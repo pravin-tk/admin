@@ -1,10 +1,13 @@
 package org.school.admin.exception;
 
+import java.util.ArrayList;
+
 public class ResponseMessage {
 	
 	private int status;
 	private String message;
 	private Object data;
+	private ArrayList<String> errors; 
 	
 	public Object getData() {
 		return data;
@@ -23,6 +26,12 @@ public class ResponseMessage {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	public ArrayList<String> getErrors() {
+		return errors;
+	}
+	public void setErrors(ArrayList<String> errors) {
+		this.errors = errors;
 	}
 	
 }
