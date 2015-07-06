@@ -1,0 +1,2 @@
+# edbuddy
+Admin Panel
