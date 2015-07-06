@@ -10,11 +10,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.engine.spi.QueryParameters;
 import org.school.admin.dao.FacilityImpl;
 import org.school.admin.dao.SchoolSearchImpl;
 import org.school.admin.dao.SettingsImpl;
@@ -25,6 +29,7 @@ import org.school.admin.data.SchoolList;
 import org.school.admin.data.SchoolListingRequest;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SearchFilter;
+import org.school.admin.data.SearchRequest;
 import org.school.admin.data.SearchSort;
 import org.school.admin.model.ActivityCategoryItem;
 import org.school.admin.model.BoardType;
@@ -60,6 +65,31 @@ public class SchoolSearchController {
 	}
 	
 	@GET
+	@Path("/schoollist.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SearchRequest SchoolSearchList(@Context UriInfo uriInfo)
+	{
+		SearchRequest searchRequest = new SearchRequest();
+		MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
+		try {
+			System.out.println("latitude:"+params.getFirst("latitude"));
+		} catch(NullPointerException e) {
+			//null pointers
+		}
+//		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+//		SchoolSearchResult result = schoolSearchImpl.getSearchList(request);
+//		result.setActivityFilter(getUserActivityFilter(request.getActivityFilter()));
+//		result.setSafetyFilter(getUserSafetyFilter(request.getSafetyFilter()));
+//		result.setInfraFilter(getUserInfraFilter(request.getInfraFilter()));
+//		result.setBoardFilter(getUserBoardFilter(request.getBoardFilter()));
+//		result.setMediumFilter(getUserMediumFilter(request.getMediumFilter()));
+//		result.setTypeFilter(getUserSchoolTypeFilter(request.getTypeFilter()));
+//		result.setCategoryFilter(getUserSchoolCategoryFilter(request.getCategoryFilter()));
+//		result.setSortFields(getUserSortFields(request.getSortFields()));
+		return searchRequest;
+	}
+	
+	@GET
 	@Path("/standardlist.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<NameList> getStandardList()
@@ -83,6 +113,7 @@ public class SchoolSearchController {
 		SearchSort searchSort2 = new SearchSort();
 		searchSort2.setName("rating");
 		searchSort2.setSortOrder("random");
+		searchSorts.add(searchSort2);
 		SearchSort searchSort3 = new SearchSort();
 		searchSort3.setName("distance");
 		searchSort3.setSortOrder("random");
