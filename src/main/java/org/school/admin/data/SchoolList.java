@@ -1,0 +1,246 @@
+package org.school.admin.data;
+
+public class SchoolList implements java.io.Serializable {
+
+	private int schoolId;
+	private String name;
+	private String alias;
+	private String latitude;
+	private String longitude;
+	private String tagLine;
+	private String aboutSchool;
+	private String logo;
+	private String homeImage;
+	private String establishmentType;
+	private String streetName;
+	private String pincode;
+	private String localityName;
+	private String cityName;
+	private String boardName;
+	private String mediums;
+	private String schoolCategory;
+	private String schoolClassification;
+	private Double rating;
+	private long galeryImages;
+	private long reviews;
+	private Double distance;
+
+	public SchoolList() {
+	}
+
+	public SchoolList(int schoolId, String boardName, long galeryImages,
+			long reviews) {
+		this.schoolId = schoolId;
+		this.boardName = boardName;
+		this.galeryImages = galeryImages;
+		this.reviews = reviews;
+	}
+
+	public SchoolList(int schoolId, String name, String alias,
+			String latitude, String longitude, String tagLine,
+			String aboutSchool, String logo, String homeImage,
+			String establishmentType, String streetName, String pincode,
+			String localityName, String cityName, String boardName,
+			String mediums, String schoolCategory, String schoolClassification,
+			Double rating, long galeryImages, long reviews, Double distance) {
+		this.schoolId = schoolId;
+		this.name = name;
+		this.alias = alias;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.tagLine = tagLine;
+		this.aboutSchool = aboutSchool;
+		this.logo = logo;
+		this.homeImage = homeImage;
+		this.establishmentType = establishmentType;
+		this.streetName = streetName;
+		this.pincode = pincode;
+		this.localityName = localityName;
+		this.cityName = cityName;
+		this.boardName = boardName;
+		this.mediums = mediums;
+		this.schoolCategory = schoolCategory;
+		this.schoolClassification = schoolClassification;
+		this.rating = rating;
+		this.galeryImages = galeryImages;
+		this.reviews = reviews;
+		this.distance = distance;
+	}
+
+	public int getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(int schoolId) {
+		this.schoolId = schoolId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getTagLine() {
+		return tagLine;
+	}
+
+	public void setTagLine(String tagLine) {
+		this.tagLine = tagLine;
+	}
+
+	public String getAboutSchool() {
+		return aboutSchool;
+	}
+
+	public void setAboutSchool(String aboutSchool) {
+		this.aboutSchool = aboutSchool;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+	public String getHomeImage() {
+		return homeImage;
+	}
+
+	public void setHomeImage(String homeImage) {
+		this.homeImage = homeImage;
+	}
+
+	public String getEstablishmentType() {
+		return establishmentType;
+	}
+
+	public void setEstablishmentType(String establishmentType) {
+		this.establishmentType = establishmentType;
+	}
+
+	public String getStreetName() {
+		return streetName;
+	}
+
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
+	}
+
+	public String getPincode() {
+		return pincode;
+	}
+
+	public void setPincode(String pincode) {
+		this.pincode = pincode;
+	}
+
+	public String getLocalityName() {
+		return localityName;
+	}
+
+	public void setLocalityName(String localityName) {
+		this.localityName = localityName;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	public String getBoardName() {
+		return boardName;
+	}
+
+	public void setBoardName(String boardName) {
+		this.boardName = boardName;
+	}
+
+	public String getMediums() {
+		return mediums;
+	}
+
+	public void setMediums(String mediums) {
+		this.mediums = mediums;
+	}
+
+	public String getSchoolCategory() {
+		return schoolCategory;
+	}
+
+	public void setSchoolCategory(String schoolCategory) {
+		this.schoolCategory = schoolCategory;
+	}
+
+	public String getSchoolClassification() {
+		return schoolClassification;
+	}
+
+	public void setSchoolClassification(String schoolClassification) {
+		this.schoolClassification = schoolClassification;
+	}
+
+	public Double getRating() {
+		return rating;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
+	}
+
+	public long getGaleryImages() {
+		return galeryImages;
+	}
+
+	public void setGaleryImages(long galeryImages) {
+		this.galeryImages = galeryImages;
+	}
+
+	public long getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(long reviews) {
+		this.reviews = reviews;
+	}
+
+	public Double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(Double distance) {
+		this.distance = distance;
+	}
+	
+}
