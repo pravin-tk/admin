@@ -3,17 +3,23 @@ package org.school.admin.dao;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.cfg.CreateKeySecondPass;
+import org.hibernate.transform.Transformers;
 import org.school.admin.model.ActivityCategory;
 import org.school.admin.model.InfrastructureCategory;
 import org.school.admin.data.InfrastructureDetail;
+import org.school.admin.data.SchoolCompleteDetail;
+import org.school.admin.data.SchoolFacilityData;
+import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.model.SafetyCategory;
 import org.school.admin.model.SafetyCategoryItem;
 import org.school.admin.model.SchoolActivityCatItem;
@@ -1507,4 +1513,36 @@ public class SchoolDAOImp {
 		return responseMessage;
 	}
 	
+	public List<SchoolTimelineData> getSchoolTimelineDetails(int school_id)
+	{
+		String sql = "from SchoolTimeline st where st.school.id = :school_id ";
+		
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		
+		Query query = session.createQuery(sql).setParameter("school_id", school_id);
+		List<SchoolTimeline> schoolTimelines = query.list();
+		List<SchoolTimelineData> result = new ArrayList<SchoolTimelineData>();
+		for(int i=0; i < schoolTimelines.size(); i++) {
+			SchoolTimelineData schoolTimelineData = new SchoolTimelineData();
+			schoolTimelineData.setId(schoolTimelines.get(i).getId());
+			schoolTimelineData.setImage(schoolTimelines.get(i).getImage());
+			schoolTimelineData.setTitle(schoolTimelines.get(i).getTitle());
+			schoolTimelineData.setYear(schoolTimelines.get(i).getYear());
+			
+			List<SchoolTimelineMilestone> schoolTimelineMilestones = new ArrayList<SchoolTimelineMilestone>();
+			for ( SchoolTimelineMilestone schoolTimelineMilestone : schoolTimelines.get(i).getSchoolTimelineMilestones()) {
+				System.out.println(" Title : " + schoolTimelineMilestone.getTitle());
+				SchoolTimelineMilestone newSchoolTimelineMilestone = new SchoolTimelineMilestone();
+				newSchoolTimelineMilestone.setId(schoolTimelineMilestone.getId());
+				newSchoolTimelineMilestone.setMilestoneDesc((schoolTimelineMilestone.getMilestoneDesc()));
+				newSchoolTimelineMilestone.setTitle( (schoolTimelineMilestone.getTitle()));
+				schoolTimelineMilestones.add( newSchoolTimelineMilestone );
+			}
+			
+		    schoolTimelineData.setMilestones(schoolTimelineMilestones);
+		    result.add(schoolTimelineData);
+		}
+		return result;
+	}
 }
