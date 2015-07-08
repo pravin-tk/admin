@@ -161,22 +161,21 @@
     		var type =  $('input:radio[name=usertype]:checked').val();
     		
     		
-    		if($("#name").val().length ==0 && $("#email").val().length == 0 && $("#mobile_no").val().length == 0)
+    		if($("#name").val().length ==0 && ($("#email").val().length == 0 || $("#mobile_no").val().length == 0))
     			{
 //     				$("#error-contact-detail").html('Please enter your name, email id and mobile number');
 //     				$('#email, #mobile_no, #name').addClass('has-error');
     				
-    				alert('Please enter your name, email id and mobile number');
+    				alert('Please enter name.Enter email id or mobile number');
     				
     			}
     		
-    		
-    		else if(!ValidateEmail($('#email').val()))
+    		if($("#email").val() != "")
     			{
-//     				$('#error-contact-detail').html("Please enter your valid email id");
-//    					$('#email').addClass('has-error');
-   					alert("Please enter your valid email id");
+    			   if(!ValidateEmail($("#email").val()))
+    				   alert("Please Enter valid email id");
     			}
+    		
     		
     		else {		
     			
@@ -245,12 +244,16 @@
 // 			$('#email, #mobile_no, #name').addClass('has-error');
 			
 			alert('Please enter your name, email id and mobile number');
-		} else if (!ValidateEmail($('#email').val()))
-		{
+		} else if($('#email').val() != "")
+			{
+			if (!ValidateEmail($('#email').val()))
+			
+		
 // 			$('#error-contact-detail').html("Please enter your valid email id");
 // 			$('#email').addClass('has-error');
 			alert("Please enter your valid email id");
-		} else {		
+		}
+   	else {		
     		$.post('webapi/school/updatecontact',{id : $("#id").val(), school_id : school_id, user_id : user_id,type : type, name: $("#name").val(), email : $("#email").val(), mobile : $("#mobile_no").val()},function(data){
     			
     			$('#email, #mobile_no, #name').removeClass('has-error');

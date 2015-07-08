@@ -306,8 +306,7 @@
      	}) 
      
     		
-     	if(($("#school_website").val() == "" || $.trim($("#school_website").val()).length == 0)
-     		&& $("#classification").val() == 0
+     	if($("#classification").val() == 0
      		&& $('#school_type').val() == 0
      		&& $('#school_category').val() == 0
      		&& board == 0 
@@ -316,34 +315,31 @@
      		{
      		  alert("All Fields are Mendatory");
      		}
-     	else if(($("#school_website").val() == "" || $.trim($("#school_website").val()).length == 0)
-         		&& $('#school_type').val() == 0
+     	else if( $('#school_type').val() == 0
          		&& $('#school_category').val() == 0
          		&& board == 0 
          		&& medium == null
          		)
          		{
          		 
-         		  alert("Please enter school website, select board type, school management, type of school and medium of instruction");
+         		  alert("Please enter  select board type, school management, type of school and medium of instruction");
          		}
-     	else if(($("#school_website").val() == "" || $.trim($("#school_website").val()).length == 0)
-         		&& $("#classification").val() == 0
+     	else if( $("#classification").val() == 0
          		&& $('#school_category').val() == 0
          		&& board == 0 
          		&& medium == null
          		)
          		{
-     		       alert("Please enter school website, select classification, board type, type of school and medium of instruction");
+     		       alert("Please enter select classification, board type, type of school and medium of instruction");
          		}
-     	else if(($("#school_website").val() == "" || $.trim($("#school_website").val()).length == 0)
-         		&& $("#classification").val() == 0
+     	else if($("#classification").val() == 0
          		&& $('#school_type').val() == 0
          		&& $('#school_category').val() == 0
          		&& board == 0 
          		)
          		{
          		 
-     		          alert("Please enter school website, select classification,board type, school management and type of school");
+     		          alert("Please enter select classification,board type, school management and type of school");
          		}
      	else if($("#classification").val() == 0
          		&& $('#school_type').val() == 0
@@ -355,11 +351,7 @@
          		 
      				 alert("Please select classification, board type, school management, type of school and medium of instruction");
          		}
-     	else if(($("#school_website").val() == "" || $.trim($("#school_website").val()).length == 0))
-     		{
-     		  alert("Please enter school website");
-     		}
-     	else if( $("#classification").val() == 0)
+          	else if( $("#classification").val() == 0)
      		{
      		  alert("Please select school classification.");
      		}
@@ -408,6 +400,7 @@
 // 			   			$('input[name=board]').prop('checked', false);
 // 			   			$("input[name=display_fee][value=1]").prop("checked",true);
 // 			   			$("input[name=residential][value=0]").prop("checked",true);
+			   			//window.location.href = "${baseUrl}/";
   	 				}
    					else{
    						alert(data.message);

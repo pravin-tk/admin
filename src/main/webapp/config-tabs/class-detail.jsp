@@ -193,77 +193,18 @@
 							for (int i = 0, j = 0; i < subjects.size(); i++) {
 
 								Subject subject = subjects.get(i);
-								if (j == 0) {
+								
 					%><div class="col-sm-3">
-						<%
-							}
-						%>
-						<%
-							if (j < 3) {
-						%>
+						
 						<label class="checkbox"> <input type="checkbox"
 							id="subject" name="subject[]"
 							value="<%out.print(subject.getId());%>"> <%
 								out.print(subject.getName());
 							%>
 						</label>
-						<%
-							}
-									if (j == 2) {
-						%>
-					</div>
-					<div class="col-sm-3">
-						<%
-							}
-									if (j > 2 && j <= 5) {
-						%>
-						<label class="checkbox"> <input type="checkbox"
-							id="subject" name="subject[]"
-							value="<%out.print(subject.getId());%>"> <%
-								out.print(subject.getName());
-							%>
-						</label>
-						<%
-							}
-
-									if (j == 5) {
-						%>
-					</div>
-					<div class="col-sm-3">
-						<%
-							}
-									if (j > 5 && j <= 8) {
-						%>
-						<label class="checkbox"> <input type="checkbox"
-							id="subject" name="subject[]"
-							value="<%out.print(subject.getId());%>"> <%
-								out.print(subject.getName());
-							%>
-						</label>
-						<%
-							}
-									if (j == 8) {
-						%>
-					</div>
-					<div class="col-sm-3">
-						<%
-							}
-									if (j > 8 && j <= 11) {
-						%>
-						<label class="checkbox"> <input type="checkbox"
-							id="subject" name="subject[]"
-							value="<%out.print(subject.getId());%>"> <%
-								out.print(subject.getName());
-							%>
-						</label>
-						<%
-							}
-
-									j++;
-								}// end for
-						%>
-					</div>
+				     </div>
 					<%
+							}
 						}//end of if
 					%>
 				</div>
@@ -474,19 +415,23 @@
 					<%
                       if(accessories.size() > 0)
                       {
-               		    for(int i = 0,j = 0; i < accessories.size(); i++)
+               		    for(int i = 0; i < accessories.size(); i++)
             			{
                			 
-               			Accessories accessories2 = accessories.get(i);                                       			 
-               		%>
-						<label class="checkbox col-sm-4"> <input type="checkbox"
+               			Accessories accessories2 = accessories.get(i);   
+               			%>
+               			<div class="col-sm-3">
+						
+						<label class="checkbox"> <input type="checkbox"
 							id="accessories" name="accessories[]"
 							value="<%out.print(accessories2.getId());%>"> <% out.print(accessories2.getName()); %>
 						</label>
+						
+					</div>
 					<%
                  		}
-                      }
-					%>
+                   	}
+				%>
 				</div>
 			</div>
 		</div>
