@@ -54,10 +54,12 @@ public class School implements java.io.Serializable {
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
 	private String homeImage;
-	private Set<TransportDetails> transportDetailses = new HashSet<TransportDetails>(
-			0);
+	private Set<ClassInfo> classInfos = new HashSet<ClassInfo>(0);
 	private Set<SchoolMedium> schoolMediums = new HashSet<SchoolMedium>(0);
 	private Set<SchoolTimeline> schoolTimelines = new HashSet<SchoolTimeline>(0);
+	private Set<SchoolActivityCatItem> schoolActivityCatItems = new HashSet<SchoolActivityCatItem>(0);
+	private Set<SchoolSafetyCatItem> schoolSafetyCatItems = new HashSet<SchoolSafetyCatItem>(0);
+	private Set<SchoolInfrastructureCatItem> schoolInfrastructureCatItems = new HashSet<SchoolInfrastructureCatItem>(0);
 
 	public School() {
 	}
@@ -86,7 +88,7 @@ public class School implements java.io.Serializable {
 			String aboutSchool, String logo, boolean establishmentType,
 			byte status, Date liveDate, Integer createdBy,
 			Date lastUpdatedOn, Integer lastUpdatedBy,
-			Set<TransportDetails> transportDetailses,
+			Set<ClassInfo> classInfos,
 			Set<SchoolMedium> schoolMediums, Set<SchoolTimeline> schoolTimelines) {
 		this.locality = locality;
 		this.name = name;
@@ -106,7 +108,7 @@ public class School implements java.io.Serializable {
 		this.createdBy = createdBy;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
-		this.transportDetailses = transportDetailses;
+		this.classInfos = classInfos;
 		this.schoolMediums = schoolMediums;
 		this.schoolTimelines = schoolTimelines;
 	}
@@ -317,21 +319,51 @@ public class School implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
-	public Set<TransportDetails> getTransportDetailses() {
-		return this.transportDetailses;
-	}
-
-	public void setTransportDetailses(Set<TransportDetails> transportDetailses) {
-		this.transportDetailses = transportDetailses;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
 	public Set<SchoolMedium> getSchoolMediums() {
 		return this.schoolMediums;
 	}
-
+	
 	public void setSchoolMediums(Set<SchoolMedium> schoolMediums) {
 		this.schoolMediums = schoolMediums;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
+	public Set<ClassInfo> getClassInfos() {
+		return classInfos;
+	}
+
+	public void setClassInfos(Set<ClassInfo> classInfos) {
+		this.classInfos = classInfos;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
+	public Set<SchoolActivityCatItem> getSchoolActivityCatItems() {
+		return schoolActivityCatItems;
+	}
+
+	public void setSchoolActivityCatItems(
+			Set<SchoolActivityCatItem> schoolActivityCatItems) {
+		this.schoolActivityCatItems = schoolActivityCatItems;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
+	public Set<SchoolSafetyCatItem> getSchoolSafetyCatItems() {
+		return schoolSafetyCatItems;
+	}
+
+	public void setSchoolSafetyCatItems(
+			Set<SchoolSafetyCatItem> schoolSafetyCatItems) {
+		this.schoolSafetyCatItems = schoolSafetyCatItems;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
+	public Set<SchoolInfrastructureCatItem> getSchoolInfrastructureCatItems() {
+		return schoolInfrastructureCatItems;
+	}
+
+	public void setSchoolInfrastructureCatItems(
+			Set<SchoolInfrastructureCatItem> schoolInfrastructureCatItems) {
+		this.schoolInfrastructureCatItems = schoolInfrastructureCatItems;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")

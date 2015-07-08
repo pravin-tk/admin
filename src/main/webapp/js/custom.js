@@ -213,12 +213,17 @@ $(function () {
         });
     });
     
+    $(".view-school-timeline").click(function () {
+        $(".school-timeline-list").hide('fast', function () {
+            $(".school-timeline-new").fadeIn();
+        });
+    });
+    
     $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
         var target = this.href,
             t = target.split('#');
         $("." + t[1] + "-new").hide();
         $("." + t[1] + "-list").show();
-        console.log("Tab")
     });
 
     // Add tier - add-specific-commission
@@ -255,6 +260,17 @@ $(function () {
 			}
 		});
 	});
+    
+    $(".view-school-highlight").click(function () {
+        $(".school-highlight-list").hide('fast', function () {
+            $(".school-highlight-new").fadeIn();
+        });
+    });
+    $(".list-school-highlight").click(function () {
+        $(".school-highlight-new").hide('fast', function () {
+            $(".school-timeline-highlight").fadeIn();
+        });
+    });
 
 
 });

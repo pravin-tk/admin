@@ -79,27 +79,27 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                 <h2>Add New Sales Detail</h2>
 
 
-                                                              <div class="form-group" >
-                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Sales executive name*</label>
-                                <div class="col-sm-6">
+                                <div class="form-group" >
+                                	<label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Sales executive name*</label>
+                                	<div class="col-sm-4">
                                     <select name="" id="sales_executive" class="form-control">
-                                  <option value='0'>Select sales executive name</option>
-                                  <%
-                            
-                            	for(int i=0; i < salesExecutives.size();i++)
-                            	{
-                            		AdminUser salesExecutive = salesExecutives.get(i);
-                            		out.print("<option value='"+salesExecutive.getId()+"' >"+salesExecutive.getName()+"</option>");
-                            	}
-                            
-                            %>
-                             
-                     </select>  
+				                    	<option value='0'>Select sales executive name</option>
+				                        <%
+				                            
+			                            	for(int i=0; i < salesExecutives.size();i++)
+			                            	{
+			                            		AdminUser salesExecutive = salesExecutives.get(i);
+			                            		out.print("<option value='"+salesExecutive.getId()+"' >"+salesExecutive.getName()+"</option>");
+			                            	}
+				                            
+				                         %>
+				                             
+				                     </select>  
                                 </div>
                             </div>
                             <div class="form-group datacollector">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Data Collector Name*</label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                    <select name="" id="datacollector" class="form-control">
                                   <option value='0'>Select data collector name</option>
                                   <%
@@ -117,7 +117,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                             </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Contact Person Name *</label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <input data-brackets-id="3402" type="text" class="form-control" id="contact_person_name" placeholder="Name of contact person">
                                 </div>
                                  <div class="col-sm-4">
@@ -131,7 +131,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                             </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Contact person number">Contact Person Number *</label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <input data-brackets-id="3402" type="text" class="form-control" id="contact_person_no" onKeyPress="return checkNumber(event)" maxlength="10" placeholder="Contact number">
                                 </div>
                                       <div class="col-sm-4">
@@ -145,7 +145,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                             </div>
                               <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Contact person email">Contact Person email *</label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <input data-brackets-id="3402" type="text" class="form-control" id="contact_person_email" placeholder="Contact email">
                                 </div>
                                       <div class="col-sm-4">
@@ -160,7 +160,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                             
                               <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Designation *</label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <input data-brackets-id="3402" type="text" class="form-control" id="designation" placeholder="Designation">
                                 </div>
                                       <div class="col-sm-4">

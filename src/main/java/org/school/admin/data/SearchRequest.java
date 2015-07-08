@@ -8,6 +8,7 @@ public class SearchRequest {
 	private String mediumId;
 	private String typeId;
 	private String categoryId;
+	private String classificationId;
 	private String safetyId;
 	private String activityId;
 	private String infraId;
@@ -91,6 +92,23 @@ public class SearchRequest {
 	}
 	public void setDistance(String distance) {
 		this.distance = distance;
+	}
+	
+	public String getClassificationId() {
+		return classificationId;
+	}
+	public void setClassificationId(String classificationId) {
+		this.classificationId = classificationId;
+	}
+	@Override
+	public String toString() {
+		return "SearchRequest [longitude=" + longitude + ", latitude="
+				+ latitude + ", standardId=" + standardId + ", boardId="
+				+ boardId + ", mediumId=" + mediumId + ", typeId=" + typeId
+				+ ", categoryId=" + categoryId + ", classificationId="
+				+ classificationId + ", safetyId=" + safetyId + ", activityId="
+				+ activityId + ", infraId=" + infraId + ", fee=" + fee
+				+ ", rating=" + rating + ", distance=" + distance + "]";
 	}
 	
 }

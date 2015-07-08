@@ -5,11 +5,12 @@
             <!-- Right main content -->
              <%
     	SchoolDAOImp progress = new SchoolDAOImp();
+        School school = progress.getSchoolDetails(Integer.parseInt(request.getParameter("school_id"))).get(0);
     	double per = progress.getPer(Integer.parseInt(request.getParameter("school_id")));
     %>
    
             <div class="col-sm-12 col-md-12  main">
-                <h1 class="page-header">Settings</h1>
+                <h2 class="page-header" style="text-transform: capitalize;"><% out.print(school.getName()); %>, <span><% out.print(school.getLocality().getName()); %></span></h2>
                 Configuration <div class="progress">
     <div style="width:100%;background-color:#f5f5f5;height:30px;border:1px solid grey;">
      	<div id="school_progress" style="background-color:green;color:white;width:<%out.print(per);%>%;text-align:center;"><%out.print(per);%>%</div>
@@ -26,10 +27,10 @@
 <!--                 <form method="" action="" class="form-horizontal"> -->
 
                     <ul id="myTab" class="nav nav-tabs">
-                     <li class="active">
-                            <a href="#school" data-toggle="tab">school</a>
-                        </li>
-                     <li>
+	                     <li class="active">
+	                            <a href="#school" data-toggle="tab">school</a>
+	                        </li>
+	                     <li>
                             <a href="#campus" data-toggle="tab" >campus</a>
                         </li>
                        

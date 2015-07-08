@@ -82,7 +82,7 @@
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Pincode">Pincode</label>
                                 <div class="col-sm-6">
-                                    <input data-brackets-id="3402" type="text" class="form-control" name="pincode" id="pincode" placeholder="Pincode">
+                                    <input data-brackets-id="3402" type="text" class="form-control" name="pincode" id="pincode" placeholder="Pincode" maxlength="6">
                                 </div>
                             </div>
                             <div class="form-group">

@@ -24,6 +24,7 @@ public class SchoolList implements java.io.Serializable {
 	private long galeryImages;
 	private long reviews;
 	private Double distance;
+	private Double totalFee;
 
 	public SchoolList() {
 	}
@@ -42,7 +43,9 @@ public class SchoolList implements java.io.Serializable {
 			String establishmentType, String streetName, String pincode,
 			String localityName, String cityName, String boardName,
 			String mediums, String schoolCategory, String schoolClassification,
-			Double rating, long galeryImages, long reviews, Double distance) {
+			Double rating, long galeryImages, long reviews, Double distance,
+			Double totalFee
+	) {
 		this.schoolId = schoolId;
 		this.name = name;
 		this.alias = alias;
@@ -242,5 +245,14 @@ public class SchoolList implements java.io.Serializable {
 	public void setDistance(Double distance) {
 		this.distance = distance;
 	}
+
+	public Double getTotalFee() {
+		return totalFee;
+	}
+
+	public void setTotalFee(Double totalFee) {
+		this.totalFee = totalFee;
+	}
+	
 	
 }
