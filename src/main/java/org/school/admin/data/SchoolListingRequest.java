@@ -13,6 +13,7 @@ public class SchoolListingRequest {
 	private List<MainFilter> mediumFilter;
 	private List<MainFilter> typeFilter;
 	private List<MainFilter> categoryFilter;
+	private List<MainFilter> classificationFilter;
 	private List<SearchSort> sortFields;
 
 	public String getLongitude() {
@@ -82,6 +83,11 @@ public class SchoolListingRequest {
 	public void setCategoryFilter(List<MainFilter> categoryFilter) {
 		this.categoryFilter = categoryFilter;
 	}
+	public List<MainFilter> getClassificationFilter() {
+		return classificationFilter;
+	}
+	public void setClassificationFilter(List<MainFilter> classificationFilter) {
+		this.classificationFilter = classificationFilter;
+	}
 	
-
 }

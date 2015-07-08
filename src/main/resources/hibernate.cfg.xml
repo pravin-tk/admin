@@ -92,6 +92,7 @@
 		<mapping class="org.school.admin.model.SchoolImageGallery"></mapping>
 		<mapping class="org.school.admin.model.TabControl"></mapping>
 		<mapping class="org.school.admin.model.SchoolSearch"></mapping>
+		<mapping class="org.school.admin.model.SchoolReview"></mapping>
     </session-factory>
 
 </hibernate-configuration>

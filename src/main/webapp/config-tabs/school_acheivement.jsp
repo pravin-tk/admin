@@ -36,11 +36,8 @@
 	      <div class="col-sm-6">
 	       
 	            <textarea class="form-control" rows="4"  placeholder="Please enter name" id='award_name' ><% 	if(info_list1.size() > 0){
-	            		if(info_list1.get(0).getAwardDesc() == "default"){
-	            			out.print("");
-	            		} else {
-	            			out.print(info_list1.get(0).getAwardDesc());
-	            		}
+	            	if(info_list1.get(0).getTieUpDesc() != null)
+            			out.print(info_list1.get(0).getAwardDesc()); 
 	            	} %></textarea>
 	      </div>
 	      <div class="col-sm-4">
@@ -57,13 +54,9 @@
 	       data-placement="bottom" title="Tooltip...">School Associations/Tie Up/Affiliation</label>
 	      <div class="col-sm-6">
 	            <textarea class="form-control" rows="4"  placeholder="Please enter School Associations/Tie Up/Affiliation" id='school_tieup' ><% if(info_list1.size() > 0){
-	            		if(info_list1.get(0).getTieUpDesc() == "default")
-	            			out.print("");
-	            		else 
+	            		if(info_list1.get(0).getTieUpDesc() != null)
 	            			out.print(info_list1.get(0).getTieUpDesc()); 
-	            	} else {
-	            		out.print("");
-	            	} %></textarea>
+	            	}%></textarea>
 	      </div>
 	        <div class="col-sm-4">
 	              <div class="tooltip custom-tool-tip right">
@@ -79,13 +72,9 @@
 	      data-placement="bottom" title="Tooltip...">Approvals</label>
 	      <div class="col-sm-6">                                       
 	           <textarea class="form-control" rows="4"  placeholder="Please enter approval" id='approval' ><%if(info_list1.size() > 0){
-	           		if(info_list1.get(0).getApprovalDesc() == "default")
-	           			out.print("");
-	           		else 
+	           		if(info_list1.get(0).getApprovalDesc() != null)
 	           			out.print(info_list1.get(0).getApprovalDesc()); 
-	           	} else {
-	           		out.print("");
-	           	}  %></textarea>
+	           	}%></textarea>
 	      </div>
 	       <div class="col-sm-4">
 	              <div class="tooltip custom-tool-tip right">
@@ -108,9 +97,9 @@
  	$("#saveschoolacheiviment").click(function(){
 	   	$.post("webapi/school/schoolachievement",{school_id : $('#school_id').val(),user_id : $('#user_id').val(),award_name : $('#award_name').val(),school_tieup : $('#school_tieup').val(), approval : $('#approval').val()},function(data){
 	   		alert(data.message);
-	   		$('#award_name').val("");
-	   		$('#school_tieup').val("");
-	   		$('#approval').val("");
+// 	   		$('#award_name').val("");
+// 	   		$('#school_tieup').val("");
+// 	   		$('#approval').val("");
 	   		updateProgress($('#school_id').val());
 	   	});
  	});

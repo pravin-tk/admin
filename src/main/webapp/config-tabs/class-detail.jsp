@@ -344,11 +344,11 @@
 			</div>
 			<div class="col-sm-4">
 				<label class="col-sm-2 control-label">to*</label>
-			<div class="col-sm-4">
-				<input type="text" class="form-control"
-					placeholder="hh:mm:ss" id="morning_time_to">
+				<div class="col-sm-4">
+					<input type="text" class="form-control"
+						placeholder="hh:mm:ss" id="morning_time_to">
+				</div>
 			</div>
-		</div>
 		
 		</div>
 		
@@ -360,15 +360,12 @@
 			</div>
 			<div class="col-sm-4">
 				<label class="col-sm-2 control-label">to*</label>
-			<div class="col-sm-4">
-				<input type="text" class="form-control"
-					placeholder="hh:mm:ss" id="evening_time_to">
+				<div class="col-sm-4">
+					<input type="text" class="form-control"
+						placeholder="hh:mm:ss" id="evening_time_to">
+				</div>
 			</div>
 		</div>
-		
-		</div>
-		
-		
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Admission deadline *</label>
@@ -472,7 +469,7 @@
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Accessories Provided *</label>
-			<div class="col-sm-6">
+			<div class="col-sm-8">
 				<div class="inline-checkboxes-holder">
 					<%
                       if(accessories.size() > 0)
@@ -481,40 +478,21 @@
             			{
                			 
                			Accessories accessories2 = accessories.get(i);                                       			 
-               			 if(j==0) { %><div class="col-sm-3">
-						<% }%>
-						<% if(j<3){ %>
-						<label class="checkbox"> <input type="checkbox"
+               		%>
+						<label class="checkbox col-sm-4"> <input type="checkbox"
 							id="accessories" name="accessories[]"
 							value="<%out.print(accessories2.getId());%>"> <% out.print(accessories2.getName()); %>
 						</label>
-						<%
-							}
-                        if(j==2) { %>
-					</div>
-					<div class="col-sm-3">
-						<% }
-						if (j>2){
-                    %>
-						<label class="checkbox"> <input type="checkbox"
-							id="accessories" name="accessories[]"
-							value="<%out.print(accessories2.getId());%>"> <% out.print(accessories2.getName()); %>
-						</label>
-						<%	}
-						j++;
-                  	}
-					%>
-					</div>
 					<%
-                 	}
-				%>
+                 		}
+                      }
+					%>
 				</div>
 			</div>
 		</div>
 
 		<h4>Fee Details</h4>
 		(Fee, Fee Payment terms etc.)
-		<div class="form-group">
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Fee payment term</label>
 				<div class="col-sm-6">
@@ -555,7 +533,7 @@
 				</select>
 			</div>
 			<div class="col-sm-2">
-				<input type="text" maxlength="120" style="margin: 4px 5px 0 5px;" placeholder="0" id= 'txt1'
+				<input type="text" maxlength="7" style="margin: 4px 5px 0 5px;" placeholder="0" id= 'txt1'
 					 name="fee_amount[]" value = "" >
 
 			</div>
@@ -590,7 +568,6 @@
 		</div>
 	</form>
 </div>
-</div>
 <link rel="stylesheet" type="text/css" href="${baseUrl}/css/selectize.css" />
 <script type="text/javascript" src="${baseUrl}/js/selectize.min.js"></script>
 <!-- datepicker Js -->
@@ -624,9 +601,9 @@ $(function() {
 	
   });
 
-$("#admission_deadline").datepicker('setDate',new Date(new Date().setMonth(new Date().getMonth()+6)));
+$("#admission_deadline").datepicker('setDate',new Date());
 $("#admission_form").datepicker('setDate',new Date());
-$("#admission_to").datepicker('setDate',new Date(new Date().setMonth(new Date().getMonth()+6)));
+$("#admission_to").datepicker('setDate',new Date());
 var arr_feetype_perm = [];
 var feetype_perm_json = [];
 var arr_feetype_temp = [];
@@ -1152,6 +1129,10 @@ $("#addClassDetail").click(function(){
 		$('[name=teaching_approach]').val(data.classInfo.teachingApproachType.id);
 		$("#total_seats").val(data.classInfo.totalSeat);
 		$("#vacant_seats").val(data.classInfo.vacantSeat);
+		$("#morning_time_from").val(data.classInfo.morningTimeFrom);
+        $("#morning_time_to").val(data.classInfo.morningTimeTo);
+        $("#evening_time_from").val(data.classInfo.afternoonTimeFrom);
+        $("#evening_time_to").val(data.classInfo.afternoonTimeTo);
 		$("#specialization").val(data.classInfo.specialization);
 		$("#ecriteria").val(data.classInfo.eligibilityCriteria);
 		$("#admission_procedure").val(data.classInfo.admissionProcess);

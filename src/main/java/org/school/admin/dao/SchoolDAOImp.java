@@ -11,9 +11,11 @@ import java.util.Set;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.cfg.CreateKeySecondPass;
+import org.hibernate.transform.Transformers;
 import org.school.admin.model.ActivityCategory;
 import org.school.admin.model.InfrastructureCategory;
 import org.school.admin.data.InfrastructureDetail;
+import org.school.admin.data.NameList;
 import org.school.admin.model.SafetyCategory;
 import org.school.admin.model.SafetyCategoryItem;
 import org.school.admin.model.SchoolActivityCatItem;
@@ -1365,6 +1367,17 @@ public class SchoolDAOImp {
 			highlights.add(schoolHighlight);
 		}
 		return highlights;
+	}
+	
+	public List<NameList> getSchoolHighlightList(int schoolId){
+		String hql = "SELECT id as id, name as name FROM SchoolHighlight where school.id = :schoolId";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+		query.setParameter("schoolId", schoolId);
+		List<NameList> result = query.list();
+		session.close();
+		return result;
 	}
 	
 	public List<SchoolHighlight> getSchoolHighlightById(int id){

@@ -72,7 +72,7 @@
                       </div>
                       <div class="form-group">
                           <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Classification *</label>
-                          <div class="col-sm-2">
+                          <div class="col-sm-4">
                                 <select name="" id="classification" class="form-control">
                                   <option value='0'>Select classification</option>
                                   <%
@@ -81,10 +81,14 @@
                             	{
                             		String selected = "";
                             		if(info_list.size() > 0){
-                            			if(schoolInfo.getSchoolClassificationType().getId() == classificationList.get(i).getId()){
-                            				selected = "selected";
-                            			}else{
-                            				selected = "";
+                            			try{
+	                            			if(schoolInfo.getSchoolClassificationType().getId() == classificationList.get(i).getId()){
+	                            				selected = "selected";
+	                            			}else{
+	                            				selected = "";
+	                            			}
+                            			} catch(Exception e) {
+                            				
                             			}
                             		}
                             		SchoolClassificationType classification = classificationList.get(i);
@@ -132,7 +136,7 @@
                 </div>
                  <div class="form-group">
                     <label class="col-sm-2 control-label">School Management *</label>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <select id="school_type" class="form-control">
                         <option value='0'>Select school management</option>
                             <%
@@ -141,10 +145,14 @@
                             	{
                             		String selected = "";
                             		if(info_list.size() > 0){
-                            			if(schoolInfo.getSchoolType().getId() == schoolTypeList.get(i).getId()){
-                            				selected = "selected";
-                            			}else{
-                            				selected = "";
+                            			try{
+	                            			if(schoolInfo.getSchoolType().getId() == schoolTypeList.get(i).getId()){
+	                            				selected = "selected";
+	                            			}else{
+	                            				selected = "";
+	                            			}
+                            			} catch(Exception e){
+                            				
                             			}
                             		}
                             		SchoolType schoolType = schoolTypeList.get(i);
@@ -166,7 +174,7 @@
                 
                  <div class="form-group">
                     <label class="col-sm-2 control-label">Type of School *</label>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <select id="school_category" class="form-control">
                             <option value='0'>Select type of school</option>
                             <%
@@ -175,10 +183,14 @@
                             	{
                             		String selected = "";
                             		if(info_list.size() > 0){
-                            			if(schoolInfo.getSchoolCategoryType().getId() == categoryList.get(i).getId()){
-                            				selected = "selected";
-                            			}else{
-                            				selected = "";
+                            			try {
+	                            			if(schoolInfo.getSchoolCategoryType().getId() == categoryList.get(i).getId()){
+	                            				selected = "selected";
+	                            			}else{
+	                            				selected = "";
+	                            			}
+                            			} catch(Exception e){
+                            				
                             			}
                             		}
                             		SchoolCategoryType category = categoryList.get(i);
@@ -203,7 +215,7 @@
                 
                   <div class="form-group">
                     <label class="col-sm-2 control-label">Medium of instruction *</label>
-                    <div class="col-sm-2" id="cbk_medium">
+                    <div class="col-sm-8" id="cbk_medium">
                     <%
                     if(mediumTypeList.size() > 0){
                        	for(int i=0;i<mediumTypeList.size();i++){ 
@@ -256,32 +268,13 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">display fee *</label>
                     <div class="col-sm-6" id="cbk_board">
-                    <%
-                       if(info_list.size() > 0){
-                       {
-                	  if( schoolInfo.getDisplayFee() == 1)
-                	  {
-                	%>
+                    <% if(info_list.size() > 0){ %>
+                    	 <label class='checkbox-inline'> <input type='radio' value='1' id='display_fee' name='display_fee' <% if( schoolInfo.getDisplayFee() == 1){%>checked<%} %>>Yes</label>
+                    	  <label class='checkbox-inline'> <input type='radio' value='0' id='display_fee' name='display_fee' <% if( schoolInfo.getDisplayFee() == 0){%>checked<%} %>>No</label>
+                     <% } else { %> 
                     	 <label class='checkbox-inline'> <input type='radio' value='1' id='display_fee' name='display_fee' checked>Yes</label>
-                    	  <label class='checkbox-inline'> <input type='radio' value='0' id='display_fee' name='display_fee'>No</label>
-                     <% } 
-                      else if(schoolInfo.getDisplayFee() == 0)
-                      {
-                    	  %>
-                    	   <label class='checkbox-inline'> <input type='radio' value='1' id='display_fee' name='display_fee'>Yes</label>
-                          <label class='checkbox-inline'> <input type='radio' value='0' id='display_fee' name='display_fee' checked>No</label>
-                          <%
-                      }
-                       }
-                       }
-                      else
-                      {
-                    	 %> 
-                    	 <label class='checkbox-inline'> <input type='radio' value='1' id='display_fee' name='display_fee' checked>Yes</label>
-                    	  <label class='checkbox-inline'> <input type='radio' value='0' id='display_fee' name='display_fee'>No</label>
-                    	 <%
-                      }
-                          %>
+                    	 <label class='checkbox-inline'> <input type='radio' value='0' id='display_fee' name='display_fee'>No</label>
+                   	 <% } %>
                       </div>
                 </div>
                 <input type="hidden" name="school_id" id="school_id" value="<%out.print(school_id);%>"/>
@@ -405,17 +398,16 @@
    	 					alert(data.message); 
    	 					updateProgress($('#school_id').val());
   	 			
-			   	 		$("#school_website").val("");
-			     		 $("#classification").val("");
-			     		 $('#school_type').val("");
-			     		 $('#school_category').val("");
+// 			   	 		$("#school_website").val("");
+// 			     		 $("#classification").val("");
+// 			     		 $('#school_type').val("");
+// 			     		 $('#school_category').val("");
 			     		
 			   	 			
-			   	 		$('input[name="medium[]"]').prop('checked',false);
-			   			$('input[name=board]').prop('checked', false);
-			   			$("input[name=display_fee][value=1]").prop("checked",true);
-			   			$("input[name=residential][value=0]").prop("checked",true);
-			   			//window.location.href = "${baseUrl}/";
+// 			   	 		$('input[name="medium[]"]').prop('checked',false);
+// 			   			$('input[name=board]').prop('checked', false);
+// 			   			$("input[name=display_fee][value=1]").prop("checked",true);
+// 			   			$("input[name=residential][value=0]").prop("checked",true);
   	 				}
    					else{
    						alert(data.message);

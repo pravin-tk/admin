@@ -129,7 +129,7 @@ public class SchoolTimeline implements java.io.Serializable {
 		this.lastUpdatedOn = lastUpdatedOn;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "schoolTimeline")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "schoolTimeline")
 	public Set<SchoolTimelineMilestone> getSchoolTimelineMilestones() {
 		return this.schoolTimelineMilestones;
 	}

@@ -32,10 +32,10 @@
 %>
 
 <!--sales detail tab starts-->
-<form action="" method="post" id="sales_detail" class="form-horizontal">
-	<div class="sales-list" id="highlight-table">
+<form action="" method="post" id="school_highlight" class="form-horizontal">
+	<div class="school-highlight-list" id="highlight-table">
 		<p>Here you can add school highlights.</p>
-		<a href="#" class="btn btn-primary view-sales bottom-margin"><i class="fa fa-plus"></i> Highlight</a>
+		<a href="#" class="btn btn-primary view-school-highlight bottom-margin"><i class="fa fa-plus"></i> Highlight</a>
 		<table class="table table-striped table-bordered" id="highlight-table-data">
 			<thead>
 				<tr>
@@ -52,9 +52,9 @@
 			%>
 
 		</table>
-		<a href="#" class="btn btn-primary view-sales"><i class="fa fa-plus"></i> Highlight</a>
+		<a href="#" class="btn btn-primary view-school-highlight"><i class="fa fa-plus"></i> Highlight</a>
 	</div>
-	<div class="sales-new" style="display: none" id="highlight-save">
+	<div class="school-highlight-new" style="display: none" id="highlight-save">
 		<h2>Add New Highlight</h2>
 		<input type="hidden" id="highlight_id" name="highlight_id" value=""/>
 		<div class="form-group">
@@ -76,7 +76,7 @@
 			<div class="col-sm-4 col-sm-offset-2">
 				<button type="button" id="savehighlight" class="btn btn-success" onclick="saveHighlight();">Save</button>
 				<button type="button" id="updatehighlight" class="btn btn-success" style="display:none;" onclick="updateHighlight();">Update</button>
-				<button type="reset" id="highlightcancel" class="btn list-id list-sales">Cancel</button>
+				<button type="reset" id="highlightcancel" class="btn list-id list-school-highlight">Cancel</button>
 			</div>
 		</div>
 	</div>

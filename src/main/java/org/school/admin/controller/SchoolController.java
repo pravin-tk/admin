@@ -278,52 +278,20 @@ public class SchoolController extends ResourceConfig {
 		School school = new School();
 		school.setId(school_id);
 		SchoolInfo schoolInfo = new SchoolInfo();
-		
-		if(award_name.equals("") && school_tieup.equals("") && approval.equals(""))
-		{
-			schoolInfo.setAwardDesc("default");
-			schoolInfo.setApprovalDesc("default");
-			schoolInfo.setTieUpDesc("default");
-		}
-		else if(award_name.equals("") && school_tieup.equals(""))
-		{
-			schoolInfo.setAwardDesc("default");
-			schoolInfo.setTieUpDesc("default");
-		}
-		else if(award_name.equals("")  && approval.equals(""))
-		{
-			schoolInfo.setAwardDesc("default");
-			schoolInfo.setApprovalDesc("default");
-		}
-		else if(school_tieup.equals("") && approval.equals(""))
-		{
-			schoolInfo.setApprovalDesc("default");
-			schoolInfo.setTieUpDesc("default");
-		}
-		else if(award_name.equals(""))
-		{
-			schoolInfo.setAwardDesc("default");
-		}
-		else if(school_tieup.equals(""))
-		{
-			schoolInfo.setTieUpDesc("default");
-		}
-		else if(approval.equals(""))
-		{
-			schoolInfo.setApprovalDesc("default");
-		}
-		else
-		{
-			schoolInfo.setLastUpdatedBy(user_id);
-			schoolInfo.setSchool(school);
+		schoolInfo.setApprovalDesc("");
+		schoolInfo.setAwardDesc("");
+		schoolInfo.setTieUpDesc("");
+		try {
+			schoolInfo.setApprovalDesc(approval);
 			schoolInfo.setAwardDesc(award_name);
 			schoolInfo.setTieUpDesc(school_tieup);
-			schoolInfo.setApprovalDesc(approval);
-			
-			System.out.println("approval : "+approval);
-			SchoolAchievementDAO schoolAchievementDAO = new SchoolAchievementDAO();
-			response = schoolAchievementDAO.saveSchoolAchievement(schoolInfo);
+		} catch(NullPointerException e) {
+			//null values
 		}
+		schoolInfo.setLastUpdatedBy(user_id);
+		schoolInfo.setSchool(school);
+		SchoolAchievementDAO schoolAchievementDAO = new SchoolAchievementDAO();
+		response = schoolAchievementDAO.saveSchoolAchievement(schoolInfo);
 		return response;
 	}
 

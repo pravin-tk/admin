@@ -3,10 +3,14 @@ package org.school.admin.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
+
 import org.school.admin.dao.FacilityImpl;
 import org.school.admin.dao.SettingsImpl;
 import org.school.admin.data.MainFilter;
 import org.school.admin.data.SearchFilter;
+import org.school.admin.data.SearchRequest;
 import org.school.admin.data.SearchSort;
 import org.school.admin.model.ActivityCategoryItem;
 import org.school.admin.model.BoardType;
@@ -14,6 +18,7 @@ import org.school.admin.model.InfrastructureCategoryItem;
 import org.school.admin.model.MediumType;
 import org.school.admin.model.SafetyCategoryItem;
 import org.school.admin.model.SchoolCategoryType;
+import org.school.admin.model.SchoolClassificationType;
 import org.school.admin.model.SchoolType;
 
 public class SearchFilterService {
@@ -32,6 +37,7 @@ public class SearchFilterService {
 		SearchSort searchSort2 = new SearchSort();
 		searchSort2.setName("rating");
 		searchSort2.setSortOrder("random");
+		searchSorts.add(searchSort2);
 		SearchSort searchSort3 = new SearchSort();
 		searchSort3.setName("distance");
 		searchSort3.setSortOrder("random");
@@ -70,6 +76,33 @@ public class SearchFilterService {
 		return sortFields;
 	}
 	
+	public List<SearchSort> getUserSortFields(String fee, String rating, String distance)
+	{
+		List<SearchSort> searchSorts = new ArrayList<SearchSort>();
+		SearchSort searchSort1 = new SearchSort();
+		searchSort1.setName("classFee");
+		searchSort1.setSortOrder("random");
+		if(fee.equalsIgnoreCase("ASC") || fee.equalsIgnoreCase("DESC")){
+			searchSort1.setSortOrder(fee);
+		}
+		searchSorts.add(searchSort1);
+		SearchSort searchSort2 = new SearchSort();
+		searchSort2.setName("rating");
+		searchSort2.setSortOrder("random");
+		if(rating.equalsIgnoreCase("ASC") || rating.equalsIgnoreCase("DESC")){
+			searchSort2.setSortOrder(rating);
+		}
+		searchSorts.add(searchSort2);
+		SearchSort searchSort3 = new SearchSort();
+		searchSort3.setName("distance");
+		searchSort3.setSortOrder("random");
+		if(distance.equalsIgnoreCase("ASC") || distance.equalsIgnoreCase("DESC")){
+			searchSort3.setSortOrder(distance);
+		}
+		searchSorts.add(searchSort3);
+		return searchSorts;
+	}
+	
 	/**
 	 * Get user activity filters
 	 * @param requestActivityFielter
@@ -96,6 +129,37 @@ public class SearchFilterService {
 			if(req_act_count > 0){
 				for(int j = 0; j < req_act_count; j++){
 					if(requestActivityFielter.get(j).getId() == activityCategoryItems.get(i).getId()){
+						searchFilter.setFiltered(true);
+					}
+				}
+			}
+			activityFilter.add(searchFilter);
+		}
+		return activityFilter;
+	}
+	
+	public List<SearchFilter> getUserActivityFilter(String activityId)
+	{
+		FacilityImpl facilityImpl = new FacilityImpl();
+		List<ActivityCategoryItem> activityCategoryItems = facilityImpl.getactivityCategoryItemList();
+		int activity_count = activityCategoryItems.size();
+		List<SearchFilter> activityFilter = new ArrayList<SearchFilter>();
+		int req_act_count = 0;
+		String[] requestActivityFielter = activityId.split(",");
+		try {
+			req_act_count = requestActivityFielter.length;
+		} catch(NullPointerException e) {
+			//activity filters not found
+		}
+		for(int i=0; i<activity_count; i++){
+			SearchFilter searchFilter = new SearchFilter();
+			searchFilter.setId(activityCategoryItems.get(i).getId());
+			searchFilter.setItemName(activityCategoryItems.get(i).getName());
+			searchFilter.setCategoryName(activityCategoryItems.get(i).getActivityCategory().getName());
+			searchFilter.setFiltered(false);
+			if(req_act_count > 0){
+				for(int j = 0; j < req_act_count; j++){
+					if(Integer.parseInt(requestActivityFielter[j]) == activityCategoryItems.get(i).getId()){
 						searchFilter.setFiltered(true);
 					}
 				}
@@ -140,6 +204,37 @@ public class SearchFilterService {
 		return safetyFilter;
 	}
 	
+	public List<SearchFilter> getUserSafetyFilter(String safetyId)
+	{
+		FacilityImpl facilityImpl = new FacilityImpl();
+		List<SafetyCategoryItem> safetyCategoryItems = facilityImpl.getSafetyCategoryItemList();
+		int safety_count = safetyCategoryItems.size();
+		List<SearchFilter> safetyFilter = new ArrayList<SearchFilter>();
+		String[] requestSafetyFilter = safetyId.split(",");
+		int req_safety_count = 0;
+		try {
+			req_safety_count = requestSafetyFilter.length;
+		} catch(NullPointerException e) {
+			//safety filters not found
+		}
+		for(int i=0; i<safety_count; i++){
+			SearchFilter searchFilter = new SearchFilter();
+			searchFilter.setId(safetyCategoryItems.get(i).getId());
+			searchFilter.setItemName(safetyCategoryItems.get(i).getName());
+			searchFilter.setCategoryName(safetyCategoryItems.get(i).getSafetyCategory().getName());
+			searchFilter.setFiltered(false);
+			if(req_safety_count > 0){
+				for(int j = 0; j < req_safety_count; j++){
+					if(Integer.parseInt(requestSafetyFilter[j]) == safetyCategoryItems.get(i).getId()){
+						searchFilter.setFiltered(true);
+					}
+				}
+			}
+			safetyFilter.add(searchFilter);
+		}
+		return safetyFilter;
+	}
+	
 	/**
 	 * Get User Infra Filters
 	 * @param requestInfraFilter
@@ -166,6 +261,37 @@ public class SearchFilterService {
 			if (req_infra_count > 0) {
 				for (int j = 0; j < req_infra_count; j++) {
 					if (requestInfraFilter.get(j).getId() == infrastructureCategoryItems.get(i).getId()) {
+						searchFilter.setFiltered(true);
+					}
+				}
+			}
+			infraFilter.add(searchFilter);
+		}
+		return infraFilter;
+	}
+	
+	public List<SearchFilter> getUserInfraFilter(String infraId) 
+	{
+		FacilityImpl facilityImpl = new FacilityImpl();
+		List<InfrastructureCategoryItem> infrastructureCategoryItems = facilityImpl.getInfrastructureCategoryItemList();
+		int infra_count = infrastructureCategoryItems.size();
+		List<SearchFilter> infraFilter = new ArrayList<SearchFilter>();
+		String[] requestInfraFilter = infraId.split(",");
+		int req_infra_count = 0;
+		try {
+			req_infra_count = requestInfraFilter.length;
+		} catch(NullPointerException e) {
+			//Infra filters not found
+		}
+		for(int i=0; i<infra_count; i++){
+			SearchFilter searchFilter = new SearchFilter();
+			searchFilter.setId(infrastructureCategoryItems.get(i).getId());
+			searchFilter.setItemName(infrastructureCategoryItems.get(i).getName());
+			searchFilter.setCategoryName(infrastructureCategoryItems.get(i).getInfrastructureCategory().getName());
+			searchFilter.setFiltered(false);
+			if (req_infra_count > 0) {
+				for (int j = 0; j < req_infra_count; j++) {
+					if (Integer.parseInt(requestInfraFilter[j]) == infrastructureCategoryItems.get(i).getId()) {
 						searchFilter.setFiltered(true);
 					}
 				}
@@ -207,6 +333,34 @@ public class SearchFilterService {
 		return boardFilter;
 	}
 	
+	public List<MainFilter> getUserBoardFilter(String boardId) 
+	{
+		SettingsImpl settingsImpl = new SettingsImpl();
+		List<BoardType> boardTypes = settingsImpl.getBoardTypes();
+		int board_count = boardTypes.size();
+		List<MainFilter> boardFilter = new ArrayList<MainFilter>();
+		String[] requestBoardFilter = boardId.split(",");
+		int req_board_count = 0;
+		try {
+			req_board_count = requestBoardFilter.length;
+		} catch(NullPointerException e) {
+			//Board filters not found
+		}
+		for (int i = 0; i < board_count; i++) {
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(boardTypes.get(i).getId());
+			mainFilter.setName(boardTypes.get(i).getBoardName());
+			mainFilter.setFiltered(false);
+			for (int j = 0; j < req_board_count; j++) {
+				if (Integer.parseInt(requestBoardFilter[j]) == boardTypes.get(i).getId()) {
+					mainFilter.setFiltered(true);
+				}
+			}
+			boardFilter.add(mainFilter);
+		}
+		return boardFilter;
+	}
+	
 	/**
 	 * Get user school type filters
 	 * @param requestTypeFilter
@@ -231,6 +385,34 @@ public class SearchFilterService {
 			mainFilter.setFiltered(false);
 			for (int j = 0; j < req_type_count; j++) {
 				if (requestTypeFilter.get(j).getId() == schoolTypes.get(i).getId()) {
+					mainFilter.setFiltered(true);
+				}
+			}
+			typeFilter.add(mainFilter);
+		}
+		return typeFilter;
+	}
+	
+	public List<MainFilter> getUserSchoolTypeFilter(String typeId)
+	{
+		SettingsImpl settingsImpl = new SettingsImpl();
+		List<SchoolType> schoolTypes = settingsImpl.getSchoolType();
+		int type_count = schoolTypes.size();
+		List<MainFilter> typeFilter = new ArrayList<MainFilter>();
+		String[] requestTypeFilter = typeId.split(",");
+		int req_type_count = 0;
+		try {
+			req_type_count = requestTypeFilter.length;
+		} catch(NullPointerException e) {
+			//Type filters not found
+		}
+		for (int i = 0; i < type_count; i++) {
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(schoolTypes.get(i).getId());
+			mainFilter.setName(schoolTypes.get(i).getName());
+			mainFilter.setFiltered(false);
+			for (int j = 0; j < req_type_count; j++) {
+				if (Integer.parseInt(requestTypeFilter[j]) == schoolTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
 				}
 			}
@@ -271,6 +453,94 @@ public class SearchFilterService {
 		return categoryFilter;
 	}
 	
+	public List<MainFilter> getUserSchoolCategoryFilter(String categoryId)
+	{
+		SettingsImpl settingsImpl = new SettingsImpl();
+		List<SchoolCategoryType> schoolCategoryTypes = settingsImpl.getAllSchoolCategoryType();
+		int category_count = schoolCategoryTypes.size();
+		List<MainFilter> categoryFilter = new ArrayList<MainFilter>();
+		String[] requestCategoryFilter = categoryId.split(",");
+		int req_category_count = 0;
+		try {
+			req_category_count = requestCategoryFilter.length;
+		} catch(NullPointerException e) {
+			//Category filters not found
+		}
+		for (int i = 0; i < category_count; i++) {
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(schoolCategoryTypes.get(i).getId());
+			mainFilter.setName(schoolCategoryTypes.get(i).getName());
+			mainFilter.setFiltered(false);
+			for (int j = 0; j < req_category_count; j++) {
+				if (Integer.parseInt(requestCategoryFilter[j]) == schoolCategoryTypes.get(i).getId()) {
+					mainFilter.setFiltered(true);
+				}
+			}
+			categoryFilter.add(mainFilter);
+		}
+		return categoryFilter;
+	}
+	
+	/**
+	 * Get user school classification filter
+	 * @param requestClassificationFilter
+	 * @return List<MainFilter>
+	 */
+	public List<MainFilter> getUserSchoolClassificationFilter(List<MainFilter> requestClassificationFilter)
+	{
+		SettingsImpl settingsImpl = new SettingsImpl();
+		List<SchoolClassificationType> schoolClassificationTypes = settingsImpl.getAllSchoolClassificationType();
+		int category_count = schoolClassificationTypes.size();
+		List<MainFilter> classificationFilter = new ArrayList<MainFilter>();
+		int req_category_count = 0;
+		try {
+			req_category_count = requestClassificationFilter.size();
+		} catch(NullPointerException e) {
+			//Category filters not found
+		}
+		for (int i = 0; i < category_count; i++) {
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(schoolClassificationTypes.get(i).getId());
+			mainFilter.setName(schoolClassificationTypes.get(i).getName());
+			mainFilter.setFiltered(false);
+			for (int j = 0; j < req_category_count; j++) {
+				if (requestClassificationFilter.get(j).getId() == schoolClassificationTypes.get(i).getId()) {
+					mainFilter.setFiltered(true);
+				}
+			}
+			classificationFilter.add(mainFilter);
+		}
+		return classificationFilter;
+	}
+	
+	public List<MainFilter> getUserSchoolClassificationFilter(String classificationId)
+	{
+		SettingsImpl settingsImpl = new SettingsImpl();
+		List<SchoolClassificationType> schoolClassificationTypes = settingsImpl.getAllSchoolClassificationType();
+		int category_count = schoolClassificationTypes.size();
+		List<MainFilter> classificationFilter = new ArrayList<MainFilter>();
+		String[] requestClassificationFilter = classificationId.split(",");
+		int req_category_count = 0;
+		try {
+			req_category_count = requestClassificationFilter.length;
+		} catch(NullPointerException e) {
+			//Category filters not found
+		}
+		for (int i = 0; i < category_count; i++) {
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(schoolClassificationTypes.get(i).getId());
+			mainFilter.setName(schoolClassificationTypes.get(i).getName());
+			mainFilter.setFiltered(false);
+			for (int j = 0; j < req_category_count; j++) {
+				if (Integer.parseInt(requestClassificationFilter[j]) == schoolClassificationTypes.get(i).getId()) {
+					mainFilter.setFiltered(true);
+				}
+			}
+			classificationFilter.add(mainFilter);
+		}
+		return classificationFilter;
+	}
+	
 	/**
 	 * Get user medium filters
 	 * @param requestMediumFilter
@@ -301,5 +571,93 @@ public class SearchFilterService {
 			mediumFilter.add(mainFilter);
 		}
 		return mediumFilter;
+	}
+	
+	public List<MainFilter> getUserMediumFilter(String mediumId)
+	{
+		SettingsImpl settingsImpl = new SettingsImpl();
+		List<MediumType> mediumTypes = settingsImpl.getAllMediumType();
+		int medium_count = mediumTypes.size();
+		List<MainFilter> mediumFilter = new ArrayList<MainFilter>();
+		String[] requestMediumFilter = mediumId.split(",");
+		int req_medium_count = 0;
+		try {
+			req_medium_count = requestMediumFilter.length;
+		} catch(NullPointerException e) {
+			//Medium filters not found
+		}
+		for (int i = 0; i < medium_count; i++) {
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(mediumTypes.get(i).getId());
+			mainFilter.setName(mediumTypes.get(i).getTitle());
+			mainFilter.setFiltered(false);
+			for (int j = 0; j < req_medium_count; j++) {
+				if (Integer.parseInt(requestMediumFilter[j]) == mediumTypes.get(i).getId()) {
+					mainFilter.setFiltered(true);
+				}
+			}
+			mediumFilter.add(mainFilter);
+		}
+		return mediumFilter;
+	}
+	
+	public SearchRequest getSearchRequest(UriInfo uriInfo){
+		MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
+		SearchRequest searchRequest = new SearchRequest();
+		Short std = 0;
+		searchRequest.setLatitude("");
+		searchRequest.setLongitude("");
+		searchRequest.setStandardId(std);
+		searchRequest.setActivityId("0");
+		searchRequest.setBoardId("0");
+		searchRequest.setCategoryId("0");
+		searchRequest.setDistance("random");
+		searchRequest.setFee("random");
+		searchRequest.setInfraId("0");
+		searchRequest.setMediumId("0");
+		searchRequest.setRating("random");
+		searchRequest.setSafetyId("0");
+		searchRequest.setTypeId("0");
+		searchRequest.setClassificationId("0");
+		try {
+			for (String param: params.keySet()) {
+				//System.out.println(param);
+		        if (param.equals("latitude")){
+		        	searchRequest.setLatitude(params.getFirst("latitude"));
+		        } else if(param.equals("longitude")) {
+		        	searchRequest.setLongitude(params.getFirst("longitude"));
+		        } else if(param.equals("standardId")) {
+					searchRequest.setStandardId(Short.parseShort(params.getFirst("standardId")));
+		        } else if(param.equals("activityId")) {
+		        	searchRequest.setActivityId(params.getFirst("activityId"));
+		        } else if(param.equals("boardId")) {
+		        	searchRequest.setBoardId(params.getFirst("boardId"));
+		        } else if(param.equals("categoryId")) {
+		        	searchRequest.setCategoryId(params.getFirst("categoryId"));
+		        } else if(param.equals("distance")) {
+		        	searchRequest.setDistance(params.getFirst("distance"));
+		        } else if(param.equals("fee")) {
+		        	searchRequest.setFee(params.getFirst("fee"));
+		        } else if(param.equals("infraId")) {
+		        	searchRequest.setInfraId(params.getFirst("infraId"));
+		        } else if(param.equals("mediumId")) {
+		        	searchRequest.setMediumId(params.getFirst("mediumId"));
+		        } else if(param.equals("rating")) {
+		        	searchRequest.setRating(params.getFirst("rating"));
+		        } else if(param.equals("safetyId")) {
+		        	searchRequest.setSafetyId(params.getFirst("safetyId"));
+		        } else if(param.equals("typeId")) {
+		        	searchRequest.setTypeId(params.getFirst("typeId"));
+		        } else if(param.equals("classificationId")) {
+		        	searchRequest.setClassificationId(params.getFirst("classificationId"));
+		        }
+		        
+		    }
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return searchRequest;
 	}
 }

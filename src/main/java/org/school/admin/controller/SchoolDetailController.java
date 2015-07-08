@@ -86,9 +86,6 @@ public class SchoolDetailController {
          schoolInfo.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
 		 schoolInfo.setIsResidential(residential);
 		 schoolInfo.setDisplayFee(display_fee);
-		 schoolInfo.setApprovalDesc("default");
-		 schoolInfo.setAwardDesc("default");
-		 schoolInfo.setTieUpDesc("default");
 		 //Short boardId = Short.parseShort(board);
          BoardType boardType = new BoardType();
          boardType.setId(board);

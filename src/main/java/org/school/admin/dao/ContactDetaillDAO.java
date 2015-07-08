@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.school.admin.data.SchoolContact;
 import org.school.admin.model.ContactInfo;
 import org.school.admin.model.SalesInfo;
 import org.school.admin.model.School;
+import org.school.admin.model.SchoolSearch;
 import org.school.admin.util.HibernateUtil;
 
 public class ContactDetaillDAO {
@@ -92,6 +94,49 @@ public class ContactDetaillDAO {
 		
 		
 		
+	}
+	
+	public SchoolContact getExternalConatctDetail(Integer school_id)
+	{
+		SchoolContact schoolContact = new SchoolContact();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String shql = "from SchoolSearch where schoolId = :school_id";
+		Session sessionnew = hibernateUtil.openSession();
+		Query query1 = sessionnew.createQuery(shql);
+		query1.setParameter("school_id", school_id);
+		List<SchoolSearch> schoolSearchs = query1.list();
+		sessionnew.close();
+		if(schoolSearchs.size() > 0) {
+			Byte type = 1;
+			String hql = "from ContactInfo where school.id = :school_id AND type = :type";
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("school_id", school_id);
+			query.setParameter("type", type);
+			List<ContactInfo> contactInfoList = query.list();
+			session.close();
+			schoolContact.setId(schoolSearchs.get(0).getSchoolId());
+			schoolContact.setName(schoolSearchs.get(0).getName());
+			String address = schoolSearchs.get(0).getStreetName()+", "
+							 +schoolSearchs.get(0).getLocalityName()+", "
+							 +schoolSearchs.get(0).getCityName()+", "
+							 +schoolSearchs.get(0).getPincode();
+			List<ContactInfo> newcontactInfoList = new ArrayList<ContactInfo>();
+			schoolContact.setAddress(address);
+			for(int i =0 ;i < contactInfoList.size(); i++)
+			{
+				ContactInfo contactInfoInternal = new ContactInfo();
+				contactInfoInternal.setName(contactInfoList.get(i).getName());
+				contactInfoInternal.setMobileNo(contactInfoList.get(i).getMobileNo());
+				contactInfoInternal.setEmail(contactInfoList.get(i).getEmail());
+				newcontactInfoList.add(contactInfoInternal);
+				
+			}
+			schoolContact.setContacts(newcontactInfoList);
+		} else {
+			schoolContact = null;
+		}
+		return schoolContact;
 	}
 	
 	public List<ContactInfo> getConatctDetailById(Integer id)

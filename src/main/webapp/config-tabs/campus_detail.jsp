@@ -188,17 +188,17 @@
  					if(data.status == 1){
  						alert(data.message);	
  						updateProgress($('#school_id').val());
- 						$('#txt_name').val("");
- 			 			$('#area_unit').val("");
- 			 			$('#txt_no_of_bldng').val("");
- 			 			$('#txt_no_of_playground').val("");
- 			 			$('#txt_no_of_student').val("");
- 			 			$('#txt_no_of_student_boys').val("");
- 			 			$('#txt_no_of_student_girls').val("");
- 			 			$('#txt_no_of_male_teaching_staff').val("");
- 			 			$('#txt_no_of_female_teaching_staff').val("");
- 			 			$('#txt_no_of_male_supporting_staff').val("");
- 			 			$('#txt_no_of_female_supporting_staff').val("");
+//  						$('#txt_name').val("");
+//  			 			$('#area_unit').val("");
+//  			 			$('#txt_no_of_bldng').val("");
+//  			 			$('#txt_no_of_playground').val("");
+//  			 			$('#txt_no_of_student').val("");
+//  			 			$('#txt_no_of_student_boys').val("");
+//  			 			$('#txt_no_of_student_girls').val("");
+//  			 			$('#txt_no_of_male_teaching_staff').val("");
+//  			 			$('#txt_no_of_female_teaching_staff').val("");
+//  			 			$('#txt_no_of_male_supporting_staff').val("");
+//  			 			$('#txt_no_of_female_supporting_staff').val("");
  					}
  					else
  						alert(data.message);
