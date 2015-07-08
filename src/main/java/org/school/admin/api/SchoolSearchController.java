@@ -1,6 +1,7 @@
 package org.school.admin.api;
 
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,6 +22,7 @@ import org.school.admin.data.SchoolCompleteDetail;
 import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolListingRequest;
 import org.school.admin.data.SchoolSearchResult;
+import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.SearchRequest;
 import org.school.admin.service.SearchFilterService;
 
@@ -95,14 +97,19 @@ public class SchoolSearchController {
 	@Path("/school.json/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SchoolCompleteDetail getSchoolInfo(@PathParam("id") int id){
+		String img_path = this.context.getInitParameter("s3_base_url");
 		SchoolCompleteDetail result = new SchoolCompleteDetail();
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 		ContactDetaillDAO contactDetaillDAO = new ContactDetaillDAO();
+		List<SchoolTimelineData> timelines = schoolDAOImp.getSchoolTimelineDetails(id);
+		for(int i = 0; i < timelines.size(); i++){
+			timelines.get(i).setImage(img_path+timelines.get(i).getImage());
+		}
 		result.setHighlights(schoolDAOImp.getSchoolHighlightList(id));
 		result.setReviews(schoolSearchImpl.getSchoolReviews(id));
 		result.setContacts(contactDetaillDAO.getExternalConatctDetail(id));
-		result.setSchoolTimelineData(schoolDAOImp.getSchoolTimelineDetails(id));
+		result.setSchoolTimelineData(timelines);
 		return result;
 	}
 	
