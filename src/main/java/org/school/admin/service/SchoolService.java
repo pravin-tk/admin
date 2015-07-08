@@ -1,8 +1,8 @@
 package org.school.admin.service;
 
 import java.util.List;
-
 import org.school.admin.dao.SchoolDAOImp;
+import org.school.admin.data.SchoolCompleteDetail;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.School;
 import org.school.admin.model.SchoolNameList;
@@ -35,5 +35,13 @@ public class SchoolService {
 	{
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 		return schoolDAOImp.updateSchool(School);
+	}
+	
+	public SchoolCompleteDetail getSchoolCompleteDetails(int schoolId)
+	{
+		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
+		SchoolCompleteDetail schoolCompleteDetail = new SchoolCompleteDetail();
+		schoolCompleteDetail.setSchoolTimelineData(schoolDAOImp.getSchoolTimelineDetails(schoolId));
+		return schoolCompleteDetail;
 	}
 }

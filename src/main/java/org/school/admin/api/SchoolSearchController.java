@@ -1,11 +1,6 @@
 package org.school.admin.api;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -27,8 +22,6 @@ import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolListingRequest;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SearchRequest;
-import org.school.admin.model.SchoolTimeline;
-import org.school.admin.model.SchoolTimelineMilestone;
 import org.school.admin.service.SearchFilterService;
 
 @Path("api1.0")
@@ -109,6 +102,7 @@ public class SchoolSearchController {
 		result.setHighlights(schoolDAOImp.getSchoolHighlightList(id));
 		result.setReviews(schoolSearchImpl.getSchoolReviews(id));
 		result.setContacts(contactDetaillDAO.getExternalConatctDetail(id));
+		result.setSchoolTimelineData(schoolDAOImp.getSchoolTimelineDetails(id));
 		return result;
 	}
 	
