@@ -120,7 +120,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                 <div class="col-sm-6">
                                     <input data-brackets-id="3402" type="text" class="form-control" id="contact_person_name" placeholder="Name of contact person">
                                 </div>
-                                 <div class="col-sm-8">
+                                 <div class="col-sm-4">
                                         <div class="tooltip custom-tool-tip right">
                                             <div class="tooltip-arrow"></div>
                                             <div class="tooltip-inner">
@@ -134,7 +134,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                 <div class="col-sm-6">
                                     <input data-brackets-id="3402" type="text" class="form-control" id="contact_person_no" onKeyPress="return checkNumber(event)" maxlength="10" placeholder="Contact number">
                                 </div>
-                                      <div class="col-sm-8">
+                                      <div class="col-sm-4">
                                         <div class="tooltip custom-tool-tip right">
                                             <div class="tooltip-arrow"></div>
                                             <div class="tooltip-inner">
@@ -148,7 +148,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                 <div class="col-sm-6">
                                     <input data-brackets-id="3402" type="text" class="form-control" id="contact_person_email" placeholder="Contact email">
                                 </div>
-                                      <div class="col-sm-8">
+                                      <div class="col-sm-4">
                                         <div class="tooltip custom-tool-tip right">
                                             <div class="tooltip-arrow"></div>
                                             <div class="tooltip-inner">
@@ -163,7 +163,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                 <div class="col-sm-6">
                                     <input data-brackets-id="3402" type="text" class="form-control" id="designation" placeholder="Designation">
                                 </div>
-                                      <div class="col-sm-8">
+                                      <div class="col-sm-4">
                                         <div class="tooltip custom-tool-tip right">
                                             <div class="tooltip-arrow"></div>
                                             <div class="tooltip-inner">

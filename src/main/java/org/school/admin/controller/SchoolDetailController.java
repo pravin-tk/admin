@@ -57,6 +57,10 @@ public class SchoolDetailController {
 	){
 		
 		ResponseMessage response = new ResponseMessage();
+		if(school_website.equals(""))
+		{
+			
+		}
 		
 		if(medium == null || medium == ""){
 			response.setStatus(0);
@@ -86,9 +90,9 @@ public class SchoolDetailController {
          schoolInfo.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
 		 schoolInfo.setIsResidential(residential);
 		 schoolInfo.setDisplayFee(display_fee);
-		 schoolInfo.setApprovalDesc("default");
-		 schoolInfo.setAwardDesc("default");
-		 schoolInfo.setTieUpDesc("default");
+		 schoolInfo.setApprovalDesc("");
+		 schoolInfo.setAwardDesc("");
+		 schoolInfo.setTieUpDesc("");
 		 //Short boardId = Short.parseShort(board);
          BoardType boardType = new BoardType();
          boardType.setId(board);

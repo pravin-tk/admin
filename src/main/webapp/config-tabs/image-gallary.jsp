@@ -14,7 +14,7 @@
 	ServletContext context = pageContext.getServletContext();
 %>
 <form action="${baseUrl}/webapi/school/saveimagegallary" method="post" id="school_imgallery_form" class="form-horizontal" enctype="multipart/form-data">
-   <div class="contact-new" id="image_info_add">
+   <div class="contact-new1" id="image_info_add">
         <h4>Add images of school</h4>
 		<div id="error-contact-detail" class="has-error bg-danger nopadding"></div>
 		<input type="hidden" name="id" id="timeline_id" value="" /> <input

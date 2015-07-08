@@ -204,10 +204,10 @@
 				+ "<div class='form-group'>"
 				+ "<label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Image Title'>Milestone Title</label>"
 				+ "<div class='col-sm-3'>"
-				+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle'>"
+				+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle1'>"
 				+ "</div><label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Description'>Milestone Description</label>"
 				+ "<div class='col-sm-4'>"
-				+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc' placeholder='Description...'></textarea>"
+				+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc1' placeholder='Description...'></textarea>"
 				+ "</div><div class='col-sm-1'><a href='javascript:remove(1);' class='btn btn-danger icon-btn'><i class='fa fa-remove'></i></a></div>"
 				+ "</div></div>";
 		document.getElementById("milestones").innerHTML = "";
@@ -293,10 +293,10 @@
 				+ "<div class='form-group'>"
 				+ "<label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Image Title'>Milestone Title</label>"
 				+ "<div class='col-sm-3'>"
-				+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle'>"
+				+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle"+mcount+"'>"
 				+ "</div><label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Description'>Milestone Description</label>"
 				+ "<div class='col-sm-4'>"
-				+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc' placeholder='Description...'></textarea>"
+				+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc"+mcount+"' placeholder='Description...'></textarea>"
 				+ "</div><div class='col-sm-1'><a href='javascript:remove("
 				+ mcount
 				+ ");' class='btn btn-danger icon-btn'><i class='fa fa-remove'></i></a></div>"

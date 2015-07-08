@@ -108,9 +108,9 @@
  	$("#saveschoolacheiviment").click(function(){
 	   	$.post("webapi/school/schoolachievement",{school_id : $('#school_id').val(),user_id : $('#user_id').val(),award_name : $('#award_name').val(),school_tieup : $('#school_tieup').val(), approval : $('#approval').val()},function(data){
 	   		alert(data.message);
-	   		$('#award_name').val("");
-	   		$('#school_tieup').val("");
-	   		$('#approval').val("");
+	   		//$('#award_name').val("");
+	   		//$('#school_tieup').val("");
+	   		//$('#approval').val("");
 	   		updateProgress($('#school_id').val());
 	   	});
  	});

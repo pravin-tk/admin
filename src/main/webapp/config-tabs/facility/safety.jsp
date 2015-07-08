@@ -38,7 +38,7 @@
              %> 	
              	<div class="col-sm-4">
 		                <label class="checkbox">
-		                      	 <input type="checkbox" id="safety" name="safety[]" value="<%out.print(safetyCategoryItem.getId());%>" <% out.print(checked); %>><% out.print(safetyCategoryItem.getName()); %>
+		                      	 <input type="checkbox" id="safety<%out.print(i); %>" name="safety[]" value="<%out.print(safetyCategoryItem.getId());%>" <% out.print(checked); %>><% out.print(safetyCategoryItem.getName()); %>
 		                </label>											
 			  	</div><!-- end col-sm-3 -->
                                        		    	

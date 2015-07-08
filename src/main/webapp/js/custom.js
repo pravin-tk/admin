@@ -141,10 +141,25 @@ $(function () {
             $(".school-management-list").fadeIn();
         });
     });
-    
+    $(".view-school-timeline").click(function () {
+        $(".school-timeline-list").hide('fast', function () {
+            $(".school-timeline-new").fadeIn();
+        });
+    });
     $(".list-school-timeline").click(function () {
         $(".school-timeline-new").hide('fast', function () {
             $(".school-timeline-list").fadeIn();
+        });
+    });
+
+    $(".view-school-highlight").click(function () {
+        $(".school-highlight-list").hide('fast', function () {
+            $(".school-highlight-new").fadeIn();
+        });
+    });
+    $(".list-school-highlight").click(function () {
+        $(".school-highlight-new").hide('fast', function () {
+            $(".school-timeline-highlight").fadeIn();
         });
     });
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
