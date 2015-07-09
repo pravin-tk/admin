@@ -111,14 +111,14 @@
 						Title</label>
 					<div class="col-sm-3">
 						<input data-brackets-id="3402" type="text" class="form-control"
-							name="milestoneTitle[]" id="milestoneTitle" placeholder="">
+							name="milestoneTitle[]" id="milestoneTitle1" placeholder="">
 					</div>
 					<label for="" class="col-sm-2 control-label" data-toggle="tooltip"
 						data-placement="bottom" title="Description">Milestone
 						Description</label>
 					<div class="col-sm-4">
 						<textarea class="form-control" name="milestoneDesc[]"
-							id="milestoneDesc" placeholder="Description..."></textarea>
+							id="milestoneDesc1" placeholder="Description..."></textarea>
 					</div>
 					<div class="col-sm-1">
 						<a href='javascript:remove(1);' class='btn btn-danger icon-btn'><i
@@ -175,24 +175,26 @@
 		var options = {
 			target : '#error-contact-detail', // target element(s) to be updated with server response 
 			beforeSubmit : showTimeLineRequest, // pre-submit callback 
-			success : showTimeLineResponse,
+			success :  showTimeLineResponse,
 			url : '${baseUrl}/webapi/school/savetimeline',
 			semantic : true,
 			dataType : 'json'
 		};
-
-		$('#school_timeline_form').ajaxForm(options);
+		console.log("test");
+		$('#school_timeline_form').ajaxSubmit(options);
 	});
 
 	// pre-submit callback 
 	function showTimeLineRequest(formData, jqForm, options) {
 		var queryString = $.param(formData);
 		$('#error-contact-detail').hide();
+		console.log("193");
 		return true;
 	}
 
 	// post-submit callback 
 	function showTimeLineResponse(responseText, statusText, xhr, $form) {
+		console.log("194");
 		if(responseText.status == 1){
 		$(".school-timeline-new").hide();
 		$(".school-timeline-list").show();
@@ -231,10 +233,10 @@
 								+ "<div class='form-group'>"
 								+ "<label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Image Title'>Milestone Title</label>"
 								+ "<div class='col-sm-3'>"
-								+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle'>"
+								+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle1'>"
 								+ "</div><label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Description'>Milestone Description</label>"
 								+ "<div class='col-sm-4'>"
-								+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc' placeholder='Description...'></textarea>"
+								+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc1' placeholder='Description...'></textarea>"
 								+ "</div><div class='col-sm-1'><a href='javascript:remove(1);' class='btn btn-danger icon-btn'><i class='fa fa-remove'></i></a></div>"
 								+ "</div></div>";
 						document.getElementById("milestones").innerHTML = "";
@@ -269,10 +271,10 @@
 										+ "<div class='form-group'>"
 										+ "<label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Image Title'>Milestone Title</label>"
 										+ "<div class='col-sm-3'>"
-										+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle' value='"+data[index].title+"'>"
+										+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle1' value='"+data[index].title+"'>"
 										+ "</div><label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Description'>Milestone Description</label>"
 										+ "<div class='col-sm-4'>"
-										+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc' placeholder='Description...'>"
+										+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc1' placeholder='Description...'>"
 										+ data[index].milestoneDesc
 										+ "</textarea>"
 										+ "</div><div class='col-sm-1'><a href='javascript:remove("

@@ -24,6 +24,8 @@ public class SchoolClassificationType {
 	private int id;
 	@Column(name = "name", nullable = false, length = 200)
 	private String name;
+	@Column(name = "image", nullable = false, length = 128)
+	private String image;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_updated_on", length = 19)
 	private Date lastUpdatedOn;
@@ -40,6 +42,13 @@ public class SchoolClassificationType {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 	public Date getLastUpdatedOn() {
 		return lastUpdatedOn;

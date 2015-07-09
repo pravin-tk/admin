@@ -44,7 +44,9 @@
 			<div class="col-sm-4">
 				<img src="<% out.print(context.getInitParameter("s3_base_url")+schools.get(0).getHomeImage()); %>" width="120" height="90"/>
 			</div>
-			<% } %>
+			<% }
+		
+			%>
 		</div>
 		
 		

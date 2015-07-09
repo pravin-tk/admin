@@ -52,8 +52,8 @@ List<SchoolClassificationType> schoolclassification = settings.getAllSchoolClass
                  </div>
                  <div class="contacts-new" style="display:none;">
                  	<h4>Add New School Classification Type</h4>
-                    <div id="error"></div>
-					<form method="post" action="" class="form-horizontal" id="submitForm">
+                    <div id="error-school-classification"></div>
+					<form method="post" action="" class="form-horizontal" id="schoolClassificationform">
                     <div class="form-group">
                          <label class="col-sm-2 control-label">Name</label>
                          <div class="col-sm-6">
@@ -64,6 +64,21 @@ List<SchoolClassificationType> schoolclassification = settings.getAllSchoolClass
                                  <div class="tooltip-arrow"></div>
                                  <div class="tooltip-inner">
                                      School Classification Type. 
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                    
+                    <div class="form-group">
+                         <label class="col-sm-2 control-label">Image</label>
+                         <div class="col-sm-6">
+                             <input type="file" id="image" name="image" class="form-control" placeholder="Select image">
+                         </div>
+                         <div class="col-sm-4">
+                             <div class="tooltip custom-tool-tip right">
+                                 <div class="tooltip-arrow"></div>
+                                 <div class="tooltip-inner">
+                                    Select School Classification Type image. 
                                  </div>
                              </div>
                          </div>
@@ -80,17 +95,52 @@ List<SchoolClassificationType> schoolclassification = settings.getAllSchoolClass
           	</div>
  	</div>
     <%@include file="../footer.jsp" %>
+    <script src="${baseUrl}/js/jquery.form.js"></script>
 	  <script type="text/javascript">
-	    	$('#save').click(function(){    		
-	    		$.post('../webapi/settings/schoolclassificationtype/save',{name: $("#name").val()},function(data){
-	    			if(data.status == 1)
-	    				window.location.href = "${baseUrl}/settings/schoolclassificationtype.jsp";
-	    			else
-	    				alert(data.message);
-	    		},'json');
+	    	$('#save').click(function(){   
+	    		
+	    		var options = {
+	    				target : '#error-contact-detail', // target element(s) to be updated with server response 
+	    				beforeSubmit : showSchoolClassificationRequest, // pre-submit callback 
+	    				success :  showClassificationResponse,
+	    				url : '../webapi/settings/schoolclassificationtype/save',
+	    				semantic : true,
+	    				dataType : 'json'
+	    			};
+	    			//console.log("test");
+	    			//$('#schoolClassificationform').ajaxForm(options);
+	    			$('#schoolClassificationform').ajaxSubmit(options);
+		    		
+	    		
+// 	    		$.post('../webapi/settings/schoolclassificationtype/save',{name: $("#name").val()},function(data){
+// 	    			if(data.status == 1)
+// 	    				window.location.href = "${baseUrl}/settings/schoolclassificationtype.jsp";
+// 	    			else
+// 	    				alert(data.message);
+// 	    		},'json');
 	    		
 	    	});
+	    	
+	    	// pre-submit callback 
+	    	function showSchoolClassificationRequest(formData, jqForm, options) {
+	    		var queryString = $.param(formData);
+	    		$('#error-school-classification').hide();
+	    		//console.log("193");
+	    		return true;
+	    	}
+	    	
 			function editSchoolClassification(id){
 				window.location.href = "${baseUrl}/settings/editschoolclassificationtype.jsp?id="+id;
+			}
+			
+			function showClassificationResponse(responseText, statusText, xhr, $form) {
+				if(responseText.status == 1){
+    		   		alert(responseText.message);
+    		   		window.location.href = "${baseUrl}/settings/schoolclassificationtype.jsp";
+    			}
+    			else{
+    			 alert(responseText.message);
+    			}
+    			console.log("Response : "+responseText.message);	
 			}
   	</script>

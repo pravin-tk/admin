@@ -1,16 +1,27 @@
 package org.school.admin.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.school.admin.dao.SettingsImpl;
@@ -45,8 +56,8 @@ import org.school.admin.model.TeachingApproachType;
 import org.school.admin.util.HibernateUtil;
 
 @Path("settings")
-public class SettingsController {
-	
+public class SettingsController extends ResourceConfig {
+	@Context ServletContext context;
 	/*-------------------Pankaj Naik-------------------------*/
 	@POST
 	@Path("/adminuserrole_save")
@@ -837,27 +848,77 @@ public class SettingsController {
 	/* *************************************** School Classification type *********************************** */
 	@POST
 	@Path("/schoolclassificationtype/save")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage saveSchoolClassificationType(
-		@FormParam("name") String name
+		@FormDataParam("name") String name,
+		@FormDataParam("image") InputStream is, 
+		@FormDataParam("image") FormDataContentDisposition header
 	){
 		SchoolClassificationType schoolClassificationType = new SchoolClassificationType();
 		schoolClassificationType.setName(name);
+		if(header.getFileName() !=null){
+		String image_name = header.getFileName();
+		image_name = image_name.replaceAll(" ", "_").toLowerCase();
+		image_name = "classification/"+image_name;
+		String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+		
+		
+		writeToFile(is, uploadedFileLocation);
+		
+		schoolClassificationType.setImage(image_name);
+		}
+		else
+			schoolClassificationType.setImage("");
 		schoolClassificationType.setLastUpdatedOn(new Date());
 		SettingsImpl settings = new SettingsImpl();
 		return settings.saveSchoolClassificationType(schoolClassificationType);
 	}
 	
+	private void writeToFile(InputStream is, String uploadedFileLocation) {
+		try {
+			OutputStream out = new FileOutputStream(new File(
+					uploadedFileLocation));
+			int read = 0;
+			byte[] bytes = new byte[102400];
+ 
+			out = new FileOutputStream(new File(uploadedFileLocation));
+			while ((read = is.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+ 
+			e.printStackTrace();
+		}
+	}
 	@POST
 	@Path("/schoolclassificationtype/update")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateSchoolClassificationType(
-			@FormParam("id") Integer id,
-			@FormParam("name") String name
-	){
+			@FormDataParam("id") Integer id,
+			@FormDataParam("name") String name,
+			@FormDataParam("image") InputStream is, 
+			@FormDataParam("image") FormDataContentDisposition header
+		){
 		SchoolClassificationType schoolClassificationType = new SchoolClassificationType();
 		schoolClassificationType.setId(id);
 		schoolClassificationType.setName(name);
+		if(header.getFileName() !=null){
+			String image_name = header.getFileName();
+			image_name = image_name.replaceAll(" ", "_").toLowerCase();
+			image_name = "classification/"+image_name;
+			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+			
+			
+			writeToFile(is, uploadedFileLocation);
+			
+			schoolClassificationType.setImage(image_name);
+			}
+			else
+				schoolClassificationType.setImage("");
 		schoolClassificationType.setLastUpdatedOn(new Date());
 		SettingsImpl settings = new SettingsImpl();
 		return settings.updateSchoolClassificationType(schoolClassificationType);
