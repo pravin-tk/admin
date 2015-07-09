@@ -63,7 +63,7 @@ public class SchoolInfrastructureCatItem implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "infra_cat_id")
 	public InfrastructureCategoryItem getInfrastructureCategoryItem() {
 		return this.infrastructureCategoryItem;

@@ -7,7 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.school.admin.data.SchoolFee;
 import org.school.admin.data.ClassInfoData;
-import org.school.admin.data.GallaryData;
+import org.school.admin.data.GalleryData;
 import org.school.admin.data.SchoolAddress;
 import org.school.admin.data.SchoolHighlightInfo;
 import org.school.admin.data.StandardTypeData;
@@ -174,7 +174,7 @@ public class ClassDetailDAO {
 		return classFeeDataList;
 	}
 	
-	public List<GallaryData> getImageGallary(Integer schoolId)
+	public List<GalleryData> getImageGallary(Integer schoolId)
 	{
 		String HQL = "from SchoolImageGallery where school.id = :schoolId";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -183,12 +183,12 @@ public class ClassDetailDAO {
 		Query query = session.createQuery(HQL);
 		query.setParameter("schoolId", schoolId);
 		List<SchoolImageGallery> schoolImageGalleryList = query.list();
-		List<GallaryData> gallaryDataList = new ArrayList<GallaryData>();
+		List<GalleryData> gallaryDataList = new ArrayList<GalleryData>();
 		String url ="http://localhost:8080/admin/images/";
 		if(schoolImageGalleryList.size() > 0)
 		{
 			for(int i=0;i<schoolImageGalleryList.size();i++){
-				GallaryData gallaryData = new GallaryData();
+				GalleryData gallaryData = new GalleryData();
 				gallaryData.setImageTitle(schoolImageGalleryList.get(i).getTitle());
 				gallaryData.setImageUrl(url+schoolImageGalleryList.get(i).getImage());
 				gallaryDataList.add(gallaryData);

@@ -5,6 +5,7 @@ public class SearchFilter {
 	private String itemName;
 	private String categoryName;
 	private boolean isFiltered;
+	private String paramName;
 	public int getId() {
 		return id;
 	}
@@ -28,6 +29,12 @@ public class SearchFilter {
 	}
 	public void setFiltered(boolean isFiltered) {
 		this.isFiltered = isFiltered;
+	}
+	public String getParamName() {
+		return paramName;
+	}
+	public void setParamName(String paramName) {
+		this.paramName = paramName;
 	}
 
 }

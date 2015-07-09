@@ -50,7 +50,7 @@ public class SchoolSafetyCatItem implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "safety_category_item_id")
 	public SafetyCategoryItem getSafetyCategoryItem() {
 		return this.safetyCategoryItem;

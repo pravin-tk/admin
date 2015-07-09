@@ -1,6 +1,6 @@
 package org.school.admin.data;
 
-public class GallaryData implements java.io.Serializable {
+public class GalleryData implements java.io.Serializable {
 	private String imageTitle;
 	private String imageUrl;
 	public String getImageTitle() {

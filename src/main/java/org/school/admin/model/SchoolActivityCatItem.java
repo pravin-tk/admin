@@ -55,7 +55,7 @@ public class SchoolActivityCatItem implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "activity_cat_item_id")
 	public ActivityCategoryItem getActivityCategoryItem() {
 		return this.activityCategoryItem;

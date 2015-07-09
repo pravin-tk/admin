@@ -4,6 +4,7 @@ public class MainFilter {
 	private int id;
 	private String name;
 	private boolean isFiltered;
+	private String paramName;
 	public int getId() {
 		return id;
 	}
@@ -21,6 +22,12 @@ public class MainFilter {
 	}
 	public void setFiltered(boolean isFiltered) {
 		this.isFiltered = isFiltered;
+	}
+	public String getParamName() {
+		return paramName;
+	}
+	public void setParamName(String paramName) {
+		this.paramName = paramName;
 	}
 
 }
