@@ -857,8 +857,8 @@ public class SettingsController extends ResourceConfig {
 	){
 		SchoolClassificationType schoolClassificationType = new SchoolClassificationType();
 		schoolClassificationType.setName(name);
-		if(header.getFileName() !=null){
-		String image_name = header.getFileName();
+		if(header.getFileName() !=null && name !=null){
+		String image_name = name+header.getFileName();
 		image_name = image_name.replaceAll(" ", "_").toLowerCase();
 		image_name = "classification/"+image_name;
 		String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
@@ -906,8 +906,8 @@ public class SettingsController extends ResourceConfig {
 		SchoolClassificationType schoolClassificationType = new SchoolClassificationType();
 		schoolClassificationType.setId(id);
 		schoolClassificationType.setName(name);
-		if(header.getFileName() !=null){
-			String image_name = header.getFileName();
+		if(header.getFileName() !=null && name !=null){
+			String image_name = name+header.getFileName();
 			image_name = image_name.replaceAll(" ", "_").toLowerCase();
 			image_name = "classification/"+image_name;
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
