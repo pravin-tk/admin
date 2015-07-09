@@ -8,6 +8,8 @@ public class SchoolContact {
 	private int id;
 	private String name;
 	private String address;
+	private String latitude;
+	private String longitude;
 	private List<ContactInfo> contacts;
 	public int getId() {
 		return id;
@@ -32,6 +34,18 @@ public class SchoolContact {
 	}
 	public void setContacts(List<ContactInfo> contacts) {
 		this.contacts = contacts;
+	}
+	public String getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+	public String getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 	
 }

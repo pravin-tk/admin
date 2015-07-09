@@ -43,13 +43,6 @@ public class SchoolClassificationType {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
-	}
 	public Date getLastUpdatedOn() {
 		return lastUpdatedOn;
 	}
@@ -61,6 +54,12 @@ public class SchoolClassificationType {
 	}
 	public void setLastUpdatedBy(Integer lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

@@ -117,6 +117,8 @@ public class ContactDetaillDAO {
 			session.close();
 			schoolContact.setId(schoolSearchs.get(0).getSchoolId());
 			schoolContact.setName(schoolSearchs.get(0).getName());
+			schoolContact.setLatitude(schoolSearchs.get(0).getLatitude());
+			schoolContact.setLongitude(schoolSearchs.get(0).getLongitude());
 			String address = schoolSearchs.get(0).getStreetName()+", "
 							 +schoolSearchs.get(0).getLocalityName()+", "
 							 +schoolSearchs.get(0).getCityName()+", "

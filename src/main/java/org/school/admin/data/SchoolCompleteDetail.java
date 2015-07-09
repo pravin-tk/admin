@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.school.admin.model.SchoolHighlight;
+import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolTimeline;
 
@@ -13,6 +14,9 @@ public class SchoolCompleteDetail {
 	SchoolContact contacts;
 	private List<SchoolTimelineData> schoolTimelineData;
 	private List<SchoolFacilityData> schoolFacilityData;
+	private List<GalleryData> images;
+	private List<FeeDetail> fees;
+	private Facility facility;
 
 	public List<SchoolTimelineData> getSchoolTimelineData() {
 		return schoolTimelineData;
@@ -53,5 +57,29 @@ public class SchoolCompleteDetail {
 	public void setSchoolFacilityData(List<SchoolFacilityData> schoolFacilityData) {
 		this.schoolFacilityData = schoolFacilityData;
 	}
-	
+
+	public List<GalleryData> getImages() {
+		return images;
+	}
+
+	public void setImages(List<GalleryData> images) {
+		this.images = images;
+	}
+
+	public List<FeeDetail> getFees() {
+		return fees;
+	}
+
+	public void setFees(List<FeeDetail> fees) {
+		this.fees = fees;
+	}
+
+	public Facility getFacility() {
+		return facility;
+	}
+
+	public void setFacility(Facility facility) {
+		this.facility = facility;
+	}
+
 }

@@ -126,6 +126,7 @@ public class SearchFilterService {
 			searchFilter.setItemName(activityCategoryItems.get(i).getName());
 			searchFilter.setCategoryName(activityCategoryItems.get(i).getActivityCategory().getName());
 			searchFilter.setFiltered(false);
+			searchFilter.setParamName("activityId");
 			if(req_act_count > 0){
 				for(int j = 0; j < req_act_count; j++){
 					if(requestActivityFielter.get(j).getId() == activityCategoryItems.get(i).getId()){
@@ -157,6 +158,7 @@ public class SearchFilterService {
 			searchFilter.setItemName(activityCategoryItems.get(i).getName());
 			searchFilter.setCategoryName(activityCategoryItems.get(i).getActivityCategory().getName());
 			searchFilter.setFiltered(false);
+			searchFilter.setParamName("activityId");
 			if(req_act_count > 0){
 				for(int j = 0; j < req_act_count; j++){
 					if(Integer.parseInt(requestActivityFielter[j]) == activityCategoryItems.get(i).getId()){
@@ -192,6 +194,7 @@ public class SearchFilterService {
 			searchFilter.setItemName(safetyCategoryItems.get(i).getName());
 			searchFilter.setCategoryName(safetyCategoryItems.get(i).getSafetyCategory().getName());
 			searchFilter.setFiltered(false);
+			searchFilter.setParamName("safetyId");
 			if(req_safety_count > 0){
 				for(int j = 0; j < req_safety_count; j++){
 					if(requestSafetyFilter.get(j).getId() == safetyCategoryItems.get(i).getId()){
@@ -223,6 +226,7 @@ public class SearchFilterService {
 			searchFilter.setItemName(safetyCategoryItems.get(i).getName());
 			searchFilter.setCategoryName(safetyCategoryItems.get(i).getSafetyCategory().getName());
 			searchFilter.setFiltered(false);
+			searchFilter.setParamName("safetyId");
 			if(req_safety_count > 0){
 				for(int j = 0; j < req_safety_count; j++){
 					if(Integer.parseInt(requestSafetyFilter[j]) == safetyCategoryItems.get(i).getId()){
@@ -258,6 +262,7 @@ public class SearchFilterService {
 			searchFilter.setItemName(infrastructureCategoryItems.get(i).getName());
 			searchFilter.setCategoryName(infrastructureCategoryItems.get(i).getInfrastructureCategory().getName());
 			searchFilter.setFiltered(false);
+			searchFilter.setParamName("infraId");
 			if (req_infra_count > 0) {
 				for (int j = 0; j < req_infra_count; j++) {
 					if (requestInfraFilter.get(j).getId() == infrastructureCategoryItems.get(i).getId()) {
@@ -289,6 +294,7 @@ public class SearchFilterService {
 			searchFilter.setItemName(infrastructureCategoryItems.get(i).getName());
 			searchFilter.setCategoryName(infrastructureCategoryItems.get(i).getInfrastructureCategory().getName());
 			searchFilter.setFiltered(false);
+			searchFilter.setParamName("infraId");
 			if (req_infra_count > 0) {
 				for (int j = 0; j < req_infra_count; j++) {
 					if (Integer.parseInt(requestInfraFilter[j]) == infrastructureCategoryItems.get(i).getId()) {
@@ -323,6 +329,7 @@ public class SearchFilterService {
 			mainFilter.setId(boardTypes.get(i).getId());
 			mainFilter.setName(boardTypes.get(i).getBoardName());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("boardId");
 			for (int j = 0; j < req_board_count; j++) {
 				if (requestBoardFilter.get(j).getId() == boardTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -351,6 +358,7 @@ public class SearchFilterService {
 			mainFilter.setId(boardTypes.get(i).getId());
 			mainFilter.setName(boardTypes.get(i).getBoardName());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("boardId");
 			for (int j = 0; j < req_board_count; j++) {
 				if (Integer.parseInt(requestBoardFilter[j]) == boardTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -383,6 +391,7 @@ public class SearchFilterService {
 			mainFilter.setId(schoolTypes.get(i).getId());
 			mainFilter.setName(schoolTypes.get(i).getName());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("typeId");
 			for (int j = 0; j < req_type_count; j++) {
 				if (requestTypeFilter.get(j).getId() == schoolTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -411,6 +420,7 @@ public class SearchFilterService {
 			mainFilter.setId(schoolTypes.get(i).getId());
 			mainFilter.setName(schoolTypes.get(i).getName());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("typeId");
 			for (int j = 0; j < req_type_count; j++) {
 				if (Integer.parseInt(requestTypeFilter[j]) == schoolTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -443,6 +453,7 @@ public class SearchFilterService {
 			mainFilter.setId(schoolCategoryTypes.get(i).getId());
 			mainFilter.setName(schoolCategoryTypes.get(i).getName());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("categoryId");
 			for (int j = 0; j < req_category_count; j++) {
 				if (requestCategoryFilter.get(j).getId() == schoolCategoryTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -471,6 +482,7 @@ public class SearchFilterService {
 			mainFilter.setId(schoolCategoryTypes.get(i).getId());
 			mainFilter.setName(schoolCategoryTypes.get(i).getName());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("categoryId");
 			for (int j = 0; j < req_category_count; j++) {
 				if (Integer.parseInt(requestCategoryFilter[j]) == schoolCategoryTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -503,6 +515,7 @@ public class SearchFilterService {
 			mainFilter.setId(schoolClassificationTypes.get(i).getId());
 			mainFilter.setName(schoolClassificationTypes.get(i).getName());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("classificationId");
 			for (int j = 0; j < req_category_count; j++) {
 				if (requestClassificationFilter.get(j).getId() == schoolClassificationTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -531,6 +544,7 @@ public class SearchFilterService {
 			mainFilter.setId(schoolClassificationTypes.get(i).getId());
 			mainFilter.setName(schoolClassificationTypes.get(i).getName());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("classificationId");
 			for (int j = 0; j < req_category_count; j++) {
 				if (Integer.parseInt(requestClassificationFilter[j]) == schoolClassificationTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -563,6 +577,7 @@ public class SearchFilterService {
 			mainFilter.setId(mediumTypes.get(i).getId());
 			mainFilter.setName(mediumTypes.get(i).getTitle());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("mediumId");
 			for (int j = 0; j < req_medium_count; j++) {
 				if (requestMediumFilter.get(j).getId() == mediumTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -591,6 +606,7 @@ public class SearchFilterService {
 			mainFilter.setId(mediumTypes.get(i).getId());
 			mainFilter.setName(mediumTypes.get(i).getTitle());
 			mainFilter.setFiltered(false);
+			mainFilter.setParamName("mediumId");
 			for (int j = 0; j < req_medium_count; j++) {
 				if (Integer.parseInt(requestMediumFilter[j]) == mediumTypes.get(i).getId()) {
 					mainFilter.setFiltered(true);
@@ -636,8 +652,8 @@ public class SearchFilterService {
 		        	searchRequest.setCategoryId(params.getFirst("categoryId"));
 		        } else if(param.equals("distance")) {
 		        	searchRequest.setDistance(params.getFirst("distance"));
-		        } else if(param.equals("fee")) {
-		        	searchRequest.setFee(params.getFirst("fee"));
+		        } else if(param.equals("classFee")) {
+		        	searchRequest.setFee(params.getFirst("classFee"));
 		        } else if(param.equals("infraId")) {
 		        	searchRequest.setInfraId(params.getFirst("infraId"));
 		        } else if(param.equals("mediumId")) {
