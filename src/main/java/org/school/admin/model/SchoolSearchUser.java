@@ -31,15 +31,16 @@ public class SchoolSearchUser implements java.io.Serializable {
 	private String lastName;
 	
 	@NotNull(message="Email can not be empty.")
-	@Email(message="Email is not valid.")
+//	@Email(message="Email is not valid.")
 	private String email;
 	
 	@NotNull(message="Mobile number can not be empty.")
 	@Pattern(regexp="[\\d]{10}",message="Mobile number should be valid 10 digit number.")
 	private String mobile;
 	private String password;
+	private String image;
 	private Byte status;
-
+	
 	public SchoolSearchUser() {
 	}
 
@@ -121,6 +122,15 @@ public class SchoolSearchUser implements java.io.Serializable {
 
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+
+	@Column(name = "image", length = 200)
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 }

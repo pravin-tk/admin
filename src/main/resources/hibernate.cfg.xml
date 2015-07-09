@@ -94,6 +94,7 @@
 		<mapping class="org.school.admin.model.SchoolSearch"></mapping>
 		<mapping class="org.school.admin.model.SchoolReview"></mapping>
 		<mapping class="org.school.admin.model.SchoolSearchUser"></mapping>
+		<mapping class="org.school.admin.model.SchoolSuggestion"></mapping>
     </session-factory>
 
 </hibernate-configuration>
