@@ -22,7 +22,7 @@ import org.school.admin.util.HibernateUtil;
 public class SchoolSearchUserDao {
 	@Context ServletContext context;
 	
-	public ResponseMessage addSchoolSearchUser( SchoolSearchUser schoolSearchUser, InputStream inputStream, String uploadFileLocation ) {
+	public ResponseMessage addSchoolSearchUser( SchoolSearchUser schoolSearchUser, InputStream inputStream, String img_path ) {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
         Transaction tx;
@@ -30,10 +30,19 @@ public class SchoolSearchUserDao {
         ResponseMessage responseMessage = new ResponseMessage();
         try {
         	schoolSearchUser.setStatus((byte)0);
-        	schoolSearchUser.setImage(new File(uploadFileLocation).getName());
         	session.save("SchoolSearchUser",schoolSearchUser );
         	tx.commit();
+        	int userId = schoolSearchUser.getId();
         	session.flush();
+        	String file_name = schoolSearchUser.getImage();
+        	file_name = "avatar/"+userId+"-"+file_name;
+        	String uploadFileLocation = img_path+file_name;
+        	schoolSearchUser.setImage(file_name);
+        	Session newsession = hibernateUtil.openSession();
+        	newsession.beginTransaction();
+        	newsession.update("id", schoolSearchUser);
+        	newsession.getTransaction().commit();
+        	newsession.close();
         	writeToFile( inputStream, uploadFileLocation);
         	responseMessage.setStatus(1);
         	responseMessage.setMessage("User registered successfully.");

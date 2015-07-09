@@ -21,12 +21,12 @@ import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.SchoolSearchUser;
 import org.school.admin.service.SchoolSearchUserService;
 
-@Path("/user/")
+@Path("api1.0/user/")
 public class SchoolSearchUserController {
 	@Context ServletContext context;
 	
 	@POST
-	@Path("add")
+	@Path("adduser.json")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addUser( @FormDataParam("firstName") String firstName,
@@ -43,10 +43,10 @@ public class SchoolSearchUserController {
 		schoolSearchUser.setEmail(email);
 		schoolSearchUser.setPassword(password);
 		schoolSearchUser.setMobile(mobile);
+		schoolSearchUser.setImage(fileDetail.getFileName());
 		
 		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService();
-		String uploadedFileLocation = context.getInitParameter("home_url") + fileDetail.getFileName();
-		ResponseMessage responseMessage = schoolSearchUserService.addSchoolSearchUser(schoolSearchUser, uploadedInputStream, uploadedFileLocation);
+		ResponseMessage responseMessage = schoolSearchUserService.addSchoolSearchUser(schoolSearchUser, uploadedInputStream, context.getInitParameter("home_url"));
 		return responseMessage;
 	}
 	
