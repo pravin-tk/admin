@@ -32,7 +32,7 @@ public class SchoolSearchUser implements java.io.Serializable {
 	private String lastName;
 	
 	@NotNull(message="Email can not be empty.")
-	@Pattern(regexp="^.+@.+\\..+$", message="Email is not valid.")
+//	@Pattern(regexp="^.+@.+\\..+$", message="Email is not valid.")
 	private String email;
 	
 	@Pattern(regexp="[\\d]{10}||[\\d]{0}",message="Mobile number should be valid 10 digit number.")
