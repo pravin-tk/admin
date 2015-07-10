@@ -238,22 +238,13 @@
 		var school_id = <%out.print(school_id3);%>
 		var user_id = <%out.print(user_id3);%>
 		var type =  $('input:radio[name=usertype]:checked').val();
+		
 		if ($("#name").val().length ==0 && $("#email").val().length == 0 && $("#mobile_no").val().length == 0)
 		{
-// 			$("#error-contact-detail").html('Please enter your name, email id and mobile number');
-// 			$('#email, #mobile_no, #name').addClass('has-error');
-			
 			alert('Please enter your name, email id and mobile number');
-		} else if($('#email').val() != "")
-			{
-			if (!ValidateEmail($('#email').val()))
-			
-		
-// 			$('#error-contact-detail').html("Please enter your valid email id");
-// 			$('#email').addClass('has-error');
+		} else if(!ValidateEmail($('#email').val())) {
 			alert("Please enter your valid email id");
-		}
-   	else {		
+		} else {		
     		$.post('webapi/school/updatecontact',{id : $("#id").val(), school_id : school_id, user_id : user_id,type : type, name: $("#name").val(), email : $("#email").val(), mobile : $("#mobile_no").val()},function(data){
     			
     			$('#email, #mobile_no, #name').removeClass('has-error');
