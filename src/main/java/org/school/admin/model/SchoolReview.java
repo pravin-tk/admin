@@ -29,7 +29,7 @@ public class SchoolReview implements java.io.Serializable {
 	private School school;
 	private String title;
 	private String review;
-	private Integer userid;
+	private SchoolSearchUser schoolSearchUser;
 	private Date date;
 	private Date time;
 	private Byte status;
@@ -38,11 +38,11 @@ public class SchoolReview implements java.io.Serializable {
 	}
 
 	public SchoolReview(School school, String title, String review,
-			Integer userid, Date date, Date time, Byte status) {
+			SchoolSearchUser schoolSearchUser, Date date, Date time, Byte status) {
 		this.school = school;
 		this.title = title;
 		this.review = review;
-		this.userid = userid;
+		this.schoolSearchUser = schoolSearchUser;
 		this.date = date;
 		this.time = time;
 		this.status = status;
@@ -87,13 +87,14 @@ public class SchoolReview implements java.io.Serializable {
 		this.review = review;
 	}
 
-	@Column(name = "userid")
-	public Integer getUserid() {
-		return this.userid;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "userid")
+	public SchoolSearchUser getSchoolSearchUser() {
+		return schoolSearchUser;
 	}
 
-	public void setUserid(Integer userid) {
-		this.userid = userid;
+	public void setSchoolSearchUser(SchoolSearchUser schoolSearchUser) {
+		this.schoolSearchUser = schoolSearchUser;
 	}
 
 	@Temporal(TemporalType.DATE)
@@ -101,7 +102,7 @@ public class SchoolReview implements java.io.Serializable {
 	public Date getDate() {
 		return this.date;
 	}
-
+	
 	public void setDate(Date date) {
 		this.date = date;
 	}

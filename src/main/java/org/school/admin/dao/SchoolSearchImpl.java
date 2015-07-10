@@ -24,6 +24,7 @@ import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolInfrastructureCatItem;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSafetyCatItem;
+import org.school.admin.model.SchoolSearchUser;
 import org.school.admin.model.SchoolTimeline;
 import org.school.admin.util.HibernateUtil;
 
@@ -164,12 +165,18 @@ public class SchoolSearchImpl {
 		session.close();
 		List<SchoolReview> schoolReviews = new ArrayList<SchoolReview>();
 		for(int i=0; i < reviews.size(); i++){
+			SchoolSearchUser schoolSearchUser = new SchoolSearchUser();
+			schoolSearchUser.setId(reviews.get(i).getSchoolSearchUser().getId());
+			schoolSearchUser.setFirstName(reviews.get(i).getSchoolSearchUser().getFirstName());
+			schoolSearchUser.setLastName(reviews.get(i).getSchoolSearchUser().getLastName());
+			schoolSearchUser.setImage(reviews.get(i).getSchoolSearchUser().getImage());
 			SchoolReview schoolReview = new SchoolReview();
 			schoolReview.setId(reviews.get(i).getId());
 			schoolReview.setReview(reviews.get(i).getReview());
 			schoolReview.setDate(reviews.get(i).getDate());
 			schoolReview.setTime(reviews.get(i).getTime());
 			schoolReview.setTitle(reviews.get(i).getTitle());
+			schoolReview.setSchoolSearchUser(schoolSearchUser);
 			schoolReviews.add(schoolReview);
 		}
 		return schoolReviews;

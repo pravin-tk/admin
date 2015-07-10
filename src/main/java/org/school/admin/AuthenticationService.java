@@ -1,8 +1,10 @@
 package org.school.admin;
 
 import java.io.IOException;
-import java.util.Base64;
+//import java.util.Base64;
 import java.util.StringTokenizer;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class AuthenticationService {
 	public boolean authenticate(String authCredentials) {
@@ -15,9 +17,10 @@ public class AuthenticationService {
 				+ " ", "");
 		String usernameAndPassword = null;
 		try {
-			byte[] decodedBytes = Base64.getDecoder().decode(
-					encodedUserPassword);
+			//byte[] decodedBytes = Base64.getDecoder().decode(encodedUserPassword);
+			byte[] decodedBytes = Base64.decodeBase64(encodedUserPassword);
 			usernameAndPassword = new String(decodedBytes, "UTF-8");
+			//usernameAndPassword = Base64.decodeBase64(encodedUserPassword);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
