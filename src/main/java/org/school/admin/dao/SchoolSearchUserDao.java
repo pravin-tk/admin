@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.validation.ConstraintViolation;
 import javax.ws.rs.core.Context;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.school.admin.exception.ResponseMessage;
@@ -28,36 +29,47 @@ public class SchoolSearchUserDao {
         Transaction tx;
         tx = session.beginTransaction();
         ResponseMessage responseMessage = new ResponseMessage();
-        try {
-        	schoolSearchUser.setStatus((byte)0);
-        	session.save("SchoolSearchUser",schoolSearchUser );
-        	tx.commit();
-        	int userId = schoolSearchUser.getId();
-        	session.flush();
-        	String file_name = schoolSearchUser.getImage();
-        	file_name = "avatar/"+userId+"-"+file_name;
-        	String uploadFileLocation = img_path+file_name;
-        	schoolSearchUser.setImage(file_name);
-        	Session newsession = hibernateUtil.openSession();
-        	newsession.beginTransaction();
-        	newsession.update("id", schoolSearchUser);
-        	newsession.getTransaction().commit();
-        	newsession.close();
-        	writeToFile( inputStream, uploadFileLocation);
-        	responseMessage.setStatus(1);
-        	responseMessage.setMessage("User registered successfully.");
-	    } catch(javax.validation.ConstraintViolationException e) {
-	    	ArrayList<String> errors = new ArrayList<String>();
-	    	Set<ConstraintViolation<?>> s = e.getConstraintViolations();
-	    	Iterator<ConstraintViolation<?>> i = s.iterator();
-	    	while (i.hasNext()) {
-	    		ConstraintViolation<?> cv = i.next();
-	    		errors.add(cv.getMessage());
-	    	}
-	    	responseMessage.setStatus(0);
+        String hql = "FROM SchoolSearchUser ssu WHERE ssu.email = :email";
+        Query query = session.createQuery(hql).setParameter("email", schoolSearchUser.getEmail());
+        SchoolSearchUser fetchedUser = (SchoolSearchUser)query.uniqueResult();
+        if(fetchedUser != null ) {
+        	ArrayList<String> errors = new ArrayList<String>();
+        	errors.add("Email Id is already registered.");
+        	responseMessage.setStatus(0);
         	responseMessage.setMessage("User registration failed.");
-	    	responseMessage.setErrors(errors);
-	    }    
+        	responseMessage.setErrors(errors);
+        } else {
+	        try {
+	        	schoolSearchUser.setStatus((byte)0);
+	        	session.save("SchoolSearchUser",schoolSearchUser );
+	        	tx.commit();
+	        	int userId = schoolSearchUser.getId();
+	        	session.flush();
+	        	String file_name = schoolSearchUser.getImage();
+	        	file_name = "avatar/"+userId+"-"+file_name;
+	        	String uploadFileLocation = img_path+file_name;
+	        	schoolSearchUser.setImage(file_name);
+	        	Session newsession = hibernateUtil.openSession();
+	        	newsession.beginTransaction();
+	        	newsession.update("id", schoolSearchUser);
+	        	newsession.getTransaction().commit();
+	        	newsession.close();
+	        	writeToFile( inputStream, uploadFileLocation);
+	        	responseMessage.setStatus(1);
+	        	responseMessage.setMessage("User registered successfully.");
+		    } catch(javax.validation.ConstraintViolationException e) {
+		    	ArrayList<String> errors = new ArrayList<String>();
+		    	Set<ConstraintViolation<?>> s = e.getConstraintViolations();
+		    	Iterator<ConstraintViolation<?>> i = s.iterator();
+		    	while (i.hasNext()) {
+		    		ConstraintViolation<?> cv = i.next();
+		    		errors.add(cv.getMessage());
+		    	}
+		    	responseMessage.setStatus(0);
+	        	responseMessage.setMessage("User registration failed.");
+		    	responseMessage.setErrors(errors);
+		    }
+        }
 	    session.close();
 	    return responseMessage;
 	}
