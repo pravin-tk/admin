@@ -1,16 +1,13 @@
 package org.school.admin.model;
 
-// Generated Jul 8, 2015 4:14:43 PM by Hibernate Tools 4.0.0
+// Generated Jul 10, 2015 5:21:17 PM by Hibernate Tools 4.0.0
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-
-import static javax.persistence.GenerationType.IDENTITY;
-
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,10 +23,10 @@ import javax.persistence.TemporalType;
 public class SchoolReview implements java.io.Serializable {
 
 	private Integer id;
+	private UserRegistrationInfo userRegistrationInfo;
 	private School school;
 	private String title;
 	private String review;
-	private SchoolSearchUser schoolSearchUser;
 	private Date date;
 	private Date time;
 	private Byte status;
@@ -37,12 +34,17 @@ public class SchoolReview implements java.io.Serializable {
 	public SchoolReview() {
 	}
 
-	public SchoolReview(School school, String title, String review,
-			SchoolSearchUser schoolSearchUser, Date date, Date time, Byte status) {
+	public SchoolReview(School school) {
+		this.school = school;
+	}
+
+	public SchoolReview(UserRegistrationInfo userRegistrationInfo,
+			School school, String title, String review, Date date, Date time,
+			Byte status) {
+		this.userRegistrationInfo = userRegistrationInfo;
 		this.school = school;
 		this.title = title;
 		this.review = review;
-		this.schoolSearchUser = schoolSearchUser;
 		this.date = date;
 		this.time = time;
 		this.status = status;
@@ -59,8 +61,19 @@ public class SchoolReview implements java.io.Serializable {
 		this.id = id;
 	}
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "userid")
+	public UserRegistrationInfo getUserRegistrationInfo() {
+		return this.userRegistrationInfo;
+	}
+
+	public void setUserRegistrationInfo(
+			UserRegistrationInfo userRegistrationInfo) {
+		this.userRegistrationInfo = userRegistrationInfo;
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "school_id")
+	@JoinColumn(name = "school_id", nullable = false)
 	public School getSchool() {
 		return this.school;
 	}
@@ -87,22 +100,12 @@ public class SchoolReview implements java.io.Serializable {
 		this.review = review;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "userid")
-	public SchoolSearchUser getSchoolSearchUser() {
-		return schoolSearchUser;
-	}
-
-	public void setSchoolSearchUser(SchoolSearchUser schoolSearchUser) {
-		this.schoolSearchUser = schoolSearchUser;
-	}
-
 	@Temporal(TemporalType.DATE)
 	@Column(name = "date", length = 10)
 	public Date getDate() {
 		return this.date;
 	}
-	
+
 	public void setDate(Date date) {
 		this.date = date;
 	}

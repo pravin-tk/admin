@@ -42,6 +42,10 @@ public class SearchFilterService {
 		searchSort3.setName("distance");
 		searchSort3.setSortOrder("random");
 		searchSorts.add(searchSort3);
+		SearchSort searchSort4 = new SearchSort();
+		searchSort4.setName("seats");
+		searchSort4.setSortOrder("random");
+		searchSorts.add(searchSort4);
 		return searchSorts;
 	}
 	
@@ -76,7 +80,7 @@ public class SearchFilterService {
 		return sortFields;
 	}
 	
-	public List<SearchSort> getUserSortFields(String fee, String rating, String distance)
+	public List<SearchSort> getUserSortFields(String fee, String rating, String distance, String seats)
 	{
 		List<SearchSort> searchSorts = new ArrayList<SearchSort>();
 		SearchSort searchSort1 = new SearchSort();
@@ -100,6 +104,13 @@ public class SearchFilterService {
 			searchSort3.setSortOrder(distance);
 		}
 		searchSorts.add(searchSort3);
+		SearchSort searchSort4 = new SearchSort();
+		searchSort4.setName("seats");
+		searchSort4.setSortOrder("random");
+		if(seats.equalsIgnoreCase("ASC") || seats.equalsIgnoreCase("DESC")){
+			searchSort4.setSortOrder(seats);
+		}
+		searchSorts.add(searchSort4);
 		return searchSorts;
 	}
 	
@@ -629,6 +640,7 @@ public class SearchFilterService {
 		searchRequest.setCategoryId("0");
 		searchRequest.setDistance("random");
 		searchRequest.setFee("random");
+		searchRequest.setSeats("random");
 		searchRequest.setInfraId("0");
 		searchRequest.setMediumId("0");
 		searchRequest.setRating("random");
@@ -652,6 +664,8 @@ public class SearchFilterService {
 		        	searchRequest.setCategoryId(params.getFirst("categoryId"));
 		        } else if(param.equals("distance")) {
 		        	searchRequest.setDistance(params.getFirst("distance"));
+		        } else if(param.equals("seats")) {
+		        	searchRequest.setSeats(params.getFirst("seats"));
 		        } else if(param.equals("classFee")) {
 		        	searchRequest.setFee(params.getFirst("classFee"));
 		        } else if(param.equals("infraId")) {

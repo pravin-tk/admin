@@ -37,7 +37,7 @@
                                         %>
                                         <tr>
                                             <td><% out.print(ratingcategory_list.get(i).getCategoryName()); %></td>
-                                            <td><% out.print(ratingcategory_list.get(i).getWeightage() == 1); %></td>
+                                            <td><% out.print(ratingcategory_list.get(i).getWeightage()); %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editRatingCategory(<% out.print(ratingcategory_list.get(i).getId()); %>);" class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a>
                                             </td>

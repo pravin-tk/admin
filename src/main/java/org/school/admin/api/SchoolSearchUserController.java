@@ -43,7 +43,11 @@ public class SchoolSearchUserController {
 		schoolSearchUser.setEmail(email);
 		schoolSearchUser.setPassword(password);
 		schoolSearchUser.setMobile(mobile);
-		schoolSearchUser.setImage(fileDetail.getFileName());
+		try{
+			schoolSearchUser.setImage(fileDetail.getFileName());
+		}catch(NullPointerException e){
+			schoolSearchUser.setImage("na");
+		}
 		
 		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService();
 		ResponseMessage responseMessage = schoolSearchUserService.addSchoolSearchUser(schoolSearchUser, uploadedInputStream, context.getInitParameter("home_url"));

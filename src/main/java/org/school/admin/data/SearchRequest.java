@@ -15,6 +15,7 @@ public class SearchRequest {
 	private String fee;
 	private String rating;
 	private String distance;
+	private String seats;
 	public String getLongitude() {
 		return longitude;
 	}
@@ -100,6 +101,12 @@ public class SearchRequest {
 	public void setClassificationId(String classificationId) {
 		this.classificationId = classificationId;
 	}
+	public String getSeats() {
+		return seats;
+	}
+	public void setSeats(String seats) {
+		this.seats = seats;
+	}
 	@Override
 	public String toString() {
 		return "SearchRequest [longitude=" + longitude + ", latitude="
@@ -108,7 +115,8 @@ public class SearchRequest {
 				+ ", categoryId=" + categoryId + ", classificationId="
 				+ classificationId + ", safetyId=" + safetyId + ", activityId="
 				+ activityId + ", infraId=" + infraId + ", fee=" + fee
-				+ ", rating=" + rating + ", distance=" + distance + "]";
+				+ ", rating=" + rating + ", distance=" + distance + ", seats="
+				+ seats + "]";
 	}
 	
 }

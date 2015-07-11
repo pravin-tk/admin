@@ -93,8 +93,11 @@
 		<mapping class="org.school.admin.model.TabControl"></mapping>
 		<mapping class="org.school.admin.model.SchoolSearch"></mapping>
 		<mapping class="org.school.admin.model.SchoolReview"></mapping>
+		<mapping class="org.school.admin.model.SchoolRating"></mapping>
 		<mapping class="org.school.admin.model.SchoolSearchUser"></mapping>
 		<mapping class="org.school.admin.model.SchoolSuggestion"></mapping>
+		<mapping class="org.school.admin.model.UserRegistrationInfo" />
+		<mapping class="org.school.admin.model.UserRating" />
     </session-factory>
 
 </hibernate-configuration>

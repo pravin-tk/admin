@@ -24,17 +24,19 @@ import org.school.admin.data.Facility;
 import org.school.admin.data.FeeDetail;
 import org.school.admin.data.InfraCategory;
 import org.school.admin.data.NameList;
+import org.school.admin.data.RatingData;
 import org.school.admin.data.SchoolContact;
 import org.school.admin.data.ClassInfoData;
 import org.school.admin.data.GalleryData;
 import org.school.admin.data.SchoolAddress;
+import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
 import org.school.admin.service.SchoolSuggestionService;
 
-@Path("api1.0/school")
+@Path("api1.0/school/")
 public class SchoolController {
 	@Context ServletContext context;
 	String img_path;
@@ -78,7 +80,7 @@ public class SchoolController {
 	}
 	
 	@GET
-	@Path("/contact.json/{id}")
+	@Path("contact.json/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SchoolContact getSchoolContact(@PathParam("id") int id){
 		ContactDetaillDAO contactDetaillDAO = new ContactDetaillDAO();
@@ -161,10 +163,27 @@ public class SchoolController {
 	@Path("suggest.json")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage addUser(SchoolSuggestion schoolSuggestion) {
+	public ResponseMessage addSuggestion(SchoolSuggestion schoolSuggestion) {
 		SchoolSuggestionService schoolSuggestionService = new SchoolSuggestionService();
 		ResponseMessage responseMessage = schoolSuggestionService.addSchoolSuggestion(schoolSuggestion);
 		return responseMessage;
+	}
+	
+	@GET
+	@Path("rating.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Rating> getSchoolRating(@PathParam("id") int id){
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getSchoolRating(id);
+	}
+	
+	@POST
+	@Path("rate.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage addSchoolRating(RatingData ratingData){
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.addSchoolRating(ratingData);
 	}
 	
 }

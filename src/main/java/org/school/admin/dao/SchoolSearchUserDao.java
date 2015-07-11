@@ -35,6 +35,7 @@ public class SchoolSearchUserDao {
         	int userId = schoolSearchUser.getId();
         	session.flush();
         	String file_name = schoolSearchUser.getImage();
+        	if(!file_name.equalsIgnoreCase("na"))
         	file_name = "avatar/"+userId+"-"+file_name;
         	String uploadFileLocation = img_path+file_name;
         	schoolSearchUser.setImage(file_name);
@@ -43,6 +44,7 @@ public class SchoolSearchUserDao {
         	newsession.update("id", schoolSearchUser);
         	newsession.getTransaction().commit();
         	newsession.close();
+        	if(!schoolSearchUser.getImage().equalsIgnoreCase("na"))
         	writeToFile( inputStream, uploadFileLocation);
         	responseMessage.setStatus(1);
         	responseMessage.setMessage("User registered successfully.");
