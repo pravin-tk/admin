@@ -187,10 +187,21 @@
 			    		row.push("<span class='label label-success'>Active</span>");
 			    	else
 			    		row.push("<span class='label label-warning'>Inactive</span>");
+			    	if(data[index].promote == 0){
 			    	row.push(
 			    			"<a href='javascript:editSchool("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-pencil'></i></a> "
 			    			+"<a href='javascript:updateConfig("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-cog'></i></a>"
+			    			+"<a href='javascript:updatePromote("+data[index].id+","+data[index].promote+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-star-o'></i></a>"
 			    			);
+			    	}
+			    	else{
+			    		row.push(
+				    			"<a href='javascript:editSchool("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-pencil'></i></a> "
+				    			+"<a href='javascript:updateConfig("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-cog'></i></a>"
+				    			+"<a href='javascript:updatePromote("+data[index].id+","+data[index].promote+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-star'></i></a>"
+				    			);
+			    		
+			    	}
 			    	oTable.fnAddData(row);
 			    });
 	    	});
@@ -207,6 +218,14 @@
   function updateConfig(school_id)
   {
 	  window.location.href="schoolconfig.jsp?school_id="+school_id;
+  }
+  function updatePromote(schoolId,promote)
+  {
+	$.post("webapi/school/updatepromote",{schoolId : schoolId,promote : promote},function(data)
+  	{
+  			search();
+  	});
+	  
   }
     </script>
 </body>

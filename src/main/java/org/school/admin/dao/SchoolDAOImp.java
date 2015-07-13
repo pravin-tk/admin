@@ -10,8 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
 import org.school.admin.model.ActivityCategory;
 import org.school.admin.model.InfrastructureCategory;
@@ -40,6 +43,7 @@ import org.school.admin.model.School;
 import org.school.admin.model.SchoolHighlight;
 import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolNameList;
+import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolTimeline;
 import org.school.admin.model.SchoolTimelineMilestone;
 import org.school.admin.model.TabControl;
@@ -148,6 +152,39 @@ public class SchoolDAOImp {
 		
 		return message;
 	}
+	
+	public ResponseMessage saveSchoolReview(SchoolReview schoolReview)
+	{
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		  Transaction tx;
+	        tx = session.beginTransaction();
+		ResponseMessage responseMessage = new ResponseMessage();
+		try
+		{
+			
+		      
+			session.save(schoolReview);
+			tx.commit();
+        	session.flush();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Saved successfuly");
+			
+		}
+		catch(javax.validation.ConstraintViolationException e) {
+	    	ArrayList<String> errors = new ArrayList<String>();
+	    	Set<ConstraintViolation<?>> s = e.getConstraintViolations();
+	    	Iterator<ConstraintViolation<?>> i = s.iterator();
+	    	while (i.hasNext()) {
+	    		ConstraintViolation<?> cv = i.next();
+	    		errors.add(cv.getMessage());
+	    	}
+	    	responseMessage.setStatus(0);
+        	responseMessage.setMessage("School Review failed to save.");
+	    	responseMessage.setErrors(errors);
+	    }    
+		return responseMessage;
+	}
 /*------------------------------------------------------*/
 	
 	
@@ -233,6 +270,7 @@ public class SchoolDAOImp {
 			school.setStatus(result.get(i).getStatus());
 			school.setStreetName(result.get(i).getStreetName());
 			school.setTagLine(result.get(i).getTagLine());
+			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
 		}
 		return schools;
@@ -752,7 +790,19 @@ public class SchoolDAOImp {
 		
 		return msg;
 	}
-	
+	public void updatePromote(School school)
+	{
+		String hql = "update School set promote = :promote where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("promote", school.getPromote());
+		query.setParameter("id", school.getId());
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
 	public List<ClassSection> getClassSectionInfo(int school_id)
 	{
 		String hql = "from ClassSection where classInfo.school.id = :school_id";

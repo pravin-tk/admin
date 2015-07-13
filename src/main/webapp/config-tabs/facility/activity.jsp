@@ -41,7 +41,7 @@
                   	
             %>	<div class="col-sm-2">
 	                 <label class="checkbox">
-	                      	 <input type="checkbox" id="activity<%out.print(i); %>" name="activity[]" value="<%out.print(activityCategoryItem.getId());%>" <% out.print(checked); %>><% out.print(activityCategoryItem.getName()); %>
+	                      	 <input type="checkbox" id="activity<%out.print(activityCategoryItem.getId()); %>" name="activity[]" value="<%out.print(activityCategoryItem.getId());%>" <% out.print(checked); %>><% out.print(activityCategoryItem.getName()); %>
 	                </label>											
 			  	</div>
                                        		    	

@@ -649,6 +649,23 @@ $('#updateclassdetail').click(function() {
 		// alert("Admission from should be less than admission to");
 		$("#error-class-detail").html('Please select admission to');
 		$('#stream').addClass('has-error');
+	}else if($("#admission_from").val() == "")
+	{
+		alert("Please select admission from");
+//			$("#error-class-detail").html('Please select admission from');
+//			$('#admission_from').addClass('has-error');
+	}
+	else if($("#admission_to").val() == "")
+	{
+		alert("Please select admission to");
+//			$("#error-class-detail").html('Please select admission from');
+//			$('#admission_from').addClass('has-error');
+	}
+	else if($("#admission_deadline").val() == "")
+	{
+		alert("Please select admission deadline");
+//			$("#error-class-detail").html('Please select admission from');
+//			$('#admission_from').addClass('has-error');
 	}
 	else{
 		fee_data = getFeeData();

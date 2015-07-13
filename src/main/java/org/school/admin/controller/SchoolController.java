@@ -167,6 +167,7 @@ public class SchoolController extends ResourceConfig {
 		@FormParam("trialStartDate") String trial_StartDate,
 		@FormParam("trialEndDate") String trial_EndDate
 	){
+
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date trialStartDate = null,trialEndDate = null;
 		try {
@@ -200,6 +201,7 @@ public class SchoolController extends ResourceConfig {
 		School.setIsFreelisting(isFreeListing);
 		School.setTrialStartDate(trialStartDate);
 		School.setTrialEndDate(trialEndDate);
+	    
 		SchoolService schoolService = new SchoolService();
 		return schoolService.updateSchool(School);
 	}
@@ -225,7 +227,8 @@ public class SchoolController extends ResourceConfig {
 		@FormParam("trialStartDate") String trial_StartDate,
 		@FormParam("trialEndDate") String trial_EndDate
 	){
-		Byte status = 0;
+		Byte status = 0,promote =0;
+		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date trialStartDate = null,trialEndDate = null;
 		try {
@@ -255,6 +258,7 @@ public class SchoolController extends ResourceConfig {
 		School.setStreetName(street_name);
 		School.setStatus(status);
 		School.setTagLine(tag_line);
+		School.setPromote(promote);
 		School.setIsFreelisting(isFreeListing);
 		School.setTrialStartDate(trialStartDate);
 		School.setTrialEndDate(trialEndDate);
@@ -263,6 +267,22 @@ public class SchoolController extends ResourceConfig {
  
 		return schoolService.addSchool(School);
 	}
+	
+	@POST
+	@Path("updatepromote")
+	public void updatePromote(@FormParam("schoolId")int schoolId,@FormParam("promote") Byte promote)
+	{
+		Byte zero = 0;
+		Byte one = 1;
+		School school = new School();
+		school.setId(schoolId);
+		if(promote == 1)
+		school.setPromote(zero);
+		else
+		school.setPromote(one);
+		new SchoolDAOImp().updatePromote(school);
+	}
+	
 	
 	@POST
 	@Path("/schoolachievement")
@@ -663,7 +683,7 @@ public class SchoolController extends ResourceConfig {
 			streamType.setTitle(classes.get(i).getStreamType().getTitle());
 			classInfo.setStreamType(streamType);
 			classInfo.setId(classes.get(i).getId());
-			
+		
 			classInfo.setTotalSeat(classes.get(i).getTotalSeat());
 			classInfo.setVacantSeat(classes.get(i).getVacantSeat());
 			newClassInfo.add(classInfo);

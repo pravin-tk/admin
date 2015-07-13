@@ -43,6 +43,7 @@ public class School implements java.io.Serializable {
 	private String tagLine;
 	private String aboutSchool;
 	private String logo;
+	private Byte promote;
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean establishmentType;
 	private Byte status;
@@ -67,7 +68,7 @@ public class School implements java.io.Serializable {
 	public School(Locality locality, String name, String plotNo,
 			String streetName, String landmark, String pincode,
 			String longitude, String latitude, String alias, String tagLine,
-			String aboutSchool, boolean establishmentType) {
+			String aboutSchool, boolean establishmentType,Byte promote) {
 		this.locality = locality;
 		this.name = name;
 		this.plotNo = plotNo;
@@ -80,6 +81,7 @@ public class School implements java.io.Serializable {
 		this.tagLine = tagLine;
 		this.aboutSchool = aboutSchool;
 		this.establishmentType = establishmentType;
+		this.promote = promote;
 	}
 
 	public School(Locality locality, String name, String plotNo,
@@ -87,7 +89,7 @@ public class School implements java.io.Serializable {
 			String longitude, String latitude, String alias, String tagLine,
 			String aboutSchool, String logo, boolean establishmentType,
 			byte status, Date liveDate, Integer createdBy,
-			Date lastUpdatedOn, Integer lastUpdatedBy,
+			Date lastUpdatedOn, Integer lastUpdatedBy,Byte promote,
 			Set<ClassInfo> classInfos,
 			Set<SchoolMedium> schoolMediums, Set<SchoolTimeline> schoolTimelines) {
 		this.locality = locality;
@@ -108,6 +110,7 @@ public class School implements java.io.Serializable {
 		this.createdBy = createdBy;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
+		this.promote = promote;
 		this.classInfos = classInfos;
 		this.schoolMediums = schoolMediums;
 		this.schoolTimelines = schoolTimelines;
@@ -318,6 +321,15 @@ public class School implements java.io.Serializable {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
+	@Column(name = "promote")
+	public Byte getPromote() {
+		return this.promote;
+	}
+
+	public void setPromote(Byte promote) {
+		this.promote = promote;
+	}
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
 	public Set<SchoolMedium> getSchoolMediums() {
 		return this.schoolMediums;

@@ -170,15 +170,12 @@
     				
     			}
     		
-    		if($("#email").val() != "")
+    		else if($("#email").val() != "")
     			{
     			   if(!ValidateEmail($("#email").val()))
     				   alert("Please Enter valid email id");
     			}
-    		
-    		
     		else {		
-    			
 	    		$.post('webapi/school/savecontact',{school_id : school_id, user_id : user_id,type : type, name: $("#name").val(), email : $("#email").val(), mobile : $("#mobile_no").val()},function(data){
 	    			$('#email, #mobile_no, #name').removeClass('has-error');
 	    			$('#error-contact-detail').html("");
