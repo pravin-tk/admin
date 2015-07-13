@@ -729,7 +729,10 @@ public class SchoolController extends ResourceConfig {
 			classInfo.setSpecialization(classes.get(i).getSpecialization());
 			classInfo.setTotalSeat(classes.get(i).getTotalSeat());
 			classInfo.setVacantSeat(classes.get(i).getVacantSeat());
-		
+			classInfo.setMorningTimeFrom(classes.get(i).getMorningTimeFrom());
+			classInfo.setMorningTimeTo(classes.get(i).getMorningTimeTo());
+			classInfo.setAfternoonTimeFrom(classes.get(i).getAfternoonTimeFrom());
+			classInfo.setAfternoonTimeTo(classes.get(i).getAfternoonTimeTo());
 			School school = new School();
 			school.setId(classes.get(i).getSchool().getId());
 			school.setName(classes.get(i).getSchool().getName());

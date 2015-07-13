@@ -1,10 +1,17 @@
 package org.school.admin.api;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,10 +23,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.school.admin.dao.ClassDetailDAO;
 import org.school.admin.dao.ContactDetaillDAO;
 import org.school.admin.dao.SchoolDAOImp;
 import org.school.admin.dao.SchoolSearchImpl;
+import org.school.admin.dao.UserImpl;
+import org.school.admin.data.ApplicantInfo;
 import org.school.admin.data.Facility;
 import org.school.admin.data.FeeDetail;
 import org.school.admin.data.InfraCategory;
@@ -32,13 +45,17 @@ import org.school.admin.data.SchoolAddress;
 import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.exception.ResponseMessage;
+import org.school.admin.model.PostRequirement;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
 import org.school.admin.service.SchoolSuggestionService;
 
 @Path("api1.0/school/")
-public class SchoolController {
+public class SchoolController extends ResourceConfig {
 	@Context ServletContext context;
+	public SchoolController() {
+		register(MultiPartFeature.class);
+    }
 	String img_path;
 	
 	@GET
@@ -185,5 +202,6 @@ public class SchoolController {
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		return schoolSearchImpl.addSchoolRating(ratingData);
 	}
+	
 	
 }

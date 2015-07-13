@@ -98,6 +98,13 @@
 		<mapping class="org.school.admin.model.SchoolSuggestion"></mapping>
 		<mapping class="org.school.admin.model.UserRegistrationInfo" />
 		<mapping class="org.school.admin.model.UserRating" />
+		<mapping class="org.school.admin.model.PostRequirement" />
+        <mapping class="org.school.admin.model.ApplicantPreSchoolDetail" />
+        <mapping class="org.school.admin.model.AppliedSchool" />
+        <mapping class="org.school.admin.model.ApplicantBasicDetail" />
+        <mapping class="org.school.admin.model.ApplicantPaymentDetail" />
+        <mapping class="org.school.admin.model.ApplicantParentDetail" />
+        <mapping class="org.school.admin.model.ShortListedSchool" />
     </session-factory>
 
 </hibernate-configuration>
