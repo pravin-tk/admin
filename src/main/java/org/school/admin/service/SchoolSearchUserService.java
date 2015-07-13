@@ -15,18 +15,34 @@ public class SchoolSearchUserService {
 		return schoolSearchUserRepo.addSchoolSearchUser(schoolSearchUser, inputStream, uploadFileLocation );
 	}
 	
-	public ResponseMessage userLogin(SchoolSearchUser schoolSearchUser)
+	public ResponseMessage userLogin(Integer socialType, SchoolSearchUser schoolSearchUser, InputStream inputStream, String uploadFileLocation)
 	{
 		SchoolSearchUserDao schoolSearchUserRepo = new SchoolSearchUserDao();
-		SchoolSearchUser fetchedUser = schoolSearchUserRepo.checkUserCredentials(schoolSearchUser);
 		ResponseMessage responseMessage = new ResponseMessage();
-		if(fetchedUser == null) {
-			responseMessage.setMessage("Invalid credentials.");
-			responseMessage.setStatus(0);
-		} else {
+		
+		if(socialType == 0) {
+			SchoolSearchUser fetchedUser = schoolSearchUserRepo.checkUserCredentials(schoolSearchUser);
+			if(fetchedUser == null) {
+				responseMessage.setMessage("Invalid credentials.");
+				responseMessage.setStatus(0);
+			} else {
+				responseMessage.setMessage("Success");
+				responseMessage.setStatus(1);
+				responseMessage.setData(fetchedUser);
+			}
+		} else if(socialType == 1 || socialType == 2) {
+			SchoolSearchUser fetchedUser = schoolSearchUserRepo.fetchUserByEmailId(schoolSearchUser);
+			if(fetchedUser == null) {
+				schoolSearchUserRepo.addSchoolSearchUser(schoolSearchUser, inputStream, uploadFileLocation );
+				responseMessage.setMessage("Success");
+				responseMessage.setStatus(1);
+				schoolSearchUser.setPassword("");;
+				responseMessage.setData(schoolSearchUser);
+			} else {
+				responseMessage.setData(fetchedUser);
+			}
 			responseMessage.setMessage("Success");
 			responseMessage.setStatus(1);
-			responseMessage.setData(fetchedUser);
 		}
 		return responseMessage;
 	}

@@ -51,11 +51,30 @@ public class SchoolSearchUserController {
 	
 	@POST
 	@Path("login")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON) 
-	public ResponseMessage login(SchoolSearchUser schoolSearchUser) {
+//	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage login(@FormDataParam("socialType") Integer socialType,
+			@FormDataParam("firstName") String firstName,
+			@FormDataParam("lastName") String lastName,
+			@FormDataParam("email") String email,
+			@FormDataParam("password") String password,
+			@FormDataParam("mobile") String mobile,
+			@FormDataParam("file") InputStream uploadedInputStream,
+			@FormDataParam("file") FormDataContentDisposition fileDetail
+			) {
 		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService();
-		ResponseMessage responseMessage = schoolSearchUserService.userLogin(schoolSearchUser);
+		SchoolSearchUser schoolSearchUser = new  SchoolSearchUser();
+		schoolSearchUser.setFirstName(firstName);
+		schoolSearchUser.setLastName(lastName);
+		schoolSearchUser.setEmail(email);
+		schoolSearchUser.setPassword(password);
+		schoolSearchUser.setMobile(mobile);
+		try{
+			schoolSearchUser.setImage(fileDetail.getFileName());
+		}catch(NullPointerException e){
+			schoolSearchUser.setImage("na");
+		}
+		ResponseMessage responseMessage = schoolSearchUserService.userLogin(socialType, schoolSearchUser, uploadedInputStream, context.getInitParameter("home_url"));
 		return responseMessage;
 	}
 	

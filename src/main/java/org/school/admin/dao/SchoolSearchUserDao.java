@@ -108,5 +108,16 @@ public class SchoolSearchUserDao {
         		
         return (SchoolSearchUser)query.uniqueResult();
 	}
+	
+	public SchoolSearchUser fetchUserByEmailId(SchoolSearchUser schoolSearchUser) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+        String hql = "Select ssu.id as id , ssu.firstName as firstName, ssu.lastName as lastName, ssu.status as status,"
+        		+ " ssu.mobile as mobile, ssu.image as image FROM SchoolSearchUser ssu WHERE ssu.email = :email";
+        Query query = session.createQuery(hql).setParameter("email", schoolSearchUser.getEmail())
+        		.setResultTransformer(Transformers.aliasToBean(SchoolSearchUser.class));
+        System.out.println("email : " + schoolSearchUser.getEmail());		
+        return (SchoolSearchUser)query.uniqueResult();
+	}
 
 }
