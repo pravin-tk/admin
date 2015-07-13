@@ -133,4 +133,12 @@ public class SchoolSearchUser implements java.io.Serializable {
 		this.image = image;
 	}
 
+	@Override
+	public String toString() {
+		return "SchoolSearchUser [id=" + id + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", mobile="
+				+ mobile + ", image=" + image
+				+ ", status=" + status + "]";
+	}
+	
 }

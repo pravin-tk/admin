@@ -14,5 +14,21 @@ public class SchoolSearchUserService {
 		SchoolSearchUserDao schoolSearchUserRepo = new SchoolSearchUserDao();
 		return schoolSearchUserRepo.addSchoolSearchUser(schoolSearchUser, inputStream, uploadFileLocation );
 	}
+	
+	public ResponseMessage userLogin(SchoolSearchUser schoolSearchUser)
+	{
+		SchoolSearchUserDao schoolSearchUserRepo = new SchoolSearchUserDao();
+		SchoolSearchUser fetchedUser = schoolSearchUserRepo.checkUserCredentials(schoolSearchUser);
+		ResponseMessage responseMessage = new ResponseMessage();
+		if(fetchedUser == null) {
+			responseMessage.setMessage("Invalid credentials.");
+			responseMessage.setStatus(0);
+		} else {
+			responseMessage.setMessage("Success");
+			responseMessage.setStatus(1);
+			responseMessage.setData(fetchedUser);
+		}
+		return responseMessage;
+	}
 
 }

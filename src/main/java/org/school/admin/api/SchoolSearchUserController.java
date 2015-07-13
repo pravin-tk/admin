@@ -1,10 +1,6 @@
 package org.school.admin.api;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -13,7 +9,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -47,6 +42,16 @@ public class SchoolSearchUserController {
 		
 		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService();
 		ResponseMessage responseMessage = schoolSearchUserService.addSchoolSearchUser(schoolSearchUser, uploadedInputStream, context.getInitParameter("home_url"));
+		return responseMessage;
+	}
+	
+	@POST
+	@Path("login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON) 
+	public ResponseMessage login(SchoolSearchUser schoolSearchUser) {
+		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService();
+		ResponseMessage responseMessage = schoolSearchUserService.userLogin(schoolSearchUser);
 		return responseMessage;
 	}
 	

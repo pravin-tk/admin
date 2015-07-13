@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.transform.Transformers;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.SchoolSearchUser;
 import org.school.admin.util.HibernateUtil;
@@ -94,6 +95,18 @@ public class SchoolSearchUserDao {
 			e.printStackTrace();
 		}
  
+	}
+	
+	public SchoolSearchUser checkUserCredentials(SchoolSearchUser schoolSearchUser) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+        String hql = "Select ssu.id as id , ssu.firstName as firstName, ssu.lastName as lastName, ssu.status as status,"
+        		+ " ssu.mobile as mobile, ssu.image as image FROM SchoolSearchUser ssu WHERE ssu.email = :email AND ssu.password = :password";
+        Query query = session.createQuery(hql).setParameter("email", schoolSearchUser.getEmail())
+        		.setParameter("password", schoolSearchUser.getPassword())
+        		.setResultTransformer(Transformers.aliasToBean(SchoolSearchUser.class));
+        		
+        return (SchoolSearchUser)query.uniqueResult();
 	}
 
 }
