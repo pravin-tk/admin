@@ -168,12 +168,42 @@ public class SchoolController extends ResourceConfig {
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		List<InfraCategory> activity = schoolSearchImpl.getSchoolActivity(id);
 		List<InfraCategory> safety = schoolSearchImpl.getSchoolSafety(id);
-		List<InfraCategory> infra = schoolSearchImpl.getSchoolActivity(id);
+		List<InfraCategory> infra = schoolSearchImpl.getSchoolInfra(id);
 		Facility facility = new Facility();
 		facility.setActivity(activity);
 		facility.setSafety(safety);
 		facility.setInfra(infra);
 		return facility;
+	}
+	
+	@GET
+	@Path("activity.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<InfraCategory> getSchoolActivity(@PathParam("id") int id)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		List<InfraCategory> activity = schoolSearchImpl.getSchoolActivity(id);
+		return activity;
+	}
+	
+	@GET
+	@Path("safety.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<InfraCategory> getSchoolSafety(@PathParam("id") int id)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		List<InfraCategory> safety = schoolSearchImpl.getSchoolSafety(id);
+		return safety;
+	}
+	
+	@GET
+	@Path("infra.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<InfraCategory> getSchoolInfra(@PathParam("id") int id)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		List<InfraCategory> infra = schoolSearchImpl.getSchoolInfra(id);
+		return infra;
 	}
 	
 	@POST

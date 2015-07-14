@@ -1,6 +1,6 @@
 package org.school.admin.model;
 
-// Generated Jul 12, 2015 1:22:56 PM by Hibernate Tools 4.0.0
+// Generated Jul 13, 2015 5:06:47 PM by Hibernate Tools 4.0.0
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +27,6 @@ public class ApplicantParentDetail implements java.io.Serializable {
 	private String qualification;
 	private String profession;
 	private Double income;
-	private String signature;
 	private Byte relationType;
 
 	public ApplicantParentDetail() {
@@ -44,7 +43,6 @@ public class ApplicantParentDetail implements java.io.Serializable {
 		this.qualification = qualification;
 		this.profession = profession;
 		this.income = income;
-		this.signature = signature;
 		this.relationType = relationType;
 	}
 
@@ -122,15 +120,6 @@ public class ApplicantParentDetail implements java.io.Serializable {
 
 	public void setIncome(Double income) {
 		this.income = income;
-	}
-
-	@Column(name = "signature", length = 128)
-	public String getSignature() {
-		return this.signature;
-	}
-
-	public void setSignature(String signature) {
-		this.signature = signature;
 	}
 
 	@Column(name = "relation_type")

@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -58,6 +59,9 @@ import org.school.admin.util.HibernateUtil;
 @Path("settings")
 public class SettingsController extends ResourceConfig {
 	@Context ServletContext context;
+	public SettingsController() {
+		register(MultiPartFeature.class);
+    }
 	/*-------------------Pankaj Naik-------------------------*/
 	@POST
 	@Path("/adminuserrole_save")
@@ -746,14 +750,24 @@ public class SettingsController extends ResourceConfig {
 	@POST
 	@Path("/ratingcategorytype/save")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage saveRatingCategoryType(
-		@FormParam("categoryName") String categoryName,
-		@FormParam("weightage") Float weightage
+			@FormDataParam("categoryName") String categoryName,
+			@FormDataParam("weightage") Float weightage,
+			@FormDataParam("image") InputStream is, 
+			@FormDataParam("image") FormDataContentDisposition header
 	){
 		RatingCategoryType ratingCategoryType = new RatingCategoryType();
 		ratingCategoryType.setCategoryName(categoryName);
 		ratingCategoryType.setWeightage(weightage);
 		ratingCategoryType.setLastUpdatedOn(new Date());
+		String image_name = ratingCategoryType.getCategoryName().replaceAll("([^a-zA-Z]|\\s)+", " ");
+		image_name = image_name+header.getFileName();
+		image_name = image_name.replaceAll(" ", "_").toLowerCase();
+		image_name = "rating/"+image_name;
+		String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+		writeToFile(is, uploadedFileLocation);
+		ratingCategoryType.setImage(image_name);
 		SettingsImpl settings = new SettingsImpl();
 		return settings.saveRatingCategoryType(ratingCategoryType);
 	}
@@ -761,16 +775,28 @@ public class SettingsController extends ResourceConfig {
 	@POST
 	@Path("/ratingcategorytype/update")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateRatingCategoryType(
-			@FormParam("id") Short id,
-			@FormParam("categoryName") String categoryName,
-			@FormParam("weightage") Float weightage
+			@FormDataParam("id") Short id,
+			@FormDataParam("categoryName") String categoryName,
+			@FormDataParam("weightage") Float weightage,
+			@FormDataParam("image") InputStream is, 
+			@FormDataParam("image") FormDataContentDisposition header
 	){
 		RatingCategoryType ratingCategoryType = new RatingCategoryType();
 		ratingCategoryType.setId(id);
 		ratingCategoryType.setCategoryName(categoryName);
 		ratingCategoryType.setWeightage(weightage);
 		ratingCategoryType.setLastUpdatedOn(new Date());
+		if(header.getFileName() != null){
+			String image_name = ratingCategoryType.getCategoryName().replaceAll("([^a-zA-Z]|\\s)+", " ");
+			image_name = image_name+header.getFileName();
+			image_name = image_name.replaceAll(" ", "_").toLowerCase();
+			image_name = "rating/"+image_name;
+			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+			writeToFile(is, uploadedFileLocation);
+			ratingCategoryType.setImage(image_name);
+		}
 		SettingsImpl settings = new SettingsImpl();
 		return settings.updateRatingCategoryType(ratingCategoryType);
 	}

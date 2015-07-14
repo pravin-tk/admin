@@ -1,40 +1,21 @@
 package org.school.admin.data;
 
+import java.util.List;
+
 public class SearchFilter {
-	private int id;
-	private String itemName;
 	private String categoryName;
-	private boolean isFiltered;
-	private String paramName;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getItemName() {
-		return itemName;
-	}
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
+	private List<MainFilter> filter;
 	public String getCategoryName() {
 		return categoryName;
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-	public boolean isFiltered() {
-		return isFiltered;
+	public List<MainFilter> getFilter() {
+		return filter;
 	}
-	public void setFiltered(boolean isFiltered) {
-		this.isFiltered = isFiltered;
+	public void setFilter(List<MainFilter> filter) {
+		this.filter = filter;
 	}
-	public String getParamName() {
-		return paramName;
-	}
-	public void setParamName(String paramName) {
-		this.paramName = paramName;
-	}
-
+	
 }

@@ -25,6 +25,7 @@ public class RatingCategoryType implements java.io.Serializable {
 
 	private Short id;
 	private String categoryName;
+	private String image;
 	private Float weightage;
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
@@ -33,10 +34,11 @@ public class RatingCategoryType implements java.io.Serializable {
 	public RatingCategoryType() {
 	}
 
-	public RatingCategoryType(String categoryName, Float weightage,
+	public RatingCategoryType(String categoryName, String image, Float weightage,
 			Date lastUpdatedOn, Integer lastUpdatedBy,
 			Set<UserRating> userRatings) {
 		this.categoryName = categoryName;
+		this.image = image;
 		this.weightage = weightage;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
@@ -61,6 +63,14 @@ public class RatingCategoryType implements java.io.Serializable {
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	@Column(name = "image", length = 128)
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Column(name = "weightage", precision = 9, scale = 3)

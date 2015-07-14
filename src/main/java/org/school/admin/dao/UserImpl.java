@@ -88,73 +88,20 @@ public class UserImpl {
 		return responseMessage;
 	}
 	
-	public ResponseMessage addApplicantDetails(ApplicantInfo applicantInfo){
+	public ResponseMessage addApplicantDetails(ApplicantBasicDetail applicantBasicDetail){
 		ResponseMessage responseMessage = new ResponseMessage();
 		ArrayList<String> errors = new ArrayList<String>();
-		String pattern = "yyyy-MM-dd";
-	    SimpleDateFormat format = new SimpleDateFormat(pattern);
 	    try {
-	    	if(applicantInfo.getSchoolId() <= 0){
-	    		errors.add("School Id required.");
-	    	}
-	    	if(applicantInfo.getUserId() <= 0){
-	    		errors.add("User Id required.");
-	    	}
-	    	if(applicantInfo.getFirstName().trim().length() <= 0){
-	    		errors.add("First Name required.");
-	    	}
-	    	if(applicantInfo.getDob().trim().length() <= 0){
-	    		errors.add("Date of Birth required.");
-	    	} else {
-	    		if (!applicantInfo.getDob().matches("\\d{4}-\\d{2}-\\d{2}")) {
-	    			errors.add("Invalid date format.");
-	    		}
-	    	}
-	    	if(applicantInfo.getGender().trim().length() <= 0){
-	    		errors.add("Gender required.");
-	    	}
-	    	if(applicantInfo.getPlaceOfBirth().trim().length() <= 0){
-	    		errors.add("Place of birth required.");
-	    	}
-	    	if(applicantInfo.getBloodGroup().trim().length() <= 0){
-	    		errors.add("Blood group required.");
-	    	}
-	    	if(errors.size() <= 0){
-		    	Date date = format.parse(applicantInfo.getDob());
-		      	ApplicantBasicDetail applicantBasicDetail = new ApplicantBasicDetail();
-				School school = new School();
-				UserRegistrationInfo userRegistrationInfo = new UserRegistrationInfo();
-				school.setId(applicantInfo.getSchoolId());
-				userRegistrationInfo.setId(applicantInfo.getUserId());
-				applicantBasicDetail.setSchool(school);
-				applicantBasicDetail.setUserRegistrationInfo(userRegistrationInfo);
-				applicantBasicDetail.setFirstName(applicantInfo.getFirstName());
-				applicantBasicDetail.setMiddleName(applicantInfo.getMiddleName());
-				applicantBasicDetail.setLastName(applicantInfo.getLastName());
-				applicantBasicDetail.setGender(applicantInfo.getGender());
-				applicantBasicDetail.setDob(date);
-				applicantBasicDetail.setBloodGroup(applicantInfo.getBloodGroup());
-				applicantBasicDetail.setPlaceOfBirth(applicantInfo.getPlaceOfBirth());
-				HibernateUtil hibernateUtil = new HibernateUtil();
-				Session session = hibernateUtil.openSession();
-				session.beginTransaction();
-				session.save(applicantBasicDetail);
-				session.getTransaction().commit();
-				int id = applicantBasicDetail.getId();
-				session.close();
-				responseMessage.setStatus(1);
-				responseMessage.setId(id);
-				responseMessage.setMessage("Applicant Info Added Successfully.");
-	    	} else {
-	    		responseMessage.setStatus(1);
-	    		responseMessage.setErrors(errors);
-				responseMessage.setMessage("Unable to add info.");
-	    	}
-	    } catch (ParseException e) {
-	    	errors.add("Invalid date format.");
-	    	responseMessage.setErrors(errors);
-	    	responseMessage.setStatus(0);
-	    	responseMessage.setMessage("Invalid date format.");
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			session.save(applicantBasicDetail);
+			session.getTransaction().commit();
+			int id = applicantBasicDetail.getId();
+			session.close();
+			responseMessage.setStatus(1);
+			responseMessage.setId(id);
+			responseMessage.setMessage("Applicant Info Added Successfully.");
 	    } catch(javax.validation.ConstraintViolationException e) {
 			Set<ConstraintViolation<?>> s = e.getConstraintViolations();
 	    	Iterator<ConstraintViolation<?>> i = s.iterator();
@@ -171,22 +118,6 @@ public class UserImpl {
 	    	responseMessage.setStatus(0);
         	responseMessage.setMessage("Failed to post application");
 		}
-		return responseMessage;
-	}
-	
-	public ResponseMessage addApplicantAddress(
-		int applicantId,
-		String nationality,
-		String religion,
-		int catId,
-		String flatNo,
-		String buildingName,
-		String locality,
-		String city,
-		String pincode
-	){
-		ResponseMessage responseMessage = new ResponseMessage();
-		
 		return responseMessage;
 	}
 

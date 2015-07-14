@@ -248,25 +248,30 @@ public class SchoolSearchImpl {
 		if(classFeeInfos.size() > 0)
 		{
 			int class_id = 0;
+			String class_name = "";
 			FeeDetail feeDetail = new FeeDetail();
 			List<SchoolFee> schoolFees = new ArrayList<SchoolFee>();
 			for(int i=0;i<classFeeInfos.size();i++)
 			{
-				SchoolFee schoolFee = new SchoolFee();
-				schoolFee.setFeeDesc(classFeeInfos.get(i).getFeeName());
-				schoolFee.setAmount(classFeeInfos.get(i).getAmount());
-				schoolFees.add(schoolFee);
-				if(class_id == 0 || class_id != classFeeInfos.get(i).getId()){
-					feeDetail.setId(classFeeInfos.get(i).getId());
-					feeDetail.setClassName(classFeeInfos.get(i).getName());
+				if(class_id != 0 && class_id != classFeeInfos.get(i).getId()){
+					feeDetail.setId(class_id);
+					feeDetail.setClassName(class_name);
 					feeDetail.setFees(schoolFees);
 					classFeeDataList.add(feeDetail);
 					schoolFees = new ArrayList<SchoolFee>();
 					feeDetail = new FeeDetail();
 				}
-
+				SchoolFee schoolFee = new SchoolFee();
+				schoolFee.setFeeDesc(classFeeInfos.get(i).getFeeName());
+				schoolFee.setAmount(classFeeInfos.get(i).getAmount());
+				schoolFees.add(schoolFee);
 				class_id = classFeeInfos.get(i).getId();
+				class_name = classFeeInfos.get(i).getName();
 			}
+			feeDetail.setId(class_id);
+			feeDetail.setClassName(class_name);
+			feeDetail.setFees(schoolFees);
+			classFeeDataList.add(feeDetail);
 		}
 		return classFeeDataList;
 	}
@@ -283,26 +288,34 @@ public class SchoolSearchImpl {
 		session.close();
 		List<InfraCategory> infraCategories = new ArrayList<InfraCategory>();
 		int cat_id = 0;
+		String cat_name = "";
+		String cat_desc = "";
 		InfraCategory infraCategory = new InfraCategory();
 		List<InfraItem> infraItems = new ArrayList<InfraItem>();
 		for(int i=0; i<items.size(); i++){
-			InfraItem infraItem = new InfraItem();
-			infraItem.setId(items.get(i).getActivityCategoryItem().getId());
-			infraItem.setName(items.get(i).getActivityCategoryItem().getName());
-			infraItem.setDescription(items.get(i).getActivityCategoryItem().getDescription());
-			infraItems.add(infraItem);
-			if(cat_id == 0 || cat_id != items.get(i).getActivityCategoryItem().getActivityCategory().getId()){
-				infraCategory.setId(items.get(i).getActivityCategoryItem().getActivityCategory().getId());
-				infraCategory.setName(items.get(i).getActivityCategoryItem().getActivityCategory().getName());
-				infraCategory.setDescription(items.get(i).getActivityCategoryItem().getActivityCategory().getDescription());
+			if(cat_id != 0 && cat_id != items.get(i).getActivityCategoryItem().getActivityCategory().getId()){
+				infraCategory.setId(cat_id);
+				infraCategory.setName(cat_name);
+				infraCategory.setDescription(cat_desc);
 				infraCategory.setItems(infraItems);
 				infraCategories.add(infraCategory);
 				infraItems = new ArrayList<InfraItem>();
 				infraCategory = new InfraCategory();
 			}
-			
+			InfraItem infraItem = new InfraItem();
+			infraItem.setId(items.get(i).getActivityCategoryItem().getId());
+			infraItem.setName(items.get(i).getActivityCategoryItem().getName());
+			infraItem.setDescription(items.get(i).getActivityCategoryItem().getDescription());
+			infraItems.add(infraItem);
 			cat_id = items.get(i).getActivityCategoryItem().getActivityCategory().getId();
+			cat_name = items.get(i).getActivityCategoryItem().getActivityCategory().getName();
+			cat_desc = items.get(i).getActivityCategoryItem().getActivityCategory().getDescription();
 		}
+		infraCategory.setId(cat_id);
+		infraCategory.setName(cat_name);
+		infraCategory.setDescription(cat_desc);
+		infraCategory.setItems(infraItems);
+		infraCategories.add(infraCategory);
 		return infraCategories;
 	}
 	
@@ -318,26 +331,35 @@ public class SchoolSearchImpl {
 		session.close();
 		List<InfraCategory> infraCategories = new ArrayList<InfraCategory>();
 		int cat_id = 0;
+		String cat_name = "";
+		String cat_desc = "";
 		InfraCategory infraCategory = new InfraCategory();
 		List<InfraItem> infraItems = new ArrayList<InfraItem>();
 		for(int i=0; i<items.size(); i++){
-			InfraItem infraItem = new InfraItem();
-			infraItem.setId(items.get(i).getSafetyCategoryItem().getId());
-			infraItem.setName(items.get(i).getSafetyCategoryItem().getName());
-			infraItem.setDescription(items.get(i).getSafetyCategoryItem().getDescription());
-			infraItems.add(infraItem);
-			if(cat_id == 0 || cat_id != items.get(i).getSafetyCategoryItem().getSafetyCategory().getId()){
-				infraCategory.setId(items.get(i).getSafetyCategoryItem().getSafetyCategory().getId());
-				infraCategory.setName(items.get(i).getSafetyCategoryItem().getSafetyCategory().getName());
-				infraCategory.setDescription(items.get(i).getSafetyCategoryItem().getSafetyCategory().getDesc());
+			if(cat_id != 0 && cat_id != items.get(i).getSafetyCategoryItem().getSafetyCategory().getId()){
+				infraCategory.setId(cat_id);
+				infraCategory.setName(cat_name);
+				infraCategory.setDescription(cat_desc);
 				infraCategory.setItems(infraItems);
 				infraCategories.add(infraCategory);
 				infraItems = new ArrayList<InfraItem>();
 				infraCategory = new InfraCategory();
 			}
+			InfraItem infraItem = new InfraItem();
+			infraItem.setId(items.get(i).getSafetyCategoryItem().getId());
+			infraItem.setName(items.get(i).getSafetyCategoryItem().getName());
+			infraItem.setDescription(items.get(i).getSafetyCategoryItem().getDescription());
+			infraItems.add(infraItem);
 			
 			cat_id = items.get(i).getSafetyCategoryItem().getSafetyCategory().getId();
+			cat_name = items.get(i).getSafetyCategoryItem().getSafetyCategory().getName();
+			cat_desc = items.get(i).getSafetyCategoryItem().getSafetyCategory().getDesc();
 		}
+		infraCategory.setId(cat_id);
+		infraCategory.setName(cat_name);
+		infraCategory.setDescription(cat_desc);
+		infraCategory.setItems(infraItems);
+		infraCategories.add(infraCategory);
 		return infraCategories;
 	}
 	
@@ -353,9 +375,18 @@ public class SchoolSearchImpl {
 		session.close();
 		List<InfraCategory> infraCategories = new ArrayList<InfraCategory>();
 		int cat_id = 0;
+		String cat_name = "";
 		InfraCategory infraCategory = new InfraCategory();
 		List<InfraItem> infraItems = new ArrayList<InfraItem>();
 		for(int i=0; i<items.size(); i++){
+			if(cat_id != 0 && cat_id != items.get(i).getInfrastructureCategoryItem().getInfrastructureCategory().getId()){
+				infraCategory.setId(cat_id);
+				infraCategory.setName(cat_name);
+				infraCategory.setItems(infraItems);
+				infraCategories.add(infraCategory);
+				infraItems = new ArrayList<InfraItem>();
+				infraCategory = new InfraCategory();
+			}
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getInfrastructureCategoryItem().getId());
 			infraItem.setName(items.get(i).getInfrastructureCategoryItem().getName());
@@ -363,23 +394,19 @@ public class SchoolSearchImpl {
 			infraItem.setItemCount(items.get(i).getCountItemValue());
 			infraItem.setCharges(items.get(i).getCharges());
 			infraItems.add(infraItem);
-			if(cat_id == 0 || cat_id != items.get(i).getInfrastructureCategoryItem().getInfrastructureCategory().getId()){
-				infraCategory.setId(items.get(i).getInfrastructureCategoryItem().getInfrastructureCategory().getId());
-				infraCategory.setName(items.get(i).getInfrastructureCategoryItem().getInfrastructureCategory().getName());
-				infraCategory.setItems(infraItems);
-				infraCategories.add(infraCategory);
-				infraItems = new ArrayList<InfraItem>();
-				infraCategory = new InfraCategory();
-			}
-			
 			cat_id = items.get(i).getInfrastructureCategoryItem().getInfrastructureCategory().getId();
+			cat_name = items.get(i).getInfrastructureCategoryItem().getInfrastructureCategory().getName();
 		}
+		infraCategory.setId(cat_id);
+		infraCategory.setName(cat_name);
+		infraCategory.setItems(infraItems);
+		infraCategories.add(infraCategory);
 		return infraCategories;
 	}
 	
 	public List<Rating> getSchoolRating(Integer schoolId)
 	{
-		String HQL = "SELECT ratingCategoryType.id as catid, ratingCategoryType.categoryName as name, avg(rating) as rating from UserRating where school.id = :schoolId GROUP BY ratingCategoryType.id";
+		String HQL = "SELECT ratingCategoryType.id as catid, ratingCategoryType.categoryName as name, avg(rating) as rating, count(ratingCategoryType.id) as ratingCount, COALESCE(ratingCategoryType.image,'') as image from UserRating where school.id = :schoolId GROUP BY ratingCategoryType.id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		
@@ -388,7 +415,7 @@ public class SchoolSearchImpl {
 		session.flush();
 		List<Rating> schoolRatings = query.list();
 		if(schoolRatings.size() <= 0){
-			String newhql = "SELECT id as catid, categoryName as name, 0 as rating from RatingCategoryType";
+			String newhql = "SELECT id as catid, categoryName as name, 0 as rating, 0 as ratingCount, COALESCE(image,'') as image from RatingCategoryType";
 			Session newsession = hibernateUtil.openSession();
 			Query newquery = newsession.createQuery(newhql).setResultTransformer(Transformers.aliasToBean(Rating.class));
 			newsession.flush();
