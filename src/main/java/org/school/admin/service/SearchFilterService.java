@@ -42,6 +42,10 @@ public class SearchFilterService {
 		searchSort3.setName("distance");
 		searchSort3.setSortOrder("random");
 		searchSorts.add(searchSort3);
+		SearchSort searchSort4 = new SearchSort();
+		searchSort4.setName("seats");
+		searchSort4.setSortOrder("random");
+		searchSorts.add(searchSort4);
 		return searchSorts;
 	}
 	
@@ -76,7 +80,7 @@ public class SearchFilterService {
 		return sortFields;
 	}
 	
-	public List<SearchSort> getUserSortFields(String fee, String rating, String distance)
+	public List<SearchSort> getUserSortFields(String fee, String rating, String distance, String seats)
 	{
 		List<SearchSort> searchSorts = new ArrayList<SearchSort>();
 		SearchSort searchSort1 = new SearchSort();
@@ -100,6 +104,13 @@ public class SearchFilterService {
 			searchSort3.setSortOrder(distance);
 		}
 		searchSorts.add(searchSort3);
+		SearchSort searchSort4 = new SearchSort();
+		searchSort4.setName("seats");
+		searchSort4.setSortOrder("random");
+		if(seats.equalsIgnoreCase("ASC") || seats.equalsIgnoreCase("DESC")){
+			searchSort4.setSortOrder(seats);
+		}
+		searchSorts.add(searchSort4);
 		return searchSorts;
 	}
 	
@@ -120,22 +131,37 @@ public class SearchFilterService {
 		} catch(NullPointerException e) {
 			//activity filters not found
 		}
+		int cat_id = 0;
+		String cat_name = "";
+		List<MainFilter> filter = new ArrayList<MainFilter>();
+		SearchFilter searchFilter = new SearchFilter();
 		for(int i=0; i<activity_count; i++){
-			SearchFilter searchFilter = new SearchFilter();
-			searchFilter.setId(activityCategoryItems.get(i).getId());
-			searchFilter.setItemName(activityCategoryItems.get(i).getName());
-			searchFilter.setCategoryName(activityCategoryItems.get(i).getActivityCategory().getName());
-			searchFilter.setFiltered(false);
-			searchFilter.setParamName("activityId");
+			if(cat_id != 0 && cat_id != activityCategoryItems.get(i).getActivityCategory().getId()){
+				searchFilter.setCategoryName(cat_name);
+				searchFilter.setFilter(filter);
+				activityFilter.add(searchFilter);
+				searchFilter = new SearchFilter();
+				filter = new ArrayList<MainFilter>();
+			}
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(activityCategoryItems.get(i).getId());
+			mainFilter.setName(activityCategoryItems.get(i).getName());
+			mainFilter.setFiltered(false);
+			mainFilter.setParamName("activityId");
 			if(req_act_count > 0){
 				for(int j = 0; j < req_act_count; j++){
-					if(requestActivityFielter.get(j).getId() == activityCategoryItems.get(i).getId()){
-						searchFilter.setFiltered(true);
+					if(requestActivityFielter.get(i).getFilter().get(j).getId() == activityCategoryItems.get(i).getId()){
+						mainFilter.setFiltered(true);
 					}
 				}
 			}
-			activityFilter.add(searchFilter);
+			filter.add(mainFilter);
+			cat_id = activityCategoryItems.get(i).getActivityCategory().getId();
+			cat_name = activityCategoryItems.get(i).getActivityCategory().getName();
 		}
+		searchFilter.setCategoryName(cat_name);
+		searchFilter.setFilter(filter);
+		activityFilter.add(searchFilter);
 		return activityFilter;
 	}
 	
@@ -152,22 +178,37 @@ public class SearchFilterService {
 		} catch(NullPointerException e) {
 			//activity filters not found
 		}
+		int cat_id = 0;
+		String cat_name = "";
+		List<MainFilter> filter = new ArrayList<MainFilter>();
+		SearchFilter searchFilter = new SearchFilter();
 		for(int i=0; i<activity_count; i++){
-			SearchFilter searchFilter = new SearchFilter();
-			searchFilter.setId(activityCategoryItems.get(i).getId());
-			searchFilter.setItemName(activityCategoryItems.get(i).getName());
-			searchFilter.setCategoryName(activityCategoryItems.get(i).getActivityCategory().getName());
-			searchFilter.setFiltered(false);
-			searchFilter.setParamName("activityId");
+			if(cat_id != 0 && cat_id != activityCategoryItems.get(i).getActivityCategory().getId()){
+				searchFilter.setCategoryName(cat_name);
+				searchFilter.setFilter(filter);
+				activityFilter.add(searchFilter);
+				searchFilter = new SearchFilter();
+				filter = new ArrayList<MainFilter>();
+			}
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(activityCategoryItems.get(i).getId());
+			mainFilter.setName(activityCategoryItems.get(i).getName());
+			mainFilter.setFiltered(false);
+			mainFilter.setParamName("activityId");
 			if(req_act_count > 0){
 				for(int j = 0; j < req_act_count; j++){
 					if(Integer.parseInt(requestActivityFielter[j]) == activityCategoryItems.get(i).getId()){
-						searchFilter.setFiltered(true);
+						mainFilter.setFiltered(true);
 					}
 				}
 			}
-			activityFilter.add(searchFilter);
+			filter.add(mainFilter);
+			cat_id = activityCategoryItems.get(i).getActivityCategory().getId();
+			cat_name = activityCategoryItems.get(i).getActivityCategory().getName();
 		}
+		searchFilter.setCategoryName(cat_name);
+		searchFilter.setFilter(filter);
+		activityFilter.add(searchFilter);
 		return activityFilter;
 	}
 	
@@ -188,22 +229,37 @@ public class SearchFilterService {
 		} catch(NullPointerException e) {
 			//safety filters not found
 		}
+		int cat_id = 0;
+		String cat_name = "";
+		List<MainFilter> filter = new ArrayList<MainFilter>();
+		SearchFilter searchFilter = new SearchFilter();
 		for(int i=0; i<safety_count; i++){
-			SearchFilter searchFilter = new SearchFilter();
-			searchFilter.setId(safetyCategoryItems.get(i).getId());
-			searchFilter.setItemName(safetyCategoryItems.get(i).getName());
-			searchFilter.setCategoryName(safetyCategoryItems.get(i).getSafetyCategory().getName());
-			searchFilter.setFiltered(false);
-			searchFilter.setParamName("safetyId");
+			if(cat_id != 0 && cat_id != safetyCategoryItems.get(i).getSafetyCategory().getId()){
+				searchFilter.setCategoryName(cat_name);
+				searchFilter.setFilter(filter);
+				safetyFilter.add(searchFilter);
+				searchFilter = new SearchFilter();
+				filter = new ArrayList<MainFilter>();
+			}
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(safetyCategoryItems.get(i).getId());
+			mainFilter.setName(safetyCategoryItems.get(i).getName());
+			mainFilter.setFiltered(false);
+			mainFilter.setParamName("safetyId");
 			if(req_safety_count > 0){
 				for(int j = 0; j < req_safety_count; j++){
-					if(requestSafetyFilter.get(j).getId() == safetyCategoryItems.get(i).getId()){
-						searchFilter.setFiltered(true);
+					if(requestSafetyFilter.get(i).getFilter().get(j).getId() == safetyCategoryItems.get(i).getId()){
+						mainFilter.setFiltered(true);
 					}
 				}
 			}
-			safetyFilter.add(searchFilter);
+			filter.add(mainFilter);
+			cat_id = safetyCategoryItems.get(i).getSafetyCategory().getId();
+			cat_name = safetyCategoryItems.get(i).getSafetyCategory().getName();
 		}
+		searchFilter.setCategoryName(cat_name);
+		searchFilter.setFilter(filter);
+		safetyFilter.add(searchFilter);
 		return safetyFilter;
 	}
 	
@@ -220,22 +276,37 @@ public class SearchFilterService {
 		} catch(NullPointerException e) {
 			//safety filters not found
 		}
+		int cat_id = 0;
+		String cat_name = "";
+		List<MainFilter> filter = new ArrayList<MainFilter>();
+		SearchFilter searchFilter = new SearchFilter();
 		for(int i=0; i<safety_count; i++){
-			SearchFilter searchFilter = new SearchFilter();
-			searchFilter.setId(safetyCategoryItems.get(i).getId());
-			searchFilter.setItemName(safetyCategoryItems.get(i).getName());
-			searchFilter.setCategoryName(safetyCategoryItems.get(i).getSafetyCategory().getName());
-			searchFilter.setFiltered(false);
-			searchFilter.setParamName("safetyId");
+			if(cat_id != 0 && cat_id != safetyCategoryItems.get(i).getSafetyCategory().getId()){
+				searchFilter.setCategoryName(cat_name);
+				searchFilter.setFilter(filter);
+				safetyFilter.add(searchFilter);
+				searchFilter = new SearchFilter();
+				filter = new ArrayList<MainFilter>();
+			}
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(safetyCategoryItems.get(i).getId());
+			mainFilter.setName(safetyCategoryItems.get(i).getName());
+			mainFilter.setFiltered(false);
+			mainFilter.setParamName("safetyId");
 			if(req_safety_count > 0){
 				for(int j = 0; j < req_safety_count; j++){
 					if(Integer.parseInt(requestSafetyFilter[j]) == safetyCategoryItems.get(i).getId()){
-						searchFilter.setFiltered(true);
+						mainFilter.setFiltered(true);
 					}
 				}
 			}
-			safetyFilter.add(searchFilter);
+			filter.add(mainFilter);
+			cat_id = safetyCategoryItems.get(i).getSafetyCategory().getId();
+			cat_name = safetyCategoryItems.get(i).getSafetyCategory().getName();
 		}
+		searchFilter.setCategoryName(cat_name);
+		searchFilter.setFilter(filter);
+		safetyFilter.add(searchFilter);
 		return safetyFilter;
 	}
 	
@@ -256,22 +327,37 @@ public class SearchFilterService {
 		} catch(NullPointerException e) {
 			//Infra filters not found
 		}
+		int cat_id = 0;
+		String cat_name = "";
+		List<MainFilter> filter = new ArrayList<MainFilter>();
+		SearchFilter searchFilter = new SearchFilter();
 		for(int i=0; i<infra_count; i++){
-			SearchFilter searchFilter = new SearchFilter();
-			searchFilter.setId(infrastructureCategoryItems.get(i).getId());
-			searchFilter.setItemName(infrastructureCategoryItems.get(i).getName());
-			searchFilter.setCategoryName(infrastructureCategoryItems.get(i).getInfrastructureCategory().getName());
-			searchFilter.setFiltered(false);
-			searchFilter.setParamName("infraId");
+			if(cat_id != 0 && cat_id != infrastructureCategoryItems.get(i).getInfrastructureCategory().getId()){
+				searchFilter.setCategoryName(cat_name);
+				searchFilter.setFilter(filter);
+				infraFilter.add(searchFilter);
+				searchFilter = new SearchFilter();
+				filter = new ArrayList<MainFilter>();
+			}
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(infrastructureCategoryItems.get(i).getId());
+			mainFilter.setName(infrastructureCategoryItems.get(i).getName());
+			mainFilter.setFiltered(false);
+			mainFilter.setParamName("infraId");
 			if (req_infra_count > 0) {
 				for (int j = 0; j < req_infra_count; j++) {
-					if (requestInfraFilter.get(j).getId() == infrastructureCategoryItems.get(i).getId()) {
-						searchFilter.setFiltered(true);
+					if (requestInfraFilter.get(i).getFilter().get(j).getId() == infrastructureCategoryItems.get(i).getId()) {
+						mainFilter.setFiltered(true);
 					}
 				}
 			}
-			infraFilter.add(searchFilter);
+			filter.add(mainFilter);
+			cat_id = infrastructureCategoryItems.get(i).getInfrastructureCategory().getId();
+			cat_name = infrastructureCategoryItems.get(i).getInfrastructureCategory().getName();
 		}
+		searchFilter.setCategoryName(cat_name);
+		searchFilter.setFilter(filter);
+		infraFilter.add(searchFilter);
 		return infraFilter;
 	}
 	
@@ -288,22 +374,37 @@ public class SearchFilterService {
 		} catch(NullPointerException e) {
 			//Infra filters not found
 		}
+		int cat_id = 0;
+		String cat_name = "";
+		List<MainFilter> filter = new ArrayList<MainFilter>();
+		SearchFilter searchFilter = new SearchFilter();
 		for(int i=0; i<infra_count; i++){
-			SearchFilter searchFilter = new SearchFilter();
-			searchFilter.setId(infrastructureCategoryItems.get(i).getId());
-			searchFilter.setItemName(infrastructureCategoryItems.get(i).getName());
-			searchFilter.setCategoryName(infrastructureCategoryItems.get(i).getInfrastructureCategory().getName());
-			searchFilter.setFiltered(false);
-			searchFilter.setParamName("infraId");
+			if(cat_id != 0 && cat_id != infrastructureCategoryItems.get(i).getInfrastructureCategory().getId()){
+				searchFilter.setCategoryName(cat_name);
+				searchFilter.setFilter(filter);
+				infraFilter.add(searchFilter);
+				searchFilter = new SearchFilter();
+				filter = new ArrayList<MainFilter>();
+			}
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(infrastructureCategoryItems.get(i).getId());
+			mainFilter.setName(infrastructureCategoryItems.get(i).getName());
+			mainFilter.setFiltered(false);
+			mainFilter.setParamName("infraId");
 			if (req_infra_count > 0) {
 				for (int j = 0; j < req_infra_count; j++) {
 					if (Integer.parseInt(requestInfraFilter[j]) == infrastructureCategoryItems.get(i).getId()) {
-						searchFilter.setFiltered(true);
+						mainFilter.setFiltered(true);
 					}
 				}
 			}
-			infraFilter.add(searchFilter);
+			filter.add(mainFilter);
+			cat_id = infrastructureCategoryItems.get(i).getInfrastructureCategory().getId();
+			cat_name = infrastructureCategoryItems.get(i).getInfrastructureCategory().getName();
 		}
+		searchFilter.setCategoryName(cat_name);
+		searchFilter.setFilter(filter);
+		infraFilter.add(searchFilter);
 		return infraFilter;
 	}
 	
@@ -629,6 +730,7 @@ public class SearchFilterService {
 		searchRequest.setCategoryId("0");
 		searchRequest.setDistance("random");
 		searchRequest.setFee("random");
+		searchRequest.setSeats("random");
 		searchRequest.setInfraId("0");
 		searchRequest.setMediumId("0");
 		searchRequest.setRating("random");
@@ -652,6 +754,8 @@ public class SearchFilterService {
 		        	searchRequest.setCategoryId(params.getFirst("categoryId"));
 		        } else if(param.equals("distance")) {
 		        	searchRequest.setDistance(params.getFirst("distance"));
+		        } else if(param.equals("seats")) {
+		        	searchRequest.setSeats(params.getFirst("seats"));
 		        } else if(param.equals("classFee")) {
 		        	searchRequest.setFee(params.getFirst("classFee"));
 		        } else if(param.equals("infraId")) {

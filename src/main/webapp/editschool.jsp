@@ -214,7 +214,6 @@ $("#trialEndDate").datepicker({
 	    startDate: '2010-01-01'
 });
 $('#update').click(function (){
-	alert('ouch');
 	var options = { 
 					url: 'webapi/school/save',
 					type: 'POST',
@@ -224,7 +223,6 @@ $('#update').click(function (){
 					success: showResponse 
 				  };
 	jQuery("#school_update").ajaxSubmit(options); 
-	//$("#school_update").ajaxForm(options);
 	function validate(){
 		//validate
 	}

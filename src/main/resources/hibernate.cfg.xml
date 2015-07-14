@@ -31,11 +31,11 @@
         <mapping class="org.school.admin.model.AdminUserRole"></mapping>
         <mapping class="org.school.admin.model.AreaUnit"></mapping>
         <mapping class="org.school.admin.model.BoardType"></mapping>
-          <mapping class="org.school.admin.model.BloodGroup"></mapping>
+        <mapping class="org.school.admin.model.BloodGroup"></mapping>
         <mapping class="org.school.admin.model.BusInfo"></mapping>
         <mapping class="org.school.admin.model.BusStop"></mapping>
         <mapping class="org.school.admin.model.CampusInfo"></mapping>
-          <mapping class="org.school.admin.model.Cast"></mapping>
+        <mapping class="org.school.admin.model.Cast"></mapping>
         <mapping class="org.school.admin.model.CertificateType"></mapping>
         <mapping class="org.school.admin.model.City"></mapping>
         <mapping class="org.school.admin.model.ClassAccessories"></mapping>
@@ -95,8 +95,18 @@
 		<mapping class="org.school.admin.model.TabControl"></mapping>
 		<mapping class="org.school.admin.model.SchoolSearch"></mapping>
 		<mapping class="org.school.admin.model.SchoolReview"></mapping>
+		<mapping class="org.school.admin.model.SchoolRating"></mapping>
 		<mapping class="org.school.admin.model.SchoolSearchUser"></mapping>
-			<mapping class="org.school.admin.model.UserRegistrationInfo"></mapping>
+		<mapping class="org.school.admin.model.SchoolSuggestion"></mapping>
+		<mapping class="org.school.admin.model.UserRegistrationInfo" />
+		<mapping class="org.school.admin.model.UserRating" />
+		<mapping class="org.school.admin.model.PostRequirement" />
+        <mapping class="org.school.admin.model.ApplicantPreSchoolDetail" />
+        <mapping class="org.school.admin.model.AppliedSchool" />
+        <mapping class="org.school.admin.model.ApplicantBasicDetail" />
+        <mapping class="org.school.admin.model.ApplicantPaymentDetail" />
+        <mapping class="org.school.admin.model.ApplicantParentDetail" />
+        <mapping class="org.school.admin.model.ShortListedSchool" />
     </session-factory>
 
 </hibernate-configuration>

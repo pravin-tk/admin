@@ -87,11 +87,15 @@ public class SchoolSearchController {
 		result.setTypeFilter(sfService.getUserSchoolTypeFilter(searchRequest.getTypeId()));
 		result.setCategoryFilter(sfService.getUserSchoolCategoryFilter(searchRequest.getCategoryId()));
 		result.setClassificationFilter(sfService.getUserSchoolClassificationFilter(searchRequest.getClassificationId()));
-		result.setSortFields(sfService.getUserSortFields
+		result.setSortFields
 			(
-				searchRequest.getFee(),
-				searchRequest.getRating(), 
-				searchRequest.getDistance())
+				sfService.getUserSortFields
+				(
+					searchRequest.getFee(),
+					searchRequest.getRating(), 
+					searchRequest.getDistance(),
+					searchRequest.getSeats()
+				)
 			);
 		return result;
 	}

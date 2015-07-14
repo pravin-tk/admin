@@ -25,6 +25,7 @@ public class SchoolList implements java.io.Serializable {
 	private long reviews;
 	private Double distance;
 	private Double totalFee;
+	private int seats;
 
 	public SchoolList() {
 	}
@@ -253,6 +254,13 @@ public class SchoolList implements java.io.Serializable {
 	public void setTotalFee(Double totalFee) {
 		this.totalFee = totalFee;
 	}
-	
+
+	public int getSeats() {
+		return seats;
+	}
+
+	public void setSeats(int seats) {
+		this.seats = seats;
+	}
 	
 }

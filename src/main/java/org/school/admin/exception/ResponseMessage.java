@@ -8,6 +8,7 @@ public class ResponseMessage {
 	private String message;
 	private Object data;
 	private ArrayList<String> errors; 
+	private int id;
 	
 	public Object getData() {
 		return data;
@@ -32,6 +33,12 @@ public class ResponseMessage {
 	}
 	public void setErrors(ArrayList<String> errors) {
 		this.errors = errors;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

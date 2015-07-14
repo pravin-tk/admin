@@ -1,6 +1,6 @@
 package org.school.admin.model;
 
-// Generated 11 Jul, 2015 4:07:33 PM by Hibernate Tools 4.3.1
+// Generated Jul 10, 2015 5:21:17 PM by Hibernate Tools 4.0.0
 
 import java.util.Date;
 import java.util.HashSet;
@@ -41,6 +41,7 @@ public class UserRegistrationInfo implements java.io.Serializable {
 	private Date lastLoggedOn;
 	private Integer lastUpdatedBy;
 	private Date lastUpdatedOn;
+	private Set<UserRating> userRatings = new HashSet<UserRating>(0);
 	private Set<SchoolReview> schoolReviews = new HashSet<SchoolReview>(0);
 
 	public UserRegistrationInfo() {
@@ -51,7 +52,8 @@ public class UserRegistrationInfo implements java.io.Serializable {
 			String memberOtp, Boolean gender, Date dateOfBirth, String image,
 			String bloodGroup, String tempAddr, String permAddr,
 			String landlineNo, Date lastLoggedOn, Integer lastUpdatedBy,
-			Date lastUpdatedOn, Set<SchoolReview> schoolReviews) {
+			Date lastUpdatedOn, Set<UserRating> userRatings,
+			Set<SchoolReview> schoolReviews) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.mobile = mobile;
@@ -69,6 +71,7 @@ public class UserRegistrationInfo implements java.io.Serializable {
 		this.lastLoggedOn = lastLoggedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
 		this.lastUpdatedOn = lastUpdatedOn;
+		this.userRatings = userRatings;
 		this.schoolReviews = schoolReviews;
 	}
 
@@ -237,6 +240,15 @@ public class UserRegistrationInfo implements java.io.Serializable {
 
 	public void setLastUpdatedOn(Date lastUpdatedOn) {
 		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRegistrationInfo")
+	public Set<UserRating> getUserRatings() {
+		return this.userRatings;
+	}
+
+	public void setUserRatings(Set<UserRating> userRatings) {
+		this.userRatings = userRatings;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRegistrationInfo")

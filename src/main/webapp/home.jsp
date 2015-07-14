@@ -1,8 +1,19 @@
 <%@page import="org.school.admin.model.City"%>
 <%@page import="org.school.admin.service.CityNamesService"%>
+<%@page import="org.school.admin.model.School"%>
+<%@page import="org.school.admin.dao.SchoolDAOImp"%>
 <%@page import="java.util.List"%>
 <%@ include file="header.jsp" %>
 <%
+	SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
+	List<School> school_list = null;
+	if (request.getParameterMap().containsKey("school_id")) {
+		if(request.getParameter("school_id") != null){
+			if(Integer.parseInt(request.getParameter("school_id")) > 0)
+			school_list = schoolDAOImp.getSchoolList(Integer.parseInt(request.getParameter("school_id")), 0, 0);
+			System.out.println(school_list.toString());
+		}
+	}
 	List<City> city_list = new CityNamesService().getAllCityNames();
 	System.out.println(city_list.toString());
 %>
@@ -80,7 +91,24 @@
                                 </tr>
                             </thead>
                             <tbody id="school_list">
-                                
+                           	<% if(school_list != null){
+                               for(int i=0; i < school_list.size(); i++){
+                               	%>
+                               	<tr>
+                                   <td><% out.print(school_list.get(i).getName()); %></td>
+                                   <td><% out.print(school_list.get(i).getLocality().getName()); %></td>
+                                   <td><% out.print(school_list.get(i).getStreetName()); %></td>
+                                   <td><% out.print(school_list.get(i).getLatitude()+","+school_list.get(i).getLongitude()); %></td>
+                                   <td><% out.print(school_list.get(i).getPincode()); %></td>
+                                   <td><% if(school_list.get(i).isEstablishmentType() == true) { out.print("New"); } else { out.print("Old"); } %></td>
+                                   <td><% if(school_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
+                                   <td class="alignRight">
+                                   		<a href='javascript:editSchool(<% out.print(school_list.get(i).getId()); %>);' class='btn btn-success icon-btn new-commission'><i class='fa fa-pencil'></i></a>
+			    						<a href='javascript:updateConfig(<% out.print(school_list.get(i).getId()); %>);' class='btn btn-success icon-btn new-commission'><i class='fa fa-cog'></i></a>
+                                   </td>
+                               	</tr>
+                               	<% } 
+                               	}%>
                             </tbody>
                         </table>
 
