@@ -31,9 +31,11 @@
         <mapping class="org.school.admin.model.AdminUserRole"></mapping>
         <mapping class="org.school.admin.model.AreaUnit"></mapping>
         <mapping class="org.school.admin.model.BoardType"></mapping>
+          <mapping class="org.school.admin.model.BloodGroup"></mapping>
         <mapping class="org.school.admin.model.BusInfo"></mapping>
         <mapping class="org.school.admin.model.BusStop"></mapping>
         <mapping class="org.school.admin.model.CampusInfo"></mapping>
+          <mapping class="org.school.admin.model.Cast"></mapping>
         <mapping class="org.school.admin.model.CertificateType"></mapping>
         <mapping class="org.school.admin.model.City"></mapping>
         <mapping class="org.school.admin.model.ClassAccessories"></mapping>

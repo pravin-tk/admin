@@ -30,9 +30,11 @@ import org.school.admin.model.Accessories;
 import org.school.admin.model.AdminUser;
 import org.school.admin.model.AdminUserRole;
 import org.school.admin.model.AreaUnit;
+import org.school.admin.model.BloodGroup;
 import org.school.admin.model.BoardType;
 import org.school.admin.model.BusInfo;
 import org.school.admin.model.BusStop;
+import org.school.admin.model.Cast;
 import org.school.admin.model.CertificateType;
 import org.school.admin.model.EducationType;
 import org.school.admin.model.ExamType;
@@ -124,6 +126,55 @@ public class SettingsController extends ResourceConfig {
 		SettingsImpl settings = new SettingsImpl();
 		return settings.saveAccessory(accessory);
 	}
+	/*----------------------PANKAJ NAIK -------------------*/
+	@POST
+	@Path("/bloodgroup/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage saveBloodGroup(@FormParam("name") String name){
+		BloodGroup bloodGroup = new BloodGroup();
+		bloodGroup.setName(name);
+		SettingsImpl settings = new SettingsImpl();
+		return settings.saveBloodGroup(bloodGroup);
+	}
+	@POST
+	@Path("/bloodgroup/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateBloodGroup(
+			@FormParam("id") Short id,
+			@FormParam("name") String name
+	){
+	
+		BloodGroup bloodGroup = new BloodGroup();
+		bloodGroup.setId(id);
+		bloodGroup.setName(name);
+		SettingsImpl settings = new SettingsImpl();
+		return settings.updateBloodGroup(bloodGroup);
+	}
+	
+	@POST
+	@Path("/cast/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage saveCast(@FormParam("name") String name){
+		Cast cast = new Cast();
+		cast.setName(name);
+		SettingsImpl settings = new SettingsImpl();
+		return settings.saveCast(cast);
+	}
+	@POST
+	@Path("/cast/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateCast(
+			@FormParam("id") Short id,
+			@FormParam("name") String name
+	){
+	
+		Cast cast = new Cast();
+		cast.setId(id);
+		cast.setName(name);
+		SettingsImpl settings = new SettingsImpl();
+		return settings.updateCast(cast);
+	}
+	/*------------------------------------------------------*/
 	
 	@POST
 	@Path("/accessory/update")

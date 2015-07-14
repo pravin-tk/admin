@@ -190,15 +190,15 @@
 			    	if(data[index].promote == 0){
 			    	row.push(
 			    			"<a href='javascript:editSchool("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-pencil'></i></a> "
-			    			+"<a href='javascript:updateConfig("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-cog'></i></a>"
+			    			+"<a href='javascript:updateConfig("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-cog'></i></a> "
 			    			+"<a href='javascript:updatePromote("+data[index].id+","+data[index].promote+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-star-o'></i></a>"
 			    			);
 			    	}
 			    	else{
 			    		row.push(
 				    			"<a href='javascript:editSchool("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-pencil'></i></a> "
-				    			+"<a href='javascript:updateConfig("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-cog'></i></a>"
-				    			+"<a href='javascript:updatePromote("+data[index].id+","+data[index].promote+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-star'></i></a>"
+				    			+"<a href='javascript:updateConfig("+data[index].id+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-cog'></i></a> "
+				    			+"<a href='javascript:depromote("+data[index].id+","+data[index].promote+");' class='btn btn-success icon-btn new-commission'><i class='fa fa-star'></i></a>"
 				    			);
 			    		
 			    	}
@@ -221,12 +221,24 @@
   }
   function updatePromote(schoolId,promote)
   {
-	$.post("webapi/school/updatepromote",{schoolId : schoolId,promote : promote},function(data)
-  	{
-  			search();
-  	});
-	  
+	 var ok = confirm("Do you want to Promoto ?");
+	 if(ok){
+		$.post("webapi/school/updatepromote",{schoolId : schoolId,promote : promote},function(data)
+	  	{
+	  			search();
+	  	});
+ 	 } 
   }
+ function depromote(schoolId,promote)
+ {
+	 var ok = confirm("Do you want to Depromoto ?");
+	 if(ok){
+			$.post("webapi/school/updatepromote",{schoolId : schoolId,promote : promote},function(data)
+		  	{
+		  			search();
+		  	});
+		 } 
+   }
     </script>
 </body>
 

@@ -11,9 +11,11 @@ import org.school.admin.model.Accessories;
 import org.school.admin.model.AdminUser;
 import org.school.admin.model.AdminUserRole;
 import org.school.admin.model.AreaUnit;
+import org.school.admin.model.BloodGroup;
 import org.school.admin.model.BoardType;
 import org.school.admin.model.BusInfo;
 import org.school.admin.model.BusStop;
+import org.school.admin.model.Cast;
 import org.school.admin.model.CertificateType;
 import org.school.admin.model.EducationType;
 import org.school.admin.model.ExamType;
@@ -291,6 +293,127 @@ public class SettingsImpl {
 		session.close();
 		return result;
 	}
+	
+	public ResponseMessage saveBloodGroup(BloodGroup bloodGroup){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if (bloodGroup.getName() == null || bloodGroup.getName().trim().length() == 0) {
+			response.setStatus(0);
+			response.setMessage("Please enter blood group name");
+		} else {
+			String hql = "from BloodGroup where name = :name";
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("name", bloodGroup.getName());
+			List<BloodGroup> result = query.list();
+			session.close();
+			if (result.size() > 0) {
+				response.setStatus(0);
+				response.setMessage("Blood Group name already exists");
+			} else {
+				Session newsession = hibernateUtil.openSession();
+				newsession.beginTransaction();
+				newsession.save(bloodGroup);
+				newsession.getTransaction().commit();
+				newsession.close();
+				response.setStatus(1);
+				response.setMessage("Success");
+			}
+		}
+		return response;
+	}
+	
+	/**
+	 * Update BloodGroup
+	 * 
+	 * @param bloodGroup
+	 * @return String
+	 */
+	public ResponseMessage updateBloodGroup(BloodGroup bloodGroup){
+    	ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "from BloodGroup where name = :name and id != :id";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("name", bloodGroup.getName());
+		query.setParameter("id", bloodGroup.getId());
+		List<BloodGroup> result = query.list();
+		session.close();
+		if (result.size() > 0) {
+			response.setStatus(0);
+			response.setMessage("Blood Group name already exists");
+		} else {
+	        Session newsession = hibernateUtil.openSession();
+	        newsession.beginTransaction();
+	        newsession.update(bloodGroup);
+	        newsession.getTransaction().commit();
+	        newsession.close();
+	        response.setStatus(1);
+			response.setMessage("Success");
+		}
+        return response;
+    }
+	
+	
+	public ResponseMessage saveCast(Cast cast){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if (cast.getName() == null || cast.getName().trim().length() == 0) {
+			response.setStatus(0);
+			response.setMessage("Please enter blood group name");
+		} else {
+			String hql = "from BloodGroup where name = :name";
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("name", cast.getName());
+			List<Cast> result = query.list();
+			session.close();
+			if (result.size() > 0) {
+				response.setStatus(0);
+				response.setMessage("cast name already exists");
+			} else {
+				Session newsession = hibernateUtil.openSession();
+				newsession.beginTransaction();
+				newsession.save(cast);
+				newsession.getTransaction().commit();
+				newsession.close();
+				response.setStatus(1);
+				response.setMessage("Success");
+			}
+		}
+		return response;
+	}
+	
+	/**
+	 * Update Cast
+	 * 
+	 * @param cast
+	 * @return String
+	 */
+	public ResponseMessage updateCast(Cast cast){
+    	ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "from Cast where name = :name and id != :id";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("name", cast.getName());
+		query.setParameter("id", cast.getId());
+		List<BloodGroup> result = query.list();
+		session.close();
+		if (result.size() > 0) {
+			response.setStatus(0);
+			response.setMessage("Cast name already exists");
+		} else {
+	        Session newsession = hibernateUtil.openSession();
+	        newsession.beginTransaction();
+	        newsession.update(cast);
+	        newsession.getTransaction().commit();
+	        newsession.close();
+	        response.setStatus(1);
+			response.setMessage("Success");
+		}
+        return response;
+    }
 	/*--------------------------------------------------------*/
 	
 	
@@ -377,7 +500,77 @@ public class SettingsImpl {
 		session.close();
 		return result;
 	}
+	/*---------------------PANKAJ NAIK ---------------------------*/
+	/**
+	 * Get All Blood group
+	 * @author PANKAJ 
+	 * @return List<BloodGroup>
+	 */
+	public List<BloodGroup> getBloodGroup()
+	{
+		String hql = "from BloodGroup";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BloodGroup> bloodGroupList = query.list();
+		session.close();
+		return bloodGroupList;
+		
+	}
 	
+	/**
+	 * Get BloodGroup by ID
+	 * @author PANKAJ
+	 * @return List<BloodGroup>
+	 */
+	public List<BloodGroup> getBloodGroupById(Short id)
+	{
+		String hql = "from BloodGroup where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BloodGroup> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	
+	/**
+	 * Get All Cast
+	 * @author PANKAJ 
+	 * @return List<Cast>
+	 */
+	public List<Cast> getCast()
+	{
+		String hql = "from Cast";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<Cast> castList = query.list();
+		session.close();
+		return castList;
+		
+	}
+	
+	/**
+	 * Get Cast by ID
+	 * @author PANKAJ
+	 * @return List<Cast>
+	 */
+	public List<Cast> getCastById(Short id)
+	{
+		String hql = "from Cast where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<Cast> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	/*-----------------------------------------------------------*/
 	/**
 	 * Get Accessory by ID
 	 * @author pradeep

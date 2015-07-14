@@ -210,6 +210,14 @@
 						
 				</a></li>
 				<li class="col-sm-2"><a
+					href="${baseUrl}/settings/blood-group.jsp"> <i class="fa"></i>Blood Group
+						
+				</a></li>
+				<li class="col-sm-2"><a
+					href="${baseUrl}/settings/cast.jsp"> <i class="fa"></i>Cast
+						
+				</a></li>
+				<li class="col-sm-2"><a
 					href="${baseUrl}/settings/leavetype.jsp"> <i class="fa"></i>Leave
 						Type
 				</a></li>

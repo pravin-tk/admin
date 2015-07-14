@@ -148,18 +148,6 @@ public class SchoolSearchImpl {
 		).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
 
 		
-		System.out.println("SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
-				+ " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
-				+ " s.homeImage as homeImage,s.logo as logo, s.establishmentType as establishmentType,"
-				+ " s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
-				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
-				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
-				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
-				+ distance + " as distance,ci.totalFee as totalFee"
-				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
-				+ " JOIN ss.schoolMediums sm" + queryJoin
-				+ " WHERE s.schoolId = ss.id"
-				+ queryCondition+ " Group By ss.id"+finalOrder);
 		List<SchoolList> resultRaw = query.list();
 		session.close();
 		//SchoolSearchResult filterMap = new SchoolSearchResult();

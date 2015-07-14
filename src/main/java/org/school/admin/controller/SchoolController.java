@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -573,7 +574,47 @@ public class SchoolController extends ResourceConfig {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
+		Time time = null;
+		try
+		{
+			 time = classInfo.getMorningTimeFrom();
+			if(time == null)
+				classInfo.setMorningTimeFrom(new Time(Calendar.getInstance().getTime().getTime()));
+		}
+		catch(NullPointerException e)
+		{
+			classInfo.setMorningTimeFrom(new Time(Calendar.getInstance().getTime().getTime()));
+		}
+		try
+		{
+			 time = classInfo.getMorningTimeTo();
+			if(time ==null)
+				classInfo.setMorningTimeTo(new Time(Calendar.getInstance().getTime().getTime()));
+		}
+		catch(NullPointerException e)
+		{
+			classInfo.setMorningTimeTo(new Time(Calendar.getInstance().getTime().getTime()));
+		}
+		try
+		{
+			 time = classInfo.getAfternoonTimeFrom();
+			if(time == null)
+				classInfo.setAfternoonTimeFrom(null);
+		}
+		catch(NullPointerException e)
+		{
+			classInfo.setAfternoonTimeFrom(null);
+		}
+		try
+		{
+			 time = classInfo.getAfternoonTimeTo();
+			if(time == null)
+				classInfo.setAfternoonTimeTo(null);
+		}
+		catch(NullPointerException e)
+		{
+			classInfo.setAfternoonTimeTo(null);
+		}
 		classInfo.setTotalFee(totalFee);
 		classDetail.setClassInfo(classInfo);
 		classDetail.setClassAccessories(classAccessories);
@@ -683,7 +724,7 @@ public class SchoolController extends ResourceConfig {
 			streamType.setTitle(classes.get(i).getStreamType().getTitle());
 			classInfo.setStreamType(streamType);
 			classInfo.setId(classes.get(i).getId());
-		
+			
 			classInfo.setTotalSeat(classes.get(i).getTotalSeat());
 			classInfo.setVacantSeat(classes.get(i).getVacantSeat());
 			newClassInfo.add(classInfo);

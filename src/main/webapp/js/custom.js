@@ -162,6 +162,27 @@ $(function () {
             $(".school-timeline-highlight").fadeIn();
         });
     });
+    
+    $(".view-blood-group").click(function () {
+        $(".blood-group-list").hide('fast', function () {
+            $(".blood-group-new").fadeIn();
+        });
+    });
+    $(".list-blood-group").click(function () {
+        $(".blood-group-new").hide('fast', function () {
+            $(".blood-group-list").fadeIn();
+        });
+    });
+    $(".view-cast").click(function () {
+        $(".cast-list").hide('fast', function () {
+            $(".cast-new").fadeIn();
+        });
+    });
+    $(".list-cast").click(function () {
+        $(".cast-new").hide('fast', function () {
+            $(".cast-list").fadeIn();
+        });
+    });
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
     $(".view-class-detail").click(function () {

@@ -589,7 +589,6 @@ for (int i = 0; i < feetypes.size(); i++) {
 			   }
 			},
 			onChange: function(value) {		    	
-		        // alert(value)
 		         arr_feetype_sel = SplitTheString(value);
 		         removeArrayItem (arr_feetype_sel);
 		     },
@@ -626,48 +625,41 @@ $('#updateclassdetail').click(function() {
 	accessory_data = getAccessoryData();
 	class_info_data = getClassInfoData();
    
+	var msg = "";
 
 	if ($('#standard').val() == 0) {
-		//alert('Please select standard');
-		$("#error-class-detail").html('Please select standard');
-		$('#standard').addClass('has-error');
-	} else if ($("#section").val() == 0) {
-		$("#error-class-detail").html('Please select section');
-		$('#section').addClass('has-error');
-	} else if ($("#stream").val() == 0) {
-		//alert('Please select stream');
-		$("#error-class-detail").html('Please select stream');
-		$('#stream').addClass('has-error');	
-	}else if($('#admission_deadline').val() != $("#admission_to").val())
-	{
-		//alert("admission deadline date should match with admission to date");
-		$("#error-class-detail").html('Please select admission deadline');
-		$('#stream').addClass('has-error');	
+		if(msg != "") msg = msg+",Please select standard"; else  msg = "Please select standard";
 	}
-	else if($("#admission_to").val() > $("#admission_from").val())
-	{
-		// alert("Admission from should be less than admission to");
-		$("#error-class-detail").html('Please select admission to');
-		$('#stream').addClass('has-error');
-	}else if($("#admission_from").val() == "")
-	{
-		alert("Please select admission from");
-//			$("#error-class-detail").html('Please select admission from');
-//			$('#admission_from').addClass('has-error');
+	if ($("#section").val() == 0) {
+		if(msg != "") msg = msg+",Please select section";  else msg = "Please select section";
+	} 
+	if ($("#stream").val() == 0) {
+		if(msg != "") msg = msg+",Please select stream"; else msg = "Please select stream";
 	}
-	else if($("#admission_to").val() == "")
-	{
-		alert("Please select admission to");
-//			$("#error-class-detail").html('Please select admission from');
-//			$('#admission_from').addClass('has-error');
+	if(parseInt($("#vacant_seats").val()) > parseInt($("#total_seats").val())){
+		if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
 	}
-	else if($("#admission_deadline").val() == "")
-	{
-		alert("Please select admission deadline");
-//			$("#error-class-detail").html('Please select admission from');
-//			$('#admission_from').addClass('has-error');
+	if($('#admission_deadline').val() < $("#admission_to").val()){
+		if(msg != "") msg = msg+",Admission deadline date should be greater than admission to"; else msg = "Please select admission deadline";
 	}
-	else{
+	 if($("#admission_to").val() > $("#admission_from").val()){
+		if(msg != "") msg = msg+",Admission to date should not greater than admission from date"; else msg = "Admission to(date) should not greater than admission from(date)";
+	} 
+	 if($("#admission_from").val() == ""){
+		if(msg != "") msg = msg+",Please select admission from"; else msg = "Please select admission from";
+	}
+    if($("#admission_to").val() == ""){
+    	if(msg != "") msg = msg+",Please select admission to"; else msg = "Please select admission to";
+	}
+   if($("#admission_deadline").val() == ""){
+	   if(msg != "") msg = msg+",Please select admission deadline"; else msg = "Please select admission deadline";
+	}
+   if(($("#morning_time_to").val() == "" || $("#morning_time_from").val()	== "") && ($("#evening_time_to" ).val() == "" || $("#evening_time_from").val() == "")){
+	 if(msg != "") msg = msg+",Please select morning shift time or evening shift time"; else msg = "Please select morning shift time or evening shift time";
+   }
+   if(msg != "") {
+	       alert(msg);
+   }else{
 		fee_data = getFeeData();
 		subject_data = getSubjectData();
 		accessory_data = getAccessoryData();
@@ -692,6 +684,8 @@ $('#updateclassdetail').click(function() {
 					 getClassList(school_id);
 						
 		 			 updateProgress(school_id);
+		 			$("#saveclassdetail").show();
+		 			$("#updateclassdetail").hide();
 					
 				}
 			},
@@ -771,7 +765,6 @@ $("#addClassDetail").click(function(){
 		for(var i = 0; i < arr_feetype_temp.length; i++) {
 			found =  $.inArray( arr_feetype_temp[i], selvalArr );
 			if(found > -1){
-				//delete arr_feetype_temp[i];
 				arr_feetype_temp.splice(i,1);
 			}
 		}
@@ -967,52 +960,41 @@ $("#addClassDetail").click(function(){
 		var school_id = <%out.print(school_id6);%>
 		var user_id = <%out.print(user_id6);%>
 		var subject = null;
+		var msg = "";
+
 		if ($('#standard').val() == 0) {
-// 				$("#error-class-detail").html('Please select standard');
-// 				$('#standard').addClass('has-error');
-				 alert("Please select standard");
-		} else if ($("#section").val() == 0) {
-				$("#error-class-detail").html('Please select section');
-				$('#section').addClass('has-error');
-		} else if ($("#stream").val() == 0) {
-// 				$("#error-class-detail").html('Please select stream');
-// 				$('#stream').addClass('has-error');	
-				alert("Please select stream");
-		}else if(parseInt($("#vacant_seats").val()) > parseInt($("#total_seats").val()))
-		{
-			alert("Vacant seats should be less than total seats");
+			if(msg != "") msg = msg+",Please select standard"; else  msg = "Please select standard";
 		}
-		else if($('#admission_deadline').val() != $("#admission_to").val())
-		{
-				alert("admission deadline date should match with admission to date");
-// 				$("#error-class-detail").html('admission deadline date should match with admission to date');
-// 				$('#admission_deadline').addClass('has-error');	
+		if ($("#section").val() == 0) {
+			if(msg != "") msg = msg+",Please select section";  else msg = "Please select section";
+		} 
+		if ($("#stream").val() == 0) {
+			if(msg != "") msg = msg+",Please select stream"; else msg = "Please select stream";
 		}
-		else if($("#admission_to").val() > $("#admission_from").val())
-		{
-				 alert("Admission from should be less than admission to");
-// 				$("#error-class-detail").html('Admission from should be less than admission to');
-// 				$('#admission_to').addClass('has-error');
+		if(parseInt($("#vacant_seats").val()) > parseInt($("#total_seats").val())){
+			if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
 		}
-		else if($("#admission_from").val() == "")
-		{
-			alert("Please select admission from");
-// 			$("#error-class-detail").html('Please select admission from');
-// 			$('#admission_from').addClass('has-error');
+		if($('#admission_deadline').val() < $("#admission_to").val()){
+			if(msg != "") msg = msg+",Admission deadline date should be greater than admission to"; else msg = "Please select admission deadline";
 		}
-		else if($("#admission_to").val() == "")
-		{
-			alert("Please select admission to");
-// 			$("#error-class-detail").html('Please select admission from');
-// 			$('#admission_from').addClass('has-error');
+		 if($("#admission_to").val() > $("#admission_from").val()){
+			if(msg != "") msg = msg+",Admission to date should not greater than admission from date"; else msg = "Admission to(date) should not greater than admission from(date)";
+		} 
+		 if($("#admission_from").val() == ""){
+			if(msg != "") msg = msg+",Please select admission from"; else msg = "Please select admission from";
 		}
-		else if($("#admission_deadline").val() == "")
-		{
-			alert("Please select admission deadline");
-// 			$("#error-class-detail").html('Please select admission from');
-// 			$('#admission_from').addClass('has-error');
+	    if($("#admission_to").val() == ""){
+	    	if(msg != "") msg = msg+",Please select admission to"; else msg = "Please select admission to";
 		}
-		else {
+	   if($("#admission_deadline").val() == ""){
+		   if(msg != "") msg = msg+",Please select admission deadline"; else msg = "Please select admission deadline";
+		}
+	   if(($("#morning_time_to").val() == "" || $("#morning_time_from").val()	== "") && ($("#evening_time_to" ).val() == "" || $("#evening_time_from").val() == "")){
+		 if(msg != "") msg = msg+",Please select morning shift time or evening shift time"; else msg = "Please select morning shift time or evening shift time";
+	   }
+	   if(msg != "") {
+		       alert(msg);
+	   }else{
 			fee_data = getFeeData();
 			subject_data = getSubjectData();
 			accessory_data = getAccessoryData();
@@ -1031,12 +1013,14 @@ $("#addClassDetail").click(function(){
 					if (data.status == 0) {
 						alert(data.message);
 						console.log('#1033');
+						
 					} else {
 						alert(data.message);
 						console.log('#1036');
 						getClassList(school_id);
 						
 			 			 updateProgress(school_id);
+			 			
 						
 					}
 				},
