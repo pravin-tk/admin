@@ -74,7 +74,7 @@ public class SchoolController extends ResourceConfig {
 	@Path("review/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage getSchoolReview(SchoolReview schoolReview)
+	public ResponseMessage saveSchoolReview(SchoolReview schoolReview)
 	{
 	    Byte reviewStatus =0;
 		schoolReview.setDate(new Date());

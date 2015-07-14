@@ -38,7 +38,7 @@
 <form action="" method="post" id="old_student_profile" class="form-horizontal">
        <div class="prevStudent-list" id="pre_student_list">
            <p>Here you can add or deactivate school type.</p>
-           <a href="#" class="btn btn-primary view-prevStudent bottom-margin"><i class="fa fa-plus"></i> old student profile</a>
+           <a href="#" class="btn btn-primary view-prevStudent bottom-margin" id="addoldStudentProfile"><i class="fa fa-plus"></i> old student profile</a>
            <table class="table table-striped table-bordered" id="prevStudent-table">
                <thead>
                    <tr>
@@ -70,7 +70,7 @@
           	%> 
       		</tbody>
        	</table>
-   		<a href="#" class="btn btn-primary view-prevStudent bottom-margin"><i class="fa fa-plus"></i> old Student Profile</a>
+   		<a href="#" class="btn btn-primary view-prevStudent bottom-margin" id="addoldStudentProfile1"><i class="fa fa-plus"></i> old Student Profile</a>
     </div>
  	<div class="prevStudent" style="display:none;" id="pre_student_add">
  	<h4>Add old Student Profile</h4>
@@ -131,6 +131,19 @@
 	   	}		  
 	  	return true;
   	}
+   	$("#addoldStudentProfile1").click(function()
+   	{
+   		$('#saveprevStudent').show();
+   		$("#updatePrevStudent").hide();
+   		
+   	});
+   	
+   	$("#addoldStudentProfile").click(function()
+   	{
+   		$('#saveprevStudent').show();
+   		$("#updatePrevStudent").hide();
+   	});
+   	
    	$('#saveprevStudent').click(function(){
    		var school_id = <%out.print(school_id5);%>
   			var user_id = <%out.print(user_id5);%>
@@ -162,6 +175,8 @@
  			   alert("Save successfully..");
  			    $("#pre_student_add").hide();
  			    $("#pre_student_list").show();
+ 			    $("#saveprevStudent").hide();
+ 			    $("#updatePrevStudent").show();
  			   updateProgress($('#school_id').val());
  			    $(data).each(function(index){
  			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"

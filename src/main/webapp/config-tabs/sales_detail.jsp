@@ -43,7 +43,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                        <div class="sales-list" id="sales-detail-list">
                                 
                                 <p>Here you can add or deactivate sales detail. You can define sales details, contact methods etc.</p>
-                                <a href="#" class="btn btn-primary view-sales bottom-margin"><i class="fa fa-plus"></i> Sales Detail</a>
+                                <a href="#" class="btn btn-primary view-sales bottom-margin" id="addSalesDetail1"><i class="fa fa-plus"></i> Sales Detail</a>
 
 
                                 <table class="table table-striped table-bordered" id="sales-table">
@@ -72,7 +72,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                     
                                 </table>
 
-                                <a href="#" class="btn btn-primary view-sales"><i class="fa fa-plus"></i> Sales Detail</a>
+                                <a href="#" class="btn btn-primary view-sales" id="addSalesDetail"><i class="fa fa-plus"></i> Sales Detail</a>
 
                             </div>
                             <div class="sales-new" style="display:none" id="sales-detail-add">
@@ -247,6 +247,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 			    oTable.fnClearTable();
 			    $(".sales-new").hide();
 	    		$(".sales-list").show();
+	    		clearSalesDetail();
 			    updateProgress($('#school_id').val());
 			    $(data).each(function(index){
 			    	var row = [];
@@ -261,7 +262,23 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
  		}else return false;
  	
  });
- 
+ $("#addSalesDetail").click(function(){
+		$("#savesalesdetail").show();
+		$("#updatesalesdetail").hide();
+	});
+ $("#addSalesDetail1").click(function(){
+		$("#savesalesdetail").show();
+		$("#updatesalesdetail").hide();
+	});
+ function clearSalesDetail()
+ {
+	 $('#sales_executive').val(0);
+     $('#datacollector').val(0),
+	 $('#contact_person_name').val("");
+     $('#contact_person_email').val("");
+	  $('#contact_person_no').val("");
+	 $('#designation').val("");
+ }
  
 	function editSalesInfo(id){
    		$.get('webapi/school/sales_detail/'+id,{},function(data){
@@ -328,6 +345,10 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 		    		$(".sales-new").hide();
 		    		$(".sales-list").show();
 				  //	$("#school_list").html(data);
+				  
+				  	$("#savesalesdetail").show();
+					$("#updatesalesdetail").hide();
+					clearSalesDetail();
 	 			    var oTable = $("#sales-table").dataTable();
 				    oTable.fnClearTable();
 				    $(".sales-new").hide();

@@ -323,6 +323,6 @@
 			dataType : 'json'
 		};
 		$('#school_timeline_form').ajaxForm(options);
-		//updateProgress($('#school_id').val());
+		updateProgress($('#school_id').val());
 	});
 </script>

@@ -108,7 +108,7 @@
 			<%} %>
 		</tbody>
 	</table>
-	<a href="#" class="btn btn-primary view-class-detail bottom-margin"><i
+	<a href="#" class="btn btn-primary view-class-detail bottom-margin" id="addClassDetail1"><i
 		class="fa fa-plus"></i> Class Detail</a>
 </div>
 <div class="class-detail-new" style="display: none;">
@@ -523,29 +523,31 @@ $(function() {
         minuteStep: 1,
         secondStep: 5,
         showSeconds: true,
-        showMeridian: false
+        showMeridian: false,
+       // defaultTime:'00:00:00'
     });
 	$('#morning_time_from').timepicker({
         minuteStep: 1,
         secondStep: 5,
         showSeconds: true,
-        showMeridian: false
+        showMeridian: false,
+       // defaultTime:'00:00:00'
     });
 	$('#evening_time_to').timepicker({
         minuteStep: 1,
         secondStep: 5,
         showSeconds: true,
-        showMeridian: false
+        showMeridian: false,
+       // defaultTime:'00:00:00'
     });
 	$('#evening_time_from').timepicker({
         minuteStep: 1,
         secondStep: 5,
         showSeconds: true,
-        showMeridian: false
+        showMeridian: false,
     });
 	
   });
-
 $("#admission_deadline").datepicker('setDate',new Date());
 $("#admission_form").datepicker('setDate',new Date());
 $("#admission_to").datepicker('setDate',new Date());
@@ -682,7 +684,7 @@ $('#updateclassdetail').click(function() {
 				} else {
 					 alert(data.message);
 					 getClassList(school_id);
-						
+					 clearAllFields();
 		 			 updateProgress(school_id);
 		 			$("#saveclassdetail").show();
 		 			$("#updateclassdetail").hide();
@@ -703,6 +705,10 @@ $("#addClassDetail").click(function(){
 	$("#updateclassdetail").hide();
 });
 
+$("#addClassDetail1").click(function(){
+	$("#saveclassdetail").show();
+	$("#updateclassdetail").hide();
+});
 
 </script>
 <script type="text/javascript">
@@ -1009,19 +1015,15 @@ $("#addClassDetail").click(function(){
 			    dataType: 'json',
 			    async: false,
 			    success: function(data) {
-			    	console.log("OP/= "+ data.status);
 					if (data.status == 0) {
 						alert(data.message);
-						console.log('#1033');
 						
 					} else {
 						alert(data.message);
-						console.log('#1036');
+						clearAllFields();
 						getClassList(school_id);
 						
 			 			 updateProgress(school_id);
-			 			
-						
 					}
 				},
 				error : function(data)
@@ -1033,7 +1035,28 @@ $("#addClassDetail").click(function(){
 			
 		}
 	});
-	
+	function clearAllFields()
+	{
+		$("#standard").val(0);
+		//$("#stream").val(0);
+		 $("#teaching_approach").val(0);
+		 $("#vacant_seats").val("");
+		 $("#total_seats").val("");
+		 $("#ecriteria").val("");
+		 $("#specialization").val("");
+		$("#admission_procedure").val("");
+		$("#how_to_apply").val("");
+		$("#admission_deadline").val("");
+		$("#admission_form").val("");
+		$("#admission_to").val("");
+		$("#fee_pay_term").val("");
+		$( "input[type='checkbox']" ).prop( "checked", false);
+		for(var i = 1;i<=rowCount;i++)
+			{
+				$("#txt"+i).val("");
+			}
+		$(".cancel-class-detail").click();
+	}
 	function getClassList(school_id)
 	{
 		$.get("webapi/school/getclasslist/"+school_id,{},function(newdata){
