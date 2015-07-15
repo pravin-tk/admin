@@ -70,28 +70,24 @@ public class SchoolController extends ResourceConfig {
 			return null;
 		}
 	}
-	@POST
-	@Path("review/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage getSchoolReview(SchoolReview schoolReview)
-	{
-	    Byte reviewStatus =0;
-		schoolReview.setDate(new Date());
-		schoolReview.setTime(new Date());
-		schoolReview.setStatus(reviewStatus);
-		return new SchoolDAOImp().saveSchoolReview(schoolReview);
-	}
-	
 	
 	@GET
 	@Path("basic.json/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SchoolAddress getBasicInfo(@PathParam("id") int id)
 	{
+		img_path = this.context.getInitParameter("s3_base_url");
 		List<SchoolAddress> basic = new ClassDetailDAO().getSchoolBasicInfo(id);
 		if(basic.size() > 0){
-			return new ClassDetailDAO().getSchoolBasicInfo(id).get(0);
+			if(basic.get(0).getHomeImage() != null)
+				basic.get(0).setHomeImage(img_path+basic.get(0).getHomeImage());
+			else
+				basic.get(0).setHomeImage("");
+			if(basic.get(0).getLogo() != null)
+				basic.get(0).setLogo(img_path+basic.get(0).getLogo());
+			else
+				basic.get(0).setLogo("");
+			return basic.get(0);
 		}else{
 			return null;
 		}
@@ -232,6 +228,19 @@ public class SchoolController extends ResourceConfig {
 	public ResponseMessage addSchoolRating(RatingData ratingData){
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		return schoolSearchImpl.addSchoolRating(ratingData);
+	}
+	
+	@POST
+	@Path("review.json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getSchoolReview(SchoolReview schoolReview)
+	{
+	    Byte reviewStatus =0;
+		schoolReview.setDate(new Date());
+		schoolReview.setTime(new Date());
+		schoolReview.setStatus(reviewStatus);
+		return new SchoolDAOImp().saveSchoolReview(schoolReview);
 	}
 	
 	

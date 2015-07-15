@@ -133,8 +133,8 @@
 		</div>
 		<div class="form-group">
 			<div class="col-sm-4">
-				<button type="submit" id='savetimeline' class="btn btn-success">Save</button>
-				<button type="submit" id='updatetimeline' class="btn btn-success"
+				<button type="button" id='savetimeline' class="btn btn-success">Save</button>
+				<button type="button" id='updatetimeline' class="btn btn-success"
 					style="display: none;">Update</button>
 				<button class="btn btn-default list-id list-school-timeline"
 					id="cancel-timeline" type="reset">Cancel</button>
@@ -322,7 +322,7 @@
 			semantic : true,
 			dataType : 'json'
 		};
-		$('#school_timeline_form').ajaxForm(options);
+		$('#school_timeline_form').ajaxSubmit(options);
 		//updateProgress($('#school_id').val());
 	});
 </script>

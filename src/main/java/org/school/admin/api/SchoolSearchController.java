@@ -68,7 +68,15 @@ public class SchoolSearchController {
 		SearchFilterService sfService = new SearchFilterService();
 		SearchRequest searchRequest = sfService.getSearchRequest(uriInfo);
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
-		return schoolSearchImpl.fetchSchoolListByLattitudeByLongitude(searchRequest);
+		List<SchoolList> schoolLists = schoolSearchImpl.fetchSchoolListByLattitudeByLongitude(searchRequest);
+		String img_path = this.context.getInitParameter("s3_base_url");
+		for(int i=0; i< schoolLists.size(); i++){
+			if(schoolLists.get(i).getLogo() != "")
+				schoolLists.get(i).setLogo(img_path+schoolLists.get(i).getLogo());
+			if(schoolLists.get(i).getHomeImage() != "")
+				schoolLists.get(i).setHomeImage(img_path+schoolLists.get(i).getHomeImage());
+		}
+		return schoolLists;
 	}
 	
 	@GET
