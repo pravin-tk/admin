@@ -2,11 +2,13 @@ package org.school.admin.service;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.ServletContext;
 
 import org.school.admin.dao.SchoolSearchUserDao;
+import org.school.admin.data.SchoolList;
 import org.school.admin.data.UserInfo;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.SchoolSearchUser;
@@ -142,6 +144,11 @@ public class SchoolSearchUserService {
 	public Boolean changeUserPassword(String email, String password) {
 		SchoolSearchUserDao schoolSearchUserDao = new SchoolSearchUserDao();
 		return schoolSearchUserDao.changePassword(email,password);
+	}
+
+	public List<SchoolList> getShortlistedSchoolsByUserId(Integer userId) {
+		SchoolSearchUserDao schoolSearchUserDao = new SchoolSearchUserDao();
+		return schoolSearchUserDao.fetchShortlistedSchoolsByUserId(userId);
 	}
 
 }
