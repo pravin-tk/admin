@@ -56,11 +56,13 @@ import org.school.admin.model.StandardType;
 import org.school.admin.model.StreamType;
 import org.school.admin.model.Subject;
 import org.school.admin.model.TeachingApproachType;
+import org.school.admin.service.ImageUploader;
 import org.school.admin.util.HibernateUtil;
 
 @Path("settings")
 public class SettingsController extends ResourceConfig {
 	@Context ServletContext context;
+	ImageUploader imageUploader = new ImageUploader();
 	public SettingsController() {
 		register(MultiPartFeature.class);
     }
@@ -817,7 +819,7 @@ public class SettingsController extends ResourceConfig {
 		image_name = image_name.replaceAll(" ", "_").toLowerCase();
 		image_name = "rating/"+image_name;
 		String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
-		writeToFile(is, uploadedFileLocation);
+		this.imageUploader.writeToFile(is, uploadedFileLocation);
 		ratingCategoryType.setImage(image_name);
 		SettingsImpl settings = new SettingsImpl();
 		return settings.saveRatingCategoryType(ratingCategoryType);
@@ -845,7 +847,7 @@ public class SettingsController extends ResourceConfig {
 			image_name = image_name.replaceAll(" ", "_").toLowerCase();
 			image_name = "rating/"+image_name;
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
-			writeToFile(is, uploadedFileLocation);
+			this.imageUploader.writeToFile(is, uploadedFileLocation);
 			ratingCategoryType.setImage(image_name);
 		}
 		SettingsImpl settings = new SettingsImpl();
@@ -941,7 +943,7 @@ public class SettingsController extends ResourceConfig {
 		String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 		
 		
-		writeToFile(is, uploadedFileLocation);
+		this.imageUploader.writeToFile(is, uploadedFileLocation);
 		
 		schoolClassificationType.setImage(image_name);
 		}
@@ -952,7 +954,7 @@ public class SettingsController extends ResourceConfig {
 		return settings.saveSchoolClassificationType(schoolClassificationType);
 	}
 	
-	private void writeToFile(InputStream is, String uploadedFileLocation) {
+	/*private void writeToFile(InputStream is, String uploadedFileLocation) {
 		try {
 			OutputStream out = new FileOutputStream(new File(
 					uploadedFileLocation));
@@ -969,7 +971,8 @@ public class SettingsController extends ResourceConfig {
  
 			e.printStackTrace();
 		}
-	}
+	}*/
+	
 	@POST
 	@Path("/schoolclassificationtype/update")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -990,7 +993,7 @@ public class SettingsController extends ResourceConfig {
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 			
 			
-			writeToFile(is, uploadedFileLocation);
+			this.imageUploader.writeToFile(is, uploadedFileLocation);
 			
 			schoolClassificationType.setImage(image_name);
 			}

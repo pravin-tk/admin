@@ -26,6 +26,7 @@ public class SchoolList implements java.io.Serializable {
 	private Double distance;
 	private Double totalFee;
 	private int seats;
+	private Short standardId;
 
 	public SchoolList() {
 	}
@@ -261,6 +262,14 @@ public class SchoolList implements java.io.Serializable {
 
 	public void setSeats(int seats) {
 		this.seats = seats;
+	}
+
+	public Short getStandardId() {
+		return standardId;
+	}
+
+	public void setStandardId(Short standardId) {
+		this.standardId = standardId;
 	}
 	
 }

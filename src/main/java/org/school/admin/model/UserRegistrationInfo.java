@@ -267,12 +267,11 @@ public class UserRegistrationInfo implements java.io.Serializable {
 	public void setSchoolReviews(Set<SchoolReview> schoolReviews) {
 		this.schoolReviews = schoolReviews;
 	}
-
 	@Override
 	public String toString() {
-		return "{id=" + id + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", mobile=" + mobile + ", email="
-				+ email + ", status=" + status + ", image=" + image + "}";
+		return "{'id':" + id + ", 'firstName':'" + firstName
+				+ "', 'lastName':'" + lastName + "', 'mobile':'" + mobile + "', 'email':'"
+				+ email + "', 'status':" + status + ", 'image':'" + image + "'}";
 	}
 	
 

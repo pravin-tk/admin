@@ -28,7 +28,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.school.admin.dao.UserImpl;
-import org.school.admin.data.ApplicantInfo;
+import org.school.admin.data.UserInfo;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ApplicantBasicDetail;
 import org.school.admin.model.ApplicantParentDetail;
@@ -37,11 +37,14 @@ import org.school.admin.model.PostRequirement;
 import org.school.admin.model.School;
 import org.school.admin.model.StandardType;
 import org.school.admin.model.UserRegistrationInfo;
+import org.school.admin.service.ImageUploader;
 @Path("api1.0/post/")
 public class GeneralController extends ResourceConfig {
 	@Context ServletContext context;
+	ImageUploader imageUploader;
 	public GeneralController() {
 		register(MultiPartFeature.class);
+		imageUploader = new ImageUploader();
     }
 	
 	@POST
@@ -144,8 +147,8 @@ public class GeneralController extends ResourceConfig {
 			applicantBasicDetail.setStatus((byte)0);
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 			String uploadedSignatureLocation = this.context.getInitParameter("logo_url") + image_name;
-			writeToFile(isSignature, uploadedSignatureLocation);
-			writeToFile(is, uploadedFileLocation);
+			this.imageUploader.writeToFile(isSignature, uploadedSignatureLocation);
+			this.imageUploader.writeToFile(is, uploadedFileLocation);
 			
 			Set<ApplicantParentDetail> applicantParentDetails = new HashSet<ApplicantParentDetail>();
 			List<String> parentNameList = new ArrayList<String>();
@@ -376,7 +379,7 @@ public class GeneralController extends ResourceConfig {
 	}
 	
 	
-	private void writeToFile(InputStream is, String uploadedFileLocation) {
+	/*private void writeToFile(InputStream is, String uploadedFileLocation) {
 		try {
 			OutputStream out = new FileOutputStream(new File(
 					uploadedFileLocation));
@@ -394,5 +397,5 @@ public class GeneralController extends ResourceConfig {
 			e.printStackTrace();
 		}
 		
-	}
+	}*/
 }

@@ -11,6 +11,7 @@ import org.school.admin.data.FeeDetail;
 import org.school.admin.data.GalleryData;
 import org.school.admin.data.InfraCategory;
 import org.school.admin.data.InfraItem;
+import org.school.admin.data.NameList;
 import org.school.admin.data.RatingData;
 import org.school.admin.data.SchoolFee;
 import org.school.admin.data.SchoolList;
@@ -33,6 +34,7 @@ import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSafetyCatItem;
 import org.school.admin.model.SchoolSearchUser;
 import org.school.admin.model.SchoolTimeline;
+import org.school.admin.model.StreamType;
 import org.school.admin.model.UserRating;
 import org.school.admin.model.UserRegistrationInfo;
 import org.school.admin.util.HibernateUtil;
@@ -55,7 +57,9 @@ public class SchoolSearchImpl {
 				     + "s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				     + "s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
 				     + "s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
-					 +distance+" as distance FROM SchoolSearch s, ClassInfo ci where s.schoolId = ci.school.id AND ci.standardType.id = :standard_id";
+					 +distance+" as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
+					 + "ci.standardType.id as standardId FROM SchoolSearch s, ClassInfo ci"
+					 + " where s.schoolId = ci.school.id AND ci.standardType.id = :standard_id";
 		if(request.getLatitude() != null && request.getLongitude() != null){
 		hql = hql + " AND "+distance+" < 3";
 		}
@@ -135,7 +139,7 @@ public class SchoolSearchImpl {
 		if (searchRequest.getDistance().equalsIgnoreCase("ASC") || searchRequest.getDistance().equalsIgnoreCase("DESC")) {
 			if(orderBy != "")
 				orderBy += ",";
-			orderBy += " s.distance "+searchRequest.getDistance();
+			orderBy += " "+distance+" "+searchRequest.getDistance();
 		}
 		
 		if (searchRequest.getSeats().equalsIgnoreCase("ASC") || searchRequest.getSeats().equalsIgnoreCase("DESC")) {
@@ -157,7 +161,7 @@ public class SchoolSearchImpl {
 				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
 				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
-				+ distance + " as distance,ci.totalFee as totalFee,ci.vacantSeat as seats"
+				+ distance + " as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,ci.standardType.id as standardId"
 				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
 				+ " JOIN ss.schoolMediums sm" + queryJoin
 				+ " WHERE s.schoolId = ss.id"
@@ -416,7 +420,7 @@ public class SchoolSearchImpl {
 		session.flush();
 		List<Rating> schoolRatings = query.list();
 		if(schoolRatings.size() <= 0){
-			String newhql = "SELECT id as catid, categoryName as name, 0 as rating, 0 as ratingCount, COALESCE(image,'') as image from RatingCategoryType";
+			String newhql = "SELECT id as catid, categoryName as name, 0.0 as rating, 0L as ratingCount, COALESCE(image,'') as image from RatingCategoryType";
 			Session newsession = hibernateUtil.openSession();
 			Query newquery = newsession.createQuery(newhql).setResultTransformer(Transformers.aliasToBean(Rating.class));
 			newsession.flush();
@@ -520,6 +524,26 @@ public class SchoolSearchImpl {
 				newsession.flush();
 			}
 		}
+	}
+	
+	public List<NameList> getBloodGroupList(){
+		String hql = "select id as id, name as name from BloodGroup";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+		List<NameList> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<NameList> getCastList(){
+		String hql = "select id as id, name as name from Cast";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+		List<NameList> result = query.list();
+		session.close();
+		return result;
 	}
 	
 }

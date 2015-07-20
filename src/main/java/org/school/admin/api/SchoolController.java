@@ -217,8 +217,13 @@ public class SchoolController extends ResourceConfig {
 	@Path("rating.json/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Rating> getSchoolRating(@PathParam("id") int id){
+		img_path = this.context.getInitParameter("s3_base_url");
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
-		return schoolSearchImpl.getSchoolRating(id);
+		List<Rating> ratings = schoolSearchImpl.getSchoolRating(id);
+		for(int i=0; i<ratings.size(); i++){
+			ratings.get(i).setImage(img_path+ratings.get(i).getImage());
+		}
+		return ratings;
 	}
 	
 	@POST

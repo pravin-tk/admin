@@ -14,7 +14,7 @@ import javax.validation.ConstraintViolation;
 import org.glassfish.jersey.message.internal.MsgTraceEvent;
 import org.hibernate.Session;
 import org.omg.CORBA.REBIND;
-import org.school.admin.data.ApplicantInfo;
+import org.school.admin.data.UserInfo;
 import org.school.admin.data.NameList;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ApplicantBasicDetail;
@@ -31,18 +31,26 @@ public class UserImpl {
 		try {
 			boolean result = true;
 			if(postRequirement.getEmail() == null){
-				if(postRequirement.getMobile() == null){
-					errors.add("Please enter your mobile or email");
+				if(postRequirement.getMobile() == null || postRequirement.getMobile().trim().length() <= 0){
+					errors.add("Please enter your mobile or email.");
+				} else if(!postRequirement.getMobile().matches("\\d{10}")){
+					errors.add("Invalid mobile number.");
 				}
-				responseMessage.setStatus(0);
-	        	responseMessage.setMessage("Failed to post requirement.");
-		    	responseMessage.setErrors(errors);
-			} else if (postRequirement.getMobile() == null) {
+			} else {
+				try {
+			       InternetAddress emailAddr = new InternetAddress(postRequirement.getEmail());
+			       emailAddr.validate();
+				} catch (AddressException ex) {
+				   result = false;
+				}
+				if(!result) {
+			    	errors.add("Please enter valid email.");
+			    }
+			}
+				
+			if (postRequirement.getMobile() == null) {
 				if(postRequirement.getEmail() == null){
-					errors.add("Please enter your mobile or email");
-					responseMessage.setErrors(errors);
-					responseMessage.setMessage("Failed to post requirement.");
-					responseMessage.setStatus(0);
+					errors.add("Please enter your mobile or email.");
 				} else {
 					if(postRequirement.getEmail() != null) {
 					    try {
@@ -54,12 +62,14 @@ public class UserImpl {
 					}
 					if(!result) {
 				    	errors.add("Please enter valid email.");
-				    	responseMessage.setMessage("Failed to post requirement.");
-						responseMessage.setErrors(errors);
-						responseMessage.setStatus(0);
 				    }
 				}
-		    } else {
+		    }
+			if(errors.size() > 0){
+				responseMessage.setErrors(errors);
+				responseMessage.setMessage("Failed to post requirement.");
+				responseMessage.setStatus(0);
+			} else {
 				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
 				session.beginTransaction();

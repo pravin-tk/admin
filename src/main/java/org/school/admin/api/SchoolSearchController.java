@@ -19,6 +19,7 @@ import org.school.admin.dao.ClassificationDAOImpl;
 import org.school.admin.dao.ContactDetaillDAO;
 import org.school.admin.dao.SchoolDAOImp;
 import org.school.admin.dao.SchoolSearchImpl;
+import org.school.admin.dao.SettingsImpl;
 import org.school.admin.dao.StandardTypeDAO;
 import org.school.admin.data.Facility;
 import org.school.admin.data.GalleryData;
@@ -158,6 +159,22 @@ public class SchoolSearchController {
 		facility.setInfra(schoolSearchImpl.getSchoolInfra(id));
 		result.setFacility(facility);
 		return result;
+	}
+	
+	@GET
+	@Path("/bloodgroup.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NameList> getBloodGroup(){
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getBloodGroupList();
+	}
+	
+	@GET
+	@Path("/castelist.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NameList> getCasteList(){
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getCastList();
 	}
 	
 	
