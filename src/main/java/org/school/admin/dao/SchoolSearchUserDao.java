@@ -19,6 +19,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
+import org.school.admin.data.SchoolList;
+import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.UserInfo;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.SchoolSearchUser;
@@ -314,5 +316,50 @@ public class SchoolSearchUserDao {
 			return false;
 		}
 	}
+	
+	public List<SchoolList> fetchShortlistedSchoolsByUserId(Integer userId) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		String hql = "SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
+					 + " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
+					 + "s.homeImage as homeImage,s.logo as logo, s.establishmentType as establishmentType,"
+				     + "s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
+				     + "s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
+				     + "s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
+				     + "s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				     +"  ci.totalFee as totalFee,  "
+				     + "ci.vacantSeat as seats,"
+					 + " ci.standardType.id as standardId FROM ShortlistedSchoolSearch s, ClassInfo ci"
+					 + " where s.userId = :user_id AND s.id = ci.school.id "
+					 + " GROUP BY s.id";
 
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
+		query.setParameter("user_id", userId);
+		List<SchoolList> resultRaw = query.list();
+		session.close();
+		return resultRaw;
+	}
+
+	public List<SchoolList> fetchAppliedSchoolsByUserId(Integer userId) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		String hql = "SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
+					 + " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
+					 + "s.homeImage as homeImage,s.logo as logo, s.establishmentType as establishmentType,"
+				     + "s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
+				     + "s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
+				     + "s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
+				     + "s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				     +"  ci.totalFee as totalFee,  "
+				     + " ci.vacantSeat as seats,"
+					 + " s.standardId as standardId FROM AppliedSchoolSearch s, ClassInfo ci"
+					 + " where s.userId = :user_id AND s.schoolId = ci.school.id AND ci.standardType.id = s.standardId "
+					 + " GROUP BY s.schoolId, s.standardId";
+
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
+		query.setParameter("user_id", userId);
+		List<SchoolList> resultRaw = query.list();
+		session.close();
+		return resultRaw;
+	}
 }

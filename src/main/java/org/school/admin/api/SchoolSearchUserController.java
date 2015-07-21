@@ -2,6 +2,7 @@ package org.school.admin.api;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.school.admin.dao.SchoolSearchUserDao;
+import org.school.admin.data.SchoolList;
 import org.school.admin.data.UserInfo;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.SchoolSearchUser;
@@ -353,5 +355,21 @@ public class SchoolSearchUserController {
 			responseMessage.setMessage("Invalid email.");
 		}
 		return responseMessage;
+	}
+	
+	@GET
+	@Path("shortlistedschools.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolList> getShortlistedSchools(@PathParam("id") int userId) {
+		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService(context);
+		return schoolSearchUserService.getShortlistedSchoolsByUserId(userId);
+	}
+	
+	@GET
+	@Path("appliedschools.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolList> getAppliedSchools(@PathParam("id") int userId) {
+		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService(context);
+		return schoolSearchUserService.getAppliedSchoolsByUserId(userId);
 	}
 }
