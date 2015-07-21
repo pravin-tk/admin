@@ -150,5 +150,10 @@ public class SchoolSearchUserService {
 		SchoolSearchUserDao schoolSearchUserDao = new SchoolSearchUserDao();
 		return schoolSearchUserDao.fetchShortlistedSchoolsByUserId(userId);
 	}
+	
+	public List<SchoolList> getAppliedSchoolsByUserId(Integer userId) {
+		SchoolSearchUserDao schoolSearchUserDao = new SchoolSearchUserDao();
+		return schoolSearchUserDao.fetchAppliedSchoolsByUserId(userId);
+	}
 
 }

@@ -364,4 +364,12 @@ public class SchoolSearchUserController {
 		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService(context);
 		return schoolSearchUserService.getShortlistedSchoolsByUserId(userId);
 	}
+	
+	@GET
+	@Path("appliedschools.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolList> getAppliedSchools(@PathParam("id") int userId) {
+		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService(context);
+		return schoolSearchUserService.getAppliedSchoolsByUserId(userId);
+	}
 }
