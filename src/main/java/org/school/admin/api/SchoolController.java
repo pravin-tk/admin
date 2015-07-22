@@ -34,6 +34,7 @@ import org.school.admin.data.RatingData;
 import org.school.admin.data.SchoolAddress;
 import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolTimelineData;
+import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
@@ -248,5 +249,12 @@ public class SchoolController extends ResourceConfig {
 		return new SchoolDAOImp().saveSchoolReview(schoolReview);
 	}
 	
-	
+	@GET
+	@Path("vacantseats.json/{schoolId}/{standardId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<VacantSeats> getVacantSeats(@PathParam("schoolId") Integer schoolId, @PathParam("standardId") Short standardId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getVacantSeatsBySchoolIdByStandardId(schoolId, standardId);
+	}
 }
