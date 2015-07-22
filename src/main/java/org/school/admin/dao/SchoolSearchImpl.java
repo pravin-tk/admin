@@ -20,9 +20,8 @@ import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SearchRequest;
 import org.school.admin.data.TotalRating;
+import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
-import org.school.admin.model.ActivityCategory;
-import org.school.admin.model.ClassFee;
 import org.school.admin.model.ClassInfo;
 import org.school.admin.model.RatingCategoryType;
 import org.school.admin.model.School;
@@ -32,9 +31,6 @@ import org.school.admin.model.SchoolInfrastructureCatItem;
 import org.school.admin.model.SchoolRating;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSafetyCatItem;
-import org.school.admin.model.SchoolSearchUser;
-import org.school.admin.model.SchoolTimeline;
-import org.school.admin.model.StreamType;
 import org.school.admin.model.UserRating;
 import org.school.admin.model.UserRegistrationInfo;
 import org.school.admin.util.HibernateUtil;
@@ -544,6 +540,28 @@ public class SchoolSearchImpl {
 		List<NameList> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	public List<VacantSeats> getVacantSeatsBySchoolIdByStandardId( Integer schoolId, Short standardId ) {
+		String hql = "FROM ClassInfo WHERE school.id = :school_id AND standardType.id = :standard_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql)
+				.setParameter("school_id", schoolId)
+				.setParameter("standard_id", standardId);
+		List<ClassInfo> result = query.list();
+		
+		VacantSeats vacantSeat = new VacantSeats();
+		List<VacantSeats> vacantSeats = new ArrayList<VacantSeats>();
+		for(int i=0; i< result.size(); i++){
+			vacantSeat.setSchoolId(schoolId);
+			vacantSeat.setStandardId(standardId);
+			vacantSeat.setVacantSeat(result.get(i).getVacantSeat());
+			vacantSeats.add(vacantSeat);
+		}
+		
+		session.close();
+		return vacantSeats;
 	}
 	
 }
