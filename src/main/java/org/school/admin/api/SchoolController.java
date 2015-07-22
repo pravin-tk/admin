@@ -267,4 +267,14 @@ public class SchoolController extends ResourceConfig {
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		return schoolSearchImpl.getContactClicksBySchoolId(schoolId);
 	}
+	
+	@GET
+	@Path("contactclicked.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void updateContactClicks(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		schoolSearchImpl.updateContactClicksBySchoolId(schoolId);
+		return;
+	}
 }

@@ -586,4 +586,40 @@ public class SchoolSearchImpl {
 		return schoolAnalyticsDataList;
 	}
 	
+	public void updateContactClicksBySchoolId( Integer schoolId ) {
+		String hql = "FROM SchoolAnalytics WHERE school.id = :school_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql)
+				.setParameter("school_id", schoolId);
+		List<SchoolAnalytics> result = query.list();
+		
+		if(result.isEmpty() != true) {
+			Integer contactClicks=0;
+			for(int i=0; i< result.size(); i++) {
+				contactClicks = result.get(i).getContactClicks();
+			}
+			++contactClicks;
+			hql = "UPDATE SchoolAnalytics SET contact_clicks = :contact_clicks WHERE school.id = :school_id";
+			query = session.createQuery(hql).setParameter("contact_clicks", contactClicks).setParameter("school_id",schoolId);
+			session.beginTransaction();
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.flush();
+		} else {
+			SchoolAnalytics schoolAnalytics = new SchoolAnalytics();
+			schoolAnalytics.setContactClicks(1);
+			hql = "FROM School where id = :school_id";
+			query = session.createQuery(hql).setParameter("school_id",schoolId);
+			schoolAnalytics.setSchool((School)query.uniqueResult());
+			
+			session.beginTransaction();
+			session.save(schoolAnalytics);
+			session.getTransaction().commit();
+			session.flush();
+		}
+		
+		session.close();
+	}
+	
 }
