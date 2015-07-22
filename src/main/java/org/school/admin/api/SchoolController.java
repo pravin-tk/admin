@@ -32,6 +32,7 @@ import org.school.admin.data.NameList;
 import org.school.admin.data.Rating;
 import org.school.admin.data.RatingData;
 import org.school.admin.data.SchoolAddress;
+import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.VacantSeats;
@@ -256,5 +257,14 @@ public class SchoolController extends ResourceConfig {
 	{
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		return schoolSearchImpl.getVacantSeatsBySchoolIdByStandardId(schoolId, standardId);
+	}
+	
+	@GET
+	@Path("contactclicks.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolAnalyticsData> getContactClicks(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getContactClicksBySchoolId(schoolId);
 	}
 }
