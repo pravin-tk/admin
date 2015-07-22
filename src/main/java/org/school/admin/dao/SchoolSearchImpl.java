@@ -13,6 +13,7 @@ import org.school.admin.data.InfraCategory;
 import org.school.admin.data.InfraItem;
 import org.school.admin.data.NameList;
 import org.school.admin.data.RatingData;
+import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolFee;
 import org.school.admin.data.SchoolList;
 import org.school.admin.data.SchoolListingRequest;
@@ -26,6 +27,7 @@ import org.school.admin.model.ClassInfo;
 import org.school.admin.model.RatingCategoryType;
 import org.school.admin.model.School;
 import org.school.admin.model.SchoolActivityCatItem;
+import org.school.admin.model.SchoolAnalytics;
 import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolInfrastructureCatItem;
 import org.school.admin.model.SchoolRating;
@@ -562,6 +564,26 @@ public class SchoolSearchImpl {
 		
 		session.close();
 		return vacantSeats;
+	}
+	
+	public List<SchoolAnalyticsData> getContactClicksBySchoolId( Integer schoolId ) {
+		String hql = "FROM SchoolAnalytics WHERE school.id = :school_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql)
+				.setParameter("school_id", schoolId);
+		List<SchoolAnalytics> result = query.list();
+		
+		SchoolAnalyticsData schoolAnalyticsData = new SchoolAnalyticsData();
+		List<SchoolAnalyticsData> schoolAnalyticsDataList = new ArrayList<SchoolAnalyticsData>();
+		for(int i=0; i< result.size(); i++){
+			schoolAnalyticsData.setSchoolId(schoolId);
+			schoolAnalyticsData.setContactClicks(result.get(i).getContactClicks());
+			schoolAnalyticsDataList.add(schoolAnalyticsData);
+		}
+		
+		session.close();
+		return schoolAnalyticsDataList;
 	}
 	
 }
