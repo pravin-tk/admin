@@ -12,6 +12,7 @@ import org.school.admin.data.GalleryData;
 import org.school.admin.data.InfraCategory;
 import org.school.admin.data.InfraItem;
 import org.school.admin.data.NameList;
+import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.RatingData;
 import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolFee;
@@ -622,4 +623,38 @@ public class SchoolSearchImpl {
 		session.close();
 	}
 	
+	public List<NearbySchoolList> getNearbySchoolByLatitudeByLogitude(SearchRequest searchRequest) {
+		
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		String distance = "ROUND(6371 *  "
+			+ " ACOS(COS( RADIANS(" + searchRequest.getLatitude() + ") ) * COS( RADIANS( s.latitude ) ) * " 
+			+ " COS(RADIANS( s.longitude ) - RADIANS(" + searchRequest.getLongitude() + ") ) "
+			+ " + SIN(RADIANS("+ searchRequest.getLatitude() +")) * SIN(RADIANS(s.latitude)) ),6)";
+		
+		String hql = "SELECT s.schoolId as schoolId, "
+			+ " s.name as name, "
+			+ " s.rating as rating, "
+			+ " ci.vacantSeat as vacantSeat, "
+			+ " ci.totalFee as totalFee, "
+			+ " ci.standardType.id as standardId, "
+			+ distance+" as distance"
+			+ " FROM SchoolSearch s, ClassInfo ci"
+			+ " WHERE ci.school.id = s.schoolId";
+		if(searchRequest.getStandardId() != 0) {
+			hql = hql + " AND ci.standardType.id = :standard_id "; 
+		}
+		if(searchRequest.getLatitude() != null && searchRequest.getLongitude() != null){
+			hql = hql + " AND "+distance+" < 6";
+		}
+		hql = hql + " GROUP BY s.schoolId " ;
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(NearbySchoolList.class));
+		if(searchRequest.getStandardId() != 0) {
+			query.setParameter("standard_id", searchRequest.getStandardId()); 
+		}
+		List<NearbySchoolList> nearbySchools = query.list();
+		session.close();
+		
+		return nearbySchools;
+	}
 }
