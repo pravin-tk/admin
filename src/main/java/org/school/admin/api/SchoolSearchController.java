@@ -26,6 +26,7 @@ import org.school.admin.data.GalleryData;
 import org.school.admin.data.NameImageList;
 import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
+import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolCompleteDetail;
 import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolList;
@@ -159,6 +160,14 @@ public class SchoolSearchController {
 		facility.setSafety(schoolSearchImpl.getSchoolSafety(id));
 		facility.setInfra(schoolSearchImpl.getSchoolInfra(id));
 		result.setFacility(facility);
+		
+		List<Rating> ratings = schoolSearchImpl.getSchoolRating(id);
+		for(int i=0; i<ratings.size(); i++){
+			ratings.get(i).setImage(img_path+ratings.get(i).getImage());
+		}
+		result.setRating(ratings);
+		result.setSchoolAchievements(schoolSearchImpl.getSchoolAchievmentsBySchoolId(id));
+		
 		return result;
 	}
 	

@@ -25,6 +25,7 @@ import org.school.admin.data.TotalRating;
 import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ClassInfo;
+import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.RatingCategoryType;
 import org.school.admin.model.School;
 import org.school.admin.model.SchoolActivityCatItem;
@@ -657,5 +658,19 @@ public class SchoolSearchImpl {
 		session.close();
 		
 		return nearbySchools;
+	}
+	
+	public List<PrevStudentProfile> getSchoolAchievmentsBySchoolId( Integer schoolId ) {
+		String hql = "SELECT psp.id as id, psp.name as name, psp.batch as batch, psp.achievements as achievements "
+				+ " FROM PrevStudentProfile psp "
+				+ " WHERE school.id = :school_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql)
+				.setParameter("school_id", schoolId)
+				.setResultTransformer(Transformers.aliasToBean(PrevStudentProfile.class));
+		List<PrevStudentProfile> result = query.list();
+		session.close();
+		return result;
 	}
 }
