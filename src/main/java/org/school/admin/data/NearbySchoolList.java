@@ -9,6 +9,7 @@ public class NearbySchoolList {
 	private Double totalFee;
 	private Short standardId;
 	private Double distance;
+	private String localityName;
 	
 	public Integer getSchoolId() {
 		return schoolId;
@@ -57,6 +58,12 @@ public class NearbySchoolList {
 	}
 	public void setDistance(Double distance) {
 		this.distance = distance;
+	}
+	public String getLocalityName() {
+		return localityName;
+	}
+	public void setLocalityName(String localityName) {
+		this.localityName = localityName;
 	}
 	
 }
