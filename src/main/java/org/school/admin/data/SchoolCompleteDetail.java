@@ -3,6 +3,7 @@ package org.school.admin.data;
 import java.util.List;
 import java.util.Set;
 
+import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SchoolHighlight;
 import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolReview;
@@ -17,6 +18,8 @@ public class SchoolCompleteDetail {
 	private List<GalleryData> images;
 	private List<FeeDetail> fees;
 	private Facility facility;
+	private List<Rating> rating;
+	private List<PrevStudentProfile> schoolAchievements;
 
 	public List<SchoolTimelineData> getSchoolTimelineData() {
 		return schoolTimelineData;
@@ -82,4 +85,20 @@ public class SchoolCompleteDetail {
 		this.facility = facility;
 	}
 
+	public List<Rating> getRating() {
+		return rating;
+	}
+
+	public void setRating(List<Rating> rating) {
+		this.rating = rating;
+	}
+
+	public List<PrevStudentProfile> getSchoolAchievements() {
+		return schoolAchievements;
+	}
+
+	public void setSchoolAchievements(List<PrevStudentProfile> schoolAchievements) {
+		this.schoolAchievements = schoolAchievements;
+	}
+	
 }
