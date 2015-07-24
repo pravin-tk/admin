@@ -634,6 +634,7 @@ public class SchoolSearchImpl {
 		
 		String hql = "SELECT s.schoolId as schoolId, "
 			+ " s.name as name, "
+			+ " s.localityName as localityName, "
 			+ " s.rating as rating, "
 			+ " ci.vacantSeat as vacantSeat, "
 			+ " ci.totalFee as totalFee, "
