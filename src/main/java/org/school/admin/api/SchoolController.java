@@ -37,6 +37,7 @@ import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
+import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
 import org.school.admin.service.SchoolSuggestionService;
@@ -276,5 +277,14 @@ public class SchoolController extends ResourceConfig {
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		schoolSearchImpl.updateContactClicksBySchoolId(schoolId);
 		return;
+	}
+	
+	@GET
+	@Path("schoolachievements.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PrevStudentProfile> getSchoolAchievements(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getSchoolAchievmentsBySchoolId(schoolId);
 	}
 }
