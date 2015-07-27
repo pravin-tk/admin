@@ -109,7 +109,7 @@ public class SchoolSearchUserDao {
 	        	if(userRegistrationInfo.getImage() != null && userRegistrationInfo.getImage().trim().length() > 0) {
 		        	String file_name = userRegistrationInfo.getImage();
 		        	file_name = "avatar/"+userId+"-"+file_name;
-		        	file_name = file_name.replaceAll("([^a-zA-Z]|\\s)+", " ").replaceAll(" ", "_").toLowerCase();
+		        	file_name = file_name.replaceAll("([^a-zA-Z0-9.]|\\s)+", " ").replaceAll(" ", "_").toLowerCase();
 		        	String uploadFileLocation = img_path+file_name;
 		        	userRegistrationInfo.setImage(file_name);
 		        	Session newsession = hibernateUtil.openSession();
@@ -159,7 +159,7 @@ public class SchoolSearchUserDao {
 	        	if(userRegistrationInfo.getImage() != null && userRegistrationInfo.getImage().trim().length() > 0) {
 		        	String file_name = userRegistrationInfo.getImage();
 		        	file_name = "avatar/"+userId+"-"+file_name;
-		        	file_name = file_name.replaceAll("([^a-zA-Z]|\\s)+", " ").replaceAll(" ", "_").toLowerCase();
+		        	file_name = file_name.replaceAll("([^a-zA-Z0-9.]|\\s)+", " ").replaceAll(" ", "_").toLowerCase();
 		        	String uploadFileLocation = img_path+file_name;
 		        	userRegistrationInfo.setImage(file_name);
 		        	this.imageUploader.writeToFile( inputStream, uploadFileLocation);
@@ -276,7 +276,7 @@ public class SchoolSearchUserDao {
 		responseMessage.setData(userRegistrationInfo);
 		responseMessage.setId(userRegistrationInfo.getId());
 		responseMessage.setStatus(1);
-		responseMessage.setMessage("Profile updated successfully.");
+		responseMessage.setMessage("Profile activated successfully.");
 		return responseMessage;
 	}
 	
@@ -352,9 +352,10 @@ public class SchoolSearchUserDao {
 				     + "s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
 				     +"  ci.totalFee as totalFee,  "
 				     + " ci.vacantSeat as seats,"
-					 + " s.standardId as standardId FROM AppliedSchoolSearch s, ClassInfo ci"
-					 + " where s.userId = :user_id AND s.schoolId = ci.school.id AND ci.standardType.id = s.standardId "
-					 + " GROUP BY s.schoolId, s.standardId";
+					 + " s.standardId as standardId FROM SchoolSearch s, School sch JOIN sch.ClassInfos ci"
+				     + " JOIN sch.appliedSchools applied JOIN applied.applicantBasicDetail abd"
+					 + " where applied.userRegistrationInfo.id = :user_id AND s.schoolId = sch.id AND ci.standardType = abd.standardType "
+					 + " GROUP BY s.schoolId, ci.standardType";
 
 		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
 		query.setParameter("user_id", userId);

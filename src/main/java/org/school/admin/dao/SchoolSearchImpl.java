@@ -56,7 +56,7 @@ public class SchoolSearchImpl {
 				     + "s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
 				     + "s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				     + "s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
-				     + "s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				     + "s.schoolType as schoolType,s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
 					 +distance+" as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
 					 + "ci.standardType.id as standardId FROM SchoolSearch s, ClassInfo ci"
 					 + " where s.schoolId = ci.school.id AND ci.standardType.id = :standard_id";

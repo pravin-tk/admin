@@ -61,6 +61,7 @@ public class School implements java.io.Serializable {
 	private Set<SchoolActivityCatItem> schoolActivityCatItems = new HashSet<SchoolActivityCatItem>(0);
 	private Set<SchoolSafetyCatItem> schoolSafetyCatItems = new HashSet<SchoolSafetyCatItem>(0);
 	private Set<SchoolInfrastructureCatItem> schoolInfrastructureCatItems = new HashSet<SchoolInfrastructureCatItem>(0);
+	private Set<AppliedSchool> appliedSchools = new HashSet<AppliedSchool>(0);
 
 	public School() {
 	}
@@ -385,6 +386,15 @@ public class School implements java.io.Serializable {
 
 	public void setSchoolTimelines(Set<SchoolTimeline> schoolTimelines) {
 		this.schoolTimelines = schoolTimelines;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
+	public Set<AppliedSchool> getAppliedSchools() {
+		return appliedSchools;
+	}
+
+	public void setAppliedSchools(Set<AppliedSchool> appliedSchools) {
+		this.appliedSchools = appliedSchools;
 	}
 
 	@Column(name = "home_image", length = 200)
