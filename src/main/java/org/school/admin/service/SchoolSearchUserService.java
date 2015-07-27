@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.servlet.ServletContext;
 
+import org.school.admin.Emailer;
 import org.school.admin.dao.SchoolSearchUserDao;
 import org.school.admin.data.SchoolList;
 import org.school.admin.data.UserInfo;
@@ -138,7 +139,16 @@ public class SchoolSearchUserService {
 	public Boolean resetUserPassword(String email) {
 		SchoolSearchUserDao schoolSearchUserDao = new SchoolSearchUserDao();
 		String password = this.commonUtility.randomString(8);
-		return schoolSearchUserDao.resetPassword(email,password);
+		boolean status = schoolSearchUserDao.resetPassword(email,password);
+		if(status){
+			//Sending newly generated password to user.
+			Emailer emailer = new Emailer();
+			emailer.setTo(email);
+			emailer.setSubject("Resetting password with edbuddy.com is successful.");
+			emailer.setBody("Your password is : " + password);
+			emailer.sendEmail();
+		}
+		return status;
 	}
 
 	public Boolean changeUserPassword(String email, String password) {

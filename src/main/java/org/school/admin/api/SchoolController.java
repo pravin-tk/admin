@@ -32,9 +32,12 @@ import org.school.admin.data.NameList;
 import org.school.admin.data.Rating;
 import org.school.admin.data.RatingData;
 import org.school.admin.data.SchoolAddress;
+import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolTimelineData;
+import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
+import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
 import org.school.admin.service.SchoolSuggestionService;
@@ -248,5 +251,40 @@ public class SchoolController extends ResourceConfig {
 		return new SchoolDAOImp().saveSchoolReview(schoolReview);
 	}
 	
+	@GET
+	@Path("vacantseats.json/{schoolId}/{standardId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<VacantSeats> getVacantSeats(@PathParam("schoolId") Integer schoolId, @PathParam("standardId") Short standardId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getVacantSeatsBySchoolIdByStandardId(schoolId, standardId);
+	}
 	
+	@GET
+	@Path("contactclicks.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolAnalyticsData> getContactClicks(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getContactClicksBySchoolId(schoolId);
+	}
+	
+	@GET
+	@Path("contactclicked.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void updateContactClicks(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		schoolSearchImpl.updateContactClicksBySchoolId(schoolId);
+		return;
+	}
+	
+	@GET
+	@Path("schoolachievements.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PrevStudentProfile> getSchoolAchievements(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getSchoolAchievmentsBySchoolId(schoolId);
+	}
 }
