@@ -61,6 +61,8 @@
 	                                        for(int i=0; i < tehsil_size; i++){
 	                                        	if(city.getTehsil().getId() == tehsil_list.get(i).getId()){
 	                                        		selected = "selected";
+	                                        	}else{
+	                                        		selected = "";
 	                                        	}
 	                                        	out.print("<option value='"+tehsil_list.get(i).getId()+"' "+selected+">"+tehsil_list.get(i).getName()+"</option>");
 	                                        }
