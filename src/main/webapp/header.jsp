@@ -96,7 +96,7 @@
                         <span class="input-group-addon"><i class="fa"></i></span>
                         <select id="change_city" name="change_city" class="form-control">
                             <option value="0">Change City</option>
-                            <option value ="2" selected>Pune</option>
+                            <option value ="1" selected>Pune</option>
                         </select>
                     </div>
               
