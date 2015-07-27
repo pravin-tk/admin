@@ -64,21 +64,15 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                     			out.print("<td>"+salesInfo.getInfoProviderContactNo()+"</td>");
                                     			out.print("<td>"+salesInfo.getInfoProviderEmail()+"</td>");
                                     			out.print("<td>"+salesInfo.getInfoProviderDesignation()+"</td>");
-                                    			out.print("<td><a href='javascript:editSalesInfo("+salesInfo.getId()+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a></td></tr>");
+                                    			out.print("<td><a href='javascript:editSalesInfo("+salesInfo.getId()+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+                                    			+"<a href='javascript:deleteSalesInfo("+salesInfo.getId()+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a></td></tr>");
                                     		}
-                                    
-                                    
                                      %> 
-                                    
                                 </table>
-
                                 <a href="#" class="btn btn-primary view-sales" id="addSalesDetail"><i class="fa fa-plus"></i> Sales Detail</a>
-
                             </div>
                             <div class="sales-new" style="display:none" id="sales-detail-add">
                                 <h2>Add New Sales Detail</h2>
-
-
                                 <div class="form-group" >
                                 	<label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Sales executive name*</label>
                                 	<div class="col-sm-4">
@@ -199,35 +193,32 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 	  	return true;
 	}
  $("#savesalesdetail").click(function(){
-	 var blnError =false;
-	 if($("#sales_executive").val() == 0)
-		 {
-		  alert("Please select sales executive name");
-		  blnError =true;
-		 }
-	 else if($("#datacollector").val()==0)
-		 {
-		   alert("Please select data collector name");
-		   blnError =true;
-		 }
-	 else if($.trim($("#contact_person_name").val()).length == 0 || $("#contact_person_name").val() == "")
-		  {
-		    alert("Please enter the contact person name");
-		    blnError =true;
-		  }
- else if (!ValidateEmail($('#contact_person_email').val()))
-		{
-		  alert("Enter valid email id of contact person");
-//			$('#error-prevStudent').html("Please enter your valid email id");
-//				$('#email').addClass('has-error');
-		  blnError =true;
-		}
- else if($("#designation").val() == "")
-	 {
-	   alert("Please enter the designation of the contact person");
-	   blnError =true;
+	 var msg = "";
+	 if($("#sales_executive").val() == 0){
+			if(msg!="") msg = ",Please select sales executive name"; else msg ="Please select sales executive name";
 	 }
-	 if(!blnError){
+	  if($("#datacollector").val()==0){
+		   if(msg!="") msg = ",Please select data collector name"; else msg ="Please select data collector name";
+	 }
+	 if($.trim($("#contact_person_name").val()).length == 0 || $("#contact_person_name").val() == ""){
+		 	if(msg!="") msg = ",Please enter the contact person name"; else msg ="Please enter the contact person name";
+	}
+	 if($("#contact_person_email").val() != "") {
+  			if (!ValidateEmail($('#contact_person_email').val())){
+		  		if(msg!="") msg = ",Please enter the valid email id"; else msg ="Please enter the valid email id";
+			}
+	 }
+	 if($('#contact_person_no').val() == "" || $('#contact_person_no').val().length == 0){
+		 if(msg != "") msg =",Please enter conatct number"; else msg="Please enter contact number";
+	 }
+		 
+  	if($("#designation").val() == ""){
+	   if(msg!="") msg = ",Please enter the designation"; else msg ="Please enter the designation";
+	 }
+  	if(msg != ""){
+  		alert(msg);
+  	}
+  	else{
 		  console.log('228');
 	    	$.post("webapi/salesdetail/save",{school_id : $('#school_id').val(),
 	    		user_id : $('#user_id').val(),
@@ -255,11 +246,12 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 			    	row.push(data[index].infoProviderContactNo);	
 			    	row.push(data[index].infoProviderEmail);	
 			    	row.push(data[index].infoProviderDesignation);	
-			    	row.push("<a href='javascript:editSalesInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>");
+			    	row.push("<a href='javascript:editSalesInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+			    	+"<a href='javascript:deleteSalesInfo("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>");
 			    	oTable.fnAddData(row);
 			   });
 	    	});
- 		}else return false;
+ 		}
  	
  });
  $("#addSalesDetail").click(function(){
@@ -300,35 +292,32 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
    	}
 	
 	$("#updatesalesdetail").click(function(){
-		 var blnError =false;
-		 if($("#sales_executive").val() == 0)
-			 {
-			  alert("Please select sales executive name");
-			  blnError =true;
-			 }
-		 else if($("#datacollector").val()==0)
-			 {
-			   alert("Please select data collector name");
-			   blnError =true;
-			 }
-		 else if($.trim($("#contact_person_name").val()).length == 0 || $("#contact_person_name").val() == "")
-			  {
-			    alert("Please enter the contact person name");
-			    blnError =true;
-			  }
-	 else if (!ValidateEmail($('#contact_person_email').val()))
-			{
-			  alert("Enter valid email id of contact person");
-//				$('#error-prevStudent').html("Please enter your valid email id");
-//					$('#email').addClass('has-error');
-			  blnError =true;
-			}
-	 else if($("#designation").val() == "")
-		 {
-		   alert("Please enter the designation of the contact person");
-		   blnError =true;
+		 var msg = "";
+		 if($("#sales_executive").val() == 0){
+				if(msg!="") msg = ",Please select sales executive name"; else msg ="Please select sales executive name";
 		 }
-		 if(!blnError){
+		  if($("#datacollector").val()==0){
+			   if(msg!="") msg = ",Please select data collector name"; else msg ="Please select data collector name";
+		 }
+		 if($.trim($("#contact_person_name").val()).length == 0 || $("#contact_person_name").val() == ""){
+			 	if(msg!="") msg = ",Please enter the contact person name"; else msg ="Please enter the contact person name";
+		}
+		 if($("#contact_person_email").val() != "") {
+	  			if (!ValidateEmail($('#contact_person_email').val())){
+			  		if(msg!="") msg = ",Please enter the valid email id"; else msg ="Please enter the valid email id";
+				}
+		 }
+		 if($('#contact_person_no').val() == "" || $('#contact_person_no').val().length == 0){
+			 if(msg != "") msg =",Please enter conatct number"; else msg="Please enter contact number";
+		 }
+			 
+	  	if($("#designation").val() == ""){
+		   if(msg!="") msg = ",Please enter the designation"; else msg ="Please enter the designation";
+		 }
+	  	if(msg != ""){
+	  		alert(msg);
+	  	}
+	  	else{
 			  console.log('228');
 		    	$.post("webapi/salesdetail/update",{school_id : $('#school_id').val(),
 		    		id: $("#sdId").val(),
@@ -360,11 +349,12 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 				    	row.push(data[index].infoProviderContactNo);	
 				    	row.push(data[index].infoProviderEmail);	
 				    	row.push(data[index].infoProviderDesignation);	
-				    	row.push("<a href='javascript:editSalesInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>");
+				    	row.push("<a href='javascript:editSalesInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+				    			+"<a href='javascript:deleteSalesInfo("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>");
 				    	oTable.fnAddData(row);
 				   });
 		    	});
-	 		}else return false;
+	 		}
 	 	
 	 });
 

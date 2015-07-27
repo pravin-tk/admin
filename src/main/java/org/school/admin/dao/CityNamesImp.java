@@ -45,14 +45,30 @@ public class CityNamesImp {
 		return response;
 	}
 	
-	public String update(City city){
+	public ResponseMessage update(City city){
+		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "from City where name = :name and tehsil.id = :tehsilId and id != :id";
 		Session session = hibernateUtil.openSession();
-		session.beginTransaction();
-		session.update(city);
-		session.getTransaction().commit();
+		Query query = session.createQuery(hql);
+		query.setParameter("name", city.getName());
+		query.setParameter("tehsilId", city.getTehsil().getId());
+		query.setParameter("id", city.getId());
+		List<City> result = query.list();
 		session.close();
-		return "Success";
+		if (result.size() > 0) {
+			response.setStatus(0);
+			response.setMessage("City name already exists");
+		} else {
+	        Session newsession = hibernateUtil.openSession();
+	        newsession.beginTransaction();
+	        newsession.update(city);
+	        newsession.getTransaction().commit();
+	        newsession.close();
+	        response.setStatus(1);
+			response.setMessage("Success");
+		}
+        return response;
 	}
 	
 	/**

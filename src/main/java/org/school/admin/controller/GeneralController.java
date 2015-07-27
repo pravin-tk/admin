@@ -227,8 +227,8 @@ public class GeneralController {
 	
 	@POST
 	@Path("/city/update")
-	@Produces(MediaType.TEXT_HTML)
-	public String updateCity(
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateCity(
 			@FormParam("id") int id,
 			@FormParam("name") String name,
 			@FormParam("isCity") int isCity,

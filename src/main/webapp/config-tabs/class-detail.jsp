@@ -248,7 +248,7 @@
 		(Eligibility criteria)
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Total Seats *</label>
+			<label class="col-sm-2 control-label">Total Seats </label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control" placeholder="No of seats"
 					id="total_seats">
@@ -263,7 +263,7 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Seats Vacant *</label>
+			<label class="col-sm-2 control-label">Seats Vacant </label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control"
 					placeholder="no of seats vacant" id="vacant_seats">
@@ -278,13 +278,13 @@
 		</div>
 
 <div class="form-group">
-			<label class="col-sm-2 control-label">Morning timing from*</label>
+			<label class="col-sm-2 control-label">Morning timing from</label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control"
 					placeholder="hh:mm:ss" id="morning_time_from">
 			</div>
 			<div class="col-sm-4">
-				<label class="col-sm-2 control-label">to*</label>
+				<label class="col-sm-2 control-label">to</label>
 				<div class="col-sm-4">
 					<input type="text" class="form-control"
 						placeholder="hh:mm:ss" id="morning_time_to">
@@ -294,13 +294,13 @@
 		</div>
 		
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Evening timing from*</label>
+			<label class="col-sm-2 control-label">Evening timing from</label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control"
 					placeholder="hh:mm:ss" id="evening_time_from">
 			</div>
 			<div class="col-sm-4">
-				<label class="col-sm-2 control-label">to*</label>
+				<label class="col-sm-2 control-label">to</label>
 				<div class="col-sm-4">
 					<input type="text" class="form-control"
 						placeholder="hh:mm:ss" id="evening_time_to">
@@ -309,7 +309,7 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Admission deadline *</label>
+			<label class="col-sm-2 control-label">Admission deadline </label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control"
 					placeholder="admission deadline" id="admission_deadline">
@@ -322,10 +322,10 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Admission from *</label>
+			<label class="col-sm-2 control-label">Admission from </label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" placeholder="admission from"
-					id="admission_form">
+					id="admission_from">
 			</div>
 			<div class="col-sm-6">
 				<div class="tooltip custom-tool-tip right">
@@ -336,7 +336,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Admission to *</label>
+			<label class="col-sm-2 control-label">Admission to </label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" placeholder="admission to"
 					id="admission_to">
@@ -417,7 +417,6 @@
                       {
                		    for(int i = 0; i < accessories.size(); i++)
             			{
-               			 
                			Accessories accessories2 = accessories.get(i);   
                			%>
                			<div class="col-sm-3">
@@ -549,7 +548,7 @@ $(function() {
 	
   });
 $("#admission_deadline").datepicker('setDate',new Date());
-$("#admission_form").datepicker('setDate',new Date());
+$("#admission_from").datepicker('setDate',new Date());
 $("#admission_to").datepicker('setDate',new Date());
 var arr_feetype_perm = [];
 var feetype_perm_json = [];
@@ -576,7 +575,7 @@ for (int i = 0; i < feetypes.size(); i++) {
 		 format: 'yyyy-mm-dd',
 		    startDate: '2010-01-01'
 	});
-	$('#admission_form').datepicker({ format: 'yyyy-mm-dd',
+	$('#admission_from').datepicker({ format: 'yyyy-mm-dd',
 	startDate: '2010-01-01'});
 	$('#admission_to').datepicker({ format: 'yyyy-mm-dd',
 	startDate: '2010-01-01'});
@@ -622,6 +621,7 @@ $('#updateclassdetail').click(function() {
 	var school_id = <%out.print(school_id6);%>
 	var user_id = <%out.print(user_id6);%>
 	var subject = null;
+ 	//if($("#cb1").val() != "" && $("#txt1").val() != "")
 	fee_data = getFeeData();
 	subject_data = getSubjectData();
 	accessory_data = getAccessoryData();
@@ -638,31 +638,48 @@ $('#updateclassdetail').click(function() {
 	if ($("#stream").val() == 0) {
 		if(msg != "") msg = msg+",Please select stream"; else msg = "Please select stream";
 	}
+	if($("#vacant_seats").val() != "" && $("#total_seats").val() != "")	{
 	if(parseInt($("#vacant_seats").val()) > parseInt($("#total_seats").val())){
-		if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
+			if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
+		}
 	}
-	if($('#admission_deadline').val() < $("#admission_to").val()){
-		if(msg != "") msg = msg+",Admission deadline date should be greater than admission to"; else msg = "Please select admission deadline";
-	}
-	 if($("#admission_to").val() > $("#admission_from").val()){
-		if(msg != "") msg = msg+",Admission to date should not greater than admission from date"; else msg = "Admission to(date) should not greater than admission from(date)";
-	} 
-	 if($("#admission_from").val() == ""){
-		if(msg != "") msg = msg+",Please select admission from"; else msg = "Please select admission from";
-	}
-    if($("#admission_to").val() == ""){
-    	if(msg != "") msg = msg+",Please select admission to"; else msg = "Please select admission to";
-	}
-   if($("#admission_deadline").val() == ""){
-	   if(msg != "") msg = msg+",Please select admission deadline"; else msg = "Please select admission deadline";
-	}
-   if(($("#morning_time_to").val() == "" || $("#morning_time_from").val()	== "") && ($("#evening_time_to" ).val() == "" || $("#evening_time_from").val() == "")){
-	 if(msg != "") msg = msg+",Please select morning shift time or evening shift time"; else msg = "Please select morning shift time or evening shift time";
-   }
+	 	  if($("#morning_time_from").val() == ""){
+				 $("#morning_time_from").val("00:00:00");
+			} 
+			if($("#morning_time_to").val() == ""){
+			 $("#morning_time_to").val("00:00:00");
+			}
+			if($("#evening_time_from").val() == "")
+			{
+				$("#evening_time_from").val("00:00:00");
+			}
+			if($("#evening_time_to").val() == "")
+			{
+				$("#evening_time_to").val("00:00:00");
+			}
+// 	if($('#admission_deadline').val() < $("#admission_to").val()){
+// 		if(msg != "") msg = msg+",Admission deadline date should be greater than admission to"; else msg = "Please select admission deadline";
+// 	}
+// 	 if($("#admission_to").val() > $("#admission_from").val()){
+// 		if(msg != "") msg = msg+",Admission to date should not greater than admission from date"; else msg = "Admission to(date) should not greater than admission from(date)";
+// 	} 
+// 	 if($("#admission_from").val() == ""){
+// 		if(msg != "") msg = msg+",Please select admission from"; else msg = "Please select admission from";
+// 	}
+//     if($("#admission_to").val() == ""){
+//     	if(msg != "") msg = msg+",Please select admission to"; else msg = "Please select admission to";
+// 	}
+//    if($("#admission_deadline").val() == ""){
+// 	   if(msg != "") msg = msg+",Please select admission deadline"; else msg = "Please select admission deadline";
+// 	}
+//    if(($("#morning_time_to").val() == "" || $("#morning_time_from").val()	== "") && ($("#evening_time_to" ).val() == "" || $("#evening_time_from").val() == "")){
+// 	 if(msg != "") msg = msg+",Please select morning shift time or evening shift time"; else msg = "Please select morning shift time or evening shift time";
+//    }
    if(msg != "") {
 	       alert(msg);
    }else{
-		fee_data = getFeeData();
+	  
+			fee_data = getFeeData();
 		subject_data = getSubjectData();
 		accessory_data = getAccessoryData();
 		class_info_data = getClassInfoData();
@@ -732,6 +749,7 @@ $("#addClassDetail1").click(function(){
 	  if (blncheck || arr_feetype_temp.length<1 ){ return false;}
 	  
 	  rowCount = rowCount +1;
+	  console.log('#751');
 	
 		var cmb = '#cb'+rowCount; 
 		var recRow = '<div class="form-group" id="rowCount'+rowCount+'">';
@@ -856,7 +874,8 @@ $("#addClassDetail1").click(function(){
 		var fee_data = [];
 		var fee_item;
 		var totalcnt =rowCount;
-		var str_val;
+		console.log("row count : "+rowCount);
+		var str_val ="";
 		for (i = 1; i <= rowCount; i++) {
 			var sep = ",";
 			var rep = "+";
@@ -864,8 +883,10 @@ $("#addClassDetail1").click(function(){
 			var item_amt = '#txt'+i;
 			if($(item_name).val() != 'undefined' && $(item_name).val() != null )
 				str_val = $(item_name).val().toString();
-				//console.log("before replace =  "+str_val);
-			var str_val = str_val.replace(/,/gi, "+"); 
+			
+			//console.log("before replace 2 =  "+str_val);
+			//if(str_val !="" && str_val != 'undefined')	
+				var str_val = str_val.replace(/,/gi, "+"); 
 			//console.log("after replace =  "+str_val);
 			if(str_val != "" && $(item_amt).val() >0  ){
 				if($("#class_id").val() >0)
@@ -929,7 +950,7 @@ $("#addClassDetail1").click(function(){
 					admissionProcess :  $("#admission_procedure").val(),
 					howToApply : $("#how_to_apply").val(),
 					admissionDeadline : new Date($("#admission_deadline").val()),
-					admissionFrom : new Date($("#admission_form").val()),
+					admissionFrom : new Date($("#admission_from").val()),
 					admissionTo : new Date($("#admission_to").val()),
 					feesPaymentTerm : $("#fee_pay_term").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
@@ -950,9 +971,10 @@ $("#addClassDetail1").click(function(){
 					admissionProcess :  $("#admission_procedure").val(),
 					howToApply : $("#how_to_apply").val(),
 					admissionDeadline : new Date($("#admission_deadline").val()),
-					admissionFrom : new Date($("#admission_form").val()),
+					admissionFrom : new Date($("#admission_from").val()),
 					admissionTo : new Date($("#admission_to").val()),
 					feesPaymentTerm : $("#fee_pay_term").val(),
+					eligibilityCriteria : $("#ecriteria").val(),
 					morningTimeFrom : $("#morning_time_from").val(),
 					morningTimeTo   : $("#morning_time_to").val(),
 					afternoonTimeFrom : $("#evening_time_from").val(),
@@ -965,7 +987,8 @@ $("#addClassDetail1").click(function(){
 	$('#saveclassdetail').click(function() {
 		var school_id = <%out.print(school_id6);%>
 		var user_id = <%out.print(user_id6);%>
-		var subject = null;
+		var subject = "";
+		var fee_data = "";
 		var msg = "";
 
 		if ($('#standard').val() == 0) {
@@ -977,30 +1000,29 @@ $("#addClassDetail1").click(function(){
 		if ($("#stream").val() == 0) {
 			if(msg != "") msg = msg+",Please select stream"; else msg = "Please select stream";
 		}
+		if($("#vacant_seats").val() != "" && $("#total_seats").val() != ""){
 		if(parseInt($("#vacant_seats").val()) > parseInt($("#total_seats").val())){
 			if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
+			}
 		}
-		if($('#admission_deadline').val() < $("#admission_to").val()){
-			if(msg != "") msg = msg+",Admission deadline date should be greater than admission to"; else msg = "Please select admission deadline";
-		}
-		 if($("#admission_to").val() > $("#admission_from").val()){
-			if(msg != "") msg = msg+",Admission to date should not greater than admission from date"; else msg = "Admission to(date) should not greater than admission from(date)";
-		} 
-		 if($("#admission_from").val() == ""){
-			if(msg != "") msg = msg+",Please select admission from"; else msg = "Please select admission from";
-		}
-	    if($("#admission_to").val() == ""){
-	    	if(msg != "") msg = msg+",Please select admission to"; else msg = "Please select admission to";
-		}
-	   if($("#admission_deadline").val() == ""){
-		   if(msg != "") msg = msg+",Please select admission deadline"; else msg = "Please select admission deadline";
-		}
-	   if(($("#morning_time_to").val() == "" || $("#morning_time_from").val()	== "") && ($("#evening_time_to" ).val() == "" || $("#evening_time_from").val() == "")){
-		 if(msg != "") msg = msg+",Please select morning shift time or evening shift time"; else msg = "Please select morning shift time or evening shift time";
-	   }
+	 	  if($("#morning_time_from").val() == ""){
+				 $("#morning_time_from").val("00:00:00");
+			} 
+			if($("#morning_time_to").val() == ""){
+			 $("#morning_time_to").val("00:00:00");
+			}
+			if($("#evening_time_from").val() == "")
+			{
+				$("#evening_time_from").val("00:00:00");
+			}
+			if($("#evening_time_to").val() == "")
+			{
+				$("#evening_time_to").val("00:00:00");
+			}
 	   if(msg != "") {
 		       alert(msg);
 	   }else{
+		  // if($("#cb1").val() != "" && $("#txt1").val() != "")
 			fee_data = getFeeData();
 			subject_data = getSubjectData();
 			accessory_data = getAccessoryData();
@@ -1047,7 +1069,7 @@ $("#addClassDetail1").click(function(){
 		$("#admission_procedure").val("");
 		$("#how_to_apply").val("");
 		$("#admission_deadline").val("");
-		$("#admission_form").val("");
+		$("#admission_from").val("");
 		$("#admission_to").val("");
 		$("#fee_pay_term").val("");
 		$( "input[type='checkbox']" ).prop( "checked", false);
@@ -1106,12 +1128,27 @@ $("#addClassDetail1").click(function(){
 		$("#ecriteria").val(data.classInfo.eligibilityCriteria);
 		$("#admission_procedure").val(data.classInfo.admissionProcess);
 		$("#how_to_apply").val(data.classInfo.howToApply);
-		ddate = new Date(data.classInfo.admissionDeadline);
+		if (typeof data.classInfo.admissionDeadline === 'undefined') {
+			$("#admission_deadline").val("");
+		}else{
+			ddate = new Date(data.classInfo.admissionDeadline);
+			$("#admission_deadline").val(ddate.getFullYear()+"-"+("0" + (ddate.getMonth()+1)).slice(-2)+"-"+("0" + ddate.getDate()).slice(-2));
+		}
+		
+		if (typeof data.classInfo.admissionFrom === 'undefined') {
+			$("#admission_from").val("");
+		}
+		else{
 		tdate = new Date(data.classInfo.admissionFrom);
-		fdate = new Date(data.classInfo.admissionTo);
-		$("#admission_deadline").val(ddate.getFullYear()+"-"+("0" + (ddate.getMonth()+1)).slice(-2)+"-"+("0" + ddate.getDate()).slice(-2));
-		$("#admission_form").val(tdate.getFullYear()+"-"+("0" + (tdate.getMonth()+1)).slice(-2)+"-"+("0" + tdate.getDate()).slice(-2));
-		$("#admission_to").val(fdate.getFullYear()+"-"+("0" + (fdate.getMonth()+1)).slice(-2)+"-"+("0" + fdate.getDate()).slice(-2));
+		$("#admission_from").val(tdate.getFullYear()+"-"+("0" + (tdate.getMonth()+1)).slice(-2)+"-"+("0" + tdate.getDate()).slice(-2));
+		}
+		
+		if (typeof data.classInfo.admissionTo === 'undefined') {
+			$("#admission_to").val("");
+		}else{
+			fdate = new Date(data.classInfo.admissionTo);
+			$("#admission_to").val(fdate.getFullYear()+"-"+("0" + (fdate.getMonth()+1)).slice(-2)+"-"+("0" + fdate.getDate()).slice(-2));
+		}
 		$("#fee_pay_term").val(data.classInfo.feesPaymentTerm);
 		$('input[name="accessories[]"]').each(function() {
 			for(var i = 0; i < data.classAccessories.length; i++){
@@ -1127,13 +1164,15 @@ $("#addClassDetail1").click(function(){
 			
 			if(data.classFee.length>0)
 			for(var i = 0; i < data.classFee.length; i++){
-				str1 = data.classFee[i].feeDesc;
-				if (str1.indexOf("+") >= 0) {
-					arr = str1.split("+");
-		        }else {
-		        	   arr [0] =str1;
-		        }
-				
+				if(data.classFee[i].feeDesc != undefined && data.classFee[i].feeDesc != ""){
+					str1 = data.classFee[i].feeDesc;
+					if (str1.indexOf("+") >= 0 ) {
+						arr = str1.split("+");
+			        }else {
+			        	 
+			        	   arr [0] =str1;
+			        }
+				}
 				if(i>=1 && i <= data.classFee.length-1) {
 					addEditRows(i+1);
 				}
@@ -1152,7 +1191,9 @@ $("#addClassDetail1").click(function(){
 		$('#feeItemCnt').val(data.classFee.length);
 		$('#oldfeeCnt').val(data.classFee.length);
 		$("#class_id").val(data.classInfo.id);
-		rowCount = data.classFee.length;
+		if(data.classFee.length >0)
+			rowCount = data.classFee.length;
+		console.log('#1191');
 		
 	});
 	}

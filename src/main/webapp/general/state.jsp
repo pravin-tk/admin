@@ -63,7 +63,7 @@ country_size = country_list.size();
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Sort Order</th>
+<!--                                             <th>Sort Order</th> -->
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
                                         </tr>
@@ -74,7 +74,7 @@ country_size = country_list.size();
                                         %>
                                         <tr>
                                             <td><% out.print(state_list.get(i).getName()); %></td>
-                                            <td><% out.print(state_list.get(i).getSortOrder()); %></td>
+<%--                                             <td><% out.print(state_list.get(i).getSortOrder()); %></td> --%>
                                             <td><% if(state_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editState(<% out.print(state_list.get(i).getId()); %>);" class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a>
@@ -127,20 +127,20 @@ country_size = country_list.size();
                                     </div>
 	                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of state
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<!--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1"> -->
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of state -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -181,16 +181,28 @@ country_size = country_list.size();
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveState(){
-	$.post("../webapi/general/state/save", {name: $("#name").val(), countryId: $("#countryId").val(), sortOrder: $("#sortOrder").val(), status: $('input[name=status]:checked').val()}, function(data){
-		if($("#countryId").val() > 0){
-			if(data.status == 1)
-				window.location.href = "${baseUrl}/general/state.jsp?country_id="+$("#countryId").val();
-			else
-				alert(data.message);
-		}else{
-			alert("Select Country");
-		}
-	});
+	var sortOrder = 1;
+	var msg = "";
+	if($("name").val() == ""){
+		if(msg != "")  msg = msg+",Please enter state name"; else msg = "Please enter state name";
+	}
+	if($("#countryId").val() == "" || $("#countryId").val() == 'undefined'){
+		if(msg != "") msg = msg+",Please select country name"; else msg = "Please select country name";
+	}
+	if(msg != ""){
+		alert(msg);
+	}else{
+		$.post("../webapi/general/state/save", {name: $("#name").val(), countryId: $("#countryId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+			if($("#countryId").val() > 0){
+				if(data.status == 1)
+					window.location.href = "${baseUrl}/general/state.jsp?country_id="+$("#countryId").val();
+				else
+					alert(data.message);
+			}else{
+				alert("Select Country");
+			}
+		});
+	}
 }
 
 function editState(id){

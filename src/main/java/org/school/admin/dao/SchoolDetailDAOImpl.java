@@ -24,8 +24,6 @@ public class SchoolDetailDAOImpl {
 	{
 		ResponseMessage response = new ResponseMessage();
 		String hqlSchoolInfo = "from SchoolInfo where school.id = :school_id";
-		String hqlSchoolBoard = "from SchoolBoard where school.id = :school_id";
-		String hqlSchoolMedium = "from SchoolMedium where school.id = :school_id";
 		String deleteSchoolMedium = "DELETE from SchoolMedium where school.id = :school_id";
 		
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -36,14 +34,7 @@ public class SchoolDetailDAOImpl {
 		List<SchoolInfo> resultSchoolInfo = query.list();
 		oldSchoolInfo.close();
 
-		Session oldSchoolBoard = hibernateUtil.openSession();
-		Query query1 = oldSchoolBoard.createQuery(hqlSchoolBoard);
-		query1.setInteger("school_id",schoolDetail.getSchoolBoard().getSchool().getId());
-		List<SchoolBoard> resultSchoolBoard = query1.list();
-		oldSchoolBoard.close();
-		
 		SchoolInfo schoolInfo = schoolDetail.getSchoolInfo();
-		SchoolBoard schoolBoard = schoolDetail.getSchoolBoard();
 		String msg = "";
 		if(	schoolInfo.getSchoolClassificationType().getId() == 0 && schoolInfo.getSchoolType().getId()==0 && 
 				schoolInfo.getSchoolCategoryType().getId() == 0
@@ -74,13 +65,8 @@ public class SchoolDetailDAOImpl {
 				msg="School detail save successfully";
 				response.setMessage(msg);
 			}
-			if (resultSchoolBoard.size() > 0) {
-				schoolBoard.setId(resultSchoolBoard.get(0).getId());
-				session.update(schoolBoard);
-			} else {
-				session.save(schoolBoard);
-			}
-			System.out.println("School ID:"+schoolBoard.getSchool().getId());
+			
+			//System.out.println("School ID:"+schoolBoard.getSchool().getId());
 			session.getTransaction().commit();
 			session.close();
 			Set<SchoolMedium> schoolMediums = schoolDetail.getSchoolMedium();

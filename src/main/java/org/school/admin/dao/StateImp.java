@@ -55,7 +55,7 @@ public class StateImp {
 		query.setParameter("name", state.getName());
 		query.setParameter("country_id", state.getCountry().getId());
 		query.setParameter("id", state.getId());
-		List<Tehsil> result = query.list();
+		List<State> result = query.list();
 		session.close();
 		if (result.size() > 0) {
 			response.setStatus(0);

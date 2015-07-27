@@ -50,20 +50,20 @@
 								
                                
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(rowCountry.getSortOrder()); %>" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of city
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                   <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<%--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(rowCountry.getSortOrder()); %>" placeholder="1"> --%>
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of city -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div>  -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>

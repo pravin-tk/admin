@@ -23,9 +23,10 @@
  		}
     }	
 %>  
+<%@include file="facility/infrastructure.jsp" %>
 <%@include file="facility/activity.jsp" %>
 <%@include file="facility/safety.jsp" %>
-<%@include file="facility/infrastructure.jsp" %>
+
 <form method="post" action="" class="form-horizontal" id="facility_detail">    
 <div class="form-group">
    	<div class="col-sm-4">

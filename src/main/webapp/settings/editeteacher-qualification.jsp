@@ -78,20 +78,20 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(education.getSortOrder()); %>" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of teacher qualification.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<%--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(education.getSortOrder()); %>" placeholder="1"> --%>
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of teacher qualification. -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <div class="col-sm-4">
@@ -112,7 +112,8 @@
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveEducationType(){
-	$.post("../webapi/settings/certificatetype/update", {id: $("#id").val(), title: $("#title").val(), shortTitle: $("#shortTitle").val(), description: $("#description").val(), sortOrder: $("#sortOrder").val()}, function(data){
+	var sortOrder = 1;
+	$.post("../webapi/settings/certificatetype/update", {id: $("#id").val(), title: $("#title").val(), shortTitle: $("#shortTitle").val(), description: $("#description").val(), sortOrder: sortOrder}, function(data){
 		window.location.href = "${baseUrl}/settings/teacher-qualification.jsp";
 	});
 }

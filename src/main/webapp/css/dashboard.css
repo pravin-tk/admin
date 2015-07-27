@@ -4,8 +4,8 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 
 body {
-    padding: 50px 0;
-    background: url("../images/bg-school.jpg") repeat-x left bottom fixed;
+/*     padding: 50px 0; */
+/*     background: url("../images/bg-school.jpg") repeat-x left bottom fixed; */
 }
 /*
  * Global add-ons

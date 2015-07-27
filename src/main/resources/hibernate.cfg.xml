@@ -107,6 +107,9 @@
         <mapping class="org.school.admin.model.ApplicantPaymentDetail" />
         <mapping class="org.school.admin.model.ApplicantParentDetail" />
         <mapping class="org.school.admin.model.ShortListedSchool" />
+        <mapping class="org.school.admin.model.ViewSchool" />
+        <mapping class="org.school.admin.model.ViewContact" />
+        <mapping class="org.school.admin.model.SchoolLog" />
     </session-factory>
 
 </hibernate-configuration>

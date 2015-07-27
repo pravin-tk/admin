@@ -68,7 +68,10 @@
 <script type="text/javascript">
 	function saveAccessory(){
 		$.post("../webapi/settings/accessory/update", {id: $("#id").val(), name: $("#name").val()}, function(data){
-			window.location.href = "${baseUrl}/settings/accessory.jsp";
+			if(data.staus == 1)
+				window.location.href = "${baseUrl}/settings/accessory.jsp";
+			else
+				alert(data.message);
 		});
 	}
 	

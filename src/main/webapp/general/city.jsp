@@ -58,7 +58,7 @@ if (request.getParameterMap().containsKey("tehsil_id")) {
                                         <tr>
                                             <th>Name</th>
                                             <th>IsCity</th>
-                                            <th>Sort Order</th>
+<!--                                             <th>Sort Order</th> -->
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
                                         </tr>
@@ -70,7 +70,7 @@ if (request.getParameterMap().containsKey("tehsil_id")) {
                                         <tr>
                                             <td><% out.print(city_list.get(i).getName()); %></td>
                                             <td><% if(city_list.get(i).getIsCity() == 1) { out.print("City"); } else { out.print("Village"); } %></td>
-                                            <td><% out.print(city_list.get(i).getSortOrder()); %></td>
+<%--                                             <td><% out.print(city_list.get(i).getSortOrder()); %></td> --%>
                                             <td><% if(city_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editCity(<% out.print(city_list.get(i).getId()); %>);" class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a>
@@ -143,7 +143,7 @@ if (request.getParameterMap().containsKey("tehsil_id")) {
                                 </div>
 
 
-                                <div class="form-group">
+<!--                                 <div class="form-group"> 
                                     <label class="col-sm-2 control-label">Display Order</label>
                                     <div class="col-sm-2">
                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1">
@@ -156,7 +156,7 @@ if (request.getParameterMap().containsKey("tehsil_id")) {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -197,16 +197,28 @@ if (request.getParameterMap().containsKey("tehsil_id")) {
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveCity(){
-	$.post("../webapi/general/city/save", {name: $("#name").val(), tehsilId: $("#tehsilId").val(), isCity: $('input[name=isCity]:checked').val(), sortOrder: $("#sortOrder").val(), status: $('input[name=status]:checked').val()}, function(data){
-		if($("#tehsilId").val() > 0){
-			if(data.status == 1)
-				window.location.href = "${baseUrl}/general/city.jsp?tehsil_id="+$("#tehsilId").val();
-			else
-				alert(data.message);
-		}else{
-			alert("Select Tehsil");
-		}
-	});
+	var sortOrder=1;
+	var msg = "";
+	if($("#name").val() == ""){
+		if(msg != "") msg= msg+",Please enter city name"; else msg = "Please enter city name";
+	}
+	if($("#tehsilId").val() == ""){
+		if(msg != "") msg=msg+",Please select tehsil name"; else msg = "Please select tehsil name";
+	}
+	if(msg!=""){
+		alert(msg);
+	}else{
+		$.post("../webapi/general/city/save", {name: $("#name").val(), tehsilId: $("#tehsilId").val(), isCity: $('input[name=isCity]:checked').val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+			if($("#tehsilId").val() > 0){
+				if(data.status == 1)
+					window.location.href = "${baseUrl}/general/city.jsp?tehsil_id="+$("#tehsilId").val();
+				else
+					alert(data.message);
+			}else{
+				alert("Select Tehsil");
+			}
+		});
+	}
 }
 
 function editCity(id){

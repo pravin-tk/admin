@@ -1,4 +1,8 @@
 
+<%@page import="org.school.admin.dao.SchoolDetailDAOImpl"%>
+<%@page import="org.school.admin.service.BoardService"%>
+<%@page import="org.school.admin.model.BoardType"%>
+<%@page import="org.school.admin.model.SchoolBoard"%>
 <%@page import="org.school.admin.model.Locality"%>
 <%@page import="org.school.admin.model.City"%>
 <%@page import="org.school.admin.service.LocalityService"%>
@@ -20,7 +24,14 @@
 
 <%
 	int school_id = Integer.parseInt(request.getParameter("school_id"));
-	
+
+
+	List<SchoolBoard> schoolBoard = null;
+	schoolBoard =  new SchoolDetailDAOImpl().getSchoolBoard(school_id);
+
+
+	List<BoardType> boardTypeList = null;
+	boardTypeList = new BoardService().getBoardList();
 	SchoolService schoolService = new SchoolService();
 	List<School> schoolList = schoolService.getSchoolDetails(school_id);
 	School School = schoolList.get(0);
@@ -66,6 +77,30 @@
                                     <input data-brackets-id="3402" type="text" class="form-control" name="school_name" id="school_name" value="<%out.print(School.getName());%>" placeholder="School Name" >
                                 </div>
                             </div>
+                             <div class="form-group">
+                    <label class="col-sm-2 control-label">Board Type *</label>
+                    <div class="col-sm-6" id="cbk_board">
+                    	<%
+                    	 if(boardTypeList.size() > 0){
+                       	for(int i=0;i<boardTypeList.size();i++){ 
+                    	   	BoardType boardType = boardTypeList.get(i);
+                    	   	String checked = "";
+                    	   	if(schoolBoard.size() > 0){
+	                       		for(int j=0; j < schoolBoard.size(); j++){
+	                       			if(boardType.getId() == schoolBoard.get(j).getBoardType().getId()){
+	                       				checked = "checked";
+	                       			}else{
+	                       				checked = "";
+	                       			}
+	                       		}
+                    	   	}
+							out.print(" <label class='checkbox-inline'> <input type='radio' value='"+boardType.getId()+
+										  "' id='board' name='board' "+checked+"> "+boardType.getBoardName()+"</label>"); 
+                       	}
+                    	 }
+						%>
+                      </div>
+                </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Plot No.">Plot No.</label>
                                 <div class="col-sm-6">
@@ -203,7 +238,8 @@
         </div>
     </div>
     <%@ include file="footer.jsp" %>
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
+    <script src="${baseUrl}/js/jquery.form.js"></script>
+<!--         <script src="http://malsup.github.com/jquery.form.js"></script>  -->
 <script type="text/javascript">
 $("#trialStartDate").datepicker({
 	 format: 'yyyy-mm-dd',

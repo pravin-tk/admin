@@ -59,7 +59,7 @@ state_size = state_list.size();
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Sort Order</th>
+<!--                                             <th>Sort Order</th> -->
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
                                         </tr>
@@ -70,7 +70,7 @@ state_size = state_list.size();
                                         %>
                                         <tr>
                                             <td><% out.print(district_list.get(i).getName()); %></td>
-                                            <td><% out.print(district_list.get(i).getSortOrder()); %></td>
+<%--                                             <td><% out.print(district_list.get(i).getSortOrder()); %></td> --%>
                                             <td><% if(district_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editDistrict(<% out.print(district_list.get(i).getId()); %>);" class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a>
@@ -123,20 +123,20 @@ state_size = state_list.size();
                                     </div>
 	                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of tehsil
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                              <!--   <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<!--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1"> -->
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of tehsil -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div>  -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -177,16 +177,28 @@ state_size = state_list.size();
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveDistrict(){
-	$.post("../webapi/general/district/save", {name: $("#name").val(), stateId: $("#stateId").val(), sortOrder: $("#sortOrder").val(), status: $('input[name=status]:checked').val()}, function(data){
-		if($("#stateId").val() > 0){
-			if(data.status == 1)
-				window.location.href = "${baseUrl}/general/district.jsp?state_id="+$("#stateId").val();
-			else
-				alert(data.message);
-		}else{
-			alert("Select State");
-		}
-	});
+	var sortOrder = 1;
+	var msg = "";
+	if($("#name").val() == ""){
+		if(msg != "") msg = msg+",Please enter district name"; else msg = "Please enter district name";
+	}
+	if($("#stateId").val() == ""){
+	    if(msg != "") msg = msg+",Please select state name"; else msg = "Please select state name";
+	}
+	if(msg != ""){
+		alert(msg);
+	}else{
+		$.post("../webapi/general/district/save", {name: $("#name").val(), stateId: $("#stateId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+			if($("#stateId").val() > 0){
+				if(data.status == 1)
+					window.location.href = "${baseUrl}/general/district.jsp?state_id="+$("#stateId").val();
+				else
+					alert(data.message);
+			}else{
+				alert("Select State");
+			}
+		});
+	}
 }
 
 function editDistrict(id){

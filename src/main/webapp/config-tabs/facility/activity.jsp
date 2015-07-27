@@ -12,7 +12,7 @@
 %>
 <div class="panel panel-info">
 <div class="panel-heading">
-  <h3 class="panel-title" id="myModalLabel">School Activities</h3>
+  <h3 class="panel-title" id="myModalLabel">School Infrastructure</h3>
   </div>
  <div class="panel-body">
 <%

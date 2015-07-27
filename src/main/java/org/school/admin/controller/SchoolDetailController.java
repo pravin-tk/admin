@@ -51,7 +51,6 @@ public class SchoolDetailController {
 			@FormParam("school_type") Short school_type,
 			@FormParam("school_category") int school_category,
 			@FormParam("medium") String medium,
-			@FormParam("board") Short  board,
 			@FormParam("residential") Short residential,
 			@FormParam("display_fee") Short display_fee
 	){
@@ -66,11 +65,7 @@ public class SchoolDetailController {
 			response.setStatus(0);
 			response.setMessage("select medium of instruction");
 				return response;
-		}else if(board == 0){
-			response.setStatus(0);
-			response.setMessage("select board");
-				return response;		}else
-		if(classificationId > 0 && school_type > 0 && school_category > 0 && (medium != null || !medium.equals(""))){
+		}else if(classificationId > 0 && school_type > 0 && school_category > 0 && (medium != null || !medium.equals(""))){
          School school = new School();
          school.setId(school_id);
          SchoolClassificationType classification = new SchoolClassificationType();
@@ -94,17 +89,10 @@ public class SchoolDetailController {
 		 schoolInfo.setAwardDesc("");
 		 schoolInfo.setTieUpDesc("");
 		 //Short boardId = Short.parseShort(board);
-         BoardType boardType = new BoardType();
-         boardType.setId(board);
        
         
-         SchoolBoard schoolBoard = new SchoolBoard();
-         schoolBoard.setSchool(school);
-         schoolBoard.setBoardType(boardType);
         
          Set<SchoolBoard> schoolBoards = new HashSet<>();
-         schoolBoards.add(schoolBoard);
-         boardType.setSchoolBoards(schoolBoards);
 		         
          String[] strMedium;
          strMedium = medium.split(",");
@@ -130,7 +118,6 @@ public class SchoolDetailController {
 		      
 		 SchoolDetail schoolDetail = new SchoolDetail();
 		 schoolDetail.setSchoolInfo(schoolInfo);
-		 schoolDetail.setSchoolBoard(schoolBoard);
 		 schoolDetail.setSchoolMedium(schoolMediums);
 		        
 		 SchoolDetailDAOImpl schoolDetailDAOImpl = new SchoolDetailDAOImpl();

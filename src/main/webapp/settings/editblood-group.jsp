@@ -69,7 +69,10 @@
 <script type="text/javascript">
 	function saveBloodGroup(){
 		$.post("../webapi/settings/bloodgroup/update", {id: $("#id").val(), name: $("#name").val()}, function(data){
-			window.location.href = "${baseUrl}/settings/blood-group.jsp";
+			if(data.status == 1)
+				window.location.href = "${baseUrl}/settings/blood-group.jsp";
+			else
+				alert(data.message);
 		});
 	}
 	

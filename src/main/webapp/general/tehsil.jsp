@@ -62,7 +62,7 @@ if (district_id > 0) {
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Sort Order</th>
+<!--                                             <th>Sort Order</th> -->
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
                                         </tr>
@@ -73,7 +73,7 @@ if (district_id > 0) {
                                         %>
                                         <tr>
                                             <td><% out.print(tehsil_list.get(i).getName()); %></td>
-                                            <td><% out.print(tehsil_list.get(i).getSortOrder()); %></td>
+<%--                                             <td><% out.print(tehsil_list.get(i).getSortOrder()); %></td> --%>
                                             <td><% if(tehsil_list.get(i).getStatus() == true) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editTehsil(<% out.print(tehsil_list.get(i).getId()); %>);" class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a>
@@ -126,20 +126,20 @@ if (district_id > 0) {
                                     </div>
 	                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of tehsil
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<!--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1"> -->
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of tehsil -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -180,16 +180,25 @@ if (district_id > 0) {
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveTehsil(){
-	$.post("../webapi/general/tehsil/save", {name: $("#name").val(), districtId: $("#districtId").val(), sortOrder: $("#sortOrder").val(), status: $('input[name=status]:checked').val()}, function(data){
-		if($("#districtId").val() > 0){
-			if(data.status == 1)
-				window.location.href = "${baseUrl}/general/tehsil.jsp?district_id="+$("#districtId").val();
-			else
-				alert(data.message);
-		}else{
-			alert("Select District");
-		}
-	});
+	var sortOrder = 1;
+	var msg = "";
+	if($("#name").val() == ""){
+		if(msg != "") msg = msg+",Please enter tehsil name"; else msg = "Please enter tehsil name";
+	}
+	if($("#districtId").val() == ""){
+		if(msg != "") msg = msg+",Please select district name"; else msg = "Please select district name";
+	}else{
+			$.post("../webapi/general/tehsil/save", {name: $("#name").val(), districtId: $("#districtId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+			if($("#districtId").val() > 0){
+				if(data.status == 1)
+					window.location.href = "${baseUrl}/general/tehsil.jsp?district_id="+$("#districtId").val();
+				else
+					alert(data.message);
+			}else{
+				alert("Select District");
+			}
+		});
+	}
 }
 
 function editTehsil(id){

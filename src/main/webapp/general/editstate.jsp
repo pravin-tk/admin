@@ -77,20 +77,20 @@
                                     </div>
 	                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(state.getSortOrder()); %>" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of district
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<%--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(state.getSortOrder()); %>" placeholder="1"> --%>
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of district -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -131,9 +131,21 @@
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveState(){
-	$.post("../webapi/general/state/update", {id: $("#id").val(), name: $("#name").val(), countryId: $("#countryId").val(), sortOrder: $("#sortOrder").val(), status: $('input[name=status]:checked').val()}, function(data){
-		window.location.href = "${baseUrl}/general/state.jsp?country_id="+$("#countryId").val();
-	});
+	var sortOrder = 1;
+	var msg = "";
+	if($("name").val() == ""){
+		if(msg != "")  msg = msg+",Please enter state name"; else msg = "Please enter state name";
+	}
+	if($("#countryId").val() == "" || $("#countryId").val() == 'undefined'){
+		if(msg != "") msg = msg+",Please select country name"; else msg = "Please select country name";
+	}
+	if(msg != ""){
+		alert(msg);
+	}else{
+		$.post("../webapi/general/state/update", {id: $("#id").val(), name: $("#name").val(), countryId: $("#countryId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+			window.location.href = "${baseUrl}/general/state.jsp?country_id="+$("#countryId").val();
+		});
+	}
 }
 
 function showStateList(id){

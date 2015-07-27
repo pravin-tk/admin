@@ -1,3 +1,9 @@
+ <style>
+  .main { 
+  margin-top:5%; 
+  }  
+  </style>  
+
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
@@ -43,7 +49,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="${baseUrl}/home.jsp">
+                <a class="navbar-brand" href="${baseUrl}/hometabs.jsp">
                     <img src="${baseUrl}/images/edbuddy-logo.jpg"  height="50" width="50" alt="school" title="school">
                 </a>
                  
@@ -85,6 +91,14 @@
                     </li>
                 </ul>
               <form class="navbar-form navbar-right">
+                    <div class="input-group margin-bottom-sm selectCountry">
+                        <span class="input-group-addon"><i class="fa"></i></span>
+                        <select id="change_city" name="change_city" class="form-control">
+                            <option value="0">Change City</option>
+                            <option value ="2" selected>Pune</option>
+                        </select>
+                    </div>
+              
                     <div class="input-group margin-bottom-sm select-country">
                     	<a class="input-group-addon" href="javascript:toggleMenu();"><i class="fa fa-sitemap"></i></a>
                     </div>

@@ -77,20 +77,20 @@
                                     </div>
 	                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(district.getSortOrder()); %>" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of district
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<%--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(district.getSortOrder()); %>" placeholder="1"> --%>
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of district -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -131,11 +131,22 @@
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveDistrict(){
-	$.post("../webapi/general/district/update", {id: $("#id").val(), name: $("#name").val(), stateId: $("#stateId").val(), sortOrder: $("#sortOrder").val(), status: $('input[name=status]:checked').val()}, function(data){
-		window.location.href = "${baseUrl}/general/district.jsp?state_id="+$("#stateId").val();
-	});
+	var sortOrder = 1;
+	var msg = "";
+	if($("#name").val() == ""){
+		if(msg != "") msg = msg+",Please enter district name"; else msg = "Please enter district name";
+	}
+	if($("#stateId").val() == ""){
+	    if(msg != "") msg = msg+",Please select state name"; else msg = "Please select state name";
+	}
+	if(msg != ""){
+		alert(msg);
+	}else{
+		$.post("../webapi/general/district/update", {id: $("#id").val(), name: $("#name").val(), stateId: $("#stateId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+			window.location.href = "${baseUrl}/general/district.jsp?state_id="+$("#stateId").val();
+		});
+	}
 }
-
 function showDistrictList(id){
 	window.location.href = "${baseUrl}/general/district.jsp?state_id="+id;
 }

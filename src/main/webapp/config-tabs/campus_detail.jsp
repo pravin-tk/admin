@@ -28,7 +28,7 @@
 	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Unit of campus size</label>
 	    <div class="col-sm-6">
 	       	<select name="area_unit" id="area_unit" class="form-control">
-	       		<option value="">Select Area Unit</option>
+	       		<option value="0">Select Area Unit</option>
 	       	<%  if(unitSize > 0){
 	       	for(int i = 0; i < unitSize; i++){ 
 	       		String selected = "";
@@ -47,28 +47,28 @@
 	    </div>
 	</div>
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of building *</label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of building </label>
 	  <div class="col-sm-6">
 	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_bldng" onKeyPress="return checkNumber(event)" placeholder="enter no of buildings" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBuildings());}%>">
 	  </div>
 	</div>
 	                              
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of playgrounds *</label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of playgrounds </label>
 	  <div class="col-sm-6">
 	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_playground" onKeyPress="return checkNumber(event)" placeholder="enter no of playgrounds" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalPlaygrounds());}%>">
 	  </div>
 	</div>
 	                              
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students *</label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students </label>
 	  <div class="col-sm-6">
 	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student"  onKeyPress="return checkNumber(event)" placeholder="enter no of students" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalStudents()); }%>">
 	  </div>
 	</div>
 	                              
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (boys) *</label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (boys) </label>
 	  <div class="col-sm-6">
 	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student_boys" onKeyPress="return checkNumber(event)"
 	       placeholder="enter no of students boys" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBoys());}%>">
@@ -76,7 +76,7 @@
 	</div>
 	                              
 	<div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (girls) *</label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (girls) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student_girls" onKeyPress="return checkNumber(event)"
 	         placeholder="enter no of students girls" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalGirls()); }%>">
@@ -84,21 +84,21 @@
 	</div>
 	 	
 	<div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of teaching staff(Male) *</label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of teaching staff(Male) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_male_teaching_staff" onKeyPress="return checkNumber(event)"
 	        placeholder="enter no of  male teaching staff" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalMaleTeacher());} %>">
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of teaching staff(Female) *</label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of teaching staff(Female) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_female_teaching_staff" onKeyPress="return checkNumber(event)"
 	        placeholder="enter no of female teaching staff " value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalFemaleTeacher()); }%>">
 	    </div>
 	</div>
 	   <div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of supporting staff(Male) *</label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of supporting staff(Male) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_male_supporting_staff" onKeyPress="return checkNumber(event)"
 	        placeholder="enter no of supporting staff male" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getMaleSupportingStaff()); }%>">
@@ -149,20 +149,20 @@
  			var txt_no_of_male_supporting_staff = $('#txt_no_of_male_supporting_staff').val();
  			var txt_no_of_female_supporting_staff = $('#txt_no_of_female_supporting_staff').val();
  			
- 			if(no_of_building == "" 
- 					|| no_of_playgrounds == "" 
- 					||campus_size == "" 
- 					|| no_of_total_student == "" 
- 					|| txt_no_of_student_boys == ""
- 					|| txt_no_of_student_girls == ""
- 					|| txt_no_of_male_teaching_staff == ""
- 					|| txt_no_of_female_teaching_staff == ""
- 					|| txt_no_of_male_supporting_staff == ""
- 					|| txt_no_of_female_supporting_staff == "")
- 				{
- 				  alert("All fields are mendatory");
- 				}
- 			else{
+//  			if(no_of_building == "" 
+//  					|| no_of_playgrounds == "" 
+//  					||campus_size == "" 
+//  					|| no_of_total_student == "" 
+//  					|| txt_no_of_student_boys == ""
+//  					|| txt_no_of_student_girls == ""
+//  					|| txt_no_of_male_teaching_staff == ""
+//  					|| txt_no_of_female_teaching_staff == ""
+//  					|| txt_no_of_male_supporting_staff == ""
+//  					|| txt_no_of_female_supporting_staff == "")
+//  				{
+//  				  alert("All fields are mendatory");
+//  				}
+//  			else{
  			$.ajax({
  				
  				url : 'webapi/campus/savecampus',
@@ -212,7 +212,7 @@
  				}
  			
  			});
- 			}
+ 			//}
  			//alert("campus details");
  		})
     

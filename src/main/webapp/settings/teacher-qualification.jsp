@@ -28,7 +28,7 @@
                                         <tr>
                                             <th>Title</th>
                                             <th>Short Title</th>
-                                            <th>Sort Order</th>
+<!--                                             <th>Sort Order</th> -->
                                             <th class="alignRight">Actions</th>
                                         </tr>
                                     </thead>
@@ -39,7 +39,7 @@
                                         <tr>
                                             <td><% out.print(education_list.get(i).getTitle()); %></td>
                                             <td><% out.print(education_list.get(i).getShortTitle()); %></td>
-                                            <td><% out.print(education_list.get(i).getSortOrder()); %></td>
+<%--                                             <td><% out.print(education_list.get(i).getSortOrder()); %></td> --%>
                                             <td class="alignRight">
                                             	<a href="javascript:editEducationType(<% out.print(education_list.get(i).getId()); %>);" class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a>
                                             </td>
@@ -101,20 +101,20 @@
                                 </div>
 
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of teacher qualification
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<!--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" placeholder="1"> -->
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of teacher qualification -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
 
                                 <div class="form-group">
@@ -136,8 +136,8 @@
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveEducationType(){
-	
-	$.post("../webapi/settings/educationtype/save", {title: $("#title").val(), shortTitle: $("#shortTitle").val(), description: $("#description").val(), sortOrder: $("#sortOrder").val()}, function(data){
+	var sortOder = 1;
+	$.post("../webapi/settings/educationtype/save", {title: $("#title").val(), shortTitle: $("#shortTitle").val(), description: $("#description").val(), sortOrder: sortOrder}, function(data){
 		if(data.status == 1)
 			window.location.href = "${baseUrl}/settings/teacher-qualification.jsp";
 		else
@@ -146,6 +146,6 @@ function saveEducationType(){
 }
 
 function editEducationType(id){
-	window.location.href = "${baseUrl}/settings/editteacher-qualification.jsp?id="+id;
+	window.location.href = "${baseUrl}/settings/editeteacher-qualification.jsp?id="+id;
 }	
 </script>

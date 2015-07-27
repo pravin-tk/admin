@@ -492,7 +492,14 @@ public class SettingsController extends ResourceConfig {
 		@FormParam("description") String description,
 		@FormParam("sortOrder") Byte sortOrder
 	){
+		Byte defaultOrder = 0;
 		EducationType educationType = new EducationType();
+		educationType.setTitle("");
+		educationType.setShortTitle("");
+		educationType.setDescription("");
+		educationType.setSortOrder(defaultOrder);
+		try
+		{
 		educationType.setTitle(title);
 		educationType.setShortTitle(shortTitle);
 		educationType.setDescription(description);
@@ -500,6 +507,11 @@ public class SettingsController extends ResourceConfig {
 		educationType.setLastUpdatedOn(new Date());
 		SettingsImpl settings = new SettingsImpl();
 		return settings.saveEducationType(educationType);
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
 	}
 	
 	@POST

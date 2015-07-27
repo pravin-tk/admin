@@ -1,3 +1,4 @@
+<%@page import="org.school.admin.data.SchoolTimelineMilestoneData"%>
 <%@page import="org.school.admin.model.SchoolTimelineMilestone"%>
 <%@page import="org.school.admin.model.AdminUser"%>
 <%@page import="org.school.admin.dao.SchoolDAOImp"%>
@@ -7,7 +8,7 @@
  
  	int school_id110 = Integer.parseInt(request.getParameter("school_id"));
 	SchoolDAOImp schoolDAOImp110 = new SchoolDAOImp();
-	List<SchoolTimelineMilestone> schoolTimelineMilestones = schoolDAOImp110.getSchoolTimelineMilestones(school_id110);
+	List<SchoolTimelineMilestoneData> schoolTimelineMilestones = schoolDAOImp110.getSchoolTimelineMilestones(school_id110);
 	session = request.getSession(false);
 	AdminUser registration110 = new AdminUser();
 	int user_id110 = 0;
@@ -66,7 +67,7 @@
    <div class="school-timeline-new" style="display:none;" id="timeline_info_add">
    <form action="" method="post" id="school_timeline_form" class="form-horizontal" enctype="multipart/form-data">
         <h4>Add New Time Line</h4>
-		<div id="error-contact-detail" class="has-error bg-danger nopadding"></div>
+		<div id="error-school-timeline" class="has-error bg-danger nopadding"></div>
 		<input type="hidden" name="id" id="timeline_id" value="" /> 
 		<input type="hidden" name="school_id" id="school_id" value="<%out.print(school_id110);%>" /> 
 		<input type="hidden" name="user_id" id="user_id" value="<%out.print(user_id110);%>" />
@@ -111,14 +112,14 @@
 						Title</label>
 					<div class="col-sm-3">
 						<input data-brackets-id="3402" type="text" class="form-control"
-							name="milestoneTitle[]" id="milestoneTitle1" placeholder="">
+							name="milestoneTitle[]" id="milestoneTitle" placeholder="">
 					</div>
 					<label for="" class="col-sm-2 control-label" data-toggle="tooltip"
 						data-placement="bottom" title="Description">Milestone
 						Description</label>
 					<div class="col-sm-4">
 						<textarea class="form-control" name="milestoneDesc[]"
-							id="milestoneDesc1" placeholder="Description..."></textarea>
+							id="milestoneDesc" placeholder="Description..."></textarea>
 					</div>
 					<div class="col-sm-1">
 						<a href='javascript:remove(1);' class='btn btn-danger icon-btn'><i
@@ -133,8 +134,8 @@
 		</div>
 		<div class="form-group">
 			<div class="col-sm-4">
-				<button type="submit" id='savetimeline' class="btn btn-success">Save</button>
-				<button type="submit" id='updatetimeline' class="btn btn-success"
+				<button type="button" id='savetimeline' class="btn btn-success">Save</button>
+				<button type="button" id='updatetimeline' class="btn btn-success"
 					style="display: none;">Update</button>
 				<button class="btn btn-default list-id list-school-timeline"
 					id="cancel-timeline" type="reset">Cancel</button>
@@ -172,33 +173,34 @@
 	};
 
 	$("#savetimeline").click(function() {
-		var options = {
-			target : '#error-contact-detail', // target element(s) to be updated with server response 
-			beforeSubmit : showTimeLineRequest, // pre-submit callback 
-			success :  showTimeLineResponse,
-			url : '${baseUrl}/webapi/school/savetimeline',
-			semantic : true,
-			dataType : 'json'
-		};
 		console.log("test");
-		$('#school_timeline_form').ajaxSubmit(options);
+		var options = {
+	 			target : '#error-school-timeline', // target element(s) to be updated with server response 
+	 			beforeSubmit : showTimeLineRequest, // pre-submit callback 
+	 			success :  showTimeLineResponse,
+	 			url : '${baseUrl}/webapi/school/savetimeline',
+	 			semantic : true,
+	 			dataType : 'json'
+	 		};
+			$('#school_timeline_form').ajaxSubmit(options);
+			updateProgress($('#school_id').val());
 	});
 
 	// pre-submit callback 
 	function showTimeLineRequest(formData, jqForm, options) {
 		var queryString = $.param(formData);
-		$('#error-contact-detail').hide();
+		$('#error-school-timeline').hide();
 		console.log("193");
 		return true;
 	}
 
-	// post-submit callback 
+ 	// post-submit callback 
 	function showTimeLineResponse(responseText, statusText, xhr, $form) {
 		console.log("194");
 		if(responseText.status == 1){
 		$(".school-timeline-new").hide();
 		$(".school-timeline-list").show();
-		$('#error-contact-detail').html("");
+		$('#error-school-timeline').html("");
 		$('#timeline_id, #year, #title, #classes_upto')
 				.removeClass('has-error');
 		$("#timeline_img").remove();
@@ -217,15 +219,39 @@
 		$("#mcount").val(1);
 		$("#savetimeline").show();
 		$("#updatetimeline").hide();
-		updateProgress($('#school_id').val());
+		//updateProgress($('#school_id').val());
+		setDataTable();
 		}
 		alert(responseText.message);
+	}
+	
+	function setDataTable()
+	{
+		$('#year').val("");
+		$('#title').val("");
+		$('#classes_upto').val("");
+		
+		//alert("schoolID : "+$("#school_id").val());
+		$.get("webapi/school/school_timeline/"+$("#school_id").val(),{},function(data){
+			var oTable =  $("#school-timeline-table").dataTable();
+		   oTable.fnClearTable();
+		    $(data).each(function(index){
+		    	html = "<a href='javascript:editTimeLine("+data[index].schoolTimeline.id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>";
+		    	var row = [];
+		    	row.push(data[index].schoolTimeline.year);
+		    	row.push(data[index].title);
+		    	row.push(data[index].schoolTimeline.title);
+		    	row.push(data[index].schoolTimeline.classesUpto);
+		    	 row.push(html);
+			    	oTable.fnAddData(row);
+		    });
+		});
 	}
 
 	$("#cancel-timeline")
 			.click(
 					function() {
-						$('#error-contact-detail').html("");
+						$('#error-school-timeline').html("");
 						$('#timeline_id, #year, #title, #classes_upto')
 								.removeClass('has-error');
 						$("#timeline_img").remove();
@@ -295,10 +321,10 @@
 				+ "<div class='form-group'>"
 				+ "<label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Image Title'>Milestone Title</label>"
 				+ "<div class='col-sm-3'>"
-				+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle"+mcount+"'>"
+				+ "<input data-brackets-id='3402' type='text' class='form-control' name='milestoneTitle[]' id='milestoneTitle'>"
 				+ "</div><label class='col-sm-2 control-label' data-toggle='tooltip' data-placement='bottom' title='Description'>Milestone Description</label>"
 				+ "<div class='col-sm-4'>"
-				+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc"+mcount+"' placeholder='Description...'></textarea>"
+				+ "<textarea class='form-control' name='milestoneDesc[]' id='milestoneDesc' placeholder='Description...'></textarea>"
 				+ "</div><div class='col-sm-1'><a href='javascript:remove("
 				+ mcount
 				+ ");' class='btn btn-danger icon-btn'><i class='fa fa-remove'></i></a></div>"
@@ -315,14 +341,14 @@
 
 	$('#updatetimeline').click(function() {
 		var options = {
-			target : '#error-contact-detail',
+			target : '#error-school-timeline',
 			beforeSubmit : showTimeLineRequest,
 			success : showTimeLineResponse,
 			url : '${baseUrl}/webapi/school/updatetimeline',
 			semantic : true,
 			dataType : 'json'
 		};
-		$('#school_timeline_form').ajaxForm(options);
-		updateProgress($('#school_id').val());
+		$('#school_timeline_form').ajaxSubmit(options);
+		//updateProgress($('#school_id').val());
 	});
 </script>

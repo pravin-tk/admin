@@ -68,7 +68,10 @@
 <script type="text/javascript">
 	function saveAreaUnit(){
 		$.post("../webapi/settings/areaunit/update", {id: $("#id").val(), name: $("#name").val()}, function(data){
-			window.location.href = "${baseUrl}/settings/areaunit.jsp";
+			if(data.status == 1)
+				window.location.href = "${baseUrl}/settings/areaunit.jsp";
+			else
+				alert(data.message);
 		});
 	}
 	

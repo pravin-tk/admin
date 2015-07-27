@@ -68,7 +68,10 @@
 <script type="text/javascript">
 	function updateAdminUserRole(){
 		$.post("../webapi/settings/adminuserrole/update", {id: $("#id").val(), adminuserrole: $("#adminuserrole").val()}, function(data){
-			window.location.href = "${baseUrl}/settings/adminuserrole.jsp";
+			if(data.status == 1)
+				window.location.href = "${baseUrl}/settings/adminuserrole.jsp";
+			else
+				alert(data.message);
 		});
 	}
 	

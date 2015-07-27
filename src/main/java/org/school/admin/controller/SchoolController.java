@@ -41,10 +41,12 @@ import org.school.admin.dao.SchoolDAOImp;
 import org.school.admin.data.ClassDetail;
 import org.school.admin.data.InfrastructureDetail;
 import org.school.admin.data.PrevStudentProfileList;
+import org.school.admin.data.SchoolTimelineMilestoneData;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.Accessories;
 import org.school.admin.model.AdminUser;
 import org.school.admin.model.AdminUserRole;
+import org.school.admin.model.BoardType;
 import org.school.admin.model.ClassAccessories;
 import org.school.admin.model.ClassFee;
 import org.school.admin.model.ClassInfo;
@@ -57,6 +59,7 @@ import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SalesInfo;
 import org.school.admin.model.School;
 import org.school.admin.model.SchoolActivityCatItem;
+import org.school.admin.model.SchoolBoard;
 import org.school.admin.model.SchoolHighlight;
 import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolInfo;
@@ -126,6 +129,16 @@ public class SchoolController extends ResourceConfig {
 	}
 	
 	@GET
+	@Path("/schoollist/{contact_id}/{city_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<School> schoolhtmllist(@PathParam("contact_id") String contactId,@PathParam("city_id") int cityId) {
+		SchoolService schoolService = new SchoolService();
+		List<School> schoollist = schoolService.getSchoolList(contactId,cityId);
+		return schoollist;
+	}
+	
+	
+	@GET
 	@Path("/htmllist/{school_id}/{city_id}/{locality_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<School> schoolhtmllist(@PathParam("school_id") int school_id, 
@@ -151,6 +164,7 @@ public class SchoolController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateSchool(
 		@FormParam("school_id") int school_id,
+		@FormParam("board") Short boardId,
 		@FormParam("school_name") String school_name,
 		@FormParam("plot_no") String plot_no,
 		@FormParam("locality_id") int locality_id,
@@ -203,8 +217,14 @@ public class SchoolController extends ResourceConfig {
 		School.setTrialStartDate(trialStartDate);
 		School.setTrialEndDate(trialEndDate);
 	    
+		BoardType boardType = new BoardType();
+		System.out.println("BoardIDINCONTROLLER : "+boardId);
+		boardType.setId(boardId);
+		SchoolBoard schoolBoard = new SchoolBoard();
+		schoolBoard.setBoardType(boardType);
+		schoolBoard.setSchool(School);
 		SchoolService schoolService = new SchoolService();
-		return schoolService.updateSchool(School);
+		return schoolService.updateSchool(School,schoolBoard);
 	}
 	
 	@POST
@@ -212,6 +232,7 @@ public class SchoolController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addSchool(
 		@FormParam("school_name") String school_name,
+		@FormParam("board") Short boardId,
 		@FormParam("plot_no") String plot_no,
 		@FormParam("locality_id") int locality_id,
 		@FormParam("street_name") String street_name,
@@ -266,7 +287,7 @@ public class SchoolController extends ResourceConfig {
 		SchoolService schoolService = new SchoolService();
 		
  
-		return schoolService.addSchool(School);
+		return schoolService.addSchool(School,boardId);
 	}
 	
 	@POST
@@ -282,6 +303,49 @@ public class SchoolController extends ResourceConfig {
 		else
 		school.setPromote(one);
 		new SchoolDAOImp().updatePromote(school);
+	}
+	
+	
+	@POST
+	@Path("activate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateActivateStatus(@FormParam("schoolId") int schoolId)
+	{
+		
+		return new SchoolDAOImp().updateAcivateStatus(schoolId);
+	}
+	
+	
+	@GET
+	@Path("active/{cityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<School> getActiveList(@PathParam("cityId") int cityId)
+	{
+		return new SchoolDAOImp().getSchoolActiveList(cityId);
+	}
+	
+	@GET
+	@Path("rejected/{cityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<School> getRejectedList(@PathParam("cityId") int cityId)
+	{
+		return new SchoolDAOImp().getSchoolRejectedList(cityId);
+	}
+	
+	@GET
+	@Path("pending/{cityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<School>  getPendingList(@PathParam("cityId") int cityId)
+	{
+		return new SchoolDAOImp().getSchoolPendingList(cityId);
+	}
+	
+	@POST
+	@Path("/deleteContact")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteContact(@FormParam("contactId") int contactId)
+	{
+		return new SchoolDAOImp().deleteContact(contactId);
 	}
 	
 	
@@ -324,22 +388,59 @@ public class SchoolController extends ResourceConfig {
 			@FormParam("name") String name,
 			@FormParam("email") String email,
 			@FormParam("mobile") String mobile,
-			@FormParam("type") Byte type
+			@FormParam("contact") String contact,
+			@FormParam("usertype")String type
 	){
-		School school = new School();
-		school.setId(school_id);
-		
+	  Byte defaultValue = 0;
+	  String userType[] = type.split(",");
+	  System.out.println("UserTypeId : "+type);
+	  System.out.println("UserTypeLen : "+userType.length);
+	  List<ContactInfo> contactInfoList = new ArrayList<ContactInfo>();
+		for(int k=0;k<userType.length;k++)
+		{
+			 System.out.println("K= : "+k);	
 		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setEmail("");
+		contactInfo.setMobileNo("");
+		contactInfo.setName("");
+		contactInfo.setContactNo("");
+		contactInfo.setType(defaultValue);
+		School school = new School();
+		school.setId(0);
 		contactInfo.setSchool(school);
-		contactInfo.setEmail(email);
-		contactInfo.setName(name);
-		contactInfo.setMobileNo(mobile);
-		contactInfo.setLastUpdatedBy(user_id);
-		contactInfo.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
-		contactInfo.setType(type);
-		ContactDetaillDAO contactDetaillDAO = new ContactDetaillDAO();
 		
-		return contactDetaillDAO.saveContactInfoInternal(contactInfo);
+		
+		try{
+		school.setId(school_id);
+//		for(int i=0;i<type;i++)
+		System.out.println("UserType : "+userType[k]);
+		
+		
+			
+			contactInfo.setSchool(school);
+			contactInfo.setEmail(email);
+			contactInfo.setName(name);
+			contactInfo.setMobileNo(mobile);
+			contactInfo.setContactNo(contact);
+			contactInfo.setType( Byte.parseByte(userType[k]));
+			contactInfo.setLastUpdatedBy(user_id);
+			contactInfo.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+			contactInfoList.add(contactInfo);
+			
+		}
+		catch(NullPointerException e)
+		{
+			System.out.println("E1 : "+e);
+				return null;
+		}
+		catch(Exception e)
+		{
+			System.out.println("E2 : "+e);
+			return null;
+		}
+	}
+		ContactDetaillDAO contactDetaillDAO = new ContactDetaillDAO();
+		return contactDetaillDAO.saveContactInfoInternal(contactInfoList);
 	}
 	
 	@POST
@@ -351,7 +452,8 @@ public class SchoolController extends ResourceConfig {
 			@FormParam("name") String name,
 			@FormParam("email") String email,
 			@FormParam("mobile") String mobile,
-			@FormParam("type") Byte type
+			@FormParam("contact") String contact,
+			@FormParam("usertype") Byte type
 	){
 		School school = new School();
 		school.setId(school_id);
@@ -362,12 +464,20 @@ public class SchoolController extends ResourceConfig {
 		contactInfo.setEmail(email);
 		contactInfo.setName(name);
 		contactInfo.setMobileNo(mobile);
+		contactInfo.setContactNo(contact);
 		contactInfo.setLastUpdatedBy(user_id);
 		contactInfo.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
 		contactInfo.setType(type);
 		ContactDetaillDAO contactDetaillDAO = new ContactDetaillDAO();
 		
 		return contactDetaillDAO.updateContactInfoInternal(contactInfo);
+	}
+	@GET 
+	@Path("viewcontact/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ContactInfo> getConatctInfo(@PathParam("schoolId") Integer schoolId)
+	{
+		return new ContactDetaillDAO().getConatctDetail(schoolId);
 	}
 	
 	@GET
@@ -420,6 +530,7 @@ public class SchoolController extends ResourceConfig {
 
 	}
 	
+	@SuppressWarnings("null")
 	@POST
 	@Path("prestudent_update")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -439,10 +550,25 @@ public class SchoolController extends ResourceConfig {
 		prevStudentProfile.setSchool(school);
 		prevStudentProfile.setId(id);
 		prevStudentProfile.setLastUpdatedBy(user_id);
+		
+		prevStudentProfile.setName("");
+		prevStudentProfile.setAchievements("");
+		prevStudentProfile.setBatch("");
+		prevStudentProfile.setEmail("");
+		prevStudentProfile.setMobile("");
+		
+		
+		
+		
+		if(name != null || name.trim().length() !=0)
 		prevStudentProfile.setName(name);
+		if(email !=null || email.trim().length() !=0)
 		prevStudentProfile.setEmail(email);
+		if(mobile !=null || mobile.trim().length() != 0)
 		prevStudentProfile.setMobile(mobile);
+		if(batch != null || batch.trim().length() != 0)
 		prevStudentProfile.setBatch(batch);
+		if(achievements != null || achievements.trim().length() !=0)
 		prevStudentProfile.setAchievements(achievements);
 		prevStudentProfile.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));;
 		
@@ -453,7 +579,16 @@ public class SchoolController extends ResourceConfig {
         return prevStudentProfileDAO.getPrevStudentProfile(school_id);
 
 	}
-			
+	
+    @POST
+    @Path("deletePreStudentProfile")
+    @Produces(MediaType.APPLICATION_JSON)
+	public List<PrevStudentProfileList> deletePreStudentProfile(@FormParam("deletePreStudentId") int id,@FormParam("schoolId") int schoolId)
+	{
+    	PrevStudentProfileDAO deleteStudent = new PrevStudentProfileDAO();
+    	deleteStudent.deletePrevStudentProfile(id);
+    	return deleteStudent.getPrevStudentProfile(schoolId);
+	}
 	@GET
 	@Path("/prestudent_detail/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -497,7 +632,9 @@ public class SchoolController extends ResourceConfig {
 			}
 		}
 		Set<ClassFee> classFee = classDetail.getClassFee();
-		if(classFee.size()>0)
+		System.out.println("Class size : "+classFee.size());
+		
+		if(classFee.size()>0 && classFee.iterator().next().getAmount() != null && classFee.iterator().next().getFeeDesc() !=null)
 		{
 			Iterator<ClassFee> sIterator = classFee.iterator();
 			
@@ -523,7 +660,7 @@ public class SchoolController extends ResourceConfig {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateClassDetail(ClassDetail classDetail)
 	{
-		System.out.println("deadline date: "+classDetail.getClassInfo().getAdmissionDeadline().toString());
+		System.out.println("deadline date: "+classDetail.getClassInfo().getAdmissionDeadline());
 		System.out.println("Class Id  : "+classDetail.getClassInfo().getId());
 		/* save class accessory*/
 		
@@ -779,10 +916,12 @@ public class SchoolController extends ResourceConfig {
 			
 			ClassInfo classInfo = new ClassInfo();
 			classInfo.setId(classes.get(i).getId());
+			if(classes.get(i).getAdmissionDeadline() != null)
 			classInfo.setAdmissionDeadline(classes.get(i).getAdmissionDeadline());
+			if(classes.get(i).getAdmissionFrom() != null)
 			classInfo.setAdmissionFrom(classes.get(i).getAdmissionFrom());
+			if(classes.get(i).getAdmissionTo() != null)
 			classInfo.setAdmissionTo(classes.get(i).getAdmissionTo());
-			
 			classInfo.setAdmissionProcess(classes.get(i).getAdmissionProcess());
 			classInfo.setEligibilityCriteria(classes.get(i).getEligibilityCriteria());
 			classInfo.setFeesPaymentTerm(classes.get(i).getFeesPaymentTerm());
@@ -794,6 +933,9 @@ public class SchoolController extends ResourceConfig {
 			classInfo.setMorningTimeTo(classes.get(i).getMorningTimeTo());
 			classInfo.setAfternoonTimeFrom(classes.get(i).getAfternoonTimeFrom());
 			classInfo.setAfternoonTimeTo(classes.get(i).getAfternoonTimeTo());
+			classInfo.setAdmissionDeadline(classes.get(i).getAdmissionDeadline());
+			classInfo.setAdmissionFrom(classes.get(i).getAdmissionFrom());
+			classInfo.setAdmissionTo(classes.get(i).getAdmissionTo());
 			School school = new School();
 			school.setId(classes.get(i).getSchool().getId());
 			school.setName(classes.get(i).getSchool().getName());
@@ -1054,7 +1196,7 @@ public class SchoolController extends ResourceConfig {
 	@GET
 	@Path("/timeline_detail/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<SchoolTimelineMilestone> getSchoolTimeline(@PathParam("id") int id){
+	public List<SchoolTimelineMilestone> getSchoolTimelineMilestone(@PathParam("id") int id){
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 		return schoolDAOImp.getSchoolTimelineMilestonesByTimelineId(id);
 	}
@@ -1105,6 +1247,24 @@ public class SchoolController extends ResourceConfig {
 			//
 		}
 		return highlights;
+	}
+	
+	@POST
+	@Path("delete-highlight")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolHighlight> deleteHighlight(@FormParam("highlightId") int id,@FormParam("schoolId") int schoolId){
+		SchoolDAOImp deleteHighlightDAO = new SchoolDAOImp();
+		deleteHighlightDAO.deleteHighlight(id);
+		return deleteHighlightDAO.getSchoolHighlights(schoolId);
+		
+	}
+	
+	@GET
+	@Path("/school_timeline/{school_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolTimelineMilestoneData> getSchoolTimeline(@PathParam("school_id") int schoolId)
+	{
+		return new SchoolDAOImp().getSchoolTimelineMilestones(schoolId);
 	}
 	
 	@GET
@@ -1243,4 +1403,10 @@ public class SchoolController extends ResourceConfig {
 		return schoolDAOImp.getPer(school_id);
 	}
 
+	@GET
+	@Path("/get_new_school_progress/{school_id}")
+	public Double getNewSchoolProgress(@PathParam("school_id") int school_id){
+		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
+		return schoolDAOImp.getPer(school_id);
+	}
 }

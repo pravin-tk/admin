@@ -15,7 +15,7 @@ public class CityNamesService  {
 		return cityNamesImp.save(city);
 	}
 	
-	public String updateCity(City city)
+	public ResponseMessage updateCity(City city)
 	{
 		CityNamesImp cityNamesImp = new CityNamesImp();
 		

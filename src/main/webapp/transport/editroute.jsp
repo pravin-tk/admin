@@ -50,20 +50,20 @@
 								
                                
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Description</label>
-                                    <div class="col-sm-2">
-                                        <textarea class="form-control" name="desc" id="desc" placeholder="Description..."><% //out.print(rowroute.()); %></textarea>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                               description if any
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Description</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<%--                                         <textarea class="form-control" name="desc" id="desc" placeholder="Description..."><% //out.print(rowroute.); %></textarea> --%>
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                description if any -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>

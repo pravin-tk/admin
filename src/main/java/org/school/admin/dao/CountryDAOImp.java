@@ -50,7 +50,7 @@ public class CountryDAOImp {
 		Query query = session.createQuery(hql);
 		query.setParameter("name", country.getName());
 		query.setParameter("id", country.getId());
-		List<Tehsil> result = query.list();
+		List<Country> result = query.list();
 		session.close();
 		if (result.size() > 0) {
 			response.setStatus(0);
