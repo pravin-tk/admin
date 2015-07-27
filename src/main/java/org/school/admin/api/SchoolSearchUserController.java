@@ -1,6 +1,7 @@
 package org.school.admin.api;
 
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.school.admin.Emailer;
 import org.school.admin.dao.SchoolSearchUserDao;
 import org.school.admin.data.SchoolList;
 import org.school.admin.data.UserInfo;
@@ -120,9 +122,10 @@ public class SchoolSearchUserController {
 			userRegistrationInfo.setImage("");
 		}
 		Boolean isValidEmail = true;
+
 		try {
-		       InternetAddress emailAddr = new InternetAddress(email);
-		       emailAddr.validate();
+			InternetAddress emailAddr = new InternetAddress(email);
+			emailAddr.validate();
 	    } catch (AddressException ex) {
 	    	isValidEmail = false;
 	    }
@@ -136,6 +139,15 @@ public class SchoolSearchUserController {
 				userRegistrationInfo.setImage(img_path+userRegistrationInfo.getImage());
 			}
 			responseMessage.setData(userRegistrationInfo);
+			
+			//Sending newly generated password to user.
+			if( responseMessage.getStatus() == 1) {
+				Emailer emailer = new Emailer();
+				emailer.setTo(email);
+				emailer.setSubject("Registration with edbuddy.com is successful.");
+				emailer.setBody("Thank you for registering with edbuddy.com. Your password is : " + password);
+				emailer.sendEmail();
+			}
 		} else {
 			ArrayList<String> errors = new ArrayList<String>();
 			errors.add("Invalid email.");
