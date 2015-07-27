@@ -68,7 +68,10 @@
 <script type="text/javascript">
 	function saveBoardType(){
 		$.post("../webapi/settings/boardtype/update", {id: $("#id").val(), name: $("#name").val()}, function(data){
-			window.location.href = "${baseUrl}/settings/boardtype.jsp";
+			if(data.status == 1)
+				window.location.href = "${baseUrl}/settings/boardtype.jsp";
+			else
+				alert(data.message);
 		});
 	}
 	

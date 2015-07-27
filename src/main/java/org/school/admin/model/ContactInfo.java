@@ -33,6 +33,7 @@ public class ContactInfo implements java.io.Serializable {
 	@Email(message="Please enter valid email id")
 	private String email;
 	private String mobileNo;
+	private String contactNo;
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
 	private Byte type;
@@ -41,12 +42,13 @@ public class ContactInfo implements java.io.Serializable {
 	}
 
 	public ContactInfo(School school, String name, String email,
-			String mobileNo, Date lastUpdatedOn, Integer lastUpdatedBy,
+			String mobileNo,String contactNo, Date lastUpdatedOn, Integer lastUpdatedBy,
 			Byte type) {
 		this.school = school;
 		this.name = name;
 		this.email = email;
 		this.mobileNo = mobileNo;
+		this.contactNo = contactNo;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
 		this.type = type;
@@ -98,6 +100,14 @@ public class ContactInfo implements java.io.Serializable {
 
 	public void setMobileNo(String mobileNo) {
 		this.mobileNo = mobileNo;
+	}
+	@Column(name = "contact_no", length = 12)
+	public String getContactNo() {
+		return contactNo;
+	}
+
+	public void setContactNo(String contactNo) {
+		this.contactNo = contactNo;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

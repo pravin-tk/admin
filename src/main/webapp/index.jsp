@@ -89,7 +89,7 @@
 			if(status==1)
 				{
 				$('#error').empty();
-					window.location.href="home.jsp";	
+					window.location.href="hometabs.jsp";	
 				}
 			
 			else if(status == 0)

@@ -77,20 +77,20 @@
                                     </div>
 	                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(tehsil.getSortOrder()); %>" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of tehsil
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<%--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(tehsil.getSortOrder()); %>" placeholder="1"> --%>
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of tehsil -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -131,9 +131,18 @@
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveTehsil(){
-	$.post("../webapi/general/tehsil/update", {id: $("#id").val(), name: $("#name").val(), districtId: $("#districtId").val(), sortOrder: $("#sortOrder").val(), status: $('input[name=status]:checked').val()}, function(data){
-		window.location.href = "${baseUrl}/general/tehsil.jsp?district_id="+$("#districtId").val();
-	});
+	var sortOrder = 1;
+	var msg = "";
+	if($("#name").val() == ""){
+		if(msg != "") msg = msg+",Please enter tehsil name"; else msg = "Please enter tehsil name";
+	}
+	if($("#districtId").val() == ""){
+		if(msg != "") msg = msg+",Please select district name"; else msg = "Please select district name";
+	}else{
+		$.post("../webapi/general/tehsil/update", {id: $("#id").val(), name: $("#name").val(), districtId: $("#districtId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+			window.location.href = "${baseUrl}/general/tehsil.jsp?district_id="+$("#districtId").val();
+		});
+	}
 }
 
 function showTehsilList(id){

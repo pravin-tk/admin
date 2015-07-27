@@ -71,7 +71,7 @@
 					                </select>
 				                </div>
 			                </div>
-                                <a href="#" class="btn btn-primary view-contacts bottom-margin"><i class="fa fa-plus"></i> Bus Stop</a>
+                                <a href="#" class="btn btn-primary view-contacts bottom-margin"><i class="fa fa-plus"></i>Route Stop</a>
 
                                 <table class="table table-striped table-bordered" id="contacts-table">
                                     <thead>
@@ -107,7 +107,7 @@
                                     </tbody>
                                 </table>
 
-                                <a href="#" class="btn btn-primary view-contacts"><i class="fa fa-plus"></i> Bus Stop</a>
+                                <a href="#" class="btn btn-primary view-contacts"><i class="fa fa-plus"></i> Route Stop</a>
 
                             </div>
                             <div class="contacts-new" style="display:none;">

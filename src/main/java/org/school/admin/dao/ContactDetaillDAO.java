@@ -13,17 +13,26 @@ import org.school.admin.model.SchoolSearch;
 import org.school.admin.util.HibernateUtil;
 
 public class ContactDetaillDAO {
-	public List<ContactInfo> saveContactInfoInternal(ContactInfo contactDetail)
+	public List<ContactInfo> saveContactInfoInternal(List<ContactInfo> contactDetail)
 	{
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-	
+	try{
 		session.beginTransaction();
-		session.save(contactDetail);
+		System.out.println("CONTACTSIZE: "+contactDetail.size());
+		for(int i=0;i<contactDetail.size();i++){
+			System.out.println("i=: "+i);
+			session.save(contactDetail.get(i));
+		}
 		session.getTransaction().commit();
 		session.close();
+	}
+	catch(Exception e)
+	{
+		System.out.println("Error in db : "+e);
+	}
 		
-		School school = contactDetail.getSchool();
+		School school = contactDetail.get(0).getSchool();
 		int school_id = school.getId();
 		List<ContactInfo> contactInfos = new ArrayList<ContactInfo>();
 		contactInfos = getConatctDetail(school_id);
@@ -64,7 +73,9 @@ public class ContactDetaillDAO {
 	
 	public List<ContactInfo> getConatctDetail(Integer school_id)
 	{
-		
+		System.out.println();
+		System.out.println("....LOADING....");
+		System.out.println();
 		String hql = "from ContactInfo where school.id = :school_id";
 		
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -84,6 +95,8 @@ public class ContactDetaillDAO {
 			contactInfoInternal.setSchool(school);
 			contactInfoInternal.setName(contactInfoList.get(i).getName());
 			contactInfoInternal.setMobileNo(contactInfoList.get(i).getMobileNo());
+			System.out.println("ContactNO: "+contactInfoList.get(i).getContactNo());
+			contactInfoInternal.setContactNo(contactInfoList.get(i).getContactNo());
 			contactInfoInternal.setEmail(contactInfoList.get(i).getEmail());
 			contactInfoInternal.setType(contactInfoList.get(i).getType());
 			newcontactInfoList.add(contactInfoInternal);
@@ -163,6 +176,7 @@ public class ContactDetaillDAO {
 			contactInfoInternal.setSchool(school);
 			contactInfoInternal.setName(contactInfoList.get(i).getName());
 			contactInfoInternal.setMobileNo(contactInfoList.get(i).getMobileNo());
+			contactInfoInternal.setContactNo(contactInfoList.get(i).getContactNo());
 			contactInfoInternal.setEmail(contactInfoList.get(i).getEmail());
 			contactInfoInternal.setType(contactInfoList.get(i).getType());
 			newcontactInfoList.add(contactInfoInternal);

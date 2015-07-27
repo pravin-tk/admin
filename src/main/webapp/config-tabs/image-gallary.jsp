@@ -196,8 +196,11 @@
 		if (responseText.status == 1) {
 			updateProgress($('#school_id').val());
 			alert(responseText.message);
-			$("#saveimagegallery").hide();
+			//$("#saveimagegallery").hide();
+			$("#verify").show();
 		}
+		else
+			alert(responseText.message);
 	}
 
 	

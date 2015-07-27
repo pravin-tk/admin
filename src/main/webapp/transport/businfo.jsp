@@ -125,7 +125,7 @@
                     <div class="form-group">
                          <label class="col-sm-2 control-label">Driver Contact</label>
                          <div class="col-sm-2">
-                             <input type="text" id="contact_no" name="contact_no" class="form-control" placeholder="">
+                             <input type="text" id="contact_no" maxlength="10" onKeyPress="return checkNumber(event)" name="contact_no" class="form-control" placeholder="">
                          </div>
                          <div class="col-sm-8">
                              <div class="tooltip custom-tool-tip right">
@@ -164,6 +164,15 @@
  	</div>
     <%@include file="../footer.jsp" %>
 	  <script type="text/javascript">
+	  function checkNumber(evt)
+	  {
+		  evt = (evt) ? evt : window.event
+		  var charCode = (evt.which) ? evt.which :evt.keyCode
+		   if(charCode > 31 && (charCode>57  ||   charCode < 48)){
+			   return false;
+		   }		  
+		  return true;
+	  }
 	    	$('#save').click(function(){    		
 	    		$.post('../webapi/settings/businfo/save',{title: $("#title").val(), busNumber: $("#bus_number").val(), vehicleNo: $("#vehicle_no").val(), busDriverName: $("#driver_name").val(), contactNo: $("#contact_no").val(), description: $("#description").val()},function(data){
 	    			if(data.status == 1)

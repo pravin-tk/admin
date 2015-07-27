@@ -25,7 +25,7 @@
 	List<SchoolBoard> schoolBoard = null;
 	List<SchoolMedium> schoolMedium = null;
 	List<SchoolType> schoolTypeList = null;
-	List<BoardType> boardTypeList = null;
+	
 	List<MediumType> mediumTypeList = null;
 	List<SchoolClassificationType> classificationList = null;
 	List<SchoolCategoryType> categoryList = null;
@@ -37,7 +37,7 @@
 	
 		
 	schoolTypeList = new SchoolTypeService().getSchoolTypeList();
-	boardTypeList = new BoardService().getBoardList();
+	
 	mediumTypeList = new MediumService().getMediumList();
 	classificationList = new ClassificationService().getClassificationList();
 	categoryList = new CategoryService().getCategoryList();
@@ -65,7 +65,7 @@
 				 <form action="webapi/test/testschool" method="post" id="school-detail" class="form-horizontal"> 
 				 <div id="error-school-detail" class="has-error"></div>
 					  <div class="form-group">
-                          <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="enter school website">School website *</label>
+                          <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="enter school website">School website </label>
                           <div class="col-sm-6">
                               <input data-brackets-id="3402" type="text" class="form-control" id="school_website" placeholder="school website" value="<%if(info_list.size() > 0){out.print(schoolInfo.getSchoolWebsite());}%>">
                           </div>
@@ -74,7 +74,7 @@
                           <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Classification *</label>
                           <div class="col-sm-4">
                                 <select name="" id="classification" class="form-control">
-                                  <option value='0'>Select classification</option>
+                                  <option value='0'>Select classification </option>
                                   <%
                                    if(classificationList.size() > 0){
                             	for(int i=0; i < classificationList.size();i++)
@@ -109,31 +109,7 @@
                     
                 </div>
                 
-                 
-                    <div class="form-group">
-                    <label class="col-sm-2 control-label">Board Type *</label>
-                    <div class="col-sm-6" id="cbk_board">
-                    	<%
-                    	 if(boardTypeList.size() > 0){
-                       	for(int i=0;i<boardTypeList.size();i++){ 
-                    	   	BoardType boardType = boardTypeList.get(i);
-                    	   	String checked = "";
-                    	   	if(info_list.size() > 0){
-	                       		for(int j=0; j < schoolBoard.size(); j++){
-	                       			if(boardType.getId() == schoolBoard.get(j).getBoardType().getId()){
-	                       				checked = "checked";
-	                       			}else{
-	                       				checked = "";
-	                       			}
-	                       		}
-                    	   	}
-							out.print(" <label class='checkbox-inline'> <input type='radio' value='"+boardType.getId()+
-										  "' id='board' name='board' "+checked+"> "+boardType.getBoardName()+"</label>"); 
-                       	}
-                    	 }
-						%>
-                      </div>
-                </div>
+                    
                  <div class="form-group">
                     <label class="col-sm-2 control-label">School Management *</label>
                     <div class="col-sm-4">
@@ -236,7 +212,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">is residential *</label>
+                    <label class="col-sm-2 control-label">is residential</label>
                     <div class="col-sm-6" id="cbk_board">
                     <%
                        if(info_list.size()>0){
@@ -266,7 +242,7 @@
                       </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">display fee *</label>
+                    <label class="col-sm-2 control-label">display fee</label>
                     <div class="col-sm-6" id="cbk_board">
                     <% if(info_list.size() > 0){ %>
                     	 <label class='checkbox-inline'> <input type='radio' value='1' id='display_fee' name='display_fee' <% if( schoolInfo.getDisplayFee() == 1){%>checked<%} %>>Yes</label>
@@ -306,59 +282,47 @@
      	}) 
      
     		
-     	if($("#classification").val() == 0
-     		&& $('#school_type').val() == 0
-     		&& $('#school_category').val() == 0
-     		&& board == 0 
-     		&& medium == null
-     		)
-     		{
-     		  alert("All Fields are Mendatory");
-     		}
-     	else if( $('#school_type').val() == 0
+     	     if( $("#classification").val() == 0 &&
+     			$('#school_type').val() == 0
          		&& $('#school_category').val() == 0
-         		&& board == 0 
          		&& medium == null
          		)
          		{
          		 
-         		  alert("Please enter  select board type, school management, type of school and medium of instruction");
+         		  alert("Please enter  select classification, school management, type of school and medium of instruction");
          		}
      	else if( $("#classification").val() == 0
          		&& $('#school_category').val() == 0
-         		&& board == 0 
          		&& medium == null
          		)
          		{
-     		       alert("Please enter select classification, board type, type of school and medium of instruction");
+     		       alert("Please enter select classification, type of school and medium of instruction");
          		}
      	else if($("#classification").val() == 0
          		&& $('#school_type').val() == 0
          		&& $('#school_category').val() == 0
-         		&& board == 0 
          		)
          		{
          		 
-     		          alert("Please enter select classification,board type, school management and type of school");
+     		          alert("Please enter select classification, school management and type of school");
          		}
      	else if($("#classification").val() == 0
          		&& $('#school_type').val() == 0
          		&& $('#school_category').val() == 0
-         		&& board == 0 
          		&& medium == null
          		)
          		{
          		 
-     				 alert("Please select classification, board type, school management, type of school and medium of instruction");
+     				 alert("Please select classification, school management, type of school and medium of instruction");
          		}
           	else if( $("#classification").val() == 0)
      		{
      		  alert("Please select school classification.");
      		}
-     	else if(board == 0)
-		{
-		 alert("Please select board name");
-		}
+//      	else if(board == 0)
+// 		{
+// 		 alert("Please select board name");
+// 		}
      	else if(medium == null)
 		{
 		 alert("Please select medium of instruction");
@@ -376,7 +340,7 @@
      		{
    	 		$.post("webapi/test/testschool",{school_id : $('#school_id').val(),	
    	 			updated_by : $('#updated_by').val(),
-   	 			board : boardId,
+   	 			//board : boardId,
    				school_website : $('#school_website').val(), 
    				classification : $('#classification').val(), 
    				school_type : $('#school_type').val(),

@@ -181,7 +181,7 @@
 			</div>
 			<ul class="nav">
 			<li class="col-sm-2"><a
-					href="${baseUrl}/settings/educationtype.jsp"> <i class="fa"></i>Teacher Qualification
+					href="${baseUrl}/settings/teacher-qualification.jsp"> <i class="fa"></i>Teacher Qualification
 				</a></li>
 				<li class="col-sm-2"><a href="${baseUrl}/settings/examtype.jsp">
 						<i class="fa"></i>Exam Type

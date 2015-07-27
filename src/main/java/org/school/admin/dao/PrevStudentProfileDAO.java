@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.school.admin.data.PrevStudentProfileList;
+import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SalesInfo;
 import org.school.admin.model.School;
@@ -90,7 +91,16 @@ public class PrevStudentProfileDAO {
 		return newListofStudentProfile;
 	}
 	
-
-
-
+	public void deletePrevStudentProfile(int contactId)
+	{
+			String hql = "delete PrevStudentProfile  where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("id", contactId);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
+	}	
 }

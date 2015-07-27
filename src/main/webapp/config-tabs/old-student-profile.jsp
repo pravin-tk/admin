@@ -38,7 +38,7 @@
 <form action="" method="post" id="old_student_profile" class="form-horizontal">
        <div class="prevStudent-list" id="pre_student_list">
            <p>Here you can add or deactivate school type.</p>
-           <a href="#" class="btn btn-primary view-prevStudent bottom-margin"><i class="fa fa-plus"></i> old student profile</a>
+           <a href="#" class="btn btn-primary view-prevStudent bottom-margin" id="addoldStudentProfile"><i class="fa fa-plus"></i> old student profile</a>
            <table class="table table-striped table-bordered" id="prevStudent-table">
                <thead>
                    <tr>
@@ -70,7 +70,7 @@
           	%> 
       		</tbody>
        	</table>
-   		<a href="#" class="btn btn-primary view-prevStudent bottom-margin"><i class="fa fa-plus"></i> old Student Profile</a>
+   		<a href="#" class="btn btn-primary view-prevStudent bottom-margin" id="addoldStudentProfile1"><i class="fa fa-plus"></i> old Student Profile</a>
     </div>
  	<div class="prevStudent" style="display:none;" id="pre_student_add">
  	<h4>Add old Student Profile</h4>
@@ -131,12 +131,25 @@
 	   	}		  
 	  	return true;
   	}
+   	$("#addoldStudentProfile1").click(function()
+   	{
+   		$('#saveprevStudent').show();
+   		$("#updatePrevStudent").hide();
+   		
+   	});
+   	
+   	$("#addoldStudentProfile").click(function()
+   	{
+   		$('#saveprevStudent').show();
+   		$("#updatePrevStudent").hide();
+   	});
+   	
    	$('#saveprevStudent').click(function(){
    		var school_id = <%out.print(school_id5);%>
   			var user_id = <%out.print(user_id5);%>
-   			if($("#osname").val().length ==0 )
-  			{
-   				alert("Please enter previous student name");
+//    			if($("#osname").val().length ==0 )
+//   			{
+   			//	alert("Please enter previous student name");
 //   				$("#error-prevStudent").html('Please enter your name, email id and mobile number');
 //   				$('#email, #mobile_no, #name, #achievements, #batch ').addClass('has-error');
   				
@@ -145,10 +158,9 @@
 //   				$('#error-prevStudent').html("Please enter your valid email id");
 //  					$('#email').addClass('has-error');
 //   			} 
-   			}
-		else {		
-   			
-    		$.post('webapi/school/prestudent',{school_id : school_id, user_id : user_id,name: $("#osname").val(), email : $("#osemail").val(), mobile : $("#osmobile_no").val(), batch : $("#osbatch").val(),
+   			//}
+// 		else {		
+   			    		$.post('webapi/school/prestudent',{school_id : school_id, user_id : user_id,name: $("#osname").val(), email : $("#osemail").val(), mobile : $("#osmobile_no").val(), batch : $("#osbatch").val(),
     			achievements : $("#osachievements").val()},function(data){
     			
     			$('#osemail, #osmobile_no, #osname').removeClass('has-error');
@@ -162,10 +174,12 @@
  			   alert("Save successfully..");
  			    $("#pre_student_add").hide();
  			    $("#pre_student_list").show();
+ 			    $("#saveprevStudent").hide();
+ 			    $("#updatePrevStudent").show();
  			   updateProgress($('#school_id').val());
  			    $(data).each(function(index){
  			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-                          +" <a href='deleteProfile("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
+                          +" <a href='javascript:deleteProfile("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
  			    	var row = [];
  			    	 row.push(data[index].name);
  			    	 row.push(data[index].batch);
@@ -175,7 +189,7 @@
  			    });
  			  
     		},'json');
-   		}
+//    		}
    		
    	});
 	    	
@@ -205,9 +219,11 @@
    	$('#updatePrevStudent').click(function(){
    		var school_id = <%out.print(school_id5);%>
   			var user_id = <%out.print(user_id5);%>
-   			if($("#osname").val().length ==0)
-  			{
-   				alert("Please enter previous student name");
+  			 var oTable = $("#prevStudent-table").dataTable();
+			    oTable.fnClearTable();
+   		//	if($("#osname").val().length ==0)
+  		//	{
+   		//		alert("Please enter previous student name");
 //   				$("#error-prevStudent").html('Please enter your name, email id and mobile number');
 //   				$('#email, #mobile_no, #name, #achievements, #batch ').addClass('has-error');
   				
@@ -216,16 +232,15 @@
 //   				$('#error-prevStudent').html("Please enter your valid email id");
 //  					$('#email').addClass('has-error');
 //   			} 
-  		 	}
-			else {		
+  		// 	}
+		//	else {		
    			
     		$.post('webapi/school/prestudent_update',{id: $("#osId").val(), school_id : school_id, user_id : user_id,name: $("#osname").val(), email : $("#osemail").val(), mobile : $("#osmobile_no").val(), batch : $("#osbatch").val(),
     			achievements : $("#osachievements").val()},function(data){
     			
     			$('#osemail, #osmobile_no, #osname').removeClass('has-error');
     			$('#error-prevStudent').html("");
-    			var oTable = $("#prevStudent-table").dataTable();
- 			    oTable.fnClearTable();
+    			
  			    $("#osname").val(""); $("#osemail").val(""); $("#osmobile_no").val("");
  			    $("#osachievements").val("");
  			    $("#osbatch").val("");
@@ -237,7 +252,7 @@
  				updateProgress($('#school_id').val());
  			    $(data).each(function(index){
  			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-                          +" <a href='deleteProfile("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
+                          +" <a href='javascript:deleteProfile("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
  			    	var row = [];
  			    	 row.push(data[index].name);
  			    	 row.push(data[index].batch);
@@ -247,9 +262,30 @@
  			    });
  			  
     		},'json');
-   		}
+   	//	}
    		
    	});
 	    	
+		function deleteProfile(deletePreStudentId)
+		{
+			 var schoolId = $("#school_id").val();
 			
+			var deletePreStudentProfile = confirm("Do you want to delete this old student profile ?");
+			if(deletePreStudentProfile){
+				$.post("webapi/school/deletePreStudentProfile",{deletePreStudentId : deletePreStudentId,schoolId : schoolId},function(data){
+					 var oTable = $("#prevStudent-table").dataTable();
+					    oTable.fnClearTable();
+					  $(data).each(function(index){
+		 			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+		                          +" <a href='javascript:deleteProfile("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
+		 			    	var row = [];
+		 			    	 row.push(data[index].name);
+		 			    	 row.push(data[index].batch);
+		 			    	 row.push(data[index].achievements);
+			 			    	 row.push(html);
+		 			    	oTable.fnAddData(row);
+		 			    });
+				});
+			}
+		}
   	</script>

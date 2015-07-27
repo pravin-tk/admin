@@ -47,7 +47,8 @@
 				for(int i = 0; i < highlights.size(); i++)
           		{
           			out.print("<td>"+highlights.get(i).getName()+"</td>");
-          			out.print("<td><a href='javascript:editHighlight("+highlights.get(i).getId()+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a></td></tr>");
+          			out.print("<td><a href='javascript:editHighlight("+highlights.get(i).getId()+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i>"
+          			+"<a href='javascript:deleteHighlight("+highlights.get(i).getId()+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a></td></tr>");
           		}
 			%>
 
@@ -88,7 +89,8 @@ function saveHighlight(){
 			var oTable = $("#highlight-table-data").dataTable();
 			    oTable.fnClearTable();
 			$(data).each(function(index){
-		    	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>";
+		    	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+		    	+"<a href='javascript:deleteHighlight("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
 		    	var row = [];
 		    	row.push(data[index].name);
 			   	row.push(html);
@@ -125,7 +127,8 @@ function updateHighlight(){
 		var oTable = $("#highlight-table-data").dataTable();
 		    oTable.fnClearTable();
 		$(data).each(function(index){
-	    	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>";
+	    	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"+
+	    	"<a href='javascript:deleteHighlight("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
 	    	var row = [];
 	    	row.push(data[index].name);
 		   	row.push(html);
@@ -146,4 +149,23 @@ $("#highlightcancel").click(function(){
 	$("#savehighlight").show();
 	$("#highlight_name").val("");
 });
+function deleteHighlight(highlightId)
+{
+	var confirmDelete = confirm("Do you want to delete highlight?");
+	if(confirmDelete){
+		  $.post("webapi/school/delete-highlight",{highlightId : highlightId,schoolId : $("#school_id").val()},function(data){
+			  var oTable = $("#highlight-table-data").dataTable();
+			  oTable.fnClearTable();
+			  $(data).each(function(index){
+			  	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"+
+			  	"<a href='javascript:deleteHighlight("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
+			  	var row = [];
+			  	row.push(data[index].name);
+				row.push(html);
+			  	oTable.fnAddData(row);
+		  });
+  });	
+	
+	}
+}
 </script>

@@ -63,7 +63,7 @@ int route_size = listRoute.size();
                                     </tbody>
                                 </table>
 
-                                  <a href="#" class="btn btn-primary view-contacts bottom-margin"><i class="fa fa-plus"></i> Category</a>
+                                  <a href="#" class="btn btn-primary view-contacts bottom-margin"><i class="fa fa-plus"></i> Route</a>
 
                             </div>
                             <div class="contacts-new" style="display:none;">
@@ -103,20 +103,20 @@ int route_size = listRoute.size();
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Description</label>
-                                    <div class="col-sm-2">
-                                        <textarea class="form-control" name="desc" id="desc" placeholder="Description..."></textarea>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Description
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Description</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<!--                                         <textarea class="form-control" name="desc" id="desc" placeholder="Description..."></textarea> -->
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Description -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <div class="col-sm-2">

@@ -1,9 +1,14 @@
+<%@page import="org.school.admin.model.BoardType"%>
+<%@page import="org.school.admin.service.BoardService"%>
 <%@page import="org.school.admin.model.City"%>
 <%@page import="org.school.admin.service.CityNamesService"%>
 <%@page import="java.util.List"%>
 <%
 	List<City> city_list = new CityNamesService().getAllCityNames();
 	System.out.println(city_list.toString());
+	
+	List<BoardType> boardTypeList = null;
+	boardTypeList = new BoardService().getBoardList();
 %>
 	<%@ include file="header.jsp" %>
 	<%@ include file="LeftNav.jsp" %>            
@@ -34,11 +39,25 @@
 							  	<span id="output"></span>
 							</div>
                             <div class="form-group">
-                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="School Name">Name</label>
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="School Name">Name*</label>
                                 <div class="col-sm-6">
                                     <input data-brackets-id="3402" type="text" class="form-control" name="school_name" id="school_name" placeholder="School Name">
                                 </div>
                             </div>
+                            <div class="form-group">
+                    <label class="col-sm-2 control-label">Board Type *</label>
+                    <div class="col-sm-6" id="cbk_board">
+                    	<%
+                    	 if(boardTypeList.size() > 0){
+                       	for(int i=0;i<boardTypeList.size();i++){ 
+                    	   	BoardType boardType = boardTypeList.get(i);
+							out.print(" <label class='checkbox-inline'> <input type='radio' value='"+boardType.getId()+
+										  "' id='board' name='board' >"+boardType.getBoardName()+"</label>"); 
+                       	}
+                    	 }
+						%>
+                      </div>
+                </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Plot No.">Plot No.</label>
                                 <div class="col-sm-6">

@@ -3,6 +3,7 @@ package org.school.admin.dao;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,6 +22,8 @@ import org.school.admin.model.InfrastructureCategory;
 import org.school.admin.data.InfrastructureDetail;
 import org.school.admin.data.NameList;
 import org.school.admin.data.SchoolTimelineData;
+import org.school.admin.data.SchoolTimelineMilestoneData;
+import org.school.admin.data.ViewSchoolData;
 import org.school.admin.model.SafetyCategory;
 import org.school.admin.model.SafetyCategoryItem;
 import org.school.admin.model.SchoolActivityCatItem;
@@ -31,6 +34,8 @@ import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ActivityCategoryItem;
 import org.school.admin.model.AdminUser;
 import org.school.admin.model.AdminUserRole;
+import org.school.admin.model.BoardType;
+import org.school.admin.model.City;
 import org.school.admin.model.ClassAccessories;
 import org.school.admin.model.ClassFee;
 import org.school.admin.model.ClassInfo;
@@ -40,6 +45,7 @@ import org.school.admin.model.FeeType;
 import org.school.admin.model.InfrastructureCategoryItem;
 import org.school.admin.model.Locality;
 import org.school.admin.model.School;
+import org.school.admin.model.SchoolBoard;
 import org.school.admin.model.SchoolHighlight;
 import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolNameList;
@@ -47,6 +53,8 @@ import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolTimeline;
 import org.school.admin.model.SchoolTimelineMilestone;
 import org.school.admin.model.TabControl;
+import org.school.admin.model.ViewContact;
+import org.school.admin.model.ViewSchool;
 import org.school.admin.util.HibernateUtil;
 
 public class SchoolDAOImp {
@@ -188,26 +196,28 @@ public class SchoolDAOImp {
 /*------------------------------------------------------*/
 	
 	
-	public ResponseMessage save(School school)
+	public ResponseMessage save(School school,Short boardId)
 	{
 		int school_id = 0;
 		ResponseMessage message = new ResponseMessage();
 		if (school.getName() == null || school.getName().trim().length() == 0) {
 			message.setMessage("School Name Required");
 			message.setStatus(0);
-		} else if(school.getLocality().getId() == 0 || school.getLocality().getId() <= 0) {
-			message.setMessage("Locality Name Required");
-			message.setStatus(0);
-		} else if(school.getStreetName() == null || school.getStreetName().trim().length() == 0) {
-			message.setMessage("Street Name Required");
-			message.setStatus(0);
-		}else if(school.getLatitude() == null || school.getLatitude().trim().length() == 0) {
-			message.setMessage("Latitude Required");
-			message.setStatus(0);
-		}else if(school.getLongitude() == null || school.getLongitude().trim().length() == 0) {
-			message.setMessage("Longitude Required");
-			message.setStatus(0);
-		} else {
+		}
+//		} else if(school.getLocality().getId() == 0 || school.getLocality().getId() <= 0) {
+//			message.setMessage("Locality Name Required");
+//			message.setStatus(0);
+//		} else if(school.getStreetName() == null || school.getStreetName().trim().length() == 0) {
+//			message.setMessage("Street Name Required");
+//			message.setStatus(0);
+//		}else if(school.getLatitude() == null || school.getLatitude().trim().length() == 0) {
+//			message.setMessage("Latitude Required");
+//			message.setStatus(0);
+//		}else if(school.getLongitude() == null || school.getLongitude().trim().length() == 0) {
+//			message.setMessage("Longitude Required");
+//			message.setStatus(0);
+//		} 
+			else {
 			try{
 				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
@@ -216,6 +226,19 @@ public class SchoolDAOImp {
 				session.getTransaction().commit();
 				school_id = school.getId();
 				session.close();
+				
+				Session boardSchool = hibernateUtil.openSession();
+				SchoolBoard schoolBoard = new SchoolBoard();
+				BoardType boardType = new BoardType();
+				boardType.setId(boardId);
+				schoolBoard.setBoardType(boardType);
+				School newSchool = new School();
+				newSchool.setId(school_id);
+				schoolBoard.setSchool(newSchool);
+				boardSchool.beginTransaction();
+				boardSchool.save(schoolBoard);
+				boardSchool.getTransaction().commit();
+				boardSchool.close();
 				saveTab(school);
 				message.setMessage("Added Successfully");
 				message.setStatus(school_id);
@@ -226,6 +249,141 @@ public class SchoolDAOImp {
 			}
 		}
 		return message;
+	}
+	/**
+	 * @param no-parameter
+	 * @return List<school> with school id and with school name,alias name,locality and city
+	 */
+	public List<ViewSchoolData> getViewSchoolList()
+	{
+		String hql = "from ViewSchool";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<ViewSchool> result = query.list();
+		List<ViewSchoolData> viewSchoolDatas = new ArrayList<ViewSchoolData>();
+		if(result.size()>0)
+		{
+			for(int i=0;i<result.size();i++)
+			{
+				ViewSchoolData viewSchoolData = new  ViewSchoolData();
+				viewSchoolData.setSchoolId(result.get(i).getSchoolId());
+				viewSchoolData.setSchoolFullName(result.get(i).getSchoolFullName());
+				viewSchoolDatas.add(viewSchoolData);
+			}
+		}
+		session.close();
+		return viewSchoolDatas;
+	}
+	/**
+	 * 
+	 * @param cityId
+	 * @return
+	 */
+	public List<ViewSchoolData> getViewSchoolList(int cityId)
+	{
+		String hql = "from ViewSchool where cityId = :cityId";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("cityId", cityId);
+		List<ViewSchool> result = query.list();
+		List<ViewSchoolData> viewSchoolDatas = new ArrayList<ViewSchoolData>();
+		if(result.size()>0)
+		{
+			for(int i=0;i<result.size();i++)
+			{
+				ViewSchoolData viewSchoolData = new  ViewSchoolData();
+				viewSchoolData.setSchoolId(result.get(i).getSchoolId());
+				viewSchoolData.setSchoolFullName(result.get(i).getSchoolFullName());
+				viewSchoolDatas.add(viewSchoolData);
+			}
+		}
+		session.close();
+		return viewSchoolDatas;
+	}
+	public List<ViewContact> getViewContactList()
+	{
+		String hql = "from ViewContact";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<ViewContact> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<ViewContact> getViewContactList(int cityId)
+	{
+		String hql = "from ViewContact where cityId =:cityId";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("cityId", cityId);
+		List<ViewContact> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<School> getSchoolList(String contact_id,int cityId){
+		String hql = "select distinct v from ViewContact v where v.contactNumber = :contactNumber and cityId =:cityId";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("contactNumber", contact_id);
+		query.setParameter("cityId",cityId);
+		List<ViewContact> viewContact = query.list();
+		List<School> viewSchoolList = new ArrayList<School>();
+		if(viewContact.size()>0)
+		{
+			for(int j =0 ;j<viewContact.size();j++)
+			{
+				viewSchoolList.addAll(getSchoolDetail(viewContact.get(j).getSchoolId()));
+			}
+		}
+		return viewSchoolList;
+	}
+	
+	
+	public List<School> getSchoolDetail(int school_id){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "";
+		int count =0;
+		List<School> schools = new ArrayList<School>();
+		Query query = null;
+		if (school_id > 0) {
+			hql = "select distinct s from School s where s.id = :school_id";
+			query = session.createQuery(hql);
+			query.setParameter("school_id",school_id);
+				List<School> result = query.list();
+	
+		for(int i=0; i<result.size(); i++){
+			School school = new School();
+			Locality locality = new Locality();
+			locality.setId(result.get(i).getLocality().getId());
+			locality.setName(result.get(i).getLocality().getName());
+			school.setId(result.get(i).getId());
+			school.setName(result.get(i).getName());
+			school.setAboutSchool(result.get(i).getAboutSchool());
+			school.setEstablishmentType(result.get(i).isEstablishmentType());
+			school.setAlias(result.get(i).getAlias());
+			school.setCreatedBy(result.get(i).getCreatedBy());
+			school.setLandmark(result.get(i).getLandmark());
+			school.setLatitude(result.get(i).getLatitude());
+			school.setLongitude(result.get(i).getLongitude());
+			school.setLiveDate(result.get(i).getLiveDate());
+			school.setLocality(locality);
+			school.setPincode(result.get(i).getPincode());
+			school.setPlotNo(result.get(i).getPlotNo());
+			school.setStatus(result.get(i).getStatus());
+			school.setStreetName(result.get(i).getStreetName());
+			school.setTagLine(result.get(i).getTagLine());
+			school.setPromote(result.get(i).getPromote());
+			schools.add(school);
+			
+		}
+		}
+		return schools;
 	}
 	
 	public List<School> getSchoolList(int school_id, int city_id, int locality_id){
@@ -275,6 +433,143 @@ public class SchoolDAOImp {
 		}
 		return schools;
 	}
+	
+	
+	
+	public List<School> getSchoolActiveList(int city_id){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "";
+		Query query = null;
+		 if (city_id > 0) {
+			hql = "from School where locality.city.id = :city_id and status = 1";
+			query = session.createQuery(hql);
+			query.setParameter("city_id",city_id);
+		} 
+		List<School> result = query.list();
+		List<School> schools = new ArrayList<School>();
+		for(int i=0; i<result.size(); i++){
+			School school = new School();
+			Locality locality = new Locality();
+			locality.setId(result.get(i).getLocality().getId());
+			locality.setName(result.get(i).getLocality().getName());
+			City city = new City();
+			city.setId(result.get(i).getLocality().getCity().getId());
+			city.setName(result.get(i).getLocality().getCity().getName());
+			locality.setCity(city);
+			school.setId(result.get(i).getId());
+			school.setName(result.get(i).getName());
+			school.setAboutSchool(result.get(i).getAboutSchool());
+			school.setEstablishmentType(result.get(i).isEstablishmentType());
+			school.setAlias(result.get(i).getAlias());
+			school.setCreatedBy(result.get(i).getCreatedBy());
+			school.setLandmark(result.get(i).getLandmark());
+			school.setLatitude(result.get(i).getLatitude());
+			school.setLongitude(result.get(i).getLongitude());
+			school.setLiveDate(result.get(i).getLiveDate());
+			school.setLocality(locality);
+			school.setPincode(result.get(i).getPincode());
+			school.setPlotNo(result.get(i).getPlotNo());
+			school.setStatus(result.get(i).getStatus());
+			school.setStreetName(result.get(i).getStreetName());
+			school.setTagLine(result.get(i).getTagLine());
+			school.setPromote(result.get(i).getPromote());
+			schools.add(school);
+		}
+		return schools;
+	}
+	
+	
+	public List<School> getSchoolPendingList(int city_id){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "";
+		Query query = null;
+		 if (city_id > 0) {
+			hql = "from School where locality.city.id = :city_id";
+			query = session.createQuery(hql);
+			query.setParameter("city_id",city_id);
+		} 
+		List<School> result = query.list();
+		List<School> schools = new ArrayList<School>();
+		for(int i=0; i<result.size(); i++){
+			System.out.println("SCHOOLID : "+result.get(i).getId());
+			if(getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 0){
+			School school = new School();
+			Locality locality = new Locality();
+			locality.setId(result.get(i).getLocality().getId());
+			locality.setName(result.get(i).getLocality().getName());
+			City city = new City();
+			city.setId(result.get(i).getLocality().getCity().getId());
+			city.setName(result.get(i).getLocality().getCity().getName());
+			locality.setCity(city);
+			school.setId(result.get(i).getId());
+			school.setName(result.get(i).getName());
+			school.setAboutSchool(result.get(i).getAboutSchool());
+			school.setEstablishmentType(result.get(i).isEstablishmentType());
+			school.setAlias(result.get(i).getAlias());
+			school.setCreatedBy(result.get(i).getCreatedBy());
+			school.setLandmark(result.get(i).getLandmark());
+			school.setLatitude(result.get(i).getLatitude());
+			school.setLongitude(result.get(i).getLongitude());
+			school.setLiveDate(result.get(i).getLiveDate());
+			school.setLocality(locality);
+			school.setPincode(result.get(i).getPincode());
+			school.setPlotNo(result.get(i).getPlotNo());
+			school.setStatus(result.get(i).getStatus());
+			school.setStreetName(result.get(i).getStreetName());
+			school.setTagLine(result.get(i).getTagLine());
+			school.setPromote(result.get(i).getPromote());
+			schools.add(school);
+			}
+		}
+		return schools;
+	}
+	
+	public List<School> getSchoolRejectedList(int city_id){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "";
+		Query query = null;
+		 if (city_id > 0) {
+			hql = "from School where locality.city.id = :city_id";
+			query = session.createQuery(hql);
+			query.setParameter("city_id",city_id);
+		} 
+		List<School> result = query.list();
+		List<School> schools = new ArrayList<School>();
+		for(int i=0; i<result.size(); i++){
+			if((getPer(result.get(i).getId()) > 0 && getPer(result.get(i).getId()) < 100)){
+			School school = new School();
+			Locality locality = new Locality();
+			locality.setId(result.get(i).getLocality().getId());
+			locality.setName(result.get(i).getLocality().getName());
+			City city = new City();
+			city.setId(result.get(i).getLocality().getCity().getId());
+			city.setName(result.get(i).getLocality().getCity().getName());
+			locality.setCity(city);
+			school.setId(result.get(i).getId());
+			school.setName(result.get(i).getName());
+			school.setAboutSchool(result.get(i).getAboutSchool());
+			school.setEstablishmentType(result.get(i).isEstablishmentType());
+			school.setAlias(result.get(i).getAlias());
+			school.setCreatedBy(result.get(i).getCreatedBy());
+			school.setLandmark(result.get(i).getLandmark());
+			school.setLatitude(result.get(i).getLatitude());
+			school.setLongitude(result.get(i).getLongitude());
+			school.setLiveDate(result.get(i).getLiveDate());
+			school.setLocality(locality);
+			school.setPincode(result.get(i).getPincode());
+			school.setPlotNo(result.get(i).getPlotNo());
+			school.setStatus(result.get(i).getStatus());
+			school.setStreetName(result.get(i).getStreetName());
+			school.setTagLine(result.get(i).getTagLine());
+			school.setPromote(result.get(i).getPromote());
+			schools.add(school);
+			}
+		}
+		return schools;
+	}
 	/**
 	 * 
 	 * @param school
@@ -317,57 +612,21 @@ public class SchoolDAOImp {
 		query.setParameter("tabName", one);
 		query.setParameter("id", school_id);
 		query.executeUpdate();
-//		School school = new School();
-//		school.setId(school_id);
-//		TabControl tabControl = new TabControl();
-//		switch(tabName)
-//		{
-//			case "schoolDetail":
-//								Byte schoolDetail = 1;
-//								tabControl.setSchoolDetail(schoolDetail);
-//								break;
-//			case "campusDetail":
-//								Byte campusDetail = 1;
-//								tabControl.setCampusDetail(campusDetail);
-//								break;
-//			case "classDetail":
-//								Byte classDetail = 1;
-//								tabControl.setClassDetail(classDetail);
-//								break;
-//			case "contact":
-//								Byte contact = 1;
-//								tabControl.setContact(contact);
-//								break;
-//			case "infrastructure":
-//								Byte infrastructure = 1;
-//								tabControl.setInfrastructure(infrastructure);
-//								break;
-//			case "achievements":
-//								Byte achievements = 1;
-//								tabControl.setAchievements(achievements);
-//								break;
-//			case "salesDetails":
-//								Byte salesDetails = 1;
-//								tabControl.setSalesDetails(salesDetails);
-//								break;
-//			case "oldStudentProfile":
-//								Byte oldStudentProfile = 1;
-//								tabControl.setOldStudentProfile(oldStudentProfile);
-//								break;
-//			case "timeLine":
-//								Byte timeLine = 1;
-//								tabControl.setTimeLine(timeLine);
-//								break;
-//			case "highlights":
-//								Byte highlights = 1;
-//								tabControl.setHighlights(highlights);
-//								break;
-//			case "gallery":
-//								Byte gallery = 1;
-//								tabControl.setGallery(gallery);
-//								break;
-//				
-//		}
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public void deleteTabs(int school_id,String tabName)
+	{
+		Byte zero = 0;
+		String hql = "update TabControl set "+tabName+" = :tabName where school.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("tabName", zero);
+		query.setParameter("id", school_id);
+		query.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
 	}
@@ -375,7 +634,7 @@ public class SchoolDAOImp {
 	public double getPer(int school_id)
 	{
 		double per= getTabs(school_id);
-		return Math.round((per*100)/11);
+		return Math.round((per*100)/12);
 
 	}
 	public double getTabs(int school_id)
@@ -390,27 +649,6 @@ public class SchoolDAOImp {
 		//List<TabControl> tabControls2 = new ArrayList<TabControl>();
 		for(int i=0;i<tabControls.size();i++)
 		{
-//			TabControl tabControl = new TabControl();
-//			
-//			tabControl.setId(tabControls.get(i).getId());
-//			School school = new School();
-//			school.setId(tabControls.get(i).getSchool().getId());
-//			tabControl.setSchool(school);
-//			tabControl.setAchievements(tabControls.get(i).getAchievements());
-//			tabControl.setBasic(tabControls.get(i).getBasic());
-//			tabControl.setCampusDetail(tabControls.get(i).getCampusDetail());
-//			tabControl.setClassDetail(tabControls.get(i).getClassDetail());
-//			tabControl.setContact(tabControls.get(i).getContact());
-//			tabControl.setGallery(tabControls.get(i).getGallery());
-//			tabControl.setHighlights(tabControls.get(i).getHighlights());
-//			tabControl.setInfrastructure(tabControls.get(i).getInfrastructure());
-//			tabControl.setOldStudentProfile(tabControls.get(i).getOldStudentProfile());
-//			tabControl.setSalesDetails(tabControls.get(i).getSalesDetails());
-//			tabControl.setSchoolDetail(tabControls.get(i).getSchoolDetail());
-//			tabControl.setTimeLine(tabControls.get(i).getTimeLine());
-//			
-//			tabControls2.add(tabControl);
-//			
 			sum = tabControls.get(i).getAchievements()
 					+tabControls.get(i).getBasic()
 					+tabControls.get(i).getCampusDetail()
@@ -476,56 +714,75 @@ public class SchoolDAOImp {
 		return schoolList;
 		
 	}
-	public ResponseMessage updateSchool(School School)
+	public ResponseMessage updateSchool(School school,SchoolBoard schoolBoard)
 	{
 		ResponseMessage message = new ResponseMessage();
-		if (School.getName() == null || School.getName().trim().length() == 0) {
+		if (school.getName() == null || school.getName().trim().length() == 0) {
 			message.setMessage("School Name Required");
 			message.setStatus(0);
-		} else if(School.getLocality().getId() == 0 || School.getLocality().getId() <= 0) {
-			message.setMessage("Locality Name Required");
-			message.setStatus(0);
-		} else if(School.getStreetName() == null || School.getStreetName().trim().length() == 0) {
-			message.setMessage("Street Name Required");
-			message.setStatus(0);
-		}else if(School.getLatitude() == null || School.getLatitude().trim().length() == 0) {
-			message.setMessage("Latitude Required");
-			message.setStatus(0);
-		}else if(School.getLongitude() == null || School.getLongitude().trim().length() == 0) {
-			message.setMessage("Longitude Required");
-			message.setStatus(0);
+//		} else if(School.getLocality().getId() == 0 || School.getLocality().getId() <= 0) {
+//			message.setMessage("Locality Name Required");
+//			message.setStatus(0);
+//		} else if(School.getStreetName() == null || School.getStreetName().trim().length() == 0) {
+//			message.setMessage("Street Name Required");
+//			message.setStatus(0);
+//		}else if(School.getLatitude() == null || School.getLatitude().trim().length() == 0) {
+//			message.setMessage("Latitude Required");
+//			message.setStatus(0);
+//		}else if(School.getLongitude() == null || School.getLongitude().trim().length() == 0) {
+//			message.setMessage("Longitude Required");
+//			message.setStatus(0);
 		} else {
 			try{
 				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
 				
-				School SchoolNew = (School) session.get(School.class, School.getId());
-				SchoolNew.setAboutSchool(School.getAboutSchool());
-				SchoolNew.setName(School.getName());
-				SchoolNew.setAlias(School.getAlias());
-				SchoolNew.setEstablishmentType(School.isEstablishmentType());
-				SchoolNew.setLandmark(School.getLandmark());
-				SchoolNew.setLastUpdatedBy(School.getLastUpdatedBy());
-				SchoolNew.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
-				SchoolNew.setLatitude(School.getLatitude());
-				SchoolNew.setLongitude(School.getLongitude());
-				SchoolNew.setLocality(School.getLocality());
-				SchoolNew.setPincode(School.getPincode());
-				SchoolNew.setPlotNo(School.getPlotNo());
-				SchoolNew.setId(School.getId());
-				SchoolNew.setStreetName(School.getStreetName());
-				SchoolNew.setTagLine(School.getTagLine());
-				SchoolNew.setIsFreelisting(School.getIsFreelisting());
-				SchoolNew.setTrialStartDate(School.getTrialStartDate());
-				SchoolNew.setTrialEndDate(School.getTrialEndDate());
+				School schoolNew = (School) session.get(School.class, school.getId());
+				schoolNew.setAboutSchool(school.getAboutSchool());
+				schoolNew.setName(school.getName());
+				schoolNew.setAlias(school.getAlias());
+				schoolNew.setEstablishmentType(school.isEstablishmentType());
+				schoolNew.setLandmark(school.getLandmark());
+				schoolNew.setLastUpdatedBy(school.getLastUpdatedBy());
+				schoolNew.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+				schoolNew.setLatitude(school.getLatitude());
+				schoolNew.setLongitude(school.getLongitude());
+				schoolNew.setLocality(school.getLocality());
+				schoolNew.setPincode(school.getPincode());
+				schoolNew.setPlotNo(school.getPlotNo());
+				schoolNew.setId(school.getId());
+				schoolNew.setStreetName(school.getStreetName());
+				schoolNew.setTagLine(school.getTagLine());
+				schoolNew.setIsFreelisting(school.getIsFreelisting());
+				schoolNew.setTrialStartDate(school.getTrialStartDate());
+				schoolNew.setTrialEndDate(school.getTrialEndDate());
 				session.beginTransaction();
-				session.update(SchoolNew);
+				session.update(schoolNew);
 				session.getTransaction().commit();
 				session.close();
+				
+				String hqlSchoolBoard = "from SchoolBoard where school.id = :school_id";
+				Session oldSchoolBoard = hibernateUtil.openSession();
+					Query query1 = oldSchoolBoard.createQuery(hqlSchoolBoard);
+					query1.setInteger("school_id",school.getId());
+					List<SchoolBoard> resultSchoolBoard = query1.list();
+					oldSchoolBoard.close();
+					
+					Session newSession = hibernateUtil.openSession();
+					newSession.beginTransaction();
+					if (resultSchoolBoard.size() > 0) {
+							schoolBoard.setId(resultSchoolBoard.get(0).getId());
+							newSession.update(schoolBoard);
+					}else{
+						newSession.save(schoolBoard);
+					}
+					newSession.getTransaction().commit();
+					newSession.close();
 				message.setMessage("Updated Successfully");
-				message.setStatus(School.getId());
-				message.setData(SchoolNew);
+				message.setStatus(school.getId());
+				message.setData(schoolNew);
 			} catch(Exception e) {
+				e.printStackTrace();
 				message.setMessage("Failed to update school");
 				message.setStatus(0);
 			}
@@ -832,6 +1089,17 @@ public class SchoolDAOImp {
 			query.setParameter("school_id", school_id);
 			
 			List<ClassInfo> schoolList = query.list();
+			for(int i=0; i<schoolList.size(); i++){
+				if(schoolList.get(i).getAdmissionDeadline() == null){
+					schoolList.get(i).setAdmissionDeadline(null);
+				}
+				if(schoolList.get(i).getAdmissionFrom() == null){
+					schoolList.get(i).setAdmissionFrom(null);
+				}
+				if(schoolList.get(i).getAdmissionTo() == null){
+					schoolList.get(i).setAdmissionTo(null);
+				}
+			}
 			classsession.close();
 			return schoolList;
 			
@@ -850,6 +1118,18 @@ public class SchoolDAOImp {
 			query.setParameter("id", class_id);
 			
 			List<ClassInfo> schoolList = query.list();
+			for(int i=0; i<schoolList.size(); i++){
+				if(schoolList.get(i).getAdmissionDeadline() == null){
+					schoolList.get(i).setAdmissionDeadline(null);
+				}
+				if(schoolList.get(i).getAdmissionFrom() == null){
+					schoolList.get(i).setAdmissionFrom(null);
+				}
+				if(schoolList.get(i).getAdmissionTo() == null){
+					schoolList.get(i).setAdmissionTo(null);
+				}
+			}
+		
 			classsession.close();
 			return schoolList;
 			
@@ -1202,13 +1482,13 @@ public class SchoolDAOImp {
 		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
 			message.setMessage("Image title Required");
 			message.setStatus(0);
-		} else if(schoolTimeline.getClassesUpto() == null || schoolTimeline.getClassesUpto().trim().length() <= 0) {
-			message.setMessage("Classes detail Required");
-			message.setStatus(0);
-		} else if(schoolTimeline.getYear() == null || schoolTimeline.getYear() <= 0) {
-			message.setMessage("Year of time line required");
-			message.setStatus(0);
-		} else {
+//		} else if(schoolTimeline.getClassesUpto() == null || schoolTimeline.getClassesUpto().trim().length() <= 0) {
+//			message.setMessage("Classes detail Required");
+//			message.setStatus(0);
+//		} else if(schoolTimeline.getYear() == null || schoolTimeline.getYear() <= 0) {
+//			message.setMessage("Year of time line required");
+//			message.setStatus(0);
+		}else {
 			try{
 				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
@@ -1276,7 +1556,7 @@ public class SchoolDAOImp {
 		return message;
 	}
 	
-	public List<SchoolTimelineMilestone> getSchoolTimelineMilestones(int schoolId)
+	public List<SchoolTimelineMilestoneData> getSchoolTimelineMilestones(int schoolId)
 	 {
 		 	String hql = "from SchoolTimelineMilestone where schoolTimeline.school.id = :schoolId";
 			HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1284,8 +1564,27 @@ public class SchoolDAOImp {
 			Query query = session.createQuery(hql);
 			query.setParameter("schoolId", schoolId);
 			List<SchoolTimelineMilestone> result = query.list();
+			List<SchoolTimelineMilestoneData> schoolTimelineMilestones = new ArrayList<SchoolTimelineMilestoneData>();
+			 
+			if(result.size() > 0)
+			{
+				for(int i = 0; i < result.size();i++)
+				{
+					SchoolTimelineMilestoneData schoolTimelineMilestoneData = new SchoolTimelineMilestoneData();
+					schoolTimelineMilestoneData.setTitle(result.get(i).getTitle());
+					schoolTimelineMilestoneData.setId(result.get(i).getId());
+					SchoolTimeline schoolTimeline = new SchoolTimeline();
+					schoolTimeline.setId(result.get(i).getSchoolTimeline().getId());
+					schoolTimeline.setClassesUpto(result.get(i).getSchoolTimeline().getClassesUpto());
+					schoolTimeline.setTitle(result.get(i).getSchoolTimeline().getTitle());
+					schoolTimeline.setYear(result.get(i).getSchoolTimeline().getYear());
+					schoolTimelineMilestoneData.setSchoolTimeline(schoolTimeline);
+					schoolTimelineMilestones.add(schoolTimelineMilestoneData);
+				}
+				
+			}
 			session.close();
-			return result;
+			return schoolTimelineMilestones;
 	 }
 	
 	public List<SchoolTimelineMilestone> getSchoolTimelineMilestonesByTimelineId(int id)
@@ -1604,5 +1903,60 @@ public class SchoolDAOImp {
 		    result.add(schoolTimelineData);
 		}
 		return result;
+	}
+	public ResponseMessage updateAcivateStatus(int schoolId){
+		ResponseMessage response = new ResponseMessage();
+		String hql = "update School set status=1 where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", schoolId);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		response.setStatus(1);
+		response.setMessage("data verified successfuly");
+		
+		return response;
+	}
+	public ResponseMessage deleteContact(int contactId)
+	{
+		ResponseMessage response = new ResponseMessage();
+		try
+		{
+			String hql = "delete ContactInfo  where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("id", contactId);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
+			response.setStatus(1);
+			response.setMessage("Contact Detail deleted successfully");
+			return response;
+		}catch(Exception e){
+			System.out.println(e);
+			response.setStatus(0);
+			response.setMessage("Fail to delete contact detail");
+			return response;
+		}
+		
+		
+	}
+	
+	public void deleteHighlight(int highlightId)
+	{
+			String hql = "delete SchoolHighlight  where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("id", highlightId);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
 	}
 }

@@ -78,20 +78,20 @@
                                     </div>
 	                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Display Order</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(locality.getSortOrder()); %>" placeholder="1">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Display order of locality
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
+<!--                                     <div class="col-sm-2"> -->
+<%--                                         <input type="text" class="form-control" name="sortOrder" id="sortOrder" value="<% out.print(locality.getSortOrder()); %>" placeholder="1"> --%>
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-8"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                 Display order of locality -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -132,16 +132,29 @@
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveLocality(){
-	if($("#cityId").val() > 0){
-		$.post("../webapi/general/locality/update", {id: $("#id").val(), name: $("#name").val(), cityId: $("#cityId").val(), sortOrder: $("#sortOrder").val(), status: $('input[name=status]:checked').val()}, function(data){
-			if(data.status == 1){
-				window.location.href = "${baseUrl}/general/locality.jsp?city_id="+$("#cityId").val();
-			}else{
-				alert(data.message);
-			}
-		});
-	}else{
-		alert("Select City");
+	var msg = "";
+	if($("#cityId").val() == "" || $("#cityId").val() == 'undefined'){
+		if(msg!="") msg = msg+",Please select city name"; else msg = "Please select city name";
+	}
+	if($("#name").val() == ""){
+		if(msg != "") msg = msg+",Please enter locality name"; else msg = "Please enter locality name";
+	}
+	if(msg != ""){
+		alert(msg);
+	}
+	else{
+		if($("#cityId").val() > 0){
+			var sortOrder = 1;
+			$.post("../webapi/general/locality/update", {id: $("#id").val(), name: $("#name").val(), cityId: $("#cityId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+				if(data.status == 1){
+					window.location.href = "${baseUrl}/general/locality.jsp?city_id="+$("#cityId").val();
+				}else{
+					alert(data.message);
+				}
+			});
+		}else{
+			alert("Select City");
+		}
 	}
 }
 
