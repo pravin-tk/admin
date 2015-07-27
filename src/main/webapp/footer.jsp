@@ -18,6 +18,7 @@
                         
                         %>
 	
+
 	<div id="footer_higher" class="col-sm-12 col-md-12 main site-map" style="top:-15px;">
 		<div class="nav">
 		<label class="col-sm-11 control-label nav panel panel-heading">School Search</label>
