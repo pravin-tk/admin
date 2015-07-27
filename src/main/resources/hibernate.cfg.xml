@@ -16,12 +16,9 @@
         <property name="hibernate.connection.username">root</property>
 
         <property name="hibernate.connection.password">root</property>
-<!--          <property name="hibernate.connection.password">root</property> -->
 
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/school_db</property>
         
-<!--          <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/school_db</property> -->
-
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
         <property name="show_sql">true</property>
@@ -110,6 +107,7 @@
         <mapping class="org.school.admin.model.ViewSchool" />
         <mapping class="org.school.admin.model.ViewContact" />
         <mapping class="org.school.admin.model.SchoolLog" />
+        <mapping class="org.school.admin.model.SchoolAnalytics" />
     </session-factory>
 
 </hibernate-configuration>

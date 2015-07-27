@@ -207,7 +207,6 @@ public class ClassDetailDAO {
 	     
 		List<School> schoolList = query.list();
 		List<SchoolAddress> schoolAddressList = new ArrayList<SchoolAddress>();
-		String url ="http://localhost:8080/admin/images/";
 		if(schoolList.size() > 0)
 		{
 			for(int i=0;i<schoolList.size();i++){
@@ -232,8 +231,8 @@ public class ClassDetailDAO {
 				schoolAddress.setEstablishmentType(newEstablishment);
 			}
 			schoolAddress.setPincode(schoolList.get(i).getPincode());
-			schoolAddress.setHomeImage(url+schoolList.get(i).getHomeImage());
-			schoolAddress.setLogo(url+schoolList.get(i).getLogo());
+			schoolAddress.setHomeImage(schoolList.get(i).getHomeImage());
+			schoolAddress.setLogo(schoolList.get(i).getLogo());
 		
 			Locality locality = new Locality();
 			locality.setId(schoolList.get(i).getLocality().getId());

@@ -61,7 +61,9 @@ public class School implements java.io.Serializable {
 	private Set<SchoolActivityCatItem> schoolActivityCatItems = new HashSet<SchoolActivityCatItem>(0);
 	private Set<SchoolSafetyCatItem> schoolSafetyCatItems = new HashSet<SchoolSafetyCatItem>(0);
 	private Set<SchoolInfrastructureCatItem> schoolInfrastructureCatItems = new HashSet<SchoolInfrastructureCatItem>(0);
-
+	private Set<AppliedSchool> appliedSchools = new HashSet<AppliedSchool>(0);
+	private Set<ShortListedSchool> shortListedSchools = new HashSet<ShortListedSchool>(0);
+	
 	public School() {
 	}
 
@@ -91,7 +93,7 @@ public class School implements java.io.Serializable {
 			byte status, Date liveDate, Integer createdBy,
 			Date lastUpdatedOn, Integer lastUpdatedBy,Byte promote,
 			Set<ClassInfo> classInfos,
-			Set<SchoolMedium> schoolMediums, Set<SchoolTimeline> schoolTimelines) {
+			Set<SchoolMedium> schoolMediums, Set<SchoolTimeline> schoolTimelines, Set<AppliedSchool> appliedSchools, Set<ShortListedSchool> shortListedSchools) {
 		this.locality = locality;
 		this.name = name;
 		this.plotNo = plotNo;
@@ -114,6 +116,8 @@ public class School implements java.io.Serializable {
 		this.classInfos = classInfos;
 		this.schoolMediums = schoolMediums;
 		this.schoolTimelines = schoolTimelines;
+		this.appliedSchools = appliedSchools;
+		this.shortListedSchools = shortListedSchools;
 	}
 
 	@Id
@@ -385,6 +389,24 @@ public class School implements java.io.Serializable {
 
 	public void setSchoolTimelines(Set<SchoolTimeline> schoolTimelines) {
 		this.schoolTimelines = schoolTimelines;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
+	public Set<AppliedSchool> getAppliedSchools() {
+		return appliedSchools;
+	}
+
+	public void setAppliedSchools(Set<AppliedSchool> appliedSchools) {
+		this.appliedSchools = appliedSchools;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
+	public Set<ShortListedSchool> getShortListedSchools() {
+		return shortListedSchools;
+	}
+
+	public void setShortListedSchools(Set<ShortListedSchool> shortListedSchools) {
+		this.shortListedSchools = shortListedSchools;
 	}
 
 	@Column(name = "home_image", length = 200)

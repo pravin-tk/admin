@@ -11,7 +11,10 @@ import org.school.admin.data.FeeDetail;
 import org.school.admin.data.GalleryData;
 import org.school.admin.data.InfraCategory;
 import org.school.admin.data.InfraItem;
+import org.school.admin.data.NameList;
+import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.RatingData;
+import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolFee;
 import org.school.admin.data.SchoolList;
 import org.school.admin.data.SchoolListingRequest;
@@ -19,20 +22,19 @@ import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SearchRequest;
 import org.school.admin.data.TotalRating;
+import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
-import org.school.admin.model.ActivityCategory;
-import org.school.admin.model.ClassFee;
 import org.school.admin.model.ClassInfo;
+import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.RatingCategoryType;
 import org.school.admin.model.School;
 import org.school.admin.model.SchoolActivityCatItem;
+import org.school.admin.model.SchoolAnalytics;
 import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolInfrastructureCatItem;
 import org.school.admin.model.SchoolRating;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSafetyCatItem;
-import org.school.admin.model.SchoolSearchUser;
-import org.school.admin.model.SchoolTimeline;
 import org.school.admin.model.UserRating;
 import org.school.admin.model.UserRegistrationInfo;
 import org.school.admin.util.HibernateUtil;
@@ -54,8 +56,10 @@ public class SchoolSearchImpl {
 				     + "s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
 				     + "s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				     + "s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
-				     + "s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
-					 +distance+" as distance FROM SchoolSearch s, ClassInfo ci where s.schoolId = ci.school.id AND ci.standardType.id = :standard_id";
+				     + "s.schoolType as schoolType,s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+					 +distance+" as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
+					 + "ci.standardType.id as standardId FROM SchoolSearch s, ClassInfo ci"
+					 + " where s.schoolId = ci.school.id AND ci.standardType.id = :standard_id";
 		if(request.getLatitude() != null && request.getLongitude() != null){
 		hql = hql + " AND "+distance+" < 3";
 		}
@@ -135,7 +139,7 @@ public class SchoolSearchImpl {
 		if (searchRequest.getDistance().equalsIgnoreCase("ASC") || searchRequest.getDistance().equalsIgnoreCase("DESC")) {
 			if(orderBy != "")
 				orderBy += ",";
-			orderBy += " s.distance "+searchRequest.getDistance();
+			orderBy += " "+distance+" "+searchRequest.getDistance();
 		}
 		
 		if (searchRequest.getSeats().equalsIgnoreCase("ASC") || searchRequest.getSeats().equalsIgnoreCase("DESC")) {
@@ -157,7 +161,7 @@ public class SchoolSearchImpl {
 				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
 				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
-				+ distance + " as distance,ci.totalFee as totalFee,ci.vacantSeat as seats"
+				+ distance + " as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,ci.standardType.id as standardId"
 				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
 				+ " JOIN ss.schoolMediums sm" + queryJoin
 				+ " WHERE s.schoolId = ss.id"
@@ -416,7 +420,7 @@ public class SchoolSearchImpl {
 		session.flush();
 		List<Rating> schoolRatings = query.list();
 		if(schoolRatings.size() <= 0){
-			String newhql = "SELECT id as catid, categoryName as name, 0 as rating, 0 as ratingCount, COALESCE(image,'') as image from RatingCategoryType";
+			String newhql = "SELECT id as catid, categoryName as name, 0.0 as rating, 0L as ratingCount, COALESCE(image,'') as image from RatingCategoryType";
 			Session newsession = hibernateUtil.openSession();
 			Query newquery = newsession.createQuery(newhql).setResultTransformer(Transformers.aliasToBean(Rating.class));
 			newsession.flush();
@@ -522,4 +526,151 @@ public class SchoolSearchImpl {
 		}
 	}
 	
+	public List<NameList> getBloodGroupList(){
+		String hql = "select id as id, name as name from BloodGroup";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+		List<NameList> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<NameList> getCastList(){
+		String hql = "select id as id, name as name from Cast";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+		List<NameList> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<VacantSeats> getVacantSeatsBySchoolIdByStandardId( Integer schoolId, Short standardId ) {
+		String hql = "FROM ClassInfo WHERE school.id = :school_id AND standardType.id = :standard_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql)
+				.setParameter("school_id", schoolId)
+				.setParameter("standard_id", standardId);
+		List<ClassInfo> result = query.list();
+		
+		VacantSeats vacantSeat = new VacantSeats();
+		List<VacantSeats> vacantSeats = new ArrayList<VacantSeats>();
+		for(int i=0; i< result.size(); i++){
+			vacantSeat.setSchoolId(schoolId);
+			vacantSeat.setStandardId(standardId);
+			vacantSeat.setVacantSeat(result.get(i).getVacantSeat());
+			vacantSeats.add(vacantSeat);
+		}
+		
+		session.close();
+		return vacantSeats;
+	}
+	
+	public List<SchoolAnalyticsData> getContactClicksBySchoolId( Integer schoolId ) {
+		String hql = "FROM SchoolAnalytics WHERE school.id = :school_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql)
+				.setParameter("school_id", schoolId);
+		List<SchoolAnalytics> result = query.list();
+		
+		SchoolAnalyticsData schoolAnalyticsData = new SchoolAnalyticsData();
+		List<SchoolAnalyticsData> schoolAnalyticsDataList = new ArrayList<SchoolAnalyticsData>();
+		for(int i=0; i< result.size(); i++){
+			schoolAnalyticsData.setSchoolId(schoolId);
+			schoolAnalyticsData.setContactClicks(result.get(i).getContactClicks());
+			schoolAnalyticsDataList.add(schoolAnalyticsData);
+		}
+		
+		session.close();
+		return schoolAnalyticsDataList;
+	}
+	
+	public void updateContactClicksBySchoolId( Integer schoolId ) {
+		String hql = "FROM SchoolAnalytics WHERE school.id = :school_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql)
+				.setParameter("school_id", schoolId);
+		List<SchoolAnalytics> result = query.list();
+		
+		if(result.isEmpty() != true) {
+			Integer contactClicks=0;
+			for(int i=0; i< result.size(); i++) {
+				contactClicks = result.get(i).getContactClicks();
+			}
+			++contactClicks;
+			hql = "UPDATE SchoolAnalytics SET contact_clicks = :contact_clicks WHERE school.id = :school_id";
+			query = session.createQuery(hql).setParameter("contact_clicks", contactClicks).setParameter("school_id",schoolId);
+			session.beginTransaction();
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.flush();
+		} else {
+			SchoolAnalytics schoolAnalytics = new SchoolAnalytics();
+			schoolAnalytics.setContactClicks(1);
+			hql = "FROM School where id = :school_id";
+			query = session.createQuery(hql).setParameter("school_id",schoolId);
+			schoolAnalytics.setSchool((School)query.uniqueResult());
+			
+			session.beginTransaction();
+			session.save(schoolAnalytics);
+			session.getTransaction().commit();
+			session.flush();
+		}
+		
+		session.close();
+	}
+	
+	public List<NearbySchoolList> getNearbySchoolByLatitudeByLogitude(SearchRequest searchRequest) {
+		
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		String distance = "ROUND(6371 *  "
+			+ " ACOS(COS( RADIANS(" + searchRequest.getLatitude() + ") ) * COS( RADIANS( s.latitude ) ) * " 
+			+ " COS(RADIANS( s.longitude ) - RADIANS(" + searchRequest.getLongitude() + ") ) "
+			+ " + SIN(RADIANS("+ searchRequest.getLatitude() +")) * SIN(RADIANS(s.latitude)) ),6)";
+		
+		String hql = "SELECT s.schoolId as schoolId, "
+			+ " s.name as name, "
+			+ " s.localityName as localityName, "
+			+ " s.rating as rating, "
+			+ " ci.vacantSeat as vacantSeat, "
+			+ " ci.totalFee as totalFee, "
+			+ " ci.standardType.id as standardId, "
+			+ distance+" as distance"
+			+ " FROM SchoolSearch s, ClassInfo ci"
+			+ " WHERE ci.school.id = s.schoolId";
+		if(searchRequest.getStandardId() != 0) {
+			hql = hql + " AND ci.standardType.id = :standard_id "; 
+		}
+		if(searchRequest.getLatitude() != null && searchRequest.getLongitude() != null){
+			hql = hql + " AND "+distance+" < 6";
+		}
+		hql = hql + " GROUP BY s.schoolId " ;
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(NearbySchoolList.class));
+		if(searchRequest.getStandardId() != 0) {
+			query.setParameter("standard_id", searchRequest.getStandardId()); 
+		}
+		List<NearbySchoolList> nearbySchools = query.list();
+		session.close();
+		
+		return nearbySchools;
+	}
+	
+	public List<PrevStudentProfile> getSchoolAchievmentsBySchoolId( Integer schoolId ) {
+		String hql = "SELECT psp.id as id, psp.name as name, psp.batch as batch, psp.achievements as achievements "
+				+ " FROM PrevStudentProfile psp "
+				+ " WHERE school.id = :school_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql)
+				.setParameter("school_id", schoolId)
+				.setResultTransformer(Transformers.aliasToBean(PrevStudentProfile.class));
+		List<PrevStudentProfile> result = query.list();
+		session.close();
+		return result;
+	}
 }

@@ -32,9 +32,12 @@ import org.school.admin.data.NameList;
 import org.school.admin.data.Rating;
 import org.school.admin.data.RatingData;
 import org.school.admin.data.SchoolAddress;
+import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolTimelineData;
+import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
+import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
 import org.school.admin.service.SchoolSuggestionService;
@@ -70,28 +73,24 @@ public class SchoolController extends ResourceConfig {
 			return null;
 		}
 	}
-	@POST
-	@Path("review/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage saveSchoolReview(SchoolReview schoolReview)
-	{
-	    Byte reviewStatus =0;
-		schoolReview.setDate(new Date());
-		schoolReview.setTime(new Date());
-		schoolReview.setStatus(reviewStatus);
-		return new SchoolDAOImp().saveSchoolReview(schoolReview);
-	}
-	
 	
 	@GET
 	@Path("basic.json/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SchoolAddress getBasicInfo(@PathParam("id") int id)
 	{
+		img_path = this.context.getInitParameter("s3_base_url");
 		List<SchoolAddress> basic = new ClassDetailDAO().getSchoolBasicInfo(id);
 		if(basic.size() > 0){
-			return new ClassDetailDAO().getSchoolBasicInfo(id).get(0);
+			if(basic.get(0).getHomeImage() != null)
+				basic.get(0).setHomeImage(img_path+basic.get(0).getHomeImage());
+			else
+				basic.get(0).setHomeImage("");
+			if(basic.get(0).getLogo() != null)
+				basic.get(0).setLogo(img_path+basic.get(0).getLogo());
+			else
+				basic.get(0).setLogo("");
+			return basic.get(0);
 		}else{
 			return null;
 		}
@@ -221,8 +220,13 @@ public class SchoolController extends ResourceConfig {
 	@Path("rating.json/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Rating> getSchoolRating(@PathParam("id") int id){
+		img_path = this.context.getInitParameter("s3_base_url");
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
-		return schoolSearchImpl.getSchoolRating(id);
+		List<Rating> ratings = schoolSearchImpl.getSchoolRating(id);
+		for(int i=0; i<ratings.size(); i++){
+			ratings.get(i).setImage(img_path+ratings.get(i).getImage());
+		}
+		return ratings;
 	}
 	
 	@POST
@@ -234,5 +238,53 @@ public class SchoolController extends ResourceConfig {
 		return schoolSearchImpl.addSchoolRating(ratingData);
 	}
 	
+	@POST
+	@Path("review.json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getSchoolReview(SchoolReview schoolReview)
+	{
+	    Byte reviewStatus =0;
+		schoolReview.setDate(new Date());
+		schoolReview.setTime(new Date());
+		schoolReview.setStatus(reviewStatus);
+		return new SchoolDAOImp().saveSchoolReview(schoolReview);
+	}
 	
+	@GET
+	@Path("vacantseats.json/{schoolId}/{standardId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<VacantSeats> getVacantSeats(@PathParam("schoolId") Integer schoolId, @PathParam("standardId") Short standardId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getVacantSeatsBySchoolIdByStandardId(schoolId, standardId);
+	}
+	
+	@GET
+	@Path("contactclicks.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolAnalyticsData> getContactClicks(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getContactClicksBySchoolId(schoolId);
+	}
+	
+	@GET
+	@Path("contactclicked.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void updateContactClicks(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		schoolSearchImpl.updateContactClicksBySchoolId(schoolId);
+		return;
+	}
+	
+	@GET
+	@Path("schoolachievements.json/{schoolId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PrevStudentProfile> getSchoolAchievements(@PathParam("schoolId") Integer schoolId)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getSchoolAchievmentsBySchoolId(schoolId);
+	}
 }

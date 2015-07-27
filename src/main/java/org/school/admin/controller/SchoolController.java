@@ -72,11 +72,13 @@ import org.school.admin.model.StandardType;
 import org.school.admin.model.StreamType;
 import org.school.admin.model.Subject;
 import org.school.admin.model.TeachingApproachType;
+import org.school.admin.service.ImageUploader;
 import org.school.admin.service.SchoolService;
 
 @Path("school")
 public class SchoolController extends ResourceConfig {
 	@Context ServletContext context;
+	ImageUploader imageUploader = new ImageUploader();
 	public SchoolController() {
 		register(MultiPartFeature.class);
     }
@@ -1097,7 +1099,7 @@ public class SchoolController extends ResourceConfig {
 			image_name = msg.getStatus()+"_"+image_name.replaceAll(" ", "_").toLowerCase();
 			image_name = "milestones/"+image_name;
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
-			writeToFile(is, uploadedFileLocation);
+			this.imageUploader.writeToFile(is, uploadedFileLocation);
 			schoolTimeline.setImage(image_name);
 			List<SchoolTimelineMilestone> timelineMilestones = new ArrayList<SchoolTimelineMilestone>();
 			if(schoolDAOImp.updateSchoolTimelineImage(msg.getStatus(),image_name)){
@@ -1171,7 +1173,7 @@ public class SchoolController extends ResourceConfig {
 		image_name = id+"_"+image_name.replaceAll(" ", "_").toLowerCase();
 		image_name = "milestones/"+image_name;
 		String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
-		writeToFile(is, uploadedFileLocation);
+		this.imageUploader.writeToFile(is, uploadedFileLocation);
 		schoolTimeline.setImage(image_name);
 		msg = schoolDAOImp.updateSchoolTimeline(schoolTimeline);
 		if (msg.getStatus() == 0) {
@@ -1275,7 +1277,7 @@ public class SchoolController extends ResourceConfig {
 		return schoolDAOImp.getSchoolHighlightById(id).get(0);
 	}
 
-	private void writeToFile(InputStream is, String uploadedFileLocation) {
+	/*private void writeToFile(InputStream is, String uploadedFileLocation) {
 		try {
 			OutputStream out = new FileOutputStream(new File(
 					uploadedFileLocation));
@@ -1293,7 +1295,7 @@ public class SchoolController extends ResourceConfig {
 			e.printStackTrace();
 		}
 		
-	}
+	}*/
 	
 	@GET
 	@Path("/feetype")
@@ -1333,7 +1335,7 @@ public class SchoolController extends ResourceConfig {
 				logo_name = logo_name.replaceAll(" ", "_").toLowerCase();
 				logo_name = "logo/"+logo_name;
 				String uploadLogoLocation = this.context.getInitParameter("logo_url")+logo_name;
-				writeToFile(is_logo_img, uploadLogoLocation);
+				this.imageUploader.writeToFile(is_logo_img, uploadLogoLocation);
 				school.setLogo(logo_name);
 				System.out.println("LOGO URL : "+logo_name);
 			}
@@ -1343,7 +1345,7 @@ public class SchoolController extends ResourceConfig {
 				home_name = home_name.replaceAll(" ","_").toLowerCase();
 				home_name = "home/"+home_name;
 				String uploadHomeLocation = this.context.getInitParameter("logo_url")+home_name;
-				writeToFile(is_home_img, uploadHomeLocation);
+				this.imageUploader.writeToFile(is_home_img, uploadHomeLocation);
 				school.setHomeImage(home_name);
 				System.out.println("HOME-URL : "+home_name);
 			}
@@ -1366,7 +1368,7 @@ public class SchoolController extends ResourceConfig {
 					gallery_name = "gallery/"+gallery_name;
 					String uploadGalleryLocation = this.context.getInitParameter("logo_url")+gallery_name;
 					System.out.println("for loop image path: "+uploadGalleryLocation);
-					writeToFile(imageslist.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+					this.imageUploader.writeToFile(imageslist.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
 					schoolImageGallery.setImage(gallery_name);
 					schoolImageGallery.setTitle(imageTitle.get(i).getValueAs(String.class).toString());
 					schoolImageGallery.setSchool(school);

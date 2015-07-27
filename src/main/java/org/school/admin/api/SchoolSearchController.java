@@ -19,11 +19,14 @@ import org.school.admin.dao.ClassificationDAOImpl;
 import org.school.admin.dao.ContactDetaillDAO;
 import org.school.admin.dao.SchoolDAOImp;
 import org.school.admin.dao.SchoolSearchImpl;
+import org.school.admin.dao.SettingsImpl;
 import org.school.admin.dao.StandardTypeDAO;
 import org.school.admin.data.Facility;
 import org.school.admin.data.GalleryData;
 import org.school.admin.data.NameImageList;
 import org.school.admin.data.NameList;
+import org.school.admin.data.NearbySchoolList;
+import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolCompleteDetail;
 import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolList;
@@ -68,7 +71,15 @@ public class SchoolSearchController {
 		SearchFilterService sfService = new SearchFilterService();
 		SearchRequest searchRequest = sfService.getSearchRequest(uriInfo);
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
-		return schoolSearchImpl.fetchSchoolListByLattitudeByLongitude(searchRequest);
+		List<SchoolList> schoolLists = schoolSearchImpl.fetchSchoolListByLattitudeByLongitude(searchRequest);
+		String img_path = this.context.getInitParameter("s3_base_url");
+		for(int i=0; i< schoolLists.size(); i++){
+			if(schoolLists.get(i).getLogo() != "")
+				schoolLists.get(i).setLogo(img_path+schoolLists.get(i).getLogo());
+			if(schoolLists.get(i).getHomeImage() != "")
+				schoolLists.get(i).setHomeImage(img_path+schoolLists.get(i).getHomeImage());
+		}
+		return schoolLists;
 	}
 	
 	@GET
@@ -79,12 +90,12 @@ public class SchoolSearchController {
 		SearchFilterService sfService = new SearchFilterService();
 		SearchRequest searchRequest = sfService.getSearchRequest(uriInfo);
 		SchoolSearchResult result = new SchoolSearchResult();
-		result.setActivityFilter(sfService.getUserActivityFilter(searchRequest.getActivityId()));
-		result.setSafetyFilter(sfService.getUserSafetyFilter(searchRequest.getSafetyId()));
-		result.setInfraFilter(sfService.getUserInfraFilter(searchRequest.getInfraId()));
+//		result.setActivityFilter(sfService.getUserActivityFilter(searchRequest.getActivityId()));
+//		result.setSafetyFilter(sfService.getUserSafetyFilter(searchRequest.getSafetyId()));
+//		result.setInfraFilter(sfService.getUserInfraFilter(searchRequest.getInfraId()));
 		result.setBoardFilter(sfService.getUserBoardFilter(searchRequest.getBoardId()));
 		result.setMediumFilter(sfService.getUserMediumFilter(searchRequest.getMediumId()));
-		result.setTypeFilter(sfService.getUserSchoolTypeFilter(searchRequest.getTypeId()));
+//		result.setTypeFilter(sfService.getUserSchoolTypeFilter(searchRequest.getTypeId()));
 		result.setCategoryFilter(sfService.getUserSchoolCategoryFilter(searchRequest.getCategoryId()));
 		result.setClassificationFilter(sfService.getUserSchoolClassificationFilter(searchRequest.getClassificationId()));
 		result.setSortFields
@@ -149,8 +160,42 @@ public class SchoolSearchController {
 		facility.setSafety(schoolSearchImpl.getSchoolSafety(id));
 		facility.setInfra(schoolSearchImpl.getSchoolInfra(id));
 		result.setFacility(facility);
+		
+		List<Rating> ratings = schoolSearchImpl.getSchoolRating(id);
+		for(int i=0; i<ratings.size(); i++){
+			ratings.get(i).setImage(img_path+ratings.get(i).getImage());
+		}
+		result.setRating(ratings);
+		result.setSchoolAchievements(schoolSearchImpl.getSchoolAchievmentsBySchoolId(id));
+		
 		return result;
 	}
 	
+	@GET
+	@Path("/bloodgroup.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NameList> getBloodGroup(){
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getBloodGroupList();
+	}
+	
+	@GET
+	@Path("/castelist.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NameList> getCasteList(){
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getCastList();
+	}
+	
+	@GET
+	@Path("/nearbyschools.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NearbySchoolList> getNearbySchools(@Context UriInfo uriInfo)
+	{
+		SearchFilterService sfService = new SearchFilterService();
+		SearchRequest searchRequest = sfService.getSearchRequest(uriInfo);
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getNearbySchoolByLatitudeByLogitude(searchRequest);
+	}
 	
 }

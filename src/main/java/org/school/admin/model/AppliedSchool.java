@@ -59,7 +59,7 @@ public class AppliedSchool implements java.io.Serializable {
 		this.userRegistrationInfo = userRegistrationInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "applicant_id")
 	public ApplicantBasicDetail getApplicantBasicDetail() {
 		return this.applicantBasicDetail;

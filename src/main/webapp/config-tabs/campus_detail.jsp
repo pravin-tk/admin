@@ -49,7 +49,7 @@
 	<div class="form-group">
 	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of building </label>
 	  <div class="col-sm-6">
-	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_bldng" onKeyPress="return checkNumber(event)" placeholder="enter no of buildings" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBuildings());}%>">
+	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_bldng" placeholder="enter no of buildings" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBuildings());}%>">
 	  </div>
 	</div>
 	                              
@@ -214,7 +214,7 @@
  			});
  			//}
  			//alert("campus details");
- 		})
+ 		});
     
 </script>            
                             

@@ -739,6 +739,7 @@ public class SchoolDAOImp {
 				
 				School schoolNew = (School) session.get(School.class, school.getId());
 				schoolNew.setAboutSchool(school.getAboutSchool());
+				schoolNew.setName(school.getName());
 				schoolNew.setAlias(school.getAlias());
 				schoolNew.setEstablishmentType(school.isEstablishmentType());
 				schoolNew.setLandmark(school.getLandmark());
