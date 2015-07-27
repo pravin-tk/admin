@@ -35,7 +35,10 @@
     <!-- Time picker js -->
     <!-- Date picker CSS -->
     <link href="${baseUrl}/css/datepicker3.css" rel="stylesheet">
+    
     <script src="${baseUrl}/js/jquery.min.js"></script>
+    <script src="${baseUrl}/js/jquery.dataTables.min.js"></script>
+<script src="${baseUrl}/js/dataTables.bootstrap.js"></script>
     <script src="${baseUrl}/js/custom-plugin.js"></script>
 </head>
 
