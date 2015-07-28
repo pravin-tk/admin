@@ -198,4 +198,13 @@ public class SchoolSearchController {
 		return schoolSearchImpl.getNearbySchoolByLatitudeByLogitude(searchRequest);
 	}
 	
+	@GET
+	@Path("/topschools.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolList> getTopSchools()
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getTopSchools();
+	}
+	
 }

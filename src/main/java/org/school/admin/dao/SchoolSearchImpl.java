@@ -673,4 +673,21 @@ public class SchoolSearchImpl {
 		session.close();
 		return result;
 	}
+	
+	public List<SchoolList> getTopSchools() {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+
+		String hql = "SELECT s.schoolId as schoolId, s.name as name,"
+					 + " s.homeImage as homeImage, s.logo as logo,"
+				     + " s.localityName as localityName,"
+				     + " s.cityName as cityName, s.rating as rating"
+					 + " FROM SchoolSearch s, School schl"
+					 + " WHERE s.schoolId = schl.id AND schl.promote = 1";
+
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
+		List<SchoolList> result = query.list();
+		session.close();
+		return result;
+	}
 }
