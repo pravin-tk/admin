@@ -467,10 +467,10 @@ public class SchoolSearchImpl {
 			}
 		} else {
 			if(ratingData.getSchoolId() <= 0){
-				errors.add("School Id Can be empty");
+				errors.add("School Id Can not be empty");
 			}
 			if(ratingData.getUserId() <= 0){
-				errors.add("User Id Can be empty");
+				errors.add("User Id Can not be empty");
 			}
 			if(ratingData.getRatings().size() <= 0){
 				errors.add("Rating data can not be empty");

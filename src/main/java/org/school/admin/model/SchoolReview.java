@@ -33,10 +33,7 @@ public class SchoolReview implements java.io.Serializable {
 	private School school;
 	@NotNull(message="Please enter user id")
 	private UserRegistrationInfo userRegistrationInfo;
-	@NotNull(message="Please enter review title")
 	private String title;
-	@NotNull(message="Please enter the review")
-	@Length(min=120,message="Minimum  120 characters required for a good review")
 	private String review;
 	private Date date;
 	private Date time;
