@@ -31,6 +31,7 @@ import org.school.admin.data.InfraCategory;
 import org.school.admin.data.NameList;
 import org.school.admin.data.Rating;
 import org.school.admin.data.RatingData;
+import org.school.admin.data.RatingReviewData;
 import org.school.admin.data.SchoolAddress;
 import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolContact;
@@ -40,6 +41,7 @@ import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
+import org.school.admin.service.SchoolService;
 import org.school.admin.service.SchoolSuggestionService;
 
 @Path("api1.0/school/")
@@ -286,5 +288,14 @@ public class SchoolController extends ResourceConfig {
 	{
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		return schoolSearchImpl.getSchoolAchievmentsBySchoolId(schoolId);
+	}
+	
+	@POST
+	@Path("ratereview.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage addSchoolRatingAndReview(RatingReviewData ratingReviewData){
+		SchoolService schoolService = new SchoolService();
+		return schoolService.addSchoolRatingAndReview(ratingReviewData);
 	}
 }
