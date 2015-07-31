@@ -3,6 +3,7 @@ package org.school.admin.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.persistence.sessions.serializers.JSONSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -22,6 +23,7 @@ import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SearchRequest;
 import org.school.admin.data.TotalRating;
+import org.school.admin.data.UriData;
 import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ClassInfo;
@@ -689,5 +691,20 @@ public class SchoolSearchImpl {
 		List<SchoolList> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	public UriData getUriByLatitudeLongitudeByStandard(String latitude, String longitude, Short standardId) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+
+		String hql = "SELECT concat(REPLACE(c.name, ' ', '-') , '/', REPLACE(l.name,' ', '-'), '/', REPLACE(st.name, ' ', '-')) as Uri "
+					 + " FROM StandardType st, Locality l JOIN l.city c"
+					 + " WHERE st.id = :standardId AND l.latitude = :latitude AND l.longitude = :longitude GROUP BY st.name";
+		Query query = session.createQuery(hql)
+				.setParameter("standardId", standardId)
+				.setParameter("latitude", latitude)
+				.setParameter("longitude", longitude)
+				.setResultTransformer(Transformers.aliasToBean(UriData.class));
+		return (UriData)query.uniqueResult();
 	}
 }
