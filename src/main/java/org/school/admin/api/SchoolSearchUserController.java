@@ -138,6 +138,7 @@ public class SchoolSearchUserController {
 			} else {
 				userRegistrationInfo.setImage(img_path+userRegistrationInfo.getImage());
 			}
+			userRegistrationInfo.setStatus((byte)0);
 			responseMessage.setData(userRegistrationInfo);
 			
 			//Sending newly generated password to user.

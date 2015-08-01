@@ -281,6 +281,7 @@ public class UserRegistrationInfo implements java.io.Serializable {
 		map.put("lastName", lastName);
 		map.put("mobile", mobile);
 		map.put("email", email);
+		System.out.println("Status:"+status);
 		map.put("status", status.toString());
 		map.put("image", image);
 		Gson gson = new Gson();

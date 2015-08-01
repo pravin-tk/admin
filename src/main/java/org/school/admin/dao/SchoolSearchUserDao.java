@@ -82,6 +82,7 @@ public class SchoolSearchUserDao {
 	    return responseMessage;
 	}
 	
+	@SuppressWarnings("null")
 	public ResponseMessage signUpUser( UserRegistrationInfo userRegistrationInfo, InputStream inputStream, String img_path ) {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -119,9 +120,10 @@ public class SchoolSearchUserDao {
 		        	newsession.close();
 		        	this.imageUploader.writeToFile( inputStream, uploadFileLocation);
 	        	}
+	        	userRegistrationInfo.setStatus((byte)0);
 	        	responseMessage.setId(userId);
 	        	responseMessage.setStatus(1);
-	        	responseMessage.setData(fetchedUser);
+	        	responseMessage.setData(userRegistrationInfo);
 	        	responseMessage.setMessage("User registered successfully.");
 		    } catch(javax.validation.ConstraintViolationException e) {
 		    	ArrayList<String> errors = new ArrayList<String>();
