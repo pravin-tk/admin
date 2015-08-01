@@ -174,6 +174,27 @@ public class SchoolSearchImpl {
 		return resultRaw;
 	}
 	
+	public List<SchoolList> fetchSchoolListById(int schoolId,int standardId) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createQuery(
+				  "SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
+				+ " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
+				+ " s.homeImage as homeImage,s.logo as logo, s.establishmentType as establishmentType,"
+				+ " s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
+				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
+				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
+				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				+ " 0.0 as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,ci.standardType.id as standardId"
+				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
+				+ " WHERE s.schoolId = ss.id AND ci.standardType.id = "+standardId
+				+ " AND ss.id = "+schoolId
+		).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
+		List<SchoolList> resultRaw = query.list();
+		session.close();
+		return resultRaw;
+	}
+	
 	public List<SchoolReview> getSchoolReviews(int id){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
@@ -558,6 +579,7 @@ public class SchoolSearchImpl {
 		VacantSeats vacantSeat = new VacantSeats();
 		List<VacantSeats> vacantSeats = new ArrayList<VacantSeats>();
 		for(int i=0; i< result.size(); i++){
+			vacantSeat.setId(result.get(i).getId());
 			vacantSeat.setSchoolId(schoolId);
 			vacantSeat.setStandardId(standardId);
 			vacantSeat.setVacantSeat(result.get(i).getVacantSeat());

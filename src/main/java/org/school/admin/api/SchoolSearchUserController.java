@@ -284,7 +284,7 @@ public class SchoolSearchUserController {
 		} else {
 			responseMessage.setErrors(errors);
 			responseMessage.setStatus(0);
-			responseMessage.setMessage("Invalid email.");
+			responseMessage.setMessage("Invalid email or password.");
 		}
 		return responseMessage;
 	}

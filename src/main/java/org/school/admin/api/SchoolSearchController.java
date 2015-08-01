@@ -34,6 +34,7 @@ import org.school.admin.data.SchoolListingRequest;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.SearchRequest;
+import org.school.admin.model.SchoolReview;
 import org.school.admin.service.SearchFilterService;
 
 import ch.qos.logback.classic.gaffer.GafferConfigurator;
@@ -149,8 +150,12 @@ public class SchoolSearchController {
 		for(int i = 0; i < galleryDatas.size(); i++){
 			galleryDatas.get(i).setImageUrl(img_path+galleryDatas.get(i).getImageUrl());
 		}
+		List<SchoolReview> reviews = schoolSearchImpl.getSchoolReviews(id);
+		for(int i = 0; i < reviews.size(); i++){
+			reviews.get(i).getUserRegistrationInfo().setImage(img_path+reviews.get(i).getUserRegistrationInfo().getImage());
+		}
 		result.setHighlights(schoolDAOImp.getSchoolHighlightList(id));
-		result.setReviews(schoolSearchImpl.getSchoolReviews(id));
+		result.setReviews(reviews);
 		result.setContacts(contactDetaillDAO.getExternalConatctDetail(id));
 		result.setSchoolTimelineData(timelines);
 		result.setImages(galleryDatas);
