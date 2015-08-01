@@ -32,6 +32,8 @@ public class Locality implements java.io.Serializable {
 	private Byte sortOrder;
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
+	private String latitude;
+	private String longitude;
 
 	public Locality() {
 	}
@@ -111,6 +113,24 @@ public class Locality implements java.io.Serializable {
 
 	public void setLastUpdatedBy(Integer lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
+	}
+	
+	@Column(name = "latitude", length=45)
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	@Column(name = "longitude", length=45)
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
 }

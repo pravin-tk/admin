@@ -1,13 +1,20 @@
 package org.school.admin.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.school.admin.data.RatingData;
+import org.school.admin.data.RatingReviewData;
 import org.school.admin.dao.SchoolDAOImp;
+import org.school.admin.dao.SchoolSearchImpl;
 import org.school.admin.data.SchoolCompleteDetail;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.School;
 import org.school.admin.model.SchoolBoard;
 import org.school.admin.model.SchoolNameList;
+import org.school.admin.model.SchoolReview;
+import org.school.admin.model.UserRegistrationInfo;
 
 public class SchoolService {
 
@@ -49,5 +56,41 @@ public class SchoolService {
 		SchoolCompleteDetail schoolCompleteDetail = new SchoolCompleteDetail();
 		schoolCompleteDetail.setSchoolTimelineData(schoolDAOImp.getSchoolTimelineDetails(schoolId));
 		return schoolCompleteDetail;
+	}
+	
+	public ResponseMessage addSchoolRatingAndReview(RatingReviewData ratingReviewData) {
+
+		RatingData ratingData = new RatingData();
+		ratingData.setRatings(ratingReviewData.getRatings());
+		ratingData.setSchoolId(ratingReviewData.getSchoolId());
+		ratingData.setUserId(ratingReviewData.getUserId());
+		ResponseMessage ratingResponse = new SchoolSearchImpl().addSchoolRating(ratingData);
+		if(ratingResponse.getStatus() == 1) {
+			SchoolReview schoolReview = new SchoolReview();
+		    Byte reviewStatus =0;
+			schoolReview.setDate(new Date());
+			schoolReview.setTime(new Date());
+			schoolReview.setStatus(reviewStatus);
+			schoolReview.setReview(ratingReviewData.getReview());
+			schoolReview.setTitle(ratingReviewData.getTitle());
+			
+			School school = new School();
+			school.setId(ratingReviewData.getSchoolId());
+			schoolReview.setSchool(school);
+			
+			UserRegistrationInfo userRegistrationInfo = new UserRegistrationInfo();
+			userRegistrationInfo.setId(ratingReviewData.getUserId());
+			schoolReview.setUserRegistrationInfo(userRegistrationInfo);
+			
+			ResponseMessage reviewResponse = new SchoolDAOImp().saveSchoolReview(schoolReview);
+			if(reviewResponse.getStatus() == 1 ) {
+				ratingResponse.setMessage("Rating and Review added successfully.");
+			} else {
+				ratingResponse.setMessage(reviewResponse.getMessage());
+				ratingResponse.setErrors(reviewResponse.getErrors());
+			}
+		}
+
+		return ratingResponse;
 	}
 }

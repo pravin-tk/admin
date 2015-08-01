@@ -19,7 +19,6 @@ import org.school.admin.dao.ClassificationDAOImpl;
 import org.school.admin.dao.ContactDetaillDAO;
 import org.school.admin.dao.SchoolDAOImp;
 import org.school.admin.dao.SchoolSearchImpl;
-import org.school.admin.dao.SettingsImpl;
 import org.school.admin.dao.StandardTypeDAO;
 import org.school.admin.data.Facility;
 import org.school.admin.data.GalleryData;
@@ -28,16 +27,14 @@ import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolCompleteDetail;
-import org.school.admin.data.SchoolContact;
 import org.school.admin.data.SchoolList;
 import org.school.admin.data.SchoolListingRequest;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.SearchRequest;
 import org.school.admin.model.SchoolReview;
+import org.school.admin.data.UriData;
 import org.school.admin.service.SearchFilterService;
-
-import ch.qos.logback.classic.gaffer.GafferConfigurator;
 
 @Path("api1.0")
 public class SchoolSearchController {
@@ -201,6 +198,26 @@ public class SchoolSearchController {
 		SearchRequest searchRequest = sfService.getSearchRequest(uriInfo);
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		return schoolSearchImpl.getNearbySchoolByLatitudeByLogitude(searchRequest);
+	}
+	
+	@GET
+	@Path("/topschools.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolList> getTopSchools()
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getTopSchools();
+	}
+	
+	@GET
+	@Path("/geturi.json/{latitude}/{longitude}/{standardId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public UriData getUri(
+			@PathParam("latitude") String latitude,
+			@PathParam("longitude") String longitude,
+			@PathParam("standardId") Short standardId) {
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.getUriByLatitudeLongitudeByStandard(latitude, longitude, standardId);
 	}
 	
 }
