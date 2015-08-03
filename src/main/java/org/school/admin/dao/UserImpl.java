@@ -29,42 +29,22 @@ public class UserImpl {
 		ResponseMessage responseMessage = new ResponseMessage();
 		ArrayList<String> errors = new ArrayList<String>();
 		try {
-			boolean result = true;
-			if(postRequirement.getEmail() == null){
-				if(postRequirement.getMobile() == null || postRequirement.getMobile().trim().length() <= 0){
-					errors.add("Please enter your mobile or email.");
-				} else if(!postRequirement.getMobile().matches("\\d{10}")){
+			if (postRequirement.getMobile() == null) {
+				errors.add("Please enter your mobile.");
+		    } else {
+		    	if(!postRequirement.getMobile().matches("\\d{10}")){
 					errors.add("Invalid mobile number.");
 				}
-			} else {
-				try {
-			       InternetAddress emailAddr = new InternetAddress(postRequirement.getEmail());
-			       emailAddr.validate();
-				} catch (AddressException ex) {
-				   result = false;
-				}
-				if(!result) {
-			    	errors.add("Please enter valid email.");
-			    }
-			}
-				
-			if (postRequirement.getMobile() == null) {
-				if(postRequirement.getEmail() == null){
-					errors.add("Please enter your mobile or email.");
-				} else {
-					if(postRequirement.getEmail() != null) {
-					    try {
-					       InternetAddress emailAddr = new InternetAddress(postRequirement.getEmail());
-					       emailAddr.validate();
-					    } catch (AddressException ex) {
-					       result = false;
-					    }
-					}
-					if(!result) {
-				    	errors.add("Please enter valid email.");
-				    }
-				}
 		    }
+			
+			if(postRequirement.getName().isEmpty()) {
+				errors.add("Please enter your name.");
+			}
+			
+			if(postRequirement.getRequirement().isEmpty()) {
+				errors.add("Please enter your requirement.");
+			}
+			
 			if(errors.size() > 0){
 				responseMessage.setErrors(errors);
 				responseMessage.setMessage("Failed to post requirement.");
