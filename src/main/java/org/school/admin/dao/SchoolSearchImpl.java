@@ -754,10 +754,14 @@ public class SchoolSearchImpl {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 
-		String hql = "SELECT concat(REPLACE(c.name, ' ', '-') , '/', REPLACE(l.name,' ', '-'), '/', REPLACE(st.name, ' ', '-')) as Uri "
-					 + " FROM StandardType st, Locality l JOIN l.city c"
-					 + " WHERE st.id = :standardId AND l.latitude = :latitude AND l.longitude = :longitude GROUP BY st.name";
-		Query query = session.createQuery(hql)
+		String sql = "SELECT "
+				+ " CONCAT(REPLACE(c.name, ' ', '-') , '/', REPLACE(l.name,' ', '-'), '/', REPLACE(st.name, ' ', '-')) as Uri "
+				+ " FROM locality l JOIN city c ON l.city_id = c.id, standard_type st "
+				+ " WHERE st.id = :standardId "
+				+ " AND (ROUND(6371 *   ACOS(COS( RADIANS( :latitude ) ) * COS( RADIANS( l.latitude ) ) *  COS(RADIANS( l.longitude ) - RADIANS(:longitude) )  + SIN(RADIANS( :latitude)) * SIN(RADIANS(l.latitude)) ),3 )) < 3 "
+				+ " ORDER BY (ROUND(6371 * ACOS(COS( RADIANS( :latitude ) ) * COS( RADIANS( l.latitude ) ) * COS(RADIANS( l.longitude ) - RADIANS(:longitude) ) + SIN(RADIANS( :latitude)) * SIN(RADIANS(l.latitude)) ),3 )) ASC "
+				+ " LIMIT 1";
+		Query query = session.createSQLQuery(sql)
 				.setParameter("standardId", standardId)
 				.setParameter("latitude", latitude)
 				.setParameter("longitude", longitude)
