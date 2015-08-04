@@ -1,6 +1,7 @@
 package org.school.admin.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.persistence.sessions.serializers.JSONSerializer;
@@ -58,9 +59,10 @@ public class SchoolSearchImpl {
 				     + "s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
 				     + "s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				     + "s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
-				     + "s.schoolType as schoolType,s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				     + "s.schoolType as schoolType,s.rating as rating,ta.name as teachingApproach,"
+				     + "s.galeryImages as galeryImages,s.reviews as reviews, "
 					 +distance+" as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
-					 + "ci.standardType.id as standardId FROM SchoolSearch s, ClassInfo ci"
+					 + "ci.standardType.id as standardId FROM SchoolSearch s, ClassInfo ci JOIN ci.teachingApproachType ta"
 					 + " where s.schoolId = ci.school.id AND ci.standardType.id = :standard_id";
 		if(request.getLatitude() != null && request.getLongitude() != null){
 		hql = hql + " AND "+distance+" < 3";
@@ -162,10 +164,11 @@ public class SchoolSearchImpl {
 				+ " s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
 				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
-				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
-				+ distance + " as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,ci.standardType.id as standardId"
+				+ " s.schoolType as schoolType,s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				+ distance + " as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
+				+ " ci.standardType.id as standardId, ta.name as teachingApproach"
 				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
-				+ " JOIN ss.schoolMediums sm" + queryJoin
+				+ " JOIN ss.schoolMediums sm JOIN ci.teachingApproachType ta" + queryJoin
 				+ " WHERE s.schoolId = ss.id"
 				+ queryCondition+ " Group By ss.id"+finalOrder
 		).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
@@ -260,8 +263,12 @@ public class SchoolSearchImpl {
 		}
 		
 		String hql = "SELECT c.id as id,s.name as name, f.id as feeId, f.feeDesc as feeName,"
-				+" f.amount as amount from ClassFee f join f.classInfo c join c.standardType s "
-				+"where c.school.id = :schoolId";
+					+"c.totalFee as totalFee,c.eligibilityCriteria as eligibilityCriteria,"
+					+"c.admissionProcess as admissionProcess,c.howToApply as howToApply,"
+					+"c.feesPaymentTerm as feesPaymentTerm,c.admissionFrom as admissionFrom,"
+					+"c.admissionDeadline as admissionDeadline,"
+					+"f.amount as amount from ClassFee f join f.classInfo c join c.standardType s "
+					+"where c.school.id = :schoolId";
 		if(standardId > 0){
 			hql += " AND s.id = "+standardId;
 		}
@@ -277,6 +284,13 @@ public class SchoolSearchImpl {
 		{
 			int class_id = 0;
 			String class_name = "";
+			Date admissionFrom = null;
+			Date admissionDeadline = null;
+			String eligibilityCriteria = "";
+			String admissionProcess = "";
+			String howToApply = "";
+			String feesPaymentTerm = "";
+			Double totalFee = 0.0;
 			FeeDetail feeDetail = new FeeDetail();
 			List<SchoolFee> schoolFees = new ArrayList<SchoolFee>();
 			for(int i=0;i<classFeeInfos.size();i++)
@@ -285,6 +299,13 @@ public class SchoolSearchImpl {
 					feeDetail.setId(class_id);
 					feeDetail.setClassName(class_name);
 					feeDetail.setFees(schoolFees);
+					feeDetail.setAdmissionFrom(admissionFrom);
+					feeDetail.setAdmissionDeadline(admissionDeadline);
+					feeDetail.setEligibilityCriteria(eligibilityCriteria);
+					feeDetail.setAdmissionProcess(admissionProcess);
+					feeDetail.setHowToApply(howToApply);
+					feeDetail.setFeesPaymentTerm(feesPaymentTerm);
+					feeDetail.setTotalFee(totalFee);
 					classFeeDataList.add(feeDetail);
 					schoolFees = new ArrayList<SchoolFee>();
 					feeDetail = new FeeDetail();
@@ -295,10 +316,24 @@ public class SchoolSearchImpl {
 				schoolFees.add(schoolFee);
 				class_id = classFeeInfos.get(i).getId();
 				class_name = classFeeInfos.get(i).getName();
+				admissionFrom = classFeeInfos.get(i).getAdmissionFrom();
+				admissionDeadline = classFeeInfos.get(i).getAdmissionDeadline();
+				eligibilityCriteria = classFeeInfos.get(i).getEligibilityCriteria();
+				admissionProcess = classFeeInfos.get(i).getAdmissionProcess();
+				howToApply = classFeeInfos.get(i).getHowToApply();
+				feesPaymentTerm = classFeeInfos.get(i).getFeesPaymentTerm();
+				totalFee = classFeeInfos.get(i).getTotalFee();
 			}
 			feeDetail.setId(class_id);
 			feeDetail.setClassName(class_name);
 			feeDetail.setFees(schoolFees);
+			feeDetail.setAdmissionFrom(admissionFrom);
+			feeDetail.setAdmissionDeadline(admissionDeadline);
+			feeDetail.setEligibilityCriteria(eligibilityCriteria);
+			feeDetail.setAdmissionProcess(admissionProcess);
+			feeDetail.setHowToApply(howToApply);
+			feeDetail.setFeesPaymentTerm(feesPaymentTerm);
+			feeDetail.setTotalFee(totalFee);
 			classFeeDataList.add(feeDetail);
 		}
 		return classFeeDataList;

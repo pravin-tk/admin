@@ -21,6 +21,7 @@ public class SchoolList implements java.io.Serializable {
 	private String schoolCategory;
 	private String schoolType;
 	private String schoolClassification;
+	private String teachingApproach;
 	private Double rating;
 	private long galeryImages;
 	private long reviews;
@@ -279,6 +280,14 @@ public class SchoolList implements java.io.Serializable {
 
 	public void setSchoolType(String schoolType) {
 		this.schoolType = schoolType;
+	}
+
+	public String getTeachingApproach() {
+		return teachingApproach;
+	}
+
+	public void setTeachingApproach(String teachingApproach) {
+		this.teachingApproach = teachingApproach;
 	}
 	
 }
