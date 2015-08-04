@@ -6,6 +6,15 @@
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%@page import="org.school.admin.model.AdminUser"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@page import="org.school.admin.model.City"%>
+<%@page import="org.school.admin.service.CityNamesService"%>
+<%@page import="java.util.List"%>
+<%
+	List<City> city_list = null; 
+	int city_size =0;
+	city_list = new CityNamesService().getAllCityNames();
+	city_size = city_list.size(); 
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,7 +69,19 @@
         <div class="panel-body">
        
             <form action="" method="post">
-            	
+            	<div class="form-group">
+            		<label for="username">City</label>
+            		<select id="cityid" name="cityid" class="form-control">
+                        <option value="">Select City</option>
+	                    <%
+	                    String search_tehsil_selected = ""; 
+	                    for(int i=0; i < city_size; i++){
+	                    	out.print("<option value='"+city_list.get(i).getId()+"' >"+city_list.get(i).getName()+"</option>");
+	                    }
+	                    %>
+                    </select>
+            		
+            	</div>
             	<div class="form-group">
             		<label for="username">User ID</label>
             		<input type="text" name="uname" id="uname" class="form-control" placeholder="Enter your user name"/>
@@ -83,13 +104,13 @@
     <script type="text/javascript">
     
     function login(){
-    	$.post('webapi/validate/info',{email: $("#uname").val(), password: $("#upassword").val()}, function(data){
+    	$.post('webapi/validate/info',{email: $("#uname").val(), password: $("#upassword").val(), cityid: $("#cityid").val()}, function(data){
 			var success = data.status;
 			var status =parseInt(success);
 			if(status==1)
 				{
 				$('#error').empty();
-					window.location.href="hometabs.jsp";	
+					window.location.href="hometab.jsp";	
 				}
 			
 			else if(status == 0)

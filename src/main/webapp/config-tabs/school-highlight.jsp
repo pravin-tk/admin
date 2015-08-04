@@ -47,8 +47,8 @@
 				for(int i = 0; i < highlights.size(); i++)
           		{
           			out.print("<td>"+highlights.get(i).getName()+"</td>");
-          			out.print("<td><a href='javascript:editHighlight("+highlights.get(i).getId()+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i>"
-          			+"<a href='javascript:deleteHighlight("+highlights.get(i).getId()+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a></td></tr>");
+          			out.print("<td><a href='javascript:editHighlight("+highlights.get(i).getId()+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i>  "
+          			+"    <a href='javascript:deleteHighlight("+highlights.get(i).getId()+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a></td></tr>");
           		}
 			%>
 
@@ -71,6 +71,22 @@
 				</div>
 			</div>
 		</div>
+		 <div class="form-group">
+	      <label for="" class="col-sm-2 control-label" data-toggle="tooltip" 
+	      data-placement="bottom" title="Tooltip...">Description</label>
+	      <div class="col-sm-6">                                       
+	           <textarea class="form-control" rows="4"  placeholder="Please enter description" id='schoolhighlightdescription' >
+	           	</textarea>
+	      </div>
+	       <div class="col-sm-4">
+	              <div class="tooltip custom-tool-tip right">
+	                  <div class="tooltip-arrow"></div>
+	                  <div class="tooltip-inner">
+	              
+	                  </div>
+	              </div>
+	          </div>
+	  </div>
 		<input type="hidden" id="school_id" value="<%out.print(school_id112);%>"> 
 		<input type="hidden" id="user_id" value="<%out.print(user_id112);%>">
 		<div class="form-group">
@@ -85,26 +101,31 @@
 <script type="text/javascript">
 function saveHighlight(){
 	if($("#highlight_name").val() != "") {
-		$.post("${baseUrl}/webapi/school/savehighlight",{name: $("#highlight_name").val(), school_id: $("#school_id").val()},function(data){
+		$.post("${baseUrl}/webapi/school/savehighlight",{name: $("#highlight_name").val(),
+			schoolhighlightdescription : $("#schoolhighlightdescription").val(),
+			school_id: $("#school_id").val()},function(data){
 			var oTable = $("#highlight-table-data").dataTable();
 			    oTable.fnClearTable();
 			$(data).each(function(index){
-		    	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-		    	+"<a href='javascript:deleteHighlight("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
+		    	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a> "
+		    	+"  <a href='javascript:deleteHighlight("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
 		    	var row = [];
 		    	row.push(data[index].name);
+		    	row.push(data[index].description);
 			   	row.push(html);
 		    	oTable.fnAddData(row);
 		    });
+			alert("Highlights saved successfuly");
 			$("#highlight-save").hide();
 			$("#highlight-table").show();
 			$("#updatehighlight").hide();
 			$("#savehighlight").show();
 			$("#highlight_name").val("");
+			$("#schoolhighlightdescription").val("");
 			updateProgress($('#school_id').val());
 		});
 	} else {
-		alert("Please enter highlight title.");
+		alert("Please enter highlight.");
 		$("#highlight-table").hide();
 		$("#highlight-save").show();
 	}
@@ -119,28 +140,38 @@ function editHighlight(id) {
 		$("#savehighlight").hide();
 		$("#highlight_id").val(data.id);
 		$("#highlight_name").val(data.name);
+		$("#schoolhighlightdescription").val(data.description);
 	});
 }
 
 function updateHighlight(){
-	$.post("${baseUrl}/webapi/school/updatehighlight",{id: $("#highlight_id").val(), name: $("#highlight_name").val(), school_id: $("#school_id").val()},function(data){
+	if($("#highlight_name").val() != ""){
+	$.post("${baseUrl}/webapi/school/updatehighlight",{id: $("#highlight_id").val(), name: $("#highlight_name").val(),
+		schoolhighlightdescription : $("#schoolhighlightdescription").val(),
+		school_id: $("#school_id").val()},function(data){
 		var oTable = $("#highlight-table-data").dataTable();
 		    oTable.fnClearTable();
 		$(data).each(function(index){
-	    	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"+
+	    	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a> "+
 	    	"<a href='javascript:deleteHighlight("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
 	    	var row = [];
 	    	row.push(data[index].name);
 		   	row.push(html);
 	    	oTable.fnAddData(row);
 	    });
+		alert("Highlights updated successfuly");
 		updateProgress($('#school_id').val());
 		$("#highlight-save").hide();
 		$("#highlight-table").show();
 		$("#updatehighlight").hide();
 		$("#savehighlight").show();
 		$("#highlight_name").val("");
+		$("#schoolhighlightdescription").val("");
 	});
+	}
+	else{
+		alert("Please enter highlight");
+	}
 }
 $("#highlightcancel").click(function(){
 	$("#highlight-save").hide();
@@ -157,7 +188,7 @@ function deleteHighlight(highlightId)
 			  var oTable = $("#highlight-table-data").dataTable();
 			  oTable.fnClearTable();
 			  $(data).each(function(index){
-			  	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"+
+			  	html = "<a href='javascript:editHighlight("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a> "+
 			  	"<a href='javascript:deleteHighlight("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
 			  	var row = [];
 			  	row.push(data[index].name);

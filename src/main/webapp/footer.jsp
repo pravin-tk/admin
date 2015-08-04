@@ -260,8 +260,7 @@
 <!-- Timepicker Js -->
 <script src="${baseUrl}/js/bootstrap-timepicker.min.js"></script>
 <!-- datatable Js -->
-<script src="${baseUrl}/js/jquery.dataTables.min.js"></script>
-<script src="${baseUrl}/js/dataTables.bootstrap.js"></script>
+
 <!-- Validation Js -->
 <script src="${baseUrl}/js/jquery.validate.min.js"></script>
 <script src="${baseUrl}/js/validation.js"></script>

@@ -182,6 +182,7 @@
 		};
 		
 		$('#school_imgallery_form').ajaxForm(options);
+		
 	});
 
 	// pre-submit callback 
@@ -197,7 +198,8 @@
 			updateProgress($('#school_id').val());
 			alert(responseText.message);
 			//$("#saveimagegallery").hide();
-			$("#verify").show();
+			//$("#verify").show();
+			 viewVerify();
 		}
 		else
 			alert(responseText.message);

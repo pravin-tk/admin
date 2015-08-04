@@ -20,6 +20,9 @@
                         <li>
                             <a href="#distribution" data-toggle="tab">Distribution</a>
                         </li>
+                         <li>
+                            <a href="#logs" data-toggle="tab">Logs</a>
+                        </li>
                     </ul>
                     <div id="myTabContent" class="tab-content">
                       <!-- first tab content -->
@@ -59,6 +62,10 @@
                                                 
                        
                         <!-- sixth tab content -->
+                         <div class="tab-pane fade" id="logs" aria-labelledby="country-tab">
+                            <h2>Logs</h2>
+                              <%@include file = "search-list/log.jsp" %>
+                        </div>
                  </div>
 <!--                 </form> -->
             </div>
@@ -66,6 +73,3 @@
     <!-- /Right main content -->
    
   <%@include file="footer.jsp" %>  
-<script type="text/javascript">
-
-</script>

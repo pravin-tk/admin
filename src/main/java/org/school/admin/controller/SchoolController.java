@@ -65,6 +65,7 @@ import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolInfo;
 import org.school.admin.model.SchoolInfrastructureCatItem;
 import org.school.admin.model.SchoolNameList;
+import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolTimeline;
 import org.school.admin.model.SchoolTimelineMilestone;
 import org.school.admin.model.SectionType;
@@ -345,11 +346,27 @@ public class SchoolController extends ResourceConfig {
 	@POST
 	@Path("/deleteContact")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage deleteContact(@FormParam("contactId") int contactId)
+	public ResponseMessage deleteContact(@FormParam("contactId") int contactId,
+			@FormParam("strReason") String reasonDelete,
+			@FormParam("schoolId") int schoolId,
+			@FormParam("userId") int userId)
 	{
-		return new SchoolDAOImp().deleteContact(contactId);
+		return new SchoolDAOImp().deleteContact(contactId,reasonDelete,schoolId,userId);
 	}
 	
+	@POST
+	@Path("deleteSalesDetail")
+	 @Produces(MediaType.APPLICATION_JSON)
+		public List<SalesInfo> deleteSalesDetail(
+				@FormParam("salesDelId") int id,
+				@FormParam("schoolId") int schoolId,
+				@FormParam("user_id") int userId,
+				@FormParam("strReason") String reasonDelete)
+		{
+	    	SalesDetailDAOImpl deleteStudent = new SalesDetailDAOImpl();
+	    	deleteStudent.deleteSalesDetaile(id, schoolId, reasonDelete, userId);
+	    	return deleteStudent.getSalesDetail(schoolId);
+		}
 	
 	@POST
 	@Path("/schoolachievement")
@@ -384,19 +401,21 @@ public class SchoolController extends ResourceConfig {
 
 	@POST
 	@Path("savecontact")
-	public List<ContactInfo> saveContactInfo(
+	public ResponseMessage saveContactInfo(
 			@FormParam("school_id") int school_id,
 			@FormParam("user_id") int user_id,
 			@FormParam("name") String name,
 			@FormParam("email") String email,
 			@FormParam("mobile") String mobile,
 			@FormParam("contact") String contact,
-			@FormParam("usertype")String type
+			@FormParam("usertype")String type,
+			@FormParam("isPrimary") Byte isPrimary
 	){
 	  Byte defaultValue = 0;
 	  String userType[] = type.split(",");
 	  System.out.println("UserTypeId : "+type);
 	  System.out.println("UserTypeLen : "+userType.length);
+	  System.out.println("IsPrimaryInController : "+isPrimary);
 	  List<ContactInfo> contactInfoList = new ArrayList<ContactInfo>();
 		for(int k=0;k<userType.length;k++)
 		{
@@ -407,6 +426,7 @@ public class SchoolController extends ResourceConfig {
 		contactInfo.setName("");
 		contactInfo.setContactNo("");
 		contactInfo.setType(defaultValue);
+		contactInfo.setIsPrimary(isPrimary);
 		School school = new School();
 		school.setId(0);
 		contactInfo.setSchool(school);
@@ -447,7 +467,7 @@ public class SchoolController extends ResourceConfig {
 	
 	@POST
 	@Path("updatecontact")
-	public List<ContactInfo> updateContactInfo(
+	public ResponseMessage updateContactInfo(
 			@FormParam("id") int id,
 			@FormParam("school_id") int school_id,
 			@FormParam("user_id") int user_id,
@@ -455,7 +475,9 @@ public class SchoolController extends ResourceConfig {
 			@FormParam("email") String email,
 			@FormParam("mobile") String mobile,
 			@FormParam("contact") String contact,
-			@FormParam("usertype") Byte type
+			@FormParam("usertype") Byte type,
+			@FormParam("strReason") String reason,
+			@FormParam("isPrimary") Byte isPrimary
 	){
 		School school = new School();
 		school.setId(school_id);
@@ -465,6 +487,7 @@ public class SchoolController extends ResourceConfig {
 		contactInfo.setSchool(school);
 		contactInfo.setEmail(email);
 		contactInfo.setName(name);
+		contactInfo.setIsPrimary(isPrimary);
 		contactInfo.setMobileNo(mobile);
 		contactInfo.setContactNo(contact);
 		contactInfo.setLastUpdatedBy(user_id);
@@ -472,7 +495,7 @@ public class SchoolController extends ResourceConfig {
 		contactInfo.setType(type);
 		ContactDetaillDAO contactDetaillDAO = new ContactDetaillDAO();
 		
-		return contactDetaillDAO.updateContactInfoInternal(contactInfo);
+		return contactDetaillDAO.updateContactInfoInternal(contactInfo,reason);
 	}
 	@GET 
 	@Path("viewcontact/{schoolId}")
@@ -544,7 +567,8 @@ public class SchoolController extends ResourceConfig {
 		@FormParam("email") String email,
 		@FormParam("mobile") String mobile,
 		@FormParam("batch") String batch,
-		@FormParam("achievements") String achievements
+		@FormParam("achievements") String achievements,
+		@FormParam("strReason") String reason
 	){
 		School school = new School();
 		school.setId(school_id);
@@ -577,7 +601,7 @@ public class SchoolController extends ResourceConfig {
 		System.out.println(prevStudentProfile);
 		
 		PrevStudentProfileDAO prevStudentProfileDAO = new PrevStudentProfileDAO();
-		prevStudentProfileDAO.updatePreStudentProfile(prevStudentProfile);
+		prevStudentProfileDAO.updatePreStudentProfile(prevStudentProfile,reason);
         return prevStudentProfileDAO.getPrevStudentProfile(school_id);
 
 	}
@@ -585,10 +609,14 @@ public class SchoolController extends ResourceConfig {
     @POST
     @Path("deletePreStudentProfile")
     @Produces(MediaType.APPLICATION_JSON)
-	public List<PrevStudentProfileList> deletePreStudentProfile(@FormParam("deletePreStudentId") int id,@FormParam("schoolId") int schoolId)
+	public List<PrevStudentProfileList> deletePreStudentProfile(
+			@FormParam("deletePreStudentId") int id,
+			@FormParam("schoolId") int schoolId,
+			@FormParam("user_id") int userId,
+			@FormParam("strReason") String reasonDelete)
 	{
     	PrevStudentProfileDAO deleteStudent = new PrevStudentProfileDAO();
-    	deleteStudent.deletePrevStudentProfile(id);
+    	deleteStudent.deletePrevStudentProfile(id,schoolId,reasonDelete,userId);
     	return deleteStudent.getPrevStudentProfile(schoolId);
 	}
 	@GET
@@ -1208,7 +1236,8 @@ public class SchoolController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<SchoolHighlight> saveSchoolHighlight(
 		@FormParam("school_id") Integer school_id,
-		@FormParam("name") String name
+		@FormParam("name") String name,
+		@FormParam("schoolhighlightdescription")String description
 	){
 		List<SchoolHighlight> highlights = new ArrayList<SchoolHighlight>();
 		try{
@@ -1217,6 +1246,7 @@ public class SchoolController extends ResourceConfig {
 			SchoolHighlight schoolHighlight = new SchoolHighlight();
 			schoolHighlight.setName(name);
 			schoolHighlight.setSchool(school);
+			schoolHighlight.setDescription(description);
 			SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 			schoolDAOImp.saveHighlight(schoolHighlight);
 			highlights =  schoolDAOImp.getSchoolHighlights(school_id);
@@ -1232,7 +1262,9 @@ public class SchoolController extends ResourceConfig {
 	public List<SchoolHighlight> updateSchoolHighlight(
 		@FormParam("school_id") Integer school_id,
 		@FormParam("id") Integer id,
-		@FormParam("name") String name
+		@FormParam("name") String name,
+		@FormParam("schoolhighlightdescription")String description
+		
 	){
 		List<SchoolHighlight> highlights = new ArrayList<SchoolHighlight>();
 		try{
@@ -1241,6 +1273,7 @@ public class SchoolController extends ResourceConfig {
 			SchoolHighlight schoolHighlight = new SchoolHighlight();
 			schoolHighlight.setId(id);
 			schoolHighlight.setName(name);
+			schoolHighlight.setDescription(description);
 			schoolHighlight.setSchool(school);
 			SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 			schoolDAOImp.updateHighlight(schoolHighlight);
@@ -1354,6 +1387,7 @@ public class SchoolController extends ResourceConfig {
 				return msg;
 			}
 		} catch(NullPointerException e) {
+			e.printStackTrace();
 			//null objects
 		}
 		try {	
@@ -1377,6 +1411,7 @@ public class SchoolController extends ResourceConfig {
 				msg =  schoolDAOImp.saveSchoolImageGallery(school,schoolImageGalleryList);
 			}
 		} catch(Exception e) {
+			e.printStackTrace();
 //			msg.setStatus(0);
 //			msg.setMessage("Unable to save image");
 		}
@@ -1410,5 +1445,85 @@ public class SchoolController extends ResourceConfig {
 	public Double getNewSchoolProgress(@PathParam("school_id") int school_id){
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 		return schoolDAOImp.getPer(school_id);
+	}
+	
+	@POST
+	@Path("/saveimagepanogallery")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage saveSchoolPanoImageGallery(
+			@FormDataParam("school_id") Integer school_id,
+		//	@FormDataParam("logo_image") InputStream is_logo_img, 
+			//@FormDataParam("logo_image") FormDataContentDisposition header_logo_img,
+		//	@FormDataParam("home_image") InputStream is_home_img, 
+	//		@FormDataParam("home_image") FormDataContentDisposition header_home_img,
+			@FormDataParam("imagePanoTitle[]") List<FormDataBodyPart> imageTitle,
+			@FormDataParam("ga_pano_image[]") List<FormDataBodyPart> imageslist
+	){
+		ResponseMessage msg = new ResponseMessage();
+		msg.setStatus(0);
+		msg.setMessage("Failed to save images.");
+		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
+		School school = new School();
+		school.setId(school_id);
+//		try{
+//			if(!header_logo_img.getFileName().isEmpty()) {
+//				String logo_name = header_logo_img.getFileName();
+//				logo_name = logo_name.replaceAll(" ", "_").toLowerCase();
+//				logo_name = "pano/"+logo_name;
+//				String uploadLogoLocation = this.context.getInitParameter("logo_url")+logo_name;
+//				this.imageUploader.writeToFile(is_logo_img, uploadLogoLocation);
+//				school.setLogo(logo_name);
+//				System.out.println("LOGO URL : "+logo_name);
+//			}
+//		}
+//		catch(Exception e){
+//			System.out.println(e);
+//			e.printStackTrace();
+//		}
+		
+		
+		try {	
+			List<SchoolPanoramicImage> schoolPanoramicImageList = new ArrayList<SchoolPanoramicImage>();
+			//for multiple inserting images.
+			if (imageslist.size() > 0) {
+				for(int i=0 ;i < imageslist.size();i++)
+				{
+					SchoolPanoramicImage schoolPanoramicImage = new SchoolPanoramicImage();
+					String gallery_name = imageslist.get(i).getFormDataContentDisposition().getFileName();
+					gallery_name = gallery_name.replaceAll(" ", "_").toLowerCase();
+					gallery_name = "pano/"+gallery_name;
+					String uploadGalleryLocation = this.context.getInitParameter("logo_url")+gallery_name;
+					System.out.println("for loop pano image path: "+uploadGalleryLocation);
+					this.imageUploader.writeToFile(imageslist.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+					schoolPanoramicImage.setPanoImage(gallery_name);
+					schoolPanoramicImage.setTitle(imageTitle.get(i).getValueAs(String.class).toString());
+					schoolPanoramicImage.setSchool(school);
+					schoolPanoramicImageList.add(schoolPanoramicImage);
+				}
+				msg =  schoolDAOImp.saveSchoolPanoImageGallery(school,schoolPanoramicImageList);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+//			msg.setStatus(0);
+//			msg.setMessage("Unable to save image");
+		}
+       	return msg;
+	}
+	
+	@GET
+	@Path("/deletepanogalleryimage/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deletePanoGalleryImage(@PathParam("id") int id){
+		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
+		return schoolDAOImp.deletePanoGalleryImage(id);
+	}
+	
+	@POST
+	@Path("/updatepanoimagePanoTitle")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateImagePanoTitle(@FormParam("id") int id, @FormParam("title") String title){
+		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
+		return schoolDAOImp.updatePanoImageTitle(id, title);
 	}
 }

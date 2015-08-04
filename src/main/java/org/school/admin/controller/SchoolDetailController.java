@@ -52,7 +52,8 @@ public class SchoolDetailController {
 			@FormParam("school_category") int school_category,
 			@FormParam("medium") String medium,
 			@FormParam("residential") Short residential,
-			@FormParam("display_fee") Short display_fee
+			@FormParam("display_fee") Short display_fee,
+			@FormParam("strReason") String strReason
 	){
 		
 		ResponseMessage response = new ResponseMessage();
@@ -122,7 +123,7 @@ public class SchoolDetailController {
 		        
 		 SchoolDetailDAOImpl schoolDetailDAOImpl = new SchoolDetailDAOImpl();
 		         
-		 	return schoolDetailDAOImpl.saveSchoolDetail(schoolDetail);
+		 	return schoolDetailDAOImpl.saveSchoolDetail(schoolDetail,strReason);
 		 }else{
 			 if(classificationId == 0){
 				 response.setStatus(0);

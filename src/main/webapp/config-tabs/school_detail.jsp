@@ -256,16 +256,45 @@
                 <input type="hidden" name="school_id" id="school_id" value="<%out.print(school_id);%>"/>
                 <input type="hidden"  value="<%out.print(user_id); %>" id="updated_by"/>
                 <input type ="hidden" value="schoolDetail" id="schoolDetail"/>
+                <% if(info_list.size()>0){ %>
+                <div class="form-group">
+                    <div class="col-sm-2 col-sm-offset-2">
+                        <button type="button" id="updateschooldetail" data-toggle="modal" data-target="#updateSchoolDetail" class="btn btn-success">update</button>
+                    </div>
+                </div>
+                <%}else{ %>
                 <div class="form-group">
                     <div class="col-sm-2 col-sm-offset-2">
                         <button type="button" id="saveschooldetail" class="btn btn-success">Save</button>
                     </div>
                 </div>
+                <%} %>
+                
+      <div class="modal fade" id="updateSchoolDetail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:450px;">
+                 <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                       </button>
+                           <h4 class="modal-title" id="myModalLabel">Reason for update</h4>
+                 </div>
+                  <div class="modal-body">
+                       <div class="input-group margin-bottom-sm col-sm-6">
+                            <textarea id="updateSchoolReason"  style="width:350px;margin-left:20px;height:120px"></textarea>
+                        </div>
+                  </div>
+                   <div class="modal-footer">
+                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                         <button type="button" id="updateschoolinfo" class="btn btn-success">Update</button>
+                   </div>
+              </div>
+        </div>
+     </div>
                </form>     
  <script type="text/javascript"> 
 	$("#saveschooldetail").click(function( 
 		){ 
-		
+		 var strReason = "";
 		var isBoard = $("#board").is(":checked");
 		var boardId = " ";
 			//$("input:radio[name=board]").click(function() {
@@ -341,6 +370,7 @@
    	 		$.post("webapi/test/testschool",{school_id : $('#school_id').val(),	
    	 			updated_by : $('#updated_by').val(),
    	 			//board : boardId,
+   	 			strReason : strReason,
    				school_website : $('#school_website').val(), 
    				classification : $('#classification').val(), 
    				school_type : $('#school_type').val(),
@@ -373,4 +403,123 @@
    			); 
      		}
     	}); 
+	
+	$("#updateschoolinfo").click(function(){
+		
+		if($("#updateSchoolReason").val() != ""){
+			updateSchoolInfo($("#updateSchoolReason").val());
+				$("#updateSchoolDetail").modal('hide');
+			}else{
+				alert("Please enter the reason for update");
+			}
+	});
+	
+	
+	function updateSchoolInfo(strReason)
+	{
+		
+		var medium = null; 
+    	 $('input[name="medium[]"]:checked').each(function() { 
+    		 if(medium != null) 
+   		 		medium = medium+","+$(this).val(); 
+    		 else 
+    			medium = $(this).val(); 
+    	}) 
+    
+   		
+    	     if( $("#classification").val() == 0 &&
+    			$('#school_type').val() == 0
+        		&& $('#school_category').val() == 0
+        		&& medium == null
+        		)
+        		{
+        		 
+        		  alert("Please enter  select classification, school management, type of school and medium of instruction");
+        		}
+    	else if( $("#classification").val() == 0
+        		&& $('#school_category').val() == 0
+        		&& medium == null
+        		)
+        		{
+    		       alert("Please enter select classification, type of school and medium of instruction");
+        		}
+    	else if($("#classification").val() == 0
+        		&& $('#school_type').val() == 0
+        		&& $('#school_category').val() == 0
+        		)
+        		{
+        		 
+    		          alert("Please enter select classification, school management and type of school");
+        		}
+    	else if($("#classification").val() == 0
+        		&& $('#school_type').val() == 0
+        		&& $('#school_category').val() == 0
+        		&& medium == null
+        		)
+        		{
+        		 
+    				 alert("Please select classification, school management, type of school and medium of instruction");
+        		}
+         	else if( $("#classification").val() == 0)
+    		{
+    		  alert("Please select school classification.");
+    		}
+//     	else if(board == 0)
+//		{
+//		 alert("Please select board name");
+//		}
+    	else if(medium == null)
+		{
+		 alert("Please select medium of instruction");
+		}
+    
+    	else if($("#school_type").val() == 0)
+    		{
+    			alert("Please select school management");
+    		}
+    	else if($("#school_category").val() == 0)
+		{
+			alert("Please select type of school");
+		}
+    	else
+    		{
+  	 		$.post("webapi/test/testschool",{school_id : $('#school_id').val(),	
+  	 			updated_by : $('#updated_by').val(),
+  	 			//board : boardId,
+  	 			strReason : strReason,
+  				school_website : $('#school_website').val(), 
+  				classification : $('#classification').val(), 
+  				school_type : $('#school_type').val(),
+  				medium : medium, 
+  				residential : $('input[name=residential]:checked').val(),
+  				display_fee : $('input[name=display_fee]:checked').val(),
+  				school_category : $('#school_category').val()},function(data)
+ 	 			{ 
+  					if(data.status ==1)
+  					{
+  	 					alert(data.message); 
+  	 					updateProgress($('#school_id').val());
+ 	 			
+//			   	 		$("#school_website").val("");
+//			     		 $("#classification").val("");
+//			     		 $('#school_type').val("");
+//			     		 $('#school_category').val("");
+			     		
+			   	 			
+//			   	 		$('input[name="medium[]"]').prop('checked',false);
+//			   			$('input[name=board]').prop('checked', false);
+//			   			$("input[name=display_fee][value=1]").prop("checked",true);
+//			   			$("input[name=residential][value=0]").prop("checked",true);
+			   			//window.location.href = "${baseUrl}/";
+ 	 				}
+  					else{
+  						alert(data.message);
+  					}
+  					$("#updateSchoolReason").val("");
+ 	 			}
+  			); 
+    		}
+
+		
+	}
  </script> 

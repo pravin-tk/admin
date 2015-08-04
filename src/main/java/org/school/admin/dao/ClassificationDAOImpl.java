@@ -18,16 +18,19 @@ public class ClassificationDAOImpl {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		List<SchoolClassificationType> result = query.list();
-		System.out.println("Result : "+result.size());
-		for( int i=0;i<result.size();i++)
-		{
-			SchoolClassificationType classification = result.get(i);
-			System.out.println(classification.getName());
-		}
 		session.close();
 		return result;
 	}
-	
+	public String getClassificationNameById(int id){
+		String hql = "from SchoolClassificationType where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<SchoolClassificationType> result = query.list();
+		session.close();
+		return result.get(0).getName();
+	}
 	public List<NameImageList> getClassifications()
 	{
 		String hql = "SELECT id as id, name as name,COALESCE(image,'na') as image from SchoolClassificationType";

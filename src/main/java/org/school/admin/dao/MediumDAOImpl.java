@@ -20,4 +20,15 @@ public class MediumDAOImpl {
 		session.close();
 		return result;
 	}
+	public List<MediumType> getMediumListNameById(Short id)
+	{
+		String hql = "from MediumType where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<MediumType> result = query.list();
+		session.close();
+		return result;
+	}
 }

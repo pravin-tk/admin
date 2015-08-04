@@ -81,7 +81,7 @@ $(function () {
 
     // Datatables
 
-    $('#logs-table, #invoice-history-table, #vendors-table, #commission-table,#contact-detail-table,#school-timeline-table, #contacts-table,#school-management-table, #active-tab-table, #fees-subscriptions-table,#highlight-table-data,#pending-tab-table,#reject-tab-table, #prevStudent-table').dataTable();
+    $('#logs-table, #invoice-history-table, #vendors-table, #commission-table, #log-tab-table,#contact-detail-table,#school-timeline-table, #contacts-table,#school-management-table, #active-tab-table, #fees-subscriptions-table,#highlight-table-data,#pending-tab-table,#reject-tab-table, #prevStudent-table').dataTable();
 
     // Configurations - Subscriptions tab
 

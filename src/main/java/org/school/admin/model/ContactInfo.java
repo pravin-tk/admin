@@ -37,13 +37,14 @@ public class ContactInfo implements java.io.Serializable {
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
 	private Byte type;
-
+	private Byte isPrimary; 
+	
 	public ContactInfo() {
 	}
 
 	public ContactInfo(School school, String name, String email,
 			String mobileNo,String contactNo, Date lastUpdatedOn, Integer lastUpdatedBy,
-			Byte type) {
+			Byte type,Byte isPrimary) {
 		this.school = school;
 		this.name = name;
 		this.email = email;
@@ -52,6 +53,7 @@ public class ContactInfo implements java.io.Serializable {
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
 		this.type = type;
+		this.isPrimary = isPrimary;
 	}
 
 	@Id
@@ -138,4 +140,15 @@ public class ContactInfo implements java.io.Serializable {
 		this.type = type;
 	}
 
+	@Column(name = "is_primary")
+	public Byte getIsPrimary() {
+		return isPrimary;
+	}
+
+	public void setIsPrimary(Byte isPrimary) {
+		this.isPrimary = isPrimary;
+	}
+
+	
+	
 }

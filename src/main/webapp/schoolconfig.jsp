@@ -69,8 +69,12 @@
                             <a href="#class-detail" data-toggle="tab" >class</a>
                         </li>
                          <li>
+                            <a href="#school-pano-image-tab" data-toggle="tab">360<sup>0</sup> Pano Image</a>
+                        </li>
+                         <li>
                             <a href="#school-image-gallery-tab" data-toggle="tab">Gallery</a>
                         </li>
+                        
                         
                     </ul>
                      
@@ -80,7 +84,7 @@
                            <h2>Contact Detail</h2>
                                <%@include file = "config-tabs/contact-detail.jsp" %>
                         </div>
-                                                <!--end first tab content -->
+                        <!--end first tab content -->
                         <!-- sec tab content -->
                           <div class="tab-pane fade " id="school" aria-labelledby="country-tab">
                             <h2>School Detail</h2>
@@ -104,7 +108,7 @@
                         <!-- fourth tab content -->
                         
                          <!-- sixth tab content --> 
-                         <div class="tab-pane fade" id="school-highlight-tab" aria-labelledby="country-tab">
+                         <div class="tab-pane fade" id="school-highlight-tab" aria-labelledby="school-highlight-tab">
                             <h2>School Highlights</h2>
                             <%@include file = "config-tabs/school-highlight.jsp" %>
                         </div>
@@ -113,14 +117,14 @@
                         <!-- sixth tab content -->
                         
                        	<!-- seventh tab content -->                         
-                       	<div class="tab-pane fade" id="school-timeline-tab" aria-labelledby="country-tab">
+                       	<div class="tab-pane fade" id="school-timeline-tab" aria-labelledby="school-timeline-tab">
                             <h2>School TimeLine</h2>
                             <%@include file = "config-tabs/school-timeline.jsp" %>
                         </div>
                         <!-- seventh tab content -->
                         
                          <!-- eighth tab content -->   
-                          <div class="tab-pane fade" id="old-student-profile" aria-labelledby="country-tab">
+                          <div class="tab-pane fade" id="old-student-profile" aria-labelledby="old-student-profile-tab">
                             <h2>Old Student Profile</h2>
                             <%@include file = "config-tabs/old-student-profile.jsp"%>
                         </div>
@@ -129,7 +133,7 @@
                         <!-- eighth tab content -->
                         
                         <!-- ninth tab content -->                         
-                       	<div class="tab-pane fade" id="infrastructure" aria-labelledby="infrastructure-tab">
+                       	<div class="tab-pane fade" id="infrastructure" aria-labelledby="country-tab">
                            <h2>Infrastructure Detail</h2>
                               <%@include file="config-tabs/facility.jsp" %>
                        	</div>
@@ -146,12 +150,18 @@
 							<%@include file = "config-tabs/class-detail.jsp" %>
                         </div>
                         <!-- 11th tab content -->
-                        <!-- 12th tab content -->                       
+                        <!-- 12th tab content -->  
+                         <div class="tab-pane fade" id="school-pano-image-tab" aria-labelledby="country-tab">
+                            <h2>360<sup>0</sup> Pano</h2>
+                              <%@include file = "config-tabs/pano-image-gallary.jsp" %>
+                        </div>                     
+                        <!-- 12th tab content -->
+                        <!-- 13th tab content -->
                         <div class="tab-pane fade" id="school-image-gallery-tab" aria-labelledby="country-tab">
                             <h2>Image Gallery</h2>
                             <%@include file = "config-tabs/image-gallary.jsp" %>
                         </div>
-                        <!-- 12th tab content -->
+                        <!-- 13th tab content -->
                  </div>
 <!--                 </form> -->
             </div>
@@ -172,16 +182,28 @@ function deleteProgress(school_id){
 		$("#school_progress").attr('width',data);
 	});
 }
+function viewVerify()
+{
+	var verify = <%out.print(per);%>
+	if(verify == 100){
+		$("#verify").show();
+	}else{
+		alert("Hi");
+	}
+	
+}
+$("#verfy").click(function(){
+	verifySchool();
+});
 function verifySchool()
 {
 	var verify = <%out.print(per);%>
 	if(verify == 100){
+		
 		var schoolId = <%out.print(request.getParameter("school_id")); %>
 	  $.post("webapi/school/activate",{schoolId:schoolId},function(data){
 		  alert(data.message);
 	  });	
-  }else{
-	  alert("Please fill all details and then press verify button");
   }
 	
 	
