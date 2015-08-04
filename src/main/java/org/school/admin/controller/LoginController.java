@@ -9,6 +9,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -35,7 +36,7 @@ public class LoginController {
 	@POST
 	@Path("/info")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage getJson(@FormParam("email") String email,@FormParam("password") String password)
+	public ResponseMessage getJson(@FormParam("email") String email,@FormParam("password") String password, @FormParam("cityid") int cityid)
 //	public Registration getJson(@Context HttpServletRequest req)
 	{
 		ResponseMessage registration = new ResponseMessage();
@@ -57,6 +58,7 @@ public class LoginController {
 		//{
 			session = req.getSession();
 			session.setAttribute("uname", registration.getData());
+			session.setAttribute("cityid", cityid);
 			System.out.println("Hi from controller");
 		//}	
 			return registration;	
@@ -102,6 +104,13 @@ public class LoginController {
 			
 		}
 		
+	}
+	
+	@GET
+	@Path("/usercity/{cityid}")
+	public void changeUserCity(@PathParam("cityid") int cityid){
+		session = req.getSession();
+		session.setAttribute("cityid", cityid);
 	}
 	
 }

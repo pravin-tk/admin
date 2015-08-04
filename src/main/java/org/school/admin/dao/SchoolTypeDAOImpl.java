@@ -20,6 +20,17 @@ public class SchoolTypeDAOImpl {
 		session.close();
 		return result;
 	}
+	public String getSchoolTypeList(Short id)
+	{
+		String hql = "from SchoolType where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<SchoolType> result = query.list();
+		session.close();
+		return result.get(0).getName();
+	}
 }
 
 

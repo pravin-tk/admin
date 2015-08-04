@@ -13,6 +13,19 @@
 <%@page import="org.school.admin.model.AdminUser"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import="org.school.admin.model.City"%>
+<%@page import="org.school.admin.service.CityNamesService"%>
+<%@page import="java.util.List"%>
+<%
+	session = request.getSession(false);
+	List<City> city_list_drop_dn = null; 
+	int city_size_drop_dn =0;
+	city_list_drop_dn = new CityNamesService().getAllCityNames();
+	city_size_drop_dn = city_list_drop_dn.size(); 
+	int drop_dn_city_id = 0;
+	
+	
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +66,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="${baseUrl}/hometabs.jsp">
+                <a class="navbar-brand" href="${baseUrl}/hometab.jsp">
                     <img src="${baseUrl}/images/edbuddy-logo.jpg"  height="50" width="50" alt="school" title="school">
                 </a>
                  
@@ -63,7 +76,6 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-user"></i>  <% 
                         
-                        session = request.getSession(false);
                         AdminUser registration = new AdminUser();
                         if(session!=null)
                         {
@@ -74,6 +86,10 @@
                      			registration  = (AdminUser)session.getAttribute("uname");
                         		out.print(registration.getName());
                         	}
+                        	if(session.getAttribute("cityid") != null){
+                        		drop_dn_city_id = (Integer)session.getAttribute("cityid");
+                        		out.print("<input type='hidden' id='cityId' value='"+drop_dn_city_id+"'/>");
+                        	}
                         	else
                             {
                             	response.sendRedirect("index.jsp");
@@ -83,7 +99,6 @@
                         {
                         	response.sendRedirect("index.jsp");
                         }
-                        
                         %> <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                            <li><a  href="${baseUrl}/settings/registration.jsp">
@@ -98,13 +113,21 @@
                     <div class="input-group margin-bottom-sm selectCountry">
                         <span class="input-group-addon"><i class="fa"></i></span>
                         <select id="change_city" name="change_city" class="form-control">
-                            <option value="0">Change City</option>
-                            <option value ="1" selected>Pune</option>
+                            <%
+		                    String drop_dn_city_selected = ""; 
+		                    for(int i=0; i < city_size_drop_dn; i++){
+		                    	if(city_list_drop_dn.get(i).getId() == drop_dn_city_id){
+		                    		drop_dn_city_selected = "selected";
+		                    	}else{
+		                    		drop_dn_city_selected = "";
+		                    	}
+		                    	out.print("<option value='"+city_list_drop_dn.get(i).getId()+"' "+drop_dn_city_selected+">"+city_list_drop_dn.get(i).getName()+"</option>");
+		                    }
+		                    %>
                         </select>
                     </div>
-              
                     <div class="input-group margin-bottom-sm select-country">
-                    	<a class="input-group-addon" href="javascript:toggleMenu();"><i class="fa fa-sitemap"></i></a>
+                    	<a class="input-group-addon" href="javascript:toggleMenu();" title="site map"><i class="fa fa-sitemap"></i></a>
                     </div>
                 </form>
               
@@ -115,5 +138,11 @@
     
    
 </body>
-
+<script>
+$("#change_city").change(function(){
+	$.get("webapi/validate/usercity/"+$(this).val(), {}, function(){
+		window.location.reload();
+	});
+});
+</script>
 </html>

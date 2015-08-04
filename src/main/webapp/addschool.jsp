@@ -261,7 +261,7 @@
        		$('#output').html(responseText.message)
     	}else{
     		$('#message_body').hide();
-    		window.location.href = "home.jsp?school_id="+responseText.status;
+    		window.location.href = "hometab.jsp?school_id="+responseText.status;
     	}
     } 
     

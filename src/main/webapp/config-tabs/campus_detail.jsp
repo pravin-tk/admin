@@ -116,12 +116,32 @@
 	<div class="form-group">
 	    <div class="col-sm-2 col-sm-offset-2">
 	    <% if(campusInfo.getId() > 0) {%>
-	    	<button type="button" id = "savecampusdetails" class="btn btn-success">Update</button>
+	    	<button type="button" id = "updatecampusdetails"  data-toggle="modal" data-target="#updateCampusDetail" class="btn btn-success">Update</button>
 	    <% } else { %>
 	        <button type="button" id = "savecampusdetails" class="btn btn-success">Save</button>
 	    <% } %>
 	    </div>
 	</div>
+	 <div class="modal fade" id="updateCampusDetail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:450px;">
+                 <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                       </button>
+                           <h4 class="modal-title" id="myModalLabel">Reason for update</h4>
+                 </div>
+                  <div class="modal-body">
+                       <div class="input-group margin-bottom-sm col-sm-6">
+                            <textarea id="updateCampusReason"  style="width:350px;margin-left:20px;height:120px"></textarea>
+                        </div>
+                  </div>
+                   <div class="modal-footer">
+                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                         <button type="button" id="updatecampusdetail" class="btn btn-success">Update</button>
+                   </div>
+              </div>
+        </div>
+     </div>
 </form>
 <script type="text/javascript">
          function checkNumber(evt)
@@ -214,6 +234,98 @@
  			});
  			//}
  			//alert("campus details");
+ 		});
+ 		function updateCampus(strReason)
+ 		{
+ 			var school_id = $('#school_id').val();
+ 			var updated_by = $('#updated_by').val();
+ 			var campus_size = $('#txt_name').val();
+ 			var area_unit = $('#area_unit').val();
+ 			var no_of_building = $('#txt_no_of_bldng').val();
+ 			var no_of_playgrounds = $('#txt_no_of_playground').val();
+ 			var no_of_total_student = $('#txt_no_of_student').val();
+ 			var txt_no_of_student_boys = $('#txt_no_of_student_boys').val();
+ 			var txt_no_of_student_girls = $('#txt_no_of_student_girls').val();
+ 			var txt_no_of_male_teaching_staff = $('#txt_no_of_male_teaching_staff').val();
+ 			var txt_no_of_female_teaching_staff = $('#txt_no_of_female_teaching_staff').val();
+ 			var txt_no_of_male_supporting_staff = $('#txt_no_of_male_supporting_staff').val();
+ 			var txt_no_of_female_supporting_staff = $('#txt_no_of_female_supporting_staff').val();
+ 			
+//  			if(no_of_building == "" 
+//  					|| no_of_playgrounds == "" 
+//  					||campus_size == "" 
+//  					|| no_of_total_student == "" 
+//  					|| txt_no_of_student_boys == ""
+//  					|| txt_no_of_student_girls == ""
+//  					|| txt_no_of_male_teaching_staff == ""
+//  					|| txt_no_of_female_teaching_staff == ""
+//  					|| txt_no_of_male_supporting_staff == ""
+//  					|| txt_no_of_female_supporting_staff == "")
+//  				{
+//  				  alert("All fields are mendatory");
+//  				}
+//  			else{
+ 			$.ajax({
+ 				
+ 				url : 'webapi/campus/savecampus',
+ 				type:'POST',
+ 				data : {
+ 					school_id : school_id,
+ 					updated_by : updated_by,
+ 					campus_size : campus_size,
+ 					area_unit : area_unit,
+ 					no_of_building : no_of_building,
+ 					no_of_playground : no_of_playgrounds,
+ 					no_of_total_student : no_of_total_student,
+ 					no_of_student_boys : txt_no_of_student_boys,
+ 					no_of_student_girls : txt_no_of_student_girls,
+ 					no_of_male_teaching_staff : txt_no_of_male_teaching_staff,
+ 					no_of_female_teaching_staff : txt_no_of_female_teaching_staff,
+ 					no_of_male_supporting_staff : txt_no_of_male_supporting_staff,
+ 					no_of_female_supporting_staff  : txt_no_of_female_supporting_staff,
+ 					strReason : strReason
+ 				},
+ 				success : function(data)
+ 				{
+ 						
+ 					if(data.status == 1){
+ 						alert(data.message);	
+ 						updateProgress($('#school_id').val());
+ 						$("#updateCampusReason").val("");
+//  						$('#txt_name').val("");
+//  			 			$('#area_unit').val("");
+//  			 			$('#txt_no_of_bldng').val("");
+//  			 			$('#txt_no_of_playground').val("");
+//  			 			$('#txt_no_of_student').val("");
+//  			 			$('#txt_no_of_student_boys').val("");
+//  			 			$('#txt_no_of_student_girls').val("");
+//  			 			$('#txt_no_of_male_teaching_staff').val("");
+//  			 			$('#txt_no_of_female_teaching_staff').val("");
+//  			 			$('#txt_no_of_male_supporting_staff').val("");
+//  			 			$('#txt_no_of_female_supporting_staff').val("");
+ 					}
+ 					else
+ 						alert(data.message);
+ 					
+ 			 			
+ 						
+ 				},
+ 				error : function(data)
+ 				{
+ 					alert("Fail to save campus detail");
+ 				}
+ 			
+ 			});
+ 			
+ 		}
+ 		$("#updatecampusdetail").click(function(){
+ 			if($("#updateCampusReason").val() != ""){
+ 				updateCampus($("#updateCampusReason").val());
+ 				$("#updateCampusDetail").modal('hide');
+ 			}else{
+ 				alert("Please enter the reason for update");
+ 			}
+ 			
  		});
     
 </script>            

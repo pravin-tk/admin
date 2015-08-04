@@ -52,9 +52,15 @@ public class SalesDetailController {
 	@Path("update")
 	
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<SalesInfo> updateSalesDetail(@FormParam("id") int id,@FormParam("school_id") int school_id,@FormParam("user_id") int user_id,@FormParam("sales_executive") int sales_executive,
-											@FormParam("datacollector") int datacollector,@FormParam("contact_person_name") String contact_person,
-											@FormParam("contact_person_no") String contact_person_no,@FormParam("contact_person_email") String contact_person_email, @FormParam("designation") String designation)
+	public List<SalesInfo> updateSalesDetail(@FormParam("id") int id,@FormParam("school_id") int school_id,
+			@FormParam("user_id") int user_id,
+			@FormParam("sales_executive") int sales_executive,
+			@FormParam("datacollector") int datacollector,
+			@FormParam("contact_person_name") String contact_person,
+			@FormParam("contact_person_no") String contact_person_no,
+			@FormParam("contact_person_email") String contact_person_email, 
+			@FormParam("designation") String designation,
+			@FormParam("strReason") String reason)
 	{
 		School school = new School();
 		school.setId(school_id);
@@ -78,7 +84,7 @@ public class SalesDetailController {
 		salesInfo.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
 		
 		SalesDetailDAOImpl salesDetailDAOImpl = new SalesDetailDAOImpl();
-		return salesDetailDAOImpl.updateSalesDetail(salesInfo);
+		return salesDetailDAOImpl.updateSalesDetail(salesInfo,reason);
 	}
 
 }

@@ -8,10 +8,10 @@ import org.school.admin.model.CampusInfo;
 
 public class CampusService {
 	
-	public ResponseMessage saveCampus(CampusInfo campusiInfo)
+	public ResponseMessage saveCampus(CampusInfo campusiInfo,String strReason)
 	{
 		CampusDAOImpl campusDAOImpl = new CampusDAOImpl();
-		return campusDAOImpl.saveCampus(campusiInfo);
+		return campusDAOImpl.saveCampus(campusiInfo,strReason);
 	}
 
 }

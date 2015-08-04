@@ -35,7 +35,8 @@
 
 
         <!-- <div id="myTabContent" class="tab-content"> -->
-<form action="" method="post" id="old_student_profile" class="form-horizontal">
+		<form action="" method="post" id="old_student_profile" class="form-horizontal">
+		<input type="hidden" id="hdnid" value="" />
        <div class="prevStudent-list" id="pre_student_list">
            <p>Here you can add or deactivate school type.</p>
            <a href="#" class="btn btn-primary view-prevStudent bottom-margin" id="addoldStudentProfile"><i class="fa fa-plus"></i> old student profile</a>
@@ -59,7 +60,7 @@
                     	out.print("<td>"+contactDetail2.getAchievements()+"</td>");
                     	out.print("<td><a href='javascript:editProfile("+contactDetail2.getId()+")' class='btn btn-success icon-btn'>"
                     				+"<i class='fa fa-pencil'></i></a>"
-                                    +" <a href='javascript:deleteProfile("+contactDetail2.getId()+")' class='btn btn-danger icon-btn'>"
+                                    +" <a href='#deleteStudentProfile'  data-id='"+contactDetail2.getId()+"' class='open-DeleteProfileDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteStudentProfile' >"
                                     +"<i class='fa fa-trash'></i></a></td></tr>");
                     }
                 }
@@ -110,11 +111,56 @@
         <div class="form-group">
     		<div class="col-sm-4" id="button_list">
             	<button type="button" id='saveprevStudent' class="btn btn-success ">Save</button>
-            	<button type="button" id="updatePrevStudent" class="btn btn-success " style="display:none;">Update</button>
+            	<button type="button" id="updatePrevStudent" class="btn btn-success " data-toggle="modal" data-target="#updateStudentProfile" style="display:none;">Update</button>
             	<button class="btn btn-default list-id list-prevStudent" id="cancel-old-student" type="reset">Cancel</button>
         	</div>
    		</div> 
     </div>
+                  <div class="modal fade" id="deleteStudentProfile" tabindex="-1" role="dialog" aria-hidden="true" >
+                      <div class="modal-dialog">
+                          <div class="modal-content" style="width:450px;">
+                              <div class="modal-header">
+                              <input type="hidden" id="delreason" name="delreason" value="" />  
+							  <input type="hidden" id="studentId" value="" />
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                  </button>
+                                  <h4 class="modal-title" id="myModalLabel">Reason for delete</h4>
+                              </div>
+                              <div class="modal-body">
+                                  <div class="input-group margin-bottom-sm col-sm-6">
+                                      <textarea id="txtDelReason" rows ="4" class="form-control" style="width:350px;margin-left:20px;height:120px"></textarea>
+                                  </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <button type="button" id="deleteProfileDetail" class="btn btn-danger">Delete</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                   <div class="modal fade" id="updateStudentProfile" tabindex="-1" role="dialog" aria-hidden="true">
+                      <div class="modal-dialog">
+                          <div class="modal-content" style="width:450px;">
+                              <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                  </button>
+                                  <h4 class="modal-title" id="myModalLabel">Reason for update</h4>
+                              </div>
+                              <div class="modal-body">
+
+                                  <div class="input-group margin-bottom-sm col-sm-6">
+                                      <textarea id="updatePreStudentReason"  style="width:350px;margin-left:20px;height:120px"></textarea>
+                                  </div>
+
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <button type="button" id="updateProfileDetail" class="btn btn-success">Update</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
 </form>
           	 	
 <script type="text/javascript">
@@ -144,9 +190,11 @@
    		$("#updatePrevStudent").hide();
    	});
    	
+   	
    	$('#saveprevStudent').click(function(){
+   		alert("hi");
    		var school_id = <%out.print(school_id5);%>
-  			var user_id = <%out.print(user_id5);%>
+   		var user_id = <%out.print(user_id5);%>
 //    			if($("#osname").val().length ==0 )
 //   			{
    			//	alert("Please enter previous student name");
@@ -179,7 +227,8 @@
  			   updateProgress($('#school_id').val());
  			    $(data).each(function(index){
  			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-                          +" <a href='javascript:deleteProfile("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
+                          +" <a href='#deleteStudentProfile'  data-id='"+data[index].id+"' class='open-DeleteProfileDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteStudentProfile' >"
+                          +"<i class='fa fa-trash'></i></a>";
  			    	var row = [];
  			    	 row.push(data[index].name);
  			    	 row.push(data[index].batch);
@@ -215,77 +264,101 @@
 			$('#osbatch').val(data.batch);
 		});
    	}
-   	
-   	$('#updatePrevStudent').click(function(){
-   		var school_id = <%out.print(school_id5);%>
-  			var user_id = <%out.print(user_id5);%>
-  			 var oTable = $("#prevStudent-table").dataTable();
-			    oTable.fnClearTable();
-   		//	if($("#osname").val().length ==0)
-  		//	{
-   		//		alert("Please enter previous student name");
-//   				$("#error-prevStudent").html('Please enter your name, email id and mobile number');
-//   				$('#email, #mobile_no, #name, #achievements, #batch ').addClass('has-error');
-  				
-//   			} else if (!ValidateEmail($('#osemail').val()))
-//   			{
-//   				$('#error-prevStudent').html("Please enter your valid email id");
-//  					$('#email').addClass('has-error');
-//   			} 
-  		// 	}
-		//	else {		
-   			
-    		$.post('webapi/school/prestudent_update',{id: $("#osId").val(), school_id : school_id, user_id : user_id,name: $("#osname").val(), email : $("#osemail").val(), mobile : $("#osmobile_no").val(), batch : $("#osbatch").val(),
-    			achievements : $("#osachievements").val()},function(data){
-    			
-    			$('#osemail, #osmobile_no, #osname').removeClass('has-error');
-    			$('#error-prevStudent').html("");
-    			
- 			    $("#osname").val(""); $("#osemail").val(""); $("#osmobile_no").val("");
- 			    $("#osachievements").val("");
- 			    $("#osbatch").val("");
- 			   alert("Updated successfully..");
- 			    $("#pre_student_add").hide();
- 			    $("#pre_student_list").show();
- 			    $("#saveprevStudent").show();
- 				$("#updatePrevStudent").hide();
- 				updateProgress($('#school_id').val());
- 			    $(data).each(function(index){
- 			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-                          +" <a href='javascript:deleteProfile("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
- 			    	var row = [];
- 			    	 row.push(data[index].name);
- 			    	 row.push(data[index].batch);
- 			    	 row.push(data[index].achievements);
-	 			    	 row.push(html);
- 			    	oTable.fnAddData(row);
- 			    });
- 			  
-    		},'json');
-   	//	}
+   	$('#updateProfileDetail').click(function(){
    		
-   	});
-	    	
-		function deleteProfile(deletePreStudentId)
-		{
-			 var schoolId = $("#school_id").val();
-			
-			var deletePreStudentProfile = confirm("Do you want to delete this old student profile ?");
-			if(deletePreStudentProfile){
-				$.post("webapi/school/deletePreStudentProfile",{deletePreStudentId : deletePreStudentId,schoolId : schoolId},function(data){
-					 var oTable = $("#prevStudent-table").dataTable();
-					    oTable.fnClearTable();
-					  $(data).each(function(index){
-		 			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-		                          +" <a href='javascript:deleteProfile("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
-		 			    	var row = [];
-		 			    	 row.push(data[index].name);
-		 			    	 row.push(data[index].batch);
-		 			    	 row.push(data[index].achievements);
-			 			    	 row.push(html);
-		 			    	oTable.fnAddData(row);
-		 			    });
-				});
-			}
+   		if($("#updatePreStudentReason").val() != ""){
+   			updateProfile($("#updatePreStudentReason").val());
+   			$("#updateStudentProfile").modal('hide');
+   			$("#updatePreStudentReason").val("");
+		}else{
+			alert("Please enter the reason for update");
 		}
+    });
+   	
+   	function updateProfile(strReason)
+   	{
+   		
+   		var school_id = <%out.print(school_id5);%>
+			var user_id = <%out.print(user_id5);%>
+			
+			 var oTable = $("#prevStudent-table").dataTable();
+		    oTable.fnClearTable();
+//			if($("#osname").val().length ==0)
+//			{
+//				alert("Please enter previous student name");
+//				$("#error-prevStudent").html('Please enter your name, email id and mobile number');
+//				$('#email, #mobile_no, #name, #achievements, #batch ').addClass('has-error');
+				
+//			} else if (!ValidateEmail($('#osemail').val()))
+//			{
+//				$('#error-prevStudent').html("Please enter your valid email id");
+//					$('#email').addClass('has-error');
+//			} 
+//			}
+//			else {		
+			
+		$.post('webapi/school/prestudent_update',{id: $("#osId").val(), school_id : school_id, user_id : user_id,name: $("#osname").val(), email : $("#osemail").val(), mobile : $("#osmobile_no").val(), batch : $("#osbatch").val(),
+			achievements : $("#osachievements").val(), strReason : strReason},function(data){
+			
+			$('#osemail, #osmobile_no, #osname').removeClass('has-error');
+			$('#error-prevStudent').html("");
+			
+			    $("#osname").val(""); $("#osemail").val(""); $("#osmobile_no").val("");
+			    $("#osachievements").val("");
+			    $("#osbatch").val("");
+			   alert("Updated successfully..");
+			    $("#pre_student_add").hide();
+			    $("#pre_student_list").show();
+			    $("#saveprevStudent").show();
+				$("#updatePrevStudent").hide();
+				updateProgress($('#school_id').val());
+			    $(data).each(function(index){
+			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+			    	+" <a href='#deleteStudentProfile'  data-id='"+data[index].id+"' class='open-DeleteProfileDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteStudentProfile' >"
+                +"<i class='fa fa-trash'></i></a>";
+			    	var row = [];
+			    	 row.push(data[index].name);
+			    	 row.push(data[index].batch);
+			    	 row.push(data[index].achievements);
+ 			    	 row.push(html);
+			    	oTable.fnAddData(row);
+			    });
+			  
+		},'json');
+   	}
+		
+		function deleteProfile(deletePreStudentId,strReason){
+			var schoolId = $("#school_id").val();
+			var user_id = <%out.print(user_id5);%>
+			$.post("webapi/school/deletePreStudentProfile",{deletePreStudentId : deletePreStudentId,schoolId : schoolId,strReason:strReason,user_id:user_id},function(data){
+				 var oTable = $("#prevStudent-table").dataTable();
+				    oTable.fnClearTable();
+				  $(data).each(function(index){
+	 			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+	                          +" <a href='#deleteStudentProfile'  data-id='"+data[index].id+"' class='open-DeleteProfileDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteStudentProfile' >"
+	                          +"<i class='fa fa-trash'></i></a>";
+	 			    	var row = [];
+	 			    	 row.push(data[index].name);
+	 			    	 row.push(data[index].batch);
+	 			    	 row.push(data[index].achievements);
+		 			    	 row.push(html);
+	 			    	oTable.fnAddData(row);
+	 			    });
+				  $("#txtDelReason").val('');
+			});
+		}
+		
+		$(document).on('click', 'a.open-DeleteProfileDialog', function(){
+			console.log("Hi11 "+$(this).data('id'));
+			$("#hdnid").val($(this).data('id'));
+		});
+		$('#deleteProfileDetail').click(function(){
+		   		if($("#txtDelReason").val() != ""){
+		   		var strReason = $("#txtDelReason").val();
+		   			deleteProfile($("#hdnid").val(),strReason);
+		   		$('#deleteStudentProfile').modal('hide');
+		   		}else{
+		   			alert("Please enter the reason before deleting");
+		   		}
+		   	});
   	</script>

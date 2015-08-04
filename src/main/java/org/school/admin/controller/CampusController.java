@@ -50,7 +50,8 @@ public class CampusController {
 			@FormParam("no_of_male_teaching_staff") String no_of_male_teaching_staff,
 			@FormParam("no_of_female_teaching_staff") String no_of_female_teaching_staff,
 			@FormParam("no_of_female_supporting_staff") String no_of_female_supporting_staff,
-			@FormParam("no_of_male_supporting_staff") String no_of_male_supporting_staff)
+			@FormParam("no_of_male_supporting_staff") String no_of_male_supporting_staff,
+			@FormParam("strReason") String strReason)
 			{
 		    ResponseMessage response = new ResponseMessage();
 //		if(no_of_building == "" 
@@ -137,7 +138,7 @@ public class CampusController {
 					CampusService campusService =new CampusService();
 					//campusService.saveCampus(campusInfo) ;
 					
-					return campusService.saveCampus(campusInfo);
+					return campusService.saveCampus(campusInfo,strReason);
 					}
 					catch(NumberFormatException e)
 					{

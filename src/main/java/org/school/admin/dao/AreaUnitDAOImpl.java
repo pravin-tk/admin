@@ -16,14 +16,26 @@ public class AreaUnitDAOImpl {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-	List<AreaUnit> result = query.list();
-	System.out.println("Result : "+result.size());
-	for( int i=0;i<result.size();i++)
-	{
-		AreaUnit city = result.get(i);
-		System.out.println(city.getName());
+		List<AreaUnit> result = query.list();
+		session.close();
+		return result;
 	}
-	session.close();
-	return result;
+	
+	public String getAreaUnitById(int id)
+	{
+		String  areaUnit = "";
+		String hql = "from AreaUnit where id =:id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+	   
+		List<AreaUnit> result = query.list();
+		if(result.size()>0)
+		{
+			areaUnit = result.get(0).getName();
+		}
+		session.close();
+		return areaUnit;
 	}
 }

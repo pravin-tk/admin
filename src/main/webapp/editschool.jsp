@@ -269,7 +269,7 @@ $('#update').click(function (){
        		$('#output').html(responseText.message)
     	}else{
     		$('#message_body').hide();
-    		window.location.href = "home.jsp?school_id="+$("#school_id").val();
+    		window.location.href = "hometab.jsp?school_id="+$("#school_id").val();
     	}
 	}
 });

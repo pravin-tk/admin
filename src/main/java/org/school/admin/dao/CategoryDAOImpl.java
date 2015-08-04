@@ -19,4 +19,14 @@ public class CategoryDAOImpl {
 		return result;
 	}
 
+	public String getCategoryList(int id) {
+		String hql = "from SchoolCategoryType where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<SchoolCategoryType> result = query.list();
+		session.close();
+		return result.get(0).getName();
+	}
 }

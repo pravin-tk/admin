@@ -22,13 +22,15 @@ public class SchoolHighlight implements java.io.Serializable {
 	private Integer id;
 	private School school;
 	private String name;
+	private String description;
 
 	public SchoolHighlight() {
 	}
 
-	public SchoolHighlight(School school, String name) {
+	public SchoolHighlight(School school, String name,String description) {
 		this.school = school;
 		this.name = name;
+		this.description = description;
 	}
 
 	@Id
@@ -59,6 +61,15 @@ public class SchoolHighlight implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Column(name = "description")
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

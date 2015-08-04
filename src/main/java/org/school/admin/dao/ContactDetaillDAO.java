@@ -1,49 +1,153 @@
 package org.school.admin.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.school.admin.data.SchoolContact;
+import org.school.admin.exception.ResponseMessage;
+import org.school.admin.model.AdminUser;
 import org.school.admin.model.ContactInfo;
 import org.school.admin.model.SalesInfo;
 import org.school.admin.model.School;
+import org.school.admin.model.SchoolLog;
 import org.school.admin.model.SchoolSearch;
 import org.school.admin.util.HibernateUtil;
 
 public class ContactDetaillDAO {
-	public List<ContactInfo> saveContactInfoInternal(List<ContactInfo> contactDetail)
+	public ResponseMessage saveContactInfoInternal(List<ContactInfo> contactDetail)
 	{
+		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
+		School school = null;
+		AdminUser adminUser = new AdminUser();
+		String message = "";
+		String log = "New entry for contact detail | ";
 	try{
 		session.beginTransaction();
-		System.out.println("CONTACTSIZE: "+contactDetail.size());
 		for(int i=0;i<contactDetail.size();i++){
 			System.out.println("i=: "+i);
-			session.save(contactDetail.get(i));
-		}
-		session.getTransaction().commit();
-		session.close();
+			//checking for external
+			if(contactDetail.get(i).getType()==1){//external
+				if(contactDetail.get(i).getIsPrimary() ==1){//primary is 1
+					if(!isPrimaryExternal(contactDetail.get(i).getSchool().getId())){//primary 1 not exist DB
+						session.save(contactDetail.get(i));
+						log +=" Name : "+contactDetail.get(i).getName();
+						log +="| Email : "+contactDetail.get(i).getEmail();
+						log +="| Mobile : "+contactDetail.get(i).getMobileNo();
+						log +="| Contact_no : "+contactDetail.get(i).getContactNo();
+						log+="|type : external";
+						log +="| is primary : yes";
+						response.setStatus(1);
+						response.setMessage("Saved successfuly");
+					}else{// primary 1 exist in DB
+						response.setStatus(0);
+						response.setMessage("Primary contact number already exist");
+					}
+				}else{// if primary is 0.
+						session.save(contactDetail.get(i));
+						log +=" Name : "+contactDetail.get(i).getName();
+						log +="| Email : "+contactDetail.get(i).getEmail();
+						log +="| Mobile : "+contactDetail.get(i).getMobileNo();
+						log +="| Contact_no : "+contactDetail.get(i).getContactNo();
+						log+="|type : external";
+						log +="| is primary : no";
+						response.setStatus(1);
+						response.setMessage("Saved successfuly");
+				}
+				
+				
+			}else if(contactDetail.get(i).getType()==0){//internal
+				if(contactDetail.get(i).getIsPrimary() == 1){//if primary is 1
+					if(!isPrimaryInternal(contactDetail.get(i).getSchool().getId())){//primary 1 not exist DB
+						session.save(contactDetail.get(i));
+						log +=" Name : "+contactDetail.get(i).getName();
+						log +="| Email : "+contactDetail.get(i).getEmail();
+						log +="| Mobile : "+contactDetail.get(i).getMobileNo();
+						log +="| Contact_no : "+contactDetail.get(i).getContactNo();
+						log+="|type : internal";
+						log +="| is primary : yes";
+						response.setStatus(1);
+						response.setMessage("Saved successfuly");
+					}else{// primary 1 exist in DB
+						response.setStatus(0);
+						response.setMessage("Primary contact number already exist");
+					}
+				}else{// if primary 0
+						session.save(contactDetail.get(i));
+						log +=" Name : "+contactDetail.get(i).getName();
+						log +="| Email : "+contactDetail.get(i).getEmail();
+						log +="| Mobile : "+contactDetail.get(i).getMobileNo();
+						log +="| Contact_no : "+contactDetail.get(i).getContactNo();
+						log+="|type : external";
+						log +="| is primary : no";
+						response.setStatus(1);
+						response.setMessage("Saved successfuly");
+						
+					}
+				}
+				
+			}
+		
+			adminUser.setId(contactDetail.get(0).getLastUpdatedBy());
+			session.getTransaction().commit();
+			session.close();
 	}
 	catch(Exception e)
-	{
+	{ 
+		response.setStatus(0);
+		response.setMessage("Fail to save data");
 		System.out.println("Error in db : "+e);
+		e.printStackTrace();
 	}
-		
-		School school = contactDetail.get(0).getSchool();
+		school = contactDetail.get(0).getSchool();
+		school.setId(contactDetail.get(0).getSchool().getId());
 		int school_id = school.getId();
-		List<ContactInfo> contactInfos = new ArrayList<ContactInfo>();
-		contactInfos = getConatctDetail(school_id);
-		
+//		List<ContactInfo> contactInfos = new ArrayList<ContactInfo>();
+//		contactInfos = getConatctDetail(school_id);
+		new SchoolDAOImp().saveSchoolLog(new SchoolLog(adminUser, school, message, log, new Date(), new Date()));
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 		schoolDAOImp.updateTabs(school_id, "contact");
-		return contactInfos;
+		return response;
 	}
 	
-	public List<ContactInfo> updateContactInfoInternal(ContactInfo contactDetail)
+	private boolean isPrimaryExternal(Integer id) {
+		String hql ="from ContactInfo where school.id = :id and type = 1 and isPrimary=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<ContactInfo> contactInfoList = query.list();
+		if(contactInfoList.size() > 0)
+		{
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	private boolean isPrimaryInternal(Integer id) {
+		String hql ="from ContactInfo where school.id = :id and type = 0 and isPrimary=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<ContactInfo> contactInfoList = query.list();
+		if(contactInfoList.size() > 0)
+		{
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public ResponseMessage updateContactInfoInternal(ContactInfo contactDetail,String strReason)
 	{
+		ResponseMessage response = new ResponseMessage();
+		String afterChange ="| Data after update in contact detail |";
 		String hql ="from ContactInfo where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -51,24 +155,70 @@ public class ContactDetaillDAO {
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", contactDetail.getId());
-		List<ContactInfo> getConatctInfo = query.list();
+		List<ContactInfo> getContactInfo = query.list();
 		session.getTransaction().commit();
 		session.close();
 		
+		String beforeChange = "Data before update in contact detail |";
+		beforeChange += " Name : "+getContactInfo.get(0).getName();
+		beforeChange += "| Email : "+getContactInfo.get(0).getEmail();
+		beforeChange += "| Mobile : "+getContactInfo.get(0).getMobileNo();
+		beforeChange += "| Contact_no : "+getContactInfo.get(0).getContactNo();
+		if(getContactInfo.get(0).getType() == 0)
+			beforeChange+="| type : internal";
+		else
+			beforeChange+="|type : external";
+		if(getContactInfo.get(0).getIsPrimary() == 0)
+			beforeChange += "| is primary : no";
+		else
+			beforeChange += "| is primary : yes";
+		
+		//new SchoolDAOImp().saveSchoolLog(new SchoolLog(adminUser, beforeUpdateschool, "", beforeChange, new Date(), new Date()));
+		
 		Session updateContactInfo = hibernateUtil.openSession();
 		updateContactInfo.beginTransaction();
-		if(getConatctInfo.size()>0)
+		if(getContactInfo.size()>0)
 		{
-			contactDetail.setId(getConatctInfo.get(0).getId());
+			if(!isPrimaryExternal(getContactInfo.get(0).getSchool().getId()) && !isPrimaryInternal(getContactInfo.get(0).getSchool().getId())){
+			contactDetail.setId(getContactInfo.get(0).getId());
 			updateContactInfo.update("id",contactDetail);
+			updateContactInfo.getTransaction().commit();
+			updateContactInfo.close();
+			response.setStatus(1);
+			response.setMessage("Updated successfully");
+			}
+			else{
+				response.setStatus(0);
+				response.setMessage("More than one primary contact numbers not allow");
+			}
 		}
-		updateContactInfo.getTransaction().commit();
-		updateContactInfo.close();
+		
+		
+		List<ContactInfo> contactAfterUpdate =  getConatctDetailById(contactDetail.getId());
+		if(contactAfterUpdate.size()>0)
+		{
+			afterChange +="| Name : "+contactAfterUpdate.get(0).getName();
+			afterChange +="| Email : "+contactAfterUpdate.get(0).getEmail();
+			afterChange +="| Mobile : "+contactAfterUpdate.get(0).getMobileNo();
+			beforeChange +="| Contact_no : "+contactAfterUpdate.get(0).getContactNo();
+			if(contactAfterUpdate.get(0).getType() == 0)
+				afterChange+="| type : internal";
+			else
+				afterChange+="|type : external";
+			String log = beforeChange.concat(afterChange);
+			School school = new School();
+			AdminUser adminUser = new AdminUser();
+			school.setId(contactDetail.getSchool().getId());
+			adminUser.setId(contactDetail.getLastUpdatedBy());
+			
+			
+		}
+		
 		School school = contactDetail.getSchool();
 		int school_id = school.getId();
-		List<ContactInfo> contactInfos = new ArrayList<ContactInfo>();
-		contactInfos = getConatctDetail(school_id);
-		return contactInfos;
+	//	List<ContactInfo> contactInfos = new ArrayList<ContactInfo>();
+		//contactInfos = getConatctDetail(school_id);
+		return response;
 	}
 	
 	public List<ContactInfo> getConatctDetail(Integer school_id)
@@ -104,9 +254,6 @@ public class ContactDetaillDAO {
 		}
 		session.close();
 		return newcontactInfoList;
-		
-		
-		
 	}
 	
 	public SchoolContact getExternalConatctDetail(Integer school_id)
@@ -185,10 +332,5 @@ public class ContactDetaillDAO {
 		session.close();
 		return newcontactInfoList;
 		
-		
-		
 	}
-	
-   
-    
 }

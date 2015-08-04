@@ -1,3 +1,4 @@
+<%@page import="org.school.admin.data.ViewContactData"%>
 <%@page import="org.school.admin.model.ViewContact"%>
 <%@page import="org.school.admin.data.ViewSchoolData"%>
 <%@page import="org.school.admin.model.ViewSchool"%>
@@ -7,24 +8,29 @@
 <%@page import="org.school.admin.dao.SchoolDAOImp"%>
 <%@page import="java.util.List"%>
 <%
+System.out.println("SessionData : "+session.getAttribute("cityid"));
 	SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 	List<School> school_list = null;
 	if (request.getParameterMap().containsKey("school_id")) {
 		if(request.getParameter("school_id") != null){
 			if(Integer.parseInt(request.getParameter("school_id")) > 0)
-			school_list = schoolDAOImp.getSchoolList(Integer.parseInt(request.getParameter("school_id")), 1, 0);
+			school_list = schoolDAOImp.getSchoolList(Integer.parseInt(request.getParameter("school_id")), (Integer)session.getAttribute("cityid"), 0);
 			//System.out.println(school_list.toString());
 		}
 	}
-	List<ViewSchoolData> viewSchoolList = new SchoolDAOImp().getViewSchoolList(2);
+	List<ViewSchoolData> viewSchoolList = new SchoolDAOImp().getViewSchoolList((Integer)session.getAttribute("cityid"));
 	
-	List<ViewContact> viewContactList = new SchoolDAOImp().getViewContactList(2);
+	List<ViewContact> viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
 	for(int i=0;i<viewContactList.size();i++)
 	{
-		System.out.println("ContactDetailsList : "+viewContactList.get(i).getContactDetail());
+	//System.out.println("ContactDetailsList : "+viewContactList.get(i).getContactDetail());
+		out.print("<script>"
+				+"console.log('"+viewContactList.get(i).getContactDetail()+"');"
+				+"</script>");
+ 
 	}
+	System.out.print("ViewSize : "+viewContactList.size());
 %>
-
             <!-- Right main content -->
                    <form class="form-horizontal" action="" method="">
                        <div class="form-group">
@@ -59,15 +65,12 @@
 		                                   </select>
                                    <%} %>
                            </div>
-                     
-                  	 
                        </div>
-                  
                 </form>                        
                 <!--Commission tab starts-->
                 <div class="tab-pane fade in active" id="commission" aria-labelledby="commission-tab">
                     <div class="commission-list">
-                        <a class="btn btn-primary addschool bottom-margin" id="addschool"><i class="fa fa-plus"></i> School</a>
+<!--                         <a class="btn btn-primary addschool bottom-margin" id="addschool"><i class="fa fa-plus"></i> School</a> -->
 
                         <table class="table table-striped table-bordered" id="commission-table">
                             <thead>
@@ -138,9 +141,8 @@
 		  onItemRemove : function(value) {
 					  }
 });
-select_school  = $select_school[0].selectize;
-    
-$select_contact = $('#contact_id').selectize({
+ select_school  = $select_school[0].selectize;
+	$select_contact = $('#contact_id').selectize({
 	
 	persist: false,
 	create: function(input) {
@@ -155,7 +157,7 @@ $select_contact = $('#contact_id').selectize({
 	  onItemRemove : function(value) {
 				  }
 });
-select_contact  = $select_contact[0].selectize;
+ select_contact  = $select_contact[0].selectize;
     
     
     
@@ -288,6 +290,10 @@ select_contact  = $select_contact[0].selectize;
 		  	});
 		 } 
    }
+ 
+
+
+ 
     </script>
 </body>
 

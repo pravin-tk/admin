@@ -35,8 +35,6 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 
 
 %>
-
-
   <!--sales detail tab starts-->
                   <form action="" method="post" id="sales_detail" class="form-horizontal">  
                   <input type="hidden" name="sdId" id="sdId" value=""/>                        
@@ -65,7 +63,8 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                     			out.print("<td>"+salesInfo.getInfoProviderEmail()+"</td>");
                                     			out.print("<td>"+salesInfo.getInfoProviderDesignation()+"</td>");
                                     			out.print("<td><a href='javascript:editSalesInfo("+salesInfo.getId()+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-                                    			+"<a href='javascript:deleteSalesInfo("+salesInfo.getId()+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a></td></tr>");
+                                    			+" <a href='#deleteSalesDialog'  data-id='"+salesInfo.getId()+"' class='open-deleteSalesDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteSalesDialog' >"
+                                                +"<i class='fa fa-trash'></i></a></td></tr>");
                                     		}
                                      %> 
                                 </table>
@@ -87,7 +86,6 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 			                            	}
 				                            
 				                         %>
-				                             
 				                     </select>  
                                 </div>
                             </div>
@@ -167,16 +165,61 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
                                     </div>
                             </div>
                             <input type="hidden"  id="school_id" value="<%out.print(school_id2);%>">
-                            
+                            <input type="hidden" id="saleshid" value=""/>
                             <input type="hidden"  id="user_id" value="<%out.print(user_id1);%>">
                             <div class="form-group">
                                 <div class="col-sm-2 col-sm-offset-2">
                                     <button type="button" id="savesalesdetail"  class="btn btn-success">Save</button>
-                                    <button type="button" id="updatesalesdetail" class="btn btn-success " style="display:none;">Update</button>
+                                    <button type="button" id="updatesalesdetail" class="btn btn-success" data-toggle="modal" data-target="#updateSalesDialog" style="display:none;">Update</button>
                                     <button type="reset" id="cancelsales"  class="btn list-id list-sales">Cancel</button>
                                 </div>
                             </div>
                             </div>
+                             <div class="modal fade" id="deleteSalesDialog" tabindex="-1" role="dialog" aria-hidden="true" >
+                   			   <div class="modal-dialog">
+                      		    <div class="modal-content" style="width:450px;">
+                           		   <div class="modal-header">
+                           		   <input type="hidden" id="delreason" name="delreason" value="" />  
+									  <input type="hidden" id="salesId" value="" />
+                               	  	 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                	  </button>
+                                 	 <h4 class="modal-title" id="deleteSalesReason">Reason for delete</h4>
+                              </div>
+                              <div class="modal-body">
+                                  <div class="input-group margin-bottom-sm col-sm-6">
+                                      <textarea id="salesDelReason" rows ="4" class="form-control" style="width:350px;margin-left:20px;height:120px;"></textarea>
+                                  </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <button type="button" id="deleteSalesDetail" class="btn btn-danger">Delete</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                   <div class="modal fade" id="updateSalesDialog" tabindex="-1" role="dialog" aria-hidden="true" >
+                      <div class="modal-dialog">
+                          <div class="modal-content" style="width:450px;">
+                              <div class="modal-header">
+                              <input type="hidden" id="delreason" name="delreason" value="" />  
+							  <input type="hidden" id="salesId" value="" />
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                  </button>
+                                  <h4 class="modal-title" id="updateSalesReason">Reason for update</h4>
+                              </div>
+                              <div class="modal-body">
+                                  <div class="input-group margin-bottom-sm col-sm-6">
+                                      <textarea id="salesUpdateReason" rows ="4" class="form-control" style="width:350px;margin-left:20px;height:120px;"></textarea>
+                                  </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <button type="button" id="updateSalesDetail" class="btn btn-success">Update</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
                       </form>      
  <script type="text/javascript">
  function ValidateEmail(email) {
@@ -220,6 +263,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
   	}
   	else{
 		  console.log('228');
+		  $("#savesalesdetail").prop("disabled",true);
 	    	$.post("webapi/salesdetail/save",{school_id : $('#school_id').val(),
 	    		user_id : $('#user_id').val(),
 	    		sales_executive : $('#sales_executive').val(),
@@ -247,9 +291,11 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 			    	row.push(data[index].infoProviderEmail);	
 			    	row.push(data[index].infoProviderDesignation);	
 			    	row.push("<a href='javascript:editSalesInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-			    	+"<a href='javascript:deleteSalesInfo("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>");
+			    			  +" <a href='#deleteSalesDialog'  data-id='"+data[index].id+"' class='open-deleteSalesDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteSalesDialog' >"
+	                          +"<i class='fa fa-trash'></i></a>");
 			    	oTable.fnAddData(row);
 			   });
+			    $("#savesalesdetail").prop("disabled",false);
 	    	});
  		}
  	
@@ -262,7 +308,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 		$("#savesalesdetail").show();
 		$("#updatesalesdetail").hide();
 	});
- function clearSalesDetail()
+  function clearSalesDetail()
  {
 	 $('#sales_executive').val(0);
      $('#datacollector').val(0),
@@ -291,7 +337,14 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 		});
    	}
 	
-	$("#updatesalesdetail").click(function(){
+	$(document).on('click', 'a.open-deleteSalesDialog', function(){
+		console.log("Hi11 "+$(this).data('id'));
+		$("#saleshid").val($(this).data('id'));
+	});
+	
+	$("#updateSalesDetail").click(function(){
+		if($("#salesUpdateReason").val() != ""){
+			$('#updateSalesDialog').modal('hide');
 		 var msg = "";
 		 if($("#sales_executive").val() == 0){
 				if(msg!="") msg = ",Please select sales executive name"; else msg ="Please select sales executive name";
@@ -319,6 +372,7 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 	  	}
 	  	else{
 			  console.log('228');
+			    $("#updatesalesdetail").prop("disabled",true);
 		    	$.post("webapi/salesdetail/update",{school_id : $('#school_id').val(),
 		    		id: $("#sdId").val(),
 		    		user_id : $('#user_id').val(),
@@ -327,14 +381,15 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 		    		contact_person_name : $('#contact_person_name').val(),
 		    		contact_person_email: $('#contact_person_email').val(),
 		    		contact_person_no : $('#contact_person_no').val(),
-		    		designation : $('#designation').val()},function(data){
+		    		designation : $('#designation').val(),
+		    		strReason : $("#salesUpdateReason").val()},function(data){
 		    		
 		    		//alert("Hi");
-		    		alert("Saved Successfully");
+		    		alert("Updated Successfully");
 		    		$(".sales-new").hide();
 		    		$(".sales-list").show();
 				  //	$("#school_list").html(data);
-				  
+				  $("#salesUpdateReason").val("");
 				  	$("#savesalesdetail").show();
 					$("#updatesalesdetail").hide();
 					clearSalesDetail();
@@ -350,14 +405,49 @@ salesExecutives = new LoginValidationImp().getSalesExecutive();
 				    	row.push(data[index].infoProviderEmail);	
 				    	row.push(data[index].infoProviderDesignation);	
 				    	row.push("<a href='javascript:editSalesInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-				    			+"<a href='javascript:deleteSalesInfo("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>");
+				    			  +" <a href='#deleteSalesDialog'  data-id='"+data[index].id+"' class='open-deleteSalesDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteSalesDialog' >"
+		                          +"<i class='fa fa-trash'></i></a>");
 				    	oTable.fnAddData(row);
 				   });
+				    $("#updatesalesdetail").prop("disabled",false);
 		    	});
 	 		}
+		}else{
+			alert("Please enter the reason for update");
+		}
 	 	
 	 });
 
+	$("#deleteSalesDetail").click(function(){
+		if($("#salesDelReason").val() != ""){
+			deleteSalesDetail($("#saleshid").val(),$("#salesDelReason").val());
+			$('#deleteSalesDialog').modal('hide');
+		}
+		else{
+		alert("Please enter the reason for delete");
+		}
+	});
+	
+	function deleteSalesDetail(salesDelId,strReason){
+		var schoolId = $("#school_id").val();
+		var user_id = $("#user_id").val();
+		$.post("webapi/school/deleteSalesDetail",{salesDelId : salesDelId,schoolId : schoolId,strReason:strReason,user_id:user_id},function(data){
+			 var oTable = $("#sales-table").dataTable();
+			    oTable.fnClearTable();
+			  $(data).each(function(index){
+				  var row = [];
+			    	row.push(data[index].infoProviderName);						//contact person name
+			    	row.push(data[index].infoProviderContactNo);	
+			    	row.push(data[index].infoProviderEmail);	
+			    	row.push(data[index].infoProviderDesignation);	
+			    	row.push("<a href='javascript:editSalesInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+			    			  +" <a href='#deleteSalesDialog'  data-id='"+data[index].id+"' class='open-deleteSalesDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteSalesDialog' >"
+	                          +"<i class='fa fa-trash'></i></a>");
+			    	oTable.fnAddData(row);
+ 			    });
+			  $("#salesDelReason").val("");
+		});
+	}
 </script>
                         
                         <!-- sales detail tab ends-->
