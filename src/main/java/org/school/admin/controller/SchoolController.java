@@ -1520,7 +1520,7 @@ public class SchoolController extends ResourceConfig {
 	}
 	
 	@POST
-	@Path("/updatepanoimagePanoTitle")
+	@Path("/updatepanoimagepanotitle")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateImagePanoTitle(@FormParam("id") int id, @FormParam("title") String title){
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();

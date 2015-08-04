@@ -111,7 +111,6 @@ function saveHighlight(){
 		    	+"  <a href='javascript:deleteHighlight("+data[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
 		    	var row = [];
 		    	row.push(data[index].name);
-		    	row.push(data[index].description);
 			   	row.push(html);
 		    	oTable.fnAddData(row);
 		    });

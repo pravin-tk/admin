@@ -33,6 +33,7 @@ public class TabControl implements java.io.Serializable {
 	private Byte timeLine;
 	private Byte highlights;
 	private Byte gallery;
+	private Byte panoImage;
 
 	public TabControl() {
 	}
@@ -40,7 +41,8 @@ public class TabControl implements java.io.Serializable {
 	public TabControl(School school, Byte basic, Byte schoolDetail,
 			Byte campusDetail, Byte classDetail, Byte contact,
 			Byte infrastructure, Byte achievements, Byte salesDetails,
-			Byte oldStudentProfile, Byte timeLine, Byte highlights, Byte gallery) {
+			Byte oldStudentProfile, Byte timeLine, Byte highlights, Byte gallery,
+			Byte panoImage) {
 		this.school = school;
 		this.basic = basic;
 		this.schoolDetail = schoolDetail;
@@ -54,6 +56,7 @@ public class TabControl implements java.io.Serializable {
 		this.timeLine = timeLine;
 		this.highlights = highlights;
 		this.gallery = gallery;
+		this.panoImage = panoImage;
 	}
 
 	@Id
@@ -183,6 +186,14 @@ public class TabControl implements java.io.Serializable {
 
 	public void setGallery(Byte gallery) {
 		this.gallery = gallery;
+	}
+	@Column(name = "pano_image")
+	public Byte getPanoImage() {
+		return panoImage;
+	}
+
+	public void setPanoImage(Byte panoImage) {
+		this.panoImage = panoImage;
 	}
 
 }

@@ -775,7 +775,8 @@ public class SchoolDAOImp {
 					+tabControls.get(i).getOldStudentProfile()
 					+tabControls.get(i).getSalesDetails()
 					+tabControls.get(i).getSchoolDetail()
-					+tabControls.get(i).getTimeLine();
+					+tabControls.get(i).getTimeLine()
+					+tabControls.get(i).getPanoImage();
 			
 		}
 		return sum;
@@ -2008,7 +2009,7 @@ public class SchoolDAOImp {
 		
 		msg.setStatus(1);
 		msg.setMessage("Images saved Successfuly..");
-		//updateTabs(school.getId(), "pano-image-gallery");
+		updateTabs(school.getId(), "panoImage");
 		return msg;
 	}
 	
