@@ -69,7 +69,7 @@
                             <a href="#class-detail" data-toggle="tab" >class</a>
                         </li>
                          <li>
-                            <a href="#school-pano-image-tab" data-toggle="tab">360<sup>0</sup> Pano Image</a>
+                            <a href="#school-pano-image-tab" data-toggle="tab">360<sup>0</sup></a>
                         </li>
                          <li>
                             <a href="#school-image-gallery-tab" data-toggle="tab">Gallery</a>
