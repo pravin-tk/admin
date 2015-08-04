@@ -335,7 +335,7 @@
 		 			  updateProgress(school_id);
 		 			 showContactDetail();
 		 			    alert(data.message);
-		 			    $('input[name="is_primary"]:checked').val(0);
+		 			   $("input[name='is_primary']:checked").val(0);
 		 			   $(".contact-new").hide();
 		 			   $(".contact-list").show();
 		 			   $("#savecontact").show();
@@ -559,6 +559,7 @@ $("#updateContact").click(function(){
 				  			  showContactDetail();
 				  			   alert("Updated successfully..");
 				  			  $("#id").val('');
+				  			  $("input[name='is_primary']:checked").val(0);
 				  			$("#contactUpReason").val("");
 				  			   $(".contact-new").hide();
 				  			   $(".contact-list").show();

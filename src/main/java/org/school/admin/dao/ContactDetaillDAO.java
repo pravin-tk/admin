@@ -45,7 +45,7 @@ public class ContactDetaillDAO {
 						response.setMessage("Saved successfuly");
 					}else{// primary 1 exist in DB
 						response.setStatus(0);
-						response.setMessage("Primary contact number already exist");
+						response.setMessage("Primary contact number for external already exist");
 					}
 				}else{// if primary is 0.
 						session.save(contactDetail.get(i));
@@ -74,7 +74,7 @@ public class ContactDetaillDAO {
 						response.setMessage("Saved successfuly");
 					}else{// primary 1 exist in DB
 						response.setStatus(0);
-						response.setMessage("Primary contact number already exist");
+						response.setMessage("Primary contact number for internal already exist");
 					}
 				}else{// if primary 0
 						session.save(contactDetail.get(i));

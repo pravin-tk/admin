@@ -192,7 +192,6 @@
    	
    	
    	$('#saveprevStudent').click(function(){
-   		alert("hi");
    		var school_id = <%out.print(school_id5);%>
    		var user_id = <%out.print(user_id5);%>
 //    			if($("#osname").val().length ==0 )

@@ -214,7 +214,7 @@
 	}
 	
 	function updateimagePanoTitle(id, img_id){
-		$.post("${baseUrl}/webapi/school/updatepanoimagePanoTitle",{id: img_id, title: $("#imagePanoTitle"+img_id).val()},function(data){
+		$.post("${baseUrl}/webapi/school/updatepanoimagepanotitle",{id: img_id, title: $("#imagePanoTitle"+img_id).val()},function(data){
 			alert(data.message);
 		});
 	}

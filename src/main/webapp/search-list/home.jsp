@@ -44,7 +44,9 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
                                        <option value="<%out.print(viewSchoolData.getSchoolId()); %>"><%out.print(viewSchoolData.getSchoolId()); %>, <%out.print(viewSchoolData.getSchoolFullName());%></option>
                                       <%} %>
                                    </select>
-                                   <%} %>
+                                   <%} else{
+                                	    out.println("<br>No school to search");
+                                   }%>
                            </div>
                            <div class="col-sm-2">
                             <div class="col-lg-8" >
@@ -63,7 +65,11 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 		                                    		<option value="<%out.print(viewContact.getContactNumber()); %>"><%out.print(viewContact.getContactDetail());%></option>
 		                                   <%} %>
 		                                   </select>
-                                   <%} %>
+                                   <%}else{
+                                        out.println("<br>No conatct name or number to search");
+                                   }
+                                	   %>
+                                   
                            </div>
                        </div>
                 </form>                        
