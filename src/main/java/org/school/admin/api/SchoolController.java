@@ -31,15 +31,18 @@ import org.school.admin.data.InfraCategory;
 import org.school.admin.data.NameList;
 import org.school.admin.data.Rating;
 import org.school.admin.data.RatingData;
+import org.school.admin.data.RatingReviewData;
 import org.school.admin.data.SchoolAddress;
 import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolContact;
+import org.school.admin.data.SchoolList;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
+import org.school.admin.service.SchoolService;
 import org.school.admin.service.SchoolSuggestionService;
 
 @Path("api1.0/school/")
@@ -81,6 +84,28 @@ public class SchoolController extends ResourceConfig {
 	{
 		img_path = this.context.getInitParameter("s3_base_url");
 		List<SchoolAddress> basic = new ClassDetailDAO().getSchoolBasicInfo(id);
+		if(basic.size() > 0){
+			if(basic.get(0).getHomeImage() != null)
+				basic.get(0).setHomeImage(img_path+basic.get(0).getHomeImage());
+			else
+				basic.get(0).setHomeImage("");
+			if(basic.get(0).getLogo() != null)
+				basic.get(0).setLogo(img_path+basic.get(0).getLogo());
+			else
+				basic.get(0).setLogo("");
+			return basic.get(0);
+		}else{
+			return null;
+		}
+	}
+	
+	@GET
+	@Path("basiclist.json/{id}/{standardId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SchoolList getBasicInfo(@PathParam("id") int id, @PathParam("standardId") int standardId)
+	{
+		img_path = this.context.getInitParameter("s3_base_url");
+		List<SchoolList> basic = new SchoolSearchImpl().fetchSchoolListById(id,standardId);
 		if(basic.size() > 0){
 			if(basic.get(0).getHomeImage() != null)
 				basic.get(0).setHomeImage(img_path+basic.get(0).getHomeImage());
@@ -156,8 +181,13 @@ public class SchoolController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<SchoolReview> getSchoolReviews(@PathParam("id") int id)
 	{
+		img_path = this.context.getInitParameter("s3_base_url");
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
-		return schoolSearchImpl.getSchoolReviews(id);
+		List<SchoolReview> reviews = schoolSearchImpl.getSchoolReviews(id);
+		for(int i = 0; i < reviews.size(); i++){
+			reviews.get(i).getUserRegistrationInfo().setImage(img_path+reviews.get(i).getUserRegistrationInfo().getImage());
+		}
+		return reviews;
 	}
 	
 	@GET
@@ -286,5 +316,14 @@ public class SchoolController extends ResourceConfig {
 	{
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		return schoolSearchImpl.getSchoolAchievmentsBySchoolId(schoolId);
+	}
+	
+	@POST
+	@Path("ratereview.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage addSchoolRatingAndReview(RatingReviewData ratingReviewData){
+		SchoolService schoolService = new SchoolService();
+		return schoolService.addSchoolRatingAndReview(ratingReviewData);
 	}
 }

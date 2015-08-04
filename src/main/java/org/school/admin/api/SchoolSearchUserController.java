@@ -138,6 +138,7 @@ public class SchoolSearchUserController {
 			} else {
 				userRegistrationInfo.setImage(img_path+userRegistrationInfo.getImage());
 			}
+			userRegistrationInfo.setStatus((byte)0);
 			responseMessage.setData(userRegistrationInfo);
 			
 			//Sending newly generated password to user.
@@ -284,7 +285,7 @@ public class SchoolSearchUserController {
 		} else {
 			responseMessage.setErrors(errors);
 			responseMessage.setStatus(0);
-			responseMessage.setMessage("Invalid email.");
+			responseMessage.setMessage("Invalid email or password.");
 		}
 		return responseMessage;
 	}

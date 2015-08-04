@@ -2,7 +2,9 @@ package org.school.admin.service;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.ServletContext;
@@ -99,17 +101,21 @@ public class SchoolSearchUserService {
 				userRegistrationInfo.setPassword(autoPass);
 				responseMessage = schoolSearchUserRepo.signUpUser(userRegistrationInfo, inputStream, uploadFileLocation );
 				userRegistrationInfo.setId(responseMessage.getId());
-				if(userRegistrationInfo.getImage().trim().length() <= 0){
+				try{
+					if(userRegistrationInfo.getImage().trim().length() <= 0){
+						userRegistrationInfo.setImage("avatar/avatar.jpg");
+					} else {
+						userRegistrationInfo.setImage(img_path+userRegistrationInfo.getImage());
+					}
+				} catch(Exception e) {
 					userRegistrationInfo.setImage("avatar/avatar.jpg");
-				} else {
-					userRegistrationInfo.setImage(img_path+userRegistrationInfo.getImage());
 				}
 				responseMessage.setData(userRegistrationInfo);
 			} else {
-				if(fetchedUser.getImage().trim().length() <= 0){
-					fetchedUser.setImage("avatar/avatar.jpg");
-				} else {
+				try{
 					fetchedUser.setImage(img_path+fetchedUser.getImage());
+				} catch(Exception e){
+					fetchedUser.setImage("avatar/avatar.jpg");
 				}
 				responseMessage.setId(fetchedUser.getId());
 				responseMessage.setData(fetchedUser);

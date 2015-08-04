@@ -1,10 +1,17 @@
 package org.school.admin.data;
 
 public class VacantSeats {
+	private Integer id;
 	private Integer schoolId;
 	private Short standardId;
 	private Short vacantSeat;
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public Integer getSchoolId() {
 		return schoolId;
 	}

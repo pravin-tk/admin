@@ -32,18 +32,22 @@ public class SearchFilterService {
 		List<SearchSort> searchSorts = new ArrayList<SearchSort>();
 		SearchSort searchSort1 = new SearchSort();
 		searchSort1.setName("classFee");
+		searchSort1.setDisplayName("Fee");
 		searchSort1.setSortOrder("random");
 		searchSorts.add(searchSort1);
 		SearchSort searchSort2 = new SearchSort();
 		searchSort2.setName("rating");
+		searchSort2.setDisplayName("Rating");
 		searchSort2.setSortOrder("random");
 		searchSorts.add(searchSort2);
 		SearchSort searchSort3 = new SearchSort();
 		searchSort3.setName("distance");
+		searchSort3.setDisplayName("Distance");
 		searchSort3.setSortOrder("random");
 		searchSorts.add(searchSort3);
 		SearchSort searchSort4 = new SearchSort();
 		searchSort4.setName("seats");
+		searchSort4.setDisplayName("Seats");
 		searchSort4.setSortOrder("random");
 		searchSorts.add(searchSort4);
 		return searchSorts;
@@ -69,10 +73,12 @@ public class SearchFilterService {
 		for(int i = 0; i < sort_field_count; i++){
 			SearchSort searchSort = new SearchSort();
 			searchSort.setName(allSortFields.get(i).getName());
+			searchSort.setDisplayName(allSortFields.get(i).getDisplayName());
 			searchSort.setSortOrder(allSortFields.get(i).getSortOrder());
 			for(int j = 0; j < req_sort_count; j++){
 				if(requestSortFields.get(j).getName().equalsIgnoreCase(allSortFields.get(i).getName())){
 					searchSort.setSortOrder(requestSortFields.get(j).getSortOrder());
+					searchSort.setDisplayName(requestSortFields.get(j).getDisplayName());
 				}
 			}
 			sortFields.add(searchSort);
@@ -85,6 +91,7 @@ public class SearchFilterService {
 		List<SearchSort> searchSorts = new ArrayList<SearchSort>();
 		SearchSort searchSort1 = new SearchSort();
 		searchSort1.setName("classFee");
+		searchSort1.setDisplayName("Fee");
 		searchSort1.setSortOrder("random");
 		if(fee.equalsIgnoreCase("ASC") || fee.equalsIgnoreCase("DESC")){
 			searchSort1.setSortOrder(fee);
@@ -92,6 +99,7 @@ public class SearchFilterService {
 		searchSorts.add(searchSort1);
 		SearchSort searchSort2 = new SearchSort();
 		searchSort2.setName("rating");
+		searchSort2.setDisplayName("Rating");
 		searchSort2.setSortOrder("random");
 		if(rating.equalsIgnoreCase("ASC") || rating.equalsIgnoreCase("DESC")){
 			searchSort2.setSortOrder(rating);
@@ -99,6 +107,7 @@ public class SearchFilterService {
 		searchSorts.add(searchSort2);
 		SearchSort searchSort3 = new SearchSort();
 		searchSort3.setName("distance");
+		searchSort3.setDisplayName("Distance");
 		searchSort3.setSortOrder("random");
 		if(distance.equalsIgnoreCase("ASC") || distance.equalsIgnoreCase("DESC")){
 			searchSort3.setSortOrder(distance);
@@ -106,6 +115,7 @@ public class SearchFilterService {
 		searchSorts.add(searchSort3);
 		SearchSort searchSort4 = new SearchSort();
 		searchSort4.setName("seats");
+		searchSort4.setDisplayName("Seats");
 		searchSort4.setSortOrder("random");
 		if(seats.equalsIgnoreCase("ASC") || seats.equalsIgnoreCase("DESC")){
 			searchSort4.setSortOrder(seats);

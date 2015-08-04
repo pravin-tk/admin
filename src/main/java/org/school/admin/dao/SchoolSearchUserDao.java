@@ -82,6 +82,7 @@ public class SchoolSearchUserDao {
 	    return responseMessage;
 	}
 	
+	@SuppressWarnings("null")
 	public ResponseMessage signUpUser( UserRegistrationInfo userRegistrationInfo, InputStream inputStream, String img_path ) {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -119,9 +120,10 @@ public class SchoolSearchUserDao {
 		        	newsession.close();
 		        	this.imageUploader.writeToFile( inputStream, uploadFileLocation);
 	        	}
+	        	userRegistrationInfo.setStatus((byte)0);
 	        	responseMessage.setId(userId);
 	        	responseMessage.setStatus(1);
-	        	responseMessage.setData(fetchedUser);
+	        	responseMessage.setData(userRegistrationInfo);
 	        	responseMessage.setMessage("User registered successfully.");
 		    } catch(javax.validation.ConstraintViolationException e) {
 		    	ArrayList<String> errors = new ArrayList<String>();
@@ -261,6 +263,7 @@ public class SchoolSearchUserDao {
 
 	public ResponseMessage updatePassword(String email, String password) {
 		ResponseMessage responseMessage = new ResponseMessage();
+		ArrayList<String> errors = new ArrayList<String>();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		String updateQuery = "UPDATE UserRegistrationInfo set"
 				+" password='"+password+"'"
@@ -273,10 +276,17 @@ public class SchoolSearchUserDao {
 		newsession.getTransaction().commit();
 		newsession.close();
 		UserRegistrationInfo userRegistrationInfo = this.getUserByEmailId(email);
-		responseMessage.setData(userRegistrationInfo);
-		responseMessage.setId(userRegistrationInfo.getId());
-		responseMessage.setStatus(1);
-		responseMessage.setMessage("Profile activated successfully.");
+		if (userRegistrationInfo != null) {
+			responseMessage.setData(userRegistrationInfo);
+			responseMessage.setId(userRegistrationInfo.getId());
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Profile activated successfully.");
+		} else {
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User not registered with us.");
+			errors.add("Invalid user.");
+			responseMessage.setErrors(errors);
+		}
 		return responseMessage;
 	}
 	

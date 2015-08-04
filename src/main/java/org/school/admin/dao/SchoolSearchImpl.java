@@ -3,6 +3,7 @@ package org.school.admin.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.persistence.sessions.serializers.JSONSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -22,6 +23,7 @@ import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SearchRequest;
 import org.school.admin.data.TotalRating;
+import org.school.admin.data.UriData;
 import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ClassInfo;
@@ -169,6 +171,27 @@ public class SchoolSearchImpl {
 		).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
 
 		
+		List<SchoolList> resultRaw = query.list();
+		session.close();
+		return resultRaw;
+	}
+	
+	public List<SchoolList> fetchSchoolListById(int schoolId,int standardId) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createQuery(
+				  "SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
+				+ " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
+				+ " s.homeImage as homeImage,s.logo as logo, s.establishmentType as establishmentType,"
+				+ " s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
+				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
+				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
+				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				+ " 0.0 as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,ci.standardType.id as standardId"
+				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
+				+ " WHERE s.schoolId = ss.id AND ci.standardType.id = "+standardId
+				+ " AND ss.id = "+schoolId
+		).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
 		List<SchoolList> resultRaw = query.list();
 		session.close();
 		return resultRaw;
@@ -467,10 +490,10 @@ public class SchoolSearchImpl {
 			}
 		} else {
 			if(ratingData.getSchoolId() <= 0){
-				errors.add("School Id Can be empty");
+				errors.add("School Id Can not be empty");
 			}
 			if(ratingData.getUserId() <= 0){
-				errors.add("User Id Can be empty");
+				errors.add("User Id Can not be empty");
 			}
 			if(ratingData.getRatings().size() <= 0){
 				errors.add("Rating data can not be empty");
@@ -558,6 +581,7 @@ public class SchoolSearchImpl {
 		VacantSeats vacantSeat = new VacantSeats();
 		List<VacantSeats> vacantSeats = new ArrayList<VacantSeats>();
 		for(int i=0; i< result.size(); i++){
+			vacantSeat.setId(result.get(i).getId());
 			vacantSeat.setSchoolId(schoolId);
 			vacantSeat.setStandardId(standardId);
 			vacantSeat.setVacantSeat(result.get(i).getVacantSeat());
@@ -672,5 +696,41 @@ public class SchoolSearchImpl {
 		List<PrevStudentProfile> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	public List<SchoolList> getTopSchools() {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+
+		String hql = "SELECT s.schoolId as schoolId, s.name as name,"
+					 + " s.homeImage as homeImage, s.logo as logo,"
+				     + " s.localityName as localityName,"
+				     + " s.cityName as cityName, s.rating as rating"
+					 + " FROM SchoolSearch s, School schl"
+					 + " WHERE s.schoolId = schl.id AND schl.promote = 1";
+
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
+		List<SchoolList> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public UriData getUriByLatitudeLongitudeByStandard(String latitude, String longitude, Short standardId) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+
+		String sql = "SELECT "
+				+ " CONCAT(REPLACE(c.name, ' ', '-') , '/', REPLACE(l.name,' ', '-'), '/', REPLACE(st.name, ' ', '-')) as Uri "
+				+ " FROM locality l JOIN city c ON l.city_id = c.id, standard_type st "
+				+ " WHERE st.id = :standardId "
+				+ " AND (ROUND(6371 *   ACOS(COS( RADIANS( :latitude ) ) * COS( RADIANS( l.latitude ) ) *  COS(RADIANS( l.longitude ) - RADIANS(:longitude) )  + SIN(RADIANS( :latitude)) * SIN(RADIANS(l.latitude)) ),3 )) < 3 "
+				+ " ORDER BY (ROUND(6371 * ACOS(COS( RADIANS( :latitude ) ) * COS( RADIANS( l.latitude ) ) * COS(RADIANS( l.longitude ) - RADIANS(:longitude) ) + SIN(RADIANS( :latitude)) * SIN(RADIANS(l.latitude)) ),3 )) ASC "
+				+ " LIMIT 1";
+		Query query = session.createSQLQuery(sql)
+				.setParameter("standardId", standardId)
+				.setParameter("latitude", latitude)
+				.setParameter("longitude", longitude)
+				.setResultTransformer(Transformers.aliasToBean(UriData.class));
+		return (UriData)query.uniqueResult();
 	}
 }
