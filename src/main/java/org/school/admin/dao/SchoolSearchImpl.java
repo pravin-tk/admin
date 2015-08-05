@@ -708,6 +708,8 @@ public class SchoolSearchImpl {
 			+ " s.name as name, "
 			+ " s.localityName as localityName, "
 			+ " s.rating as rating, "
+			+ " s.homeImage as homeImage, "
+			+ " s.mediums as mediums, "
 			+ " ci.vacantSeat as vacantSeat, "
 			+ " ci.totalFee as totalFee, "
 			+ " ci.standardType.id as standardId, "
