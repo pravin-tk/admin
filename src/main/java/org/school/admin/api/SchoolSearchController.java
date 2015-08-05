@@ -35,6 +35,7 @@ import org.school.admin.data.SearchRequest;
 import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.data.UriData;
+import org.school.admin.exception.ResponseMessage;
 import org.school.admin.service.SearchFilterService;
 
 @Path("api1.0")
@@ -219,7 +220,7 @@ public class SchoolSearchController {
 	@GET
 	@Path("/geturi.json/{latitude}/{longitude}/{standardId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public UriData getUri(
+	public ResponseMessage getUri(
 			@PathParam("latitude") String latitude,
 			@PathParam("longitude") String longitude,
 			@PathParam("standardId") Short standardId) {
