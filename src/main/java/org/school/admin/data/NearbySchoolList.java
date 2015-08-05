@@ -10,6 +10,8 @@ public class NearbySchoolList {
 	private Short standardId;
 	private Double distance;
 	private String localityName;
+	private String homeImage;
+	private String mediums;
 	
 	public Integer getSchoolId() {
 		return schoolId;
@@ -64,6 +66,18 @@ public class NearbySchoolList {
 	}
 	public void setLocalityName(String localityName) {
 		this.localityName = localityName;
+	}
+	public String getHomeImage() {
+		return homeImage;
+	}
+	public void setHomeImage(String homeImage) {
+		this.homeImage = homeImage;
+	}
+	public String getMediums() {
+		return mediums;
+	}
+	public void setMediums(String mediums) {
+		this.mediums = mediums;
 	}
 	
 }
