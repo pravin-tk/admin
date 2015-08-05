@@ -111,7 +111,7 @@
                 </ul>
               <form class="navbar-form navbar-right">
                     <div class="input-group margin-bottom-sm selectCountry">
-                        <span class="input-group-addon"><i class="fa"></i></span>
+<!--                         <span class="input-group-addon"><i class="fa"></i></span> -->
                         <select id="change_city" name="change_city" class="form-control">
                             <%
 		                    String drop_dn_city_selected = ""; 

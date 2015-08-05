@@ -17,6 +17,7 @@ import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -52,10 +53,10 @@ public class GeneralController extends ResourceConfig {
 	@Path("requirement.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addRequirement(
-			@FormDataParam("name") String name,
-			@FormDataParam("email") @DefaultValue("") String email,
-			@FormDataParam("mobile") String mobile,
-			@FormDataParam("requirement") String requirement
+			@FormParam("name") String name,
+			@FormParam("email") @DefaultValue("") String email,
+			@FormParam("mobile") String mobile,
+			@FormParam("requirement") String requirement
 			) {
 		PostRequirement postRequirement = new PostRequirement(name,email,mobile,requirement);
 		UserImpl userImpl = new UserImpl();

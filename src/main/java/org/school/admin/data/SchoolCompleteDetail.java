@@ -6,6 +6,7 @@ import java.util.Set;
 import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.SchoolHighlight;
 import org.school.admin.model.SchoolImageGallery;
+import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolTimeline;
 
@@ -16,6 +17,7 @@ public class SchoolCompleteDetail {
 	private List<SchoolTimelineData> schoolTimelineData;
 	private List<SchoolFacilityData> schoolFacilityData;
 	private List<GalleryData> images;
+	private List<SchoolPanoramicImage> panorama;
 	private List<FeeDetail> fees;
 	private Facility facility;
 	private List<Rating> rating;
@@ -67,6 +69,14 @@ public class SchoolCompleteDetail {
 
 	public void setImages(List<GalleryData> images) {
 		this.images = images;
+	}
+
+	public List<SchoolPanoramicImage> getPanorama() {
+		return panorama;
+	}
+
+	public void setPanorama(List<SchoolPanoramicImage> panorama) {
+		this.panorama = panorama;
 	}
 
 	public List<FeeDetail> getFees() {

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -40,8 +41,11 @@ import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.PrevStudentProfile;
+import org.school.admin.model.School;
+import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
+import org.school.admin.model.UserRegistrationInfo;
 import org.school.admin.service.SchoolService;
 import org.school.admin.service.SchoolSuggestionService;
 
@@ -141,6 +145,20 @@ public class SchoolController extends ResourceConfig {
 			galleryDatas.get(i).setImageUrl(img_path+galleryDatas.get(i).getImageUrl());
 		}
 		return galleryDatas;
+	}
+	
+	@GET
+	@Path("panorama.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolPanoramicImage> getSchoolPanorama(@PathParam("id") int id)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		List<SchoolPanoramicImage> schoolPanoramicImages = schoolSearchImpl.getSchoolPanorama(id);
+		img_path = this.context.getInitParameter("s3_base_url");
+		for(int i = 0; i < schoolPanoramicImages.size(); i++){
+			schoolPanoramicImages.get(i).setPanoImage(img_path+schoolPanoramicImages.get(i).getPanoImage());
+		}
+		return schoolPanoramicImages;
 	}
 	
 	@GET
@@ -270,11 +288,23 @@ public class SchoolController extends ResourceConfig {
 	
 	@POST
 	@Path("review.json")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage getSchoolReview(SchoolReview schoolReview)
-	{
-	    Byte reviewStatus =0;
+	public ResponseMessage getSchoolReview(
+			@FormParam("schoolId") int schoolId,
+			@FormParam("userId") int userId,
+			@FormParam("title") String title,
+			@FormParam("review") String review
+	){
+		SchoolReview schoolReview = new SchoolReview();
+		School school = new School();
+		school.setId(schoolId);
+		UserRegistrationInfo userRegistrationInfo = new UserRegistrationInfo();
+		userRegistrationInfo.setId(userId);
+		schoolReview.setSchool(school);
+		schoolReview.setUserRegistrationInfo(userRegistrationInfo);
+		schoolReview.setTitle(title);
+		schoolReview.setReview(review);
+		Byte reviewStatus =0;
 		schoolReview.setDate(new Date());
 		schoolReview.setTime(new Date());
 		schoolReview.setStatus(reviewStatus);
