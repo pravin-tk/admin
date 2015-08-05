@@ -60,7 +60,8 @@ public class ContactDetaillDAO {
 				}
 				
 				
-			}else if(contactDetail.get(i).getType()==0){//internal
+			}
+			if(contactDetail.get(i).getType()==0){//internal
 				if(contactDetail.get(i).getIsPrimary() == 1){//if primary is 1
 					if(!isPrimaryInternal(contactDetail.get(i).getSchool().getId())){//primary 1 not exist DB
 						session.save(contactDetail.get(i));

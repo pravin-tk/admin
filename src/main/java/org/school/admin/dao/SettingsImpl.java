@@ -258,6 +258,16 @@ public class SettingsImpl {
 		session.close();
 		return result;
 	}
+	public String getStreamTypeNameById(Short id){
+		String hql = "from StreamType where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<StreamType> result = query.list();
+		session.close();
+		return result.get(0).getTitle();
+	}
 	/*------------------------------------------------------------------------*/
 	/*------------------------Pankaj Naik--------------*/
 	/**
@@ -501,6 +511,22 @@ public class SettingsImpl {
 		return result;
 	}
 	/*---------------------PANKAJ NAIK ---------------------------*/
+	/**
+	 * Get Accessory Name by id
+	 * @author PANKAJ 
+	 * @return String
+	 */
+	public String getAccessoryNameById(int id)
+	{
+		String hql = "from Accessories where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<Accessories> result = query.list();
+		session.close();
+		return result.get(0).getName();
+	}
 	/**
 	 * Get All Blood group
 	 * @author PANKAJ 
@@ -1253,6 +1279,18 @@ public class SettingsImpl {
 		session.close();
 		return result;
 	}
+	public String getTeachingApproachTypeNameById(short id)
+	{
+		String hql = "from TeachingApproachType where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<TeachingApproachType> result = query.list();
+		System.out.println("Output="+result.size());
+		session.close();
+		return result.get(0).getName();
+	}
 	/**
 	 * Save SchoolType
 	 * 
@@ -1537,6 +1575,23 @@ public class SettingsImpl {
 		List<Subject> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	/**
+	 * Get Subject name by id
+	 * @author Pankaj
+	 * @return String
+	 */
+	public String getSubjectNameById(int id)
+	{
+		String hql = "from Subject where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<Subject> result = query.list();
+		session.close();
+		return result.get(0).getName();
 	}
 	
 	/**

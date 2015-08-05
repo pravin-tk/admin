@@ -22,7 +22,17 @@ public class StandardTypeDAO {
 		session.close();
 		return result;
 	}
-	
+	public String getStandardTypeNameById(Short id)
+	{
+		String hql = "from StandardType where id =:id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<StandardType> result = query.list();
+		session.close();
+		return result.get(0).getName();
+	}
 	public List<NameList> getStandardList()
 	{
 		String hql = "SELECT s.id as id, s.name as name FROM StandardType s";

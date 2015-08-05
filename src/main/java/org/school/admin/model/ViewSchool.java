@@ -26,8 +26,6 @@ public class ViewSchool implements java.io.Serializable {
 	public ViewSchool() {
 	}
 
-	
-
 	public ViewSchool(int schoolId, String schoolName, String aliasName,
 			String localityName,int cityId, String cityName, String schoolFullName) {
 		this.schoolId = schoolId;

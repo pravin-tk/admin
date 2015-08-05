@@ -127,15 +127,15 @@
                                <div class="form-group">
                    				 <label class="col-sm-2 control-label">is primary</label>
                   				  <div class="col-sm-6" id="cbk_board">
-                    				 <label class='checkbox-inline'> <input type='radio' value='1' id='is_primary' name='is_primary' >Yes</label>
-                    				  <label class='checkbox-inline'> <input type='radio' value='0' id='is_primary' name='is_primary' checked>No</label>
+                    				 <label class='checkbox-inline'> <input type='radio' value='1' id='is_primary_yes' name='is_primary' >Yes</label>
+                    				  <label class='checkbox-inline'> <input type='radio' value='0' id='is_primary_no' name='is_primary' checked>No</label>
                      			 </div>
                				 </div>
                                
                          <div class="form-group">
                     		<div class="col-sm-4">
                             	<button type="button" id='savecontact' class="btn btn-success">Save</button>
-                            	<button type="button" id='updatecontact' class="btn btn-success"  data-toggle="modal" data-target="#updateContactDetail" style="display:none;">Update</button>
+                            	<button type="button" id='updatecontact' class="btn btn-success"  data-toggle="modal" data-target="#updatecontactdetail" style="display:none;">Update</button>
                             	<button class="btn btn-default list-id list-contact" id="cancel-contact-detail" type="reset" >Cancel</button>
                         	</div>
                    		 </div> 
@@ -162,7 +162,7 @@
                       </div>
                   </div>
                   
-                  <div class="modal fade" id="updateContactDetail" tabindex="-1" role="dialog" aria-hidden="true" >
+                  <div class="modal fade" id="updatecontactdetail" tabindex="-1" role="dialog" aria-hidden="true" >
                       <div class="modal-dialog">
                           <div class="modal-content" style="width:450px;">
                               <div class="modal-header">
@@ -386,7 +386,10 @@
 			$('#email').val(data.email);
 			$('#mobile_no').val(data.mobileNo);
 			$("#contact_no").val(data.contactNo);
-			$("#is_primary").val(data.isPrimary);
+			if(data.isPrimary == 1)
+				$("#is_primary_yes").val("1");
+			else
+				$("#is_primary_no").val("0");
 			
 			$('input[name="usertype[]"]').prop( "checked", false);
 			if(data.type == 0){
@@ -493,7 +496,7 @@
 $("#updateContact").click(function(){
 	if($("#contactUpReason").val() != ""){
 		updateContact($("#contactUpReason").val());
-		$('#updateContactDetail').modal('hide');
+		$('#updatecontactdetail').modal('hide');
 	}else{
 		alert("Please enter the resaon for update");
 	}
@@ -559,7 +562,8 @@ $("#updateContact").click(function(){
 				  			  showContactDetail();
 				  			   alert("Updated successfully..");
 				  			  $("#id").val('');
-				  			  $("input[name='is_primary']:checked").val(0);
+				  			 $("#is_primary_yes").prop( "checked", false);
+				  			  $("#is_primary_no").prop( "checked", true);
 				  			$("#contactUpReason").val("");
 				  			   $(".contact-new").hide();
 				  			   $(".contact-list").show();

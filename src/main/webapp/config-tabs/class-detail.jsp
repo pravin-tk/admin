@@ -598,9 +598,6 @@ for (int i = 0; i < feetypes.size(); i++) {
 			  }
 	});
 	select_fee  = $select_fee[0].selectize;
-
-
-
 	
 	function SplitTheString(CommaSepStr) {
 		 var ResultArray = []; 
@@ -678,13 +675,15 @@ $('#updateclassdetail').click(function() {
    if(msg != "") {
 	       alert(msg);
    }else{
-	  
+	  	// if($("#strReasonUpdateClass").val() != ""){
 			fee_data = getFeeData();
 		subject_data = getSubjectData();
 		accessory_data = getAccessoryData();
 		class_info_data = getClassInfoData();
+		adminUser = getAdminUser();
+		strReason = $("#strReasonUpdateClass").val();
 		var final_data = [];
-		final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data };
+		final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data};
 		$.ajax({
 		    url: 'webapi/school/updateclassdetail',
 		    type: 'POST',
@@ -714,6 +713,7 @@ $('#updateclassdetail').click(function() {
 			}
 			
 		});
+	 // }
 	}
 });
 
@@ -902,9 +902,6 @@ $("#addClassDetail1").click(function(){
 		return fee_data;
 	}
 
-
-
-
 	function getSubjectData() {
 		var subject = null;
 		var subjectItem =null;
@@ -920,6 +917,7 @@ $("#addClassDetail1").click(function(){
 		return subject_data;
 	}
 
+	
 	function getAccessoryData() {
 		var accessories = null;
 		var accessoryItem =null;
@@ -934,6 +932,12 @@ $("#addClassDetail1").click(function(){
 		return accessory_data;
 	}
 
+	function getAdminUser(){
+		var adminId = <%out.print(user_id6);%>
+		adminUser = {adminUser:{id:adminId}};
+		return adminUser;
+	}
+	
 	function getClassInfoData () {
 		var school_id = <%out.print(school_id6);%>
 		if($("#class_id").val() >0) {
@@ -990,6 +994,7 @@ $("#addClassDetail1").click(function(){
 		var subject = "";
 		var fee_data = "";
 		var msg = "";
+	//	var strReason = "";
 
 		if ($('#standard').val() == 0) {
 			if(msg != "") msg = msg+",Please select standard"; else  msg = "Please select standard";
@@ -1027,6 +1032,7 @@ $("#addClassDetail1").click(function(){
 			subject_data = getSubjectData();
 			accessory_data = getAccessoryData();
 			class_info_data = getClassInfoData();
+			adminUser = getAdminUser();
 			var final_data = [];
 			final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data };
 			$.ajax({

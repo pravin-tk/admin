@@ -369,31 +369,36 @@ public class SchoolDAOImp {
 //		return result;
 //	}
 	
-	public List<ViewContact> getViewContactList(int cityId)
+	public List<ViewContactData> getViewContactList(int cityId)
 	{
 		System.out.println("TTTT");
-		String hql = "select distinct v from ViewContact v where v.cityId =:cityId";
+		String hql = "from ViewContact where cityId =:cityId";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("cityId", cityId);
 		List<ViewContact> result = query.list();
-//		List<ViewContactData> viewContactDatas = new ArrayList<ViewContactData>();
-//		if(result.size()>0){
-//			for(int i=0;i<result.size();i++)
-//			{
-//				ViewContactData viewContactData = new ViewContactData();
-//				viewContactData.setContactNumber(result.get(i).getContactNumber());
-//				viewContactData.setContactDetail(result.get(i).getContactDetail());
-//				viewContactDatas.add(viewContactData);
-//				System.out.println("AAA : "+result.get(i).getContactDetail());
-//			}
-//			session.close();
-//		}
-//		else{
-//			System.out.println("ZZZZZZZZZZZ..");
-//		}
-		return result;
+		List<ViewContactData> viewContactDatas = new ArrayList<ViewContactData>();
+		if(result.size()>0){
+			for(int i=0;i<result.size();i++)
+			{
+//				ViewContact viewContact = new ViewContact();
+//				viewContact.setContactNumber(result.get(i).getContactNumber());
+//				viewContact.setContactDetail(result.get(i).getContactDetail());
+				String contactNumber = result.get(i).getContactNumber();
+				String conatctDetail = result.get(i).getContactDetail();
+				ViewContactData viewContactData = new ViewContactData();
+				viewContactData.setContactNumber(contactNumber);
+				viewContactData.setContactDetail(conatctDetail);
+				viewContactDatas.add(viewContactData);
+				System.out.println("AAA : "+result.get(i).getContactDetail());
+			}
+			session.close();
+		}
+		else{
+			System.out.println("ZZZZZZZZZZZ..");
+		}
+		return viewContactDatas;
 	}
 	
 	public List<School> getSchoolList(String contact_id,int cityId){
@@ -711,6 +716,7 @@ public class SchoolDAOImp {
 		tabControl.setSalesDetails(defaultVal);
 		tabControl.setSchoolDetail(defaultVal);
 		tabControl.setTimeLine(defaultVal);
+		tabControl.setPanoImage(defaultVal);
 		session.save(tabControl);
 		session.getTransaction().commit();
 		session.close();
@@ -926,9 +932,13 @@ public class SchoolDAOImp {
 	}
 	public ResponseMessage saveClassDetail(ClassDetail classDetail)
 	{
+		String log = "|New entry in class detail |";
 		int class_info_id = 0;
 		ResponseMessage msg = new ResponseMessage();
 		ClassInfo classInfo = classDetail.getClassInfo();
+		//String strReason = classDetail.getStrReason();
+	//	AdminUser adminUser = new AdminUser();
+		//adminUser.setId(classDetail.getAdminUser().getId());
 		School school = new School();
 		school.setId(classDetail.getClassInfo().getSchool().getId());
 		if(classDetail.getClassInfo().getStandardType().getId() <= 0) {
@@ -962,6 +972,23 @@ public class SchoolDAOImp {
 				class_info_id = classInfo.getId();
 				session.getTransaction().commit();
 				session.close();
+				log += " Standard : "+new StandardTypeDAO().getStandardTypeNameById(classInfo.getStandardType().getId());
+				log += "| stream : "+new SettingsImpl().getStreamTypeNameById(classInfo.getStreamType().getId());
+				log += "| Teaching approach : "+new SettingsImpl().getTeachingApproachTypeNameById(classInfo.getTeachingApproachType().getId());
+				log += "| Total seats : "+classInfo.getTotalSeat();
+				log += "| Vacant seats : "+classInfo.getVacantSeat();
+				log += "| Morning time from : "+classInfo.getMorningTimeFrom();
+				log += "| Moring time to : "+classInfo.getMorningTimeTo();
+				log += "| Afternoon time from : "+classInfo.getAfternoonTimeFrom();
+				log += "| Afternoon time to : "+classInfo.getAfternoonTimeTo();
+				log += "| Admission deadline : "+classInfo.getAdmissionDeadline();
+				log += "| Admission from : "+classInfo.getAdmissionFrom();
+				log += "| Admission to : "+classInfo.getAdmissionTo();
+				log += "| Eligibility Criteria :"+classInfo.getEligibilityCriteria();
+				log += "| Specialization : "+classInfo.getSpecialization();
+				log += "| Admission Procedure : "+classInfo.getAdmissionProcess();
+				log += "| How To Apply : "+classInfo.getHowToApply();
+				log += "| Fee Payment Term : "+classInfo.getFeesPaymentTerm();
 			}
 			
 			Set<ClassAccessories> classAccessories = classDetail.getClassAccessories();
@@ -969,6 +996,7 @@ public class SchoolDAOImp {
 		
 			if(classAccessories.size()>0)
 			{		
+				log +="| Accessories Provided : ";
 				Session session = hibernateUtil.openSession();
 				session.beginTransaction();
 				
@@ -978,6 +1006,7 @@ public class SchoolDAOImp {
 					ClassAccessories classAccessoryItem = sIterator.next();
 					classAccessoryItem.setClassInfo(classInfo);
 					session.save(classAccessoryItem);
+					log +=", "+new SettingsImpl().getAccessoryById(classAccessoryItem.getAccessories().getId());
 				}
 				session.getTransaction().commit();
 				session.close();
@@ -989,6 +1018,8 @@ public class SchoolDAOImp {
 			session3.beginTransaction();
 			if(classSubjects.size()>0)
 			{
+				log += "| subject taughts : ";
+				
 				for(int i=0;i< classSubjects.size();i++)
 				{
 					if(!classSubjects.isEmpty())
@@ -1000,6 +1031,7 @@ public class SchoolDAOImp {
 							classSubjects4.setClassInfo(classInfo);
 							classSubjects4.setSchool(school);
 							session3.save(classSubjects4);
+							log +=", "+new SettingsImpl().getSubjectNameById(classSubjects4.getSubject().getId());
 						}
 					}
 				}
@@ -1012,6 +1044,7 @@ public class SchoolDAOImp {
 			session4.beginTransaction();
 			if(classFees.size()>0)
 			{
+				log +="| Fee Type : ";
 				for(int i=0;i< classFees.size();i++)
 				{
 					if(!classFees.isEmpty())
@@ -1022,6 +1055,8 @@ public class SchoolDAOImp {
 							ClassFee classFees4 = classFees3.next();
 							classFees4.setClassInfo(classInfo);
 							session4.save(classFees4);
+							log += " Fee Description : "+classFees4.getFeeDesc();
+							log += " | Amount : "+classFees4.getAmount();
 						}
 					}
 				}
@@ -1031,6 +1066,7 @@ public class SchoolDAOImp {
 			msg.setStatus(1);
 			msg.setMessage("Saved Successfully");
 			updateTabs(school.getId(), "classDetail");
+			//saveSchoolLog(new SchoolLog(adminUser, school, "", log, new Date(), new Date()));
 		}	
 		
 		return msg;

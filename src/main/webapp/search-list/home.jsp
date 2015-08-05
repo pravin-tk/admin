@@ -20,10 +20,10 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 	}
 	List<ViewSchoolData> viewSchoolList = new SchoolDAOImp().getViewSchoolList((Integer)session.getAttribute("cityid"));
 	
-	List<ViewContact> viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
+	List<ViewContactData> viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
 	for(int i=0;i<viewContactList.size();i++)
 	{
-	//System.out.println("ContactDetailsList : "+viewContactList.get(i).getContactDetail());
+	System.out.println("ContactDetailsList : "+viewContactList.get(i).getContactDetail());
 		out.print("<script>"
 				+"console.log('"+viewContactList.get(i).getContactDetail()+"');"
 				+"</script>");
@@ -61,7 +61,7 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 		                                   <select id="contact_id" name="sendImages">
 		                                        <option value="0">Enter POC Name or POC Contact Number</option> 
 		                                  <% for(int i=0;i<viewContactList.size();i++) {
-		                                         ViewContact viewContact = viewContactList.get(i); %>
+		                                	  ViewContactData viewContact = viewContactList.get(i); %>
 		                                    		<option value="<%out.print(viewContact.getContactNumber()); %>"><%out.print(viewContact.getContactDetail());%></option>
 		                                   <%} %>
 		                                   </select>
