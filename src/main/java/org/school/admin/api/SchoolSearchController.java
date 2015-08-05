@@ -32,6 +32,7 @@ import org.school.admin.data.SchoolListingRequest;
 import org.school.admin.data.SchoolSearchResult;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.SearchRequest;
+import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.data.UriData;
 import org.school.admin.service.SearchFilterService;
@@ -147,6 +148,11 @@ public class SchoolSearchController {
 		for(int i = 0; i < galleryDatas.size(); i++){
 			galleryDatas.get(i).setImageUrl(img_path+galleryDatas.get(i).getImageUrl());
 		}
+		List<SchoolPanoramicImage> schoolPanoramicImages = schoolSearchImpl.getSchoolPanorama(id);
+		img_path = this.context.getInitParameter("s3_base_url");
+		for(int i = 0; i < schoolPanoramicImages.size(); i++){
+			schoolPanoramicImages.get(i).setPanoImage(img_path+schoolPanoramicImages.get(i).getPanoImage());
+		}
 		List<SchoolReview> reviews = schoolSearchImpl.getSchoolReviews(id);
 		for(int i = 0; i < reviews.size(); i++){
 			reviews.get(i).getUserRegistrationInfo().setImage(img_path+reviews.get(i).getUserRegistrationInfo().getImage());
@@ -156,6 +162,7 @@ public class SchoolSearchController {
 		result.setContacts(contactDetaillDAO.getExternalConatctDetail(id));
 		result.setSchoolTimelineData(timelines);
 		result.setImages(galleryDatas);
+		result.setPanorama(schoolPanoramicImages);
 		result.setFees(schoolSearchImpl.getClassFeeDetails(id,standardId));
 		Facility facility = new Facility();
 		facility.setActivity(schoolSearchImpl.getSchoolActivity(id));

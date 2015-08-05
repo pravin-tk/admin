@@ -35,6 +35,7 @@ import org.school.admin.model.SchoolActivityCatItem;
 import org.school.admin.model.SchoolAnalytics;
 import org.school.admin.model.SchoolImageGallery;
 import org.school.admin.model.SchoolInfrastructureCatItem;
+import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolRating;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSafetyCatItem;
@@ -247,6 +248,17 @@ public class SchoolSearchImpl {
      		}
 		}
 		return gallaryDataList;
+	}
+	
+	public List<SchoolPanoramicImage> getSchoolPanorama(int schoolId) {
+		String HQL = "SELECT id as id,title as title, panoImage as panoImage from SchoolPanoramicImage where school.id = :schoolId";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		
+		Query query = session.createQuery(HQL).setResultTransformer(Transformers.aliasToBean(SchoolPanoramicImage.class));
+		query.setParameter("schoolId", schoolId);
+		List<SchoolPanoramicImage> schoolImageGalleryList = query.list();
+		return schoolImageGalleryList;
 	}
 	
 	public List<FeeDetail> getClassFeeDetails(int schoolId,Short std_id)

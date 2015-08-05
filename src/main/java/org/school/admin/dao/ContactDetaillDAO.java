@@ -147,9 +147,61 @@ public class ContactDetaillDAO {
 	public ResponseMessage updateContactInfoInternal(ContactInfo contactDetail,String strReason)
 	{
 		ResponseMessage response = new ResponseMessage();
+		String hql1 ="from ContactInfo where school.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("id", contactDetail.getSchool().getId());
+		List<ContactInfo> contactInfoList = query1.list();
+		int internal_cont = 0;
+		int external_cont = 0;
+		int is_int_primary = 0;
+		int is_ext_primary = 0;
+		for(int i=0; i<contactInfoList.size(); i++){
+			if(contactInfoList.get(i).getId() != contactDetail.getId()){
+				if(contactInfoList.get(i).getType() == 1){
+					if(contactInfoList.get(i).getIsPrimary() == 1){
+						is_ext_primary++;
+					}
+					external_cont++;
+				}else{
+					if(contactInfoList.get(i).getIsPrimary() == 1){
+						is_int_primary++;
+					}
+					internal_cont++;
+				}
+			}
+		}
+		if(contactDetail.getType() == 1){
+			if(external_cont >= 2){
+				response.setMessage("Can not add more than two external contacts.");
+				response.setStatus(0);
+				return response;
+			}
+		}else{
+			if(internal_cont >= 2){
+				response.setMessage("Can not add more than two internal contacts.");
+				response.setStatus(0);
+				return response;
+			}
+		}
+		if(contactDetail.getIsPrimary() == 1){
+			if(contactDetail.getType() == 1){
+				if(is_ext_primary >= 1){
+					response.setMessage("Primary external contact already exists.");
+					response.setStatus(0);
+					return response;
+				}
+			}else{
+				if(is_int_primary >= 1){
+					response.setMessage("Primary internal contact already exists.");
+					response.setStatus(0);
+					return response;
+				}
+			}
+		}
 		String afterChange ="| Data after update in contact detail |";
 		String hql ="from ContactInfo where id = :id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 	
 		session.beginTransaction();
@@ -179,18 +231,18 @@ public class ContactDetaillDAO {
 		updateContactInfo.beginTransaction();
 		if(getContactInfo.size()>0)
 		{
-			if(!isPrimaryExternal(getContactInfo.get(0).getSchool().getId()) && !isPrimaryInternal(getContactInfo.get(0).getSchool().getId())){
-			contactDetail.setId(getContactInfo.get(0).getId());
-			updateContactInfo.update("id",contactDetail);
-			updateContactInfo.getTransaction().commit();
-			updateContactInfo.close();
-			response.setStatus(1);
-			response.setMessage("Updated successfully");
-			}
-			else{
-				response.setStatus(0);
-				response.setMessage("More than one primary contact numbers not allow");
-			}
+//			if(!isPrimaryExternal(getContactInfo.get(0).getSchool().getId()) && !isPrimaryInternal(getContactInfo.get(0).getSchool().getId())){
+				contactDetail.setId(getContactInfo.get(0).getId());
+				updateContactInfo.update("id",contactDetail);
+				updateContactInfo.getTransaction().commit();
+				updateContactInfo.close();
+				response.setStatus(1);
+				response.setMessage("Updated successfully");
+//			}
+//			else{
+//				response.setStatus(0);
+//				response.setMessage("More than one primary contact numbers not allow");
+//			}
 		}
 		
 		
@@ -268,7 +320,7 @@ public class ContactDetaillDAO {
 		sessionnew.close();
 		if(schoolSearchs.size() > 0) {
 			Byte type = 1;
-			String hql = "from ContactInfo where school.id = :school_id AND type = :type";
+			String hql = "from ContactInfo where school.id = :school_id AND type = :type order by isPrimary DESC";
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
 			query.setParameter("school_id", school_id);
@@ -291,6 +343,7 @@ public class ContactDetaillDAO {
 				contactInfoInternal.setName(contactInfoList.get(i).getName());
 				contactInfoInternal.setMobileNo(contactInfoList.get(i).getMobileNo());
 				contactInfoInternal.setEmail(contactInfoList.get(i).getEmail());
+				contactInfoInternal.setIsPrimary(contactInfoList.get(i).getIsPrimary());
 				newcontactInfoList.add(contactInfoInternal);
 				
 			}

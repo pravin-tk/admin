@@ -42,6 +42,7 @@ import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.School;
+import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSuggestion;
 import org.school.admin.model.UserRegistrationInfo;
@@ -144,6 +145,20 @@ public class SchoolController extends ResourceConfig {
 			galleryDatas.get(i).setImageUrl(img_path+galleryDatas.get(i).getImageUrl());
 		}
 		return galleryDatas;
+	}
+	
+	@GET
+	@Path("panorama.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolPanoramicImage> getSchoolPanorama(@PathParam("id") int id)
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		List<SchoolPanoramicImage> schoolPanoramicImages = schoolSearchImpl.getSchoolPanorama(id);
+		img_path = this.context.getInitParameter("s3_base_url");
+		for(int i = 0; i < schoolPanoramicImages.size(); i++){
+			schoolPanoramicImages.get(i).setPanoImage(img_path+schoolPanoramicImages.get(i).getPanoImage());
+		}
+		return schoolPanoramicImages;
 	}
 	
 	@GET

@@ -127,8 +127,8 @@
                                <div class="form-group">
                    				 <label class="col-sm-2 control-label">is primary</label>
                   				  <div class="col-sm-6" id="cbk_board">
-                    				 <label class='checkbox-inline'> <input type='radio' value='1' id='is_primary' name='is_primary' >Yes</label>
-                    				  <label class='checkbox-inline'> <input type='radio' value='0' id='is_primary' name='is_primary' checked>No</label>
+                    				 <label class='checkbox-inline'> <input type='radio' value='1' id='is_primary_yes' name='is_primary' >Yes</label>
+                    				  <label class='checkbox-inline'> <input type='radio' value='0' id='is_primary_no' name='is_primary' checked>No</label>
                      			 </div>
                				 </div>
                                
@@ -386,7 +386,11 @@
 			$('#email').val(data.email);
 			$('#mobile_no').val(data.mobileNo);
 			$("#contact_no").val(data.contactNo);
-			$("#is_primary").val(data.isPrimary);
+			if(data.isPrimary == 1){
+				$("#is_primary_yes").val("1");
+			}else{
+				$("#is_primary_no").val("0");
+			}
 			
 			$('input[name="usertype[]"]').prop( "checked", false);
 			if(data.type == 0){
@@ -559,7 +563,8 @@ $("#updateContact").click(function(){
 				  			  showContactDetail();
 				  			   alert("Updated successfully..");
 				  			  $("#id").val('');
-				  			  $("input[name='is_primary']:checked").val(0);
+				  			  $("#is_primary_yes").prop( "checked", false);
+				  			  $("#is_primary_no").prop( "checked", true);
 				  			$("#contactUpReason").val("");
 				  			   $(".contact-new").hide();
 				  			   $(".contact-list").show();
@@ -606,33 +611,35 @@ $("#updateContact").click(function(){
 			var oTable = $("#contact-detail-table").dataTable();
 		    oTable.fnClearTable();
 		    var datacount = 0;
-		 $(data).each(function(index){
+		 	$(data).each(function(index){
 		    	var row = [];
-		    	 row.push(data[index].name);
-		    	 row.push(data[index].email);
-		    	 row.push(data[index].mobileNo);
-		    	 if(data[index].contactNo != 'undefined')
-		    		 row.push(data[index].contactNo);
-			    	if(data[index].type == 0){
-		    	 		row.push("Internal");	
-			    	} else {
-			    		row.push("External");
-		    		}
-		    	 row.push("<a href='javascript:editContactInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"+
+		    	row.push(data[index].name);
+		    	row.push(data[index].email);
+		    	row.push(data[index].mobileNo);
+		    	if(data[index].contactNo != 'undefined' && data[index].contactNo != null)
+		    		row.push(data[index].contactNo);
+		    	else
+		    		row.push("");
+		    	if(data[index].type == 0){
+	    	 		row.push("Internal");	
+		    	} else {
+		    		row.push("External");
+	    		}
+		    	row.push("<a href='javascript:editContactInfo("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"+
 		    			 "<a href='#deleteContactDetail'  data-id='"+data[index].id+"' class='open-deleteContactDetail btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteContactDetail' >"
                          +"<i class='fa fa-trash'></i></a>");
-		    	 oTable.fnAddData(row);
-		    	 count++;
-		    	 datacount++;
+		    	oTable.fnAddData(row);
+		    	count++;
+		    	datacount++;
 		    	 
-		   });
-		 if(datacount >=4){
-			 $("#contact_detail_add1").hide();
-			 $("#contact_detail_add2").hide();
-		 } else {
-			 $("#contact_detail_add1").show();
-			 $("#contact_detail_add2").show();			 
-		 }
+		   	});
+			if(datacount >=4){
+				$("#contact_detail_add1").hide();
+				$("#contact_detail_add2").hide();
+			} else {
+				$("#contact_detail_add1").show();
+				$("#contact_detail_add2").show();			 
+			}
 		});
 		
 	}
