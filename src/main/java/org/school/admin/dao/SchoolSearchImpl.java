@@ -43,6 +43,8 @@ import org.school.admin.model.UserRating;
 import org.school.admin.model.UserRegistrationInfo;
 import org.school.admin.util.HibernateUtil;
 
+import com.google.gson.Gson;
+
 
 public class SchoolSearchImpl {
 	
@@ -764,7 +766,7 @@ public class SchoolSearchImpl {
 		return result;
 	}
 	
-	public UriData getUriByLatitudeLongitudeByStandard(String latitude, String longitude, Short standardId) {
+	public ResponseMessage getUriByLatitudeLongitudeByStandard(String latitude, String longitude, Short standardId) {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 
@@ -780,6 +782,18 @@ public class SchoolSearchImpl {
 				.setParameter("latitude", latitude)
 				.setParameter("longitude", longitude)
 				.setResultTransformer(Transformers.aliasToBean(UriData.class));
-		return (UriData)query.uniqueResult();
+		
+		UriData result = (UriData)query.uniqueResult();
+		ResponseMessage responseMessage = new ResponseMessage();
+		if( result == null ) { 
+			responseMessage.setMessage("No school found.");
+			responseMessage.setStatus(0);
+		} else {
+			Gson gson = new Gson();
+			responseMessage.setMessage("School found.");
+			responseMessage.setData(result);
+			responseMessage.setStatus(1);
+		}
+		return responseMessage;
 	}
 }
