@@ -33,11 +33,11 @@
 	</filter-mapping>
 	<context-param>
 		<param-name>logo_url</param-name>
-		<param-value>/opt/tomcat/webapps/edbuddy/src/main/webapp/images/</param-value>
+		<param-value>/opt/tomcat/webapps/edbuddy/images/</param-value>
 	</context-param>
 	<context-param>
 		<param-name>home_url</param-name>
-		<param-value>/opt/tomcat/webapps/edbuddy/src/main/webapp/images/</param-value>
+		<param-value>/opt/tomcat/webapps/edbuddy/images/</param-value>
 	</context-param>
 	<context-param>
 		<param-name>s3_base_url</param-name>
