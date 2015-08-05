@@ -28,6 +28,7 @@ import org.school.admin.data.UriData;
 import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ClassInfo;
+import org.school.admin.model.ContactUs;
 import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.RatingCategoryType;
 import org.school.admin.model.School;
@@ -520,6 +521,7 @@ public class SchoolSearchImpl {
 					userRating.setSchool(school);
 					userRating.setUserRegistrationInfo(userRegistrationInfo);
 					userRating.setRating((float)ratingData.getRatings().get(i).getRating());
+					userRating.setAddedDate(new Date());
 					RatingCategoryType ratingCategoryType = new RatingCategoryType();
 					ratingCategoryType.setId(ratingData.getRatings().get(i).getCatid());
 					userRating.setRatingCategoryType(ratingCategoryType);
@@ -781,5 +783,18 @@ public class SchoolSearchImpl {
 				.setParameter("longitude", longitude)
 				.setResultTransformer(Transformers.aliasToBean(UriData.class));
 		return (UriData)query.uniqueResult();
+	}
+	
+	public ResponseMessage postContactRequest(ContactUs contactUs){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(contactUs);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setStatus(1);
+		response.setMessage("Success");
+		return response;
 	}
 }
