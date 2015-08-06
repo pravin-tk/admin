@@ -12,6 +12,7 @@ public class RatingsReviewsData {
 	private String firstName;
 	private String lastName;
 	private String image;
+	private String title;
 
 	public int getSchoolId() {
 		return schoolId;
@@ -66,6 +67,12 @@ public class RatingsReviewsData {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 }
