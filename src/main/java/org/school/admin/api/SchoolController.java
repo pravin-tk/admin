@@ -33,6 +33,7 @@ import org.school.admin.data.NameList;
 import org.school.admin.data.Rating;
 import org.school.admin.data.RatingData;
 import org.school.admin.data.RatingReviewData;
+import org.school.admin.data.RatingsReviewsData;
 import org.school.admin.data.SchoolAddress;
 import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolContact;
@@ -204,6 +205,20 @@ public class SchoolController extends ResourceConfig {
 		List<SchoolReview> reviews = schoolSearchImpl.getSchoolReviews(id);
 		for(int i = 0; i < reviews.size(); i++){
 			reviews.get(i).getUserRegistrationInfo().setImage(img_path+reviews.get(i).getUserRegistrationInfo().getImage());
+		}
+		return reviews;
+	}
+	
+	@GET
+	@Path("ratingsandreviews.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<RatingsReviewsData> getSchoolRatingsAndReviews(@PathParam("id") int id)
+	{
+		img_path = this.context.getInitParameter("s3_base_url");
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		List<RatingsReviewsData> reviews = schoolSearchImpl.getSchoolRatingsAndReviews(id);
+		for(int i = 0; i < reviews.size(); i++){
+			reviews.get(i).setImage(img_path+reviews.get(i).getImage());
 		}
 		return reviews;
 	}

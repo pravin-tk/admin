@@ -16,6 +16,7 @@ import org.school.admin.data.InfraItem;
 import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.RatingData;
+import org.school.admin.data.RatingsReviewsData;
 import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolFee;
 import org.school.admin.data.SchoolList;
@@ -229,6 +230,26 @@ public class SchoolSearchImpl {
 			schoolReviews.add(schoolReview);
 		}
 		return schoolReviews;
+	}
+	
+	public List<RatingsReviewsData> getSchoolRatingsAndReviews(int schoolId){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		String sql = " SELECT ur.school_id as schoolId, sr.review as review, ur.user_id as userId, "
+				+ " uri.first_name as firstName, uri.last_name as lastName, uri.image, "
+				+ " avg(ur.rating) as rating,"
+				+ " sr.date as date, sr.time as time "
+				+ " FROM user_rating ur JOIN school_review sr ON sr.userid=ur.user_id "
+				+ " AND sr.school_id = ur.school_id "
+				+ " JOIN user_registration_info uri ON uri.id = ur.user_id "
+				+ " WHERE sr.school_id = :schoolId "
+				+ " GROUP BY ur.user_id, ur.school_id ";
+		Query query = session.createSQLQuery(sql)
+				.setParameter("schoolId", schoolId)
+				.setResultTransformer(Transformers.aliasToBean(RatingsReviewsData.class));
+		List<RatingsReviewsData> ratingAndReviewsData = query.list();
+		session.close();
+		return ratingAndReviewsData;
 	}
 	
 	public List<GalleryData> getImageGallary(Integer schoolId)
