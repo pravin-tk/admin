@@ -285,6 +285,7 @@ public class SchoolDAOImp {
 				session.save(school);
 				session.getTransaction().commit();
 				school_id = school.getId();
+				saveTab(school);
 				session.close();
 				
 				Session boardSchool = hibernateUtil.openSession();
@@ -299,7 +300,7 @@ public class SchoolDAOImp {
 				boardSchool.save(schoolBoard);
 				boardSchool.getTransaction().commit();
 				boardSchool.close();
-				saveTab(school);
+				
 				message.setMessage("Added Successfully");
 				message.setStatus(school_id);
 				message.setData(school);

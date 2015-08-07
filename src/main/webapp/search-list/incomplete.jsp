@@ -72,7 +72,7 @@
 	});
  $("#btn-incompletepending").click(function(){
 	if($("#incompletependingReason").val() != ""){
-	    pending
+	    
 		$("#incompletependingReason").val("");
 	}else{
 		alert("Please enter the reason for pending");

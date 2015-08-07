@@ -155,7 +155,9 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 		  onItemRemove : function(value) {
 					  }
 });
+<% if(viewSchoolList.size() > 0){ %>
  select_school  = $select_school[0].selectize;
+<% } %>
 	$select_contact = $('#contact_id').selectize({
 	
 	persist: false,
@@ -171,7 +173,9 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 	  onItemRemove : function(value) {
 				  }
 });
+	<% if(viewContactList.size()>0) { %>
  select_contact  = $select_contact[0].selectize;
+ <%}%>
     
     
     
@@ -185,7 +189,7 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
     	
     	if( school_id > 0){
 	    	
-	    	$.get("webapi/school/htmllist/"+school_id+"/2/0",function(data){
+	    	$.get("webapi/school/htmllist/"+school_id+"/1/0",function(data){
 			  	$("#school_list").html(data);
 			    var oTable = $("#commission-table").dataTable();
 			    oTable.fnClearTable();
