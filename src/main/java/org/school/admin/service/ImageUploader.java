@@ -6,6 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
+
 public class ImageUploader {
 	
 	public void writeToFile(InputStream is, String uploadedFileLocation) {
@@ -21,10 +30,35 @@ public class ImageUploader {
 			}
 			out.flush();
 			out.close();
+			try {
+				this.s3Upload(uploadedFileLocation);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
  
 			e.printStackTrace();
 		}
 		
 	}
+	public String s3Upload(String uploadedFileLocation) throws Exception {
+
+	    String url = "";
+	    AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials("AKIAIXQ55SW6H6XLY45A", "x1u7l1ZKMJN7BpqSazYZCygxpHZQ0LUHj8Iey4MC"));
+
+		try {
+		    File file = new File(uploadedFileLocation);
+		    String folder = file.getParentFile().getName();
+		    PutObjectRequest putObjectRequest = new PutObjectRequest("edbuddy", "images/"+folder+"/"+file.getName(), file);
+		    putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+		    s3client.putObject(putObjectRequest);
+		} catch (AmazonServiceException ase) {
+			ase.printStackTrace();
+		} catch (AmazonClientException ace) {
+			ace.printStackTrace();
+		}
+	    return url;
+	}
+	
 }

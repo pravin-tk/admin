@@ -23,7 +23,7 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 	if(session!=null){
 		if(session.getAttribute("cityid") != null){
 		    viewSchoolList = new SchoolDAOImp().getViewSchoolList((Integer)session.getAttribute("cityid"));
-			
+		    System.out.println("schoolSize:"+viewSchoolList.size());
 			viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
 		}
 	}
