@@ -212,7 +212,12 @@ public class SchoolSearchController {
 		SearchFilterService sfService = new SearchFilterService();
 		SearchRequest searchRequest = sfService.getSearchRequest(uriInfo);
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
-		return schoolSearchImpl.getNearbySchoolByLatitudeByLogitude(searchRequest);
+		List<NearbySchoolList> nearbySchoolLists = schoolSearchImpl.getNearbySchoolByLatitudeByLogitude(searchRequest);
+		String img_path = this.context.getInitParameter("s3_base_url");
+		for(int i = 0; i < nearbySchoolLists.size(); i++){
+			nearbySchoolLists.get(i).setHomeImage(img_path+nearbySchoolLists.get(i).getHomeImage());
+		}
+		return nearbySchoolLists;
 	}
 	
 	@GET
@@ -221,7 +226,12 @@ public class SchoolSearchController {
 	public List<SchoolList> getTopSchools()
 	{
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
-		return schoolSearchImpl.getTopSchools();
+		List<SchoolList> schoolLists =  schoolSearchImpl.getTopSchools();
+		String img_path = this.context.getInitParameter("s3_base_url");
+		for(int i = 0; i < schoolLists.size(); i++){
+			schoolLists.get(i).setHomeImage(img_path+schoolLists.get(i).getHomeImage());
+		}
+		return schoolLists;
 	}
 	
 	@GET
