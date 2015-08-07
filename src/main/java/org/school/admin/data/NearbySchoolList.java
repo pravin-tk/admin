@@ -13,6 +13,7 @@ public class NearbySchoolList {
 	private String cityName;
 	private String homeImage;
 	private String mediums;
+	private String boardName;
 	
 	public Integer getSchoolId() {
 		return schoolId;
@@ -85,6 +86,12 @@ public class NearbySchoolList {
 	}
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
+	}
+	public String getBoardName() {
+		return boardName;
+	}
+	public void setBoardName(String boardName) {
+		this.boardName = boardName;
 	}
 	
 }
