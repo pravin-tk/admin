@@ -101,16 +101,37 @@
 
 				<td class="alignRight"><a
 					href="javascript:editClassInfo(<% out.print(classInfo.get(i).getId()); %>);"
-					class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a> <a
-					href="javascript:deleteClassInfo(<% out.print(classInfo.get(i).getId()); %>);"
-					class="btn btn-danger icon-btn"><i class="fa fa-trash"></i></a></td>
-			</tr>
+					class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a> 
+					<a href='#classdetaildelete'  data-id='<% out.print(classInfo.get(i).getId());%>' class='open-deleteclassdialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#classdetaildelete' >
+                         <i class='fa fa-trash'></i></a></td></tr>
 			<%} %>
 		</tbody>
 	</table>
 	<a href="#" class="btn btn-primary view-class-detail bottom-margin" id="addClassDetail1"><i
 		class="fa fa-plus"></i> Class Detail</a>
 </div>
+				<div class="modal fade" id="classdetaildelete" tabindex="-1" role="dialog" aria-hidden="true" >
+                      <div class="modal-dialog">
+                          <div class="modal-content" style="width:450px;">
+                              <div class="modal-header">
+                              <input type="hidden" id="delreason" name="delreason" value="" />  
+							  <input type="hidden" id="hdclassid" value="" />
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                  </button>
+                                  <h4 class="modal-title" id="myModalLabel">Reason for delete</h4>
+                              </div>
+                              <div class="modal-body">
+                                  <div class="input-group margin-bottom-sm col-sm-6">
+                                      <textarea id="classDelReason" rows ="4" class="form-control" style="width:350px;margin-left:20px;height:120px"></textarea>
+                                  </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <button type="button" id="deleteclassinfo" class="btn btn-danger">Delete</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
 <div class="class-detail-new" style="display: none;">
 	<h4>Add New Class Detail</h4>
 	<div id="error-class-detail" class="has-error"></div>
@@ -191,9 +212,7 @@
 					<%
 						if (subjects.size() > 0) {
 							for (int i = 0, j = 0; i < subjects.size(); i++) {
-
 								Subject subject = subjects.get(i);
-								
 					%><div class="col-sm-3">
 						
 						<label class="checkbox"> <input type="checkbox"
@@ -277,7 +296,7 @@
 			</div>
 		</div>
 
-<div class="form-group">
+		<div class="form-group">
 			<label class="col-sm-2 control-label">Morning timing from</label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control"
@@ -501,6 +520,9 @@
 		<!--xxx  -->
 		</div>
 
+				
+
+
 		<div class="form-group">
 			<div class="col-sm-4">
 				<button type="button" id='saveclassdetail' class="btn btn-success">Save</button>
@@ -510,6 +532,7 @@
 					type="reset">Cancel</button>
 			</div>
 		</div>
+		
 	</form>
 </div>
 <link rel="stylesheet" type="text/css" href="${baseUrl}/css/selectize.css" />
@@ -517,6 +540,10 @@
 <!-- datepicker Js -->
 <script src="${baseUrl}/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
+$(document).on('click', 'a.open-deleteclassdialog', function(){
+	console.log("Hi11 "+$(this).data('id'));
+	$("#hdclassid").val($(this).data('id'));
+});
 $(function() {
 	$('#morning_time_to').timepicker({
         minuteStep: 1,
@@ -940,6 +967,7 @@ $("#addClassDetail1").click(function(){
 	
 	function getClassInfoData () {
 		var school_id = <%out.print(school_id6);%>
+		var user_id = <%out.print(user_id6);%>
 		if($("#class_id").val() >0) {
 			var classInfo = {
 					school:{id:school_id},
@@ -961,7 +989,8 @@ $("#addClassDetail1").click(function(){
 					morningTimeFrom : $("#morning_time_from").val(),
 					morningTimeTo   : $("#morning_time_to").val(),
 					afternoonTimeFrom : $("#evening_time_from").val(),
-					afternoonTimeTo   : $("#evening_time_to").val()
+					afternoonTimeTo   : $("#evening_time_to").val(),
+					lastUpdatedBy : user_id
 					};
 		}else {
 			var classInfo = {school:{id:school_id},
@@ -982,7 +1011,8 @@ $("#addClassDetail1").click(function(){
 					morningTimeFrom : $("#morning_time_from").val(),
 					morningTimeTo   : $("#morning_time_to").val(),
 					afternoonTimeFrom : $("#evening_time_from").val(),
-					afternoonTimeTo   : $("#evening_time_to").val()
+					afternoonTimeTo   : $("#evening_time_to").val(),
+					lastUpdatedBy : user_id
 					};
 		}
 		return classInfo;
@@ -994,8 +1024,8 @@ $("#addClassDetail1").click(function(){
 		var subject = "";
 		var fee_data = "";
 		var msg = "";
-	//	var strReason = "";
-
+		var strReason = "";
+         var adminUser = "";
 		if ($('#standard').val() == 0) {
 			if(msg != "") msg = msg+",Please select standard"; else  msg = "Please select standard";
 		}
@@ -1034,7 +1064,7 @@ $("#addClassDetail1").click(function(){
 			class_info_data = getClassInfoData();
 			adminUser = getAdminUser();
 			var final_data = [];
-			final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data };
+			final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data,strReason : strReason,adminUser:adminUser};
 			$.ajax({
 			    url: 'webapi/school/saveclassdetail',
 			    type: 'POST',
@@ -1092,7 +1122,8 @@ $("#addClassDetail1").click(function(){
 			    oTable.fnClearTable();
 			$(newdata).each(function(index){
 			    	html = "<a href='javascript:editClassInfo("+newdata[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-                      +" <a href='deleteClassInfo("+newdata[index].id+");' class='btn btn-danger icon-btn'><i class='fa fa-trash'></i></a>";
+                      +"<a href='#classdetaildelete'  data-id="+newdata[index].id+" class='open-deleteclassdialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#classdetaildelete'>"
+                      +"<i class='fa fa-trash'></i></a>";
 			    	var row = [];
 			    	 row.push(newdata[index].standardType.name);
 			    	// row.push(newdata[index].sectionType.name);
@@ -1238,5 +1269,28 @@ $("#addClassDetail1").click(function(){
 					}); 
 			}
 		}
+	
+	$("#deleteclassinfo").click(function(){
+		if($("#classDelReason").val() != ""){
+			//alert("Reason : "+$("#classDelReason").val());
+			deleteClass($("#hdclassid").val(),$("#classDelReason").val());
+			$("#classdetaildelete").hide();
+			$("#classDelReason").val("");
+		}else{
+			alert("Please enter the reason for delete");
+		}
+	});
 		
+	function deleteClass(classId,strReason){
+		var schoolId = <%out.print(school_id6);%>
+		var userId = <%out.print(user_id6);%>
+		$.post("webapi/school/deleteclassdetail",{classId : classId,schoolId : schoolId,strReason:strReason,userId:userId},function(data){
+			if(data.status ==1){
+				alert(data.message);
+				getClassList(schoolId);
+			}else{
+			     alert(data.message);
+			}
+		});
+	}
 </script>

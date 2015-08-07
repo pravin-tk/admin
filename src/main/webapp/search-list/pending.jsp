@@ -3,6 +3,9 @@
 <%@page import="java.util.List"%>
 
 <%List<School> schoolPendingList = new SchoolDAOImp().getSchoolPendingList((Integer)session.getAttribute("cityid"));
+out.print("<script>"
+		+"console.log('"+schoolPendingList.size()+"');"
+		+"</script>");
    if(schoolPendingList.size()>0)
    {
 %>
@@ -31,9 +34,11 @@
 				
 				<td class="alignRight"><a
 					href=""
-					class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a> <a
+					class="btn btn-success icon-btn"><i class="fa fa-font"></i></a> <a
 					href=""
-					class="btn btn-danger icon-btn"><i class="fa fa-trash"></i></a></td>
+					class="btn btn-danger icon-btn"><i class="fa fa-star-half-o"></i></a> <a
+					href=""
+					class="btn btn-danger icon-btn"><i class="fa fa-ban"></i></a></td>
 			</tr>
 			<%}
  			}%> 

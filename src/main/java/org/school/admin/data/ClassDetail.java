@@ -13,7 +13,7 @@ import org.school.admin.model.ClassSubjects;
 public class ClassDetail {
 	private ClassInfo classInfo;
 	private ClassSection classSection;
-	//private String strReason;
+	private String strReason;
 	//private AdminUser adminUser;
 	private Set<ClassFee> classFee;
 	private Set<ClassAccessories> classAccessories;
@@ -49,12 +49,12 @@ public class ClassDetail {
 	public void setClassFee(Set<ClassFee> classFee) {
 		this.classFee = classFee;
 	}
-//	public String getStrReason() {
-//		return strReason;
-//	}
-//	public void setStrReason(String strReason) {
-//		this.strReason = strReason;
-//	}
+	public String getStrReason() {
+		return strReason;
+	}
+	public void setStrReason(String strReason) {
+		this.strReason = strReason;
+	}
 //	public AdminUser getAdminUser() {
 //		return adminUser;
 //	}

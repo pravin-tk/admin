@@ -74,7 +74,7 @@ public class ClassDetailDAO {
 				classInfoDataList.add(classInfoData);
 			}
 		}
-		
+		session.close();
 		return classInfoDataList;
 	}
 	
@@ -89,6 +89,7 @@ public class ClassDetailDAO {
 		query.setParameter("schoolId", school_id);
 		query.setParameter("stdId", stdId);
 		List<ClassInfo> classDetailList = query.list();
+		session.close();
 		List<ClassInfoData> classInfoDataList = new ArrayList<ClassInfoData>();
 		if(classDetailList.size() > 0)
 		{
@@ -145,6 +146,7 @@ public class ClassDetailDAO {
 		query.setParameter("stdId", stdId);
 		
 		List<ClassInfo> idList = query.list();
+		session.close();
 		List<SchoolFee> classFeeDataList = new ArrayList<SchoolFee>();
 		if(idList.size() > 0)
 		{
@@ -182,6 +184,7 @@ public class ClassDetailDAO {
 		
 		Query query = session.createQuery(HQL);
 		query.setParameter("schoolId", schoolId);
+		session.close();
 		List<SchoolImageGallery> schoolImageGalleryList = query.list();
 		List<GalleryData> gallaryDataList = new ArrayList<GalleryData>();
 		String url ="http://localhost:8080/admin/images/";
@@ -206,6 +209,7 @@ public class ClassDetailDAO {
 		query.setParameter("schoolId", schoolId);
 	     
 		List<School> schoolList = query.list();
+		session.close();
 		List<SchoolAddress> schoolAddressList = new ArrayList<SchoolAddress>();
 		if(schoolList.size() > 0)
 		{
@@ -263,6 +267,7 @@ public class ClassDetailDAO {
 		Query query = session.createQuery(HQL);
 		query.setParameter("schoolId", schoolId);
 	    List<SchoolHighlight> schoolHighlightList = query.list();
+	    session.close();
 	    List<SchoolHighlightInfo> schoolHighlightInfos = new ArrayList<SchoolHighlightInfo>();
 	    if(schoolHighlightList.size() > 0)
 	    {

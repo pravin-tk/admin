@@ -15,6 +15,9 @@
                             <a href="#pending" data-toggle="tab" >Pending</a>
                         </li>
                          <li>
+                            <a href="#incomplete" data-toggle="tab" >Incomplete</a>
+                        </li>
+                         <li>
                             <a href="#rejected" data-toggle="tab">Rejected</a>
                         </li>
                         <li>
@@ -42,17 +45,23 @@
                        <div class="tab-pane fade " id="pending" aria-labelledby="defaults-tab">
                              <h2>pending</h2>
                                <%@include file = "search-list/pending.jsp" %>
-                             
                         </div>
                          
                         <!-- third tab content -->
                         
-                         <!-- fourth tab content -->                         
+                         <!-- fourth tab content -->  
+                          <div class="tab-pane fade " id="incomplete" aria-labelledby="defaults-tab">
+                             <h2>Incomplete</h2>
+                               <%@include file = "search-list/incomplete.jsp" %>
+                             
+                        </div>
+                           <!-- fourth tab content -->
+                           <!-- fifth tab content -->                     
                        <div class="tab-pane fade" id="rejected" aria-labelledby="school-acheivement-tab">
                            	<h2>Rejected</h2>
                            	  <%@include file = "search-list/rejected.jsp" %>
                        	</div>
-                        <!-- fourth tab content -->
+                          <!-- fifth tab content -->  
                         
                          <!-- sixth tab content --> 
                          <div class="tab-pane fade" id="distribution" aria-labelledby="country-tab">
