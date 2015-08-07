@@ -740,6 +740,7 @@ public class SchoolSearchImpl {
 			+ " s.rating as rating, "
 			+ " s.homeImage as homeImage, "
 			+ " s.mediums as mediums, "
+			+ " s.boardName as boardName, "
 			+ " ci.vacantSeat as vacantSeat, "
 			+ " ci.totalFee as totalFee, "
 			+ " ci.standardType.id as standardId, "
@@ -784,7 +785,8 @@ public class SchoolSearchImpl {
 		String hql = "SELECT s.schoolId as schoolId, s.name as name,"
 					 + " s.homeImage as homeImage, s.logo as logo,"
 				     + " s.localityName as localityName,"
-				     + " s.cityName as cityName, s.rating as rating"
+				     + " s.cityName as cityName, s.rating as rating, "
+				     + " s.boardName as boardName "
 					 + " FROM SchoolSearch s, School schl"
 					 + " WHERE s.schoolId = schl.id AND schl.promote = 1";
 
