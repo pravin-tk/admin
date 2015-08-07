@@ -2180,6 +2180,7 @@ public class SchoolDAOImp {
 		
 		Query query = session.createQuery(sql).setParameter("school_id", school_id);
 		List<SchoolTimeline> schoolTimelines = query.list();
+		session.close();
 		List<SchoolTimelineData> result = new ArrayList<SchoolTimelineData>();
 		for(int i=0; i < schoolTimelines.size(); i++) {
 			SchoolTimelineData schoolTimelineData = new SchoolTimelineData();

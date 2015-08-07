@@ -256,6 +256,7 @@ public class SchoolSearchUserDao {
         String hql = "FROM UserRegistrationInfo ssu WHERE ssu.email = '"+email+"'";
         Query query = session.createQuery(hql);
         userRegistrationInfos = query.list();
+        session.close();
         if(userRegistrationInfos.size() > 0) {
         	return userRegistrationInfos.get(0);
         } else {

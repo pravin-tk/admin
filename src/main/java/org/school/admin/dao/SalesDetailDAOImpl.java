@@ -161,7 +161,6 @@ public class SalesDetailDAOImpl {
  		    AdminUser adminUser=new AdminUser();
  		    adminUser.setId(userId);
  		    School school = null;
- 		    System.out.println("AdminUserID.. "+userId);
  		    SalesInfo salesInfo = getSalesDetailById(contactId);
  		    List<School> schoolList = new SchoolDAOImp().getSchoolById(schoolId);
  		    String log = "Deleted Data : ";

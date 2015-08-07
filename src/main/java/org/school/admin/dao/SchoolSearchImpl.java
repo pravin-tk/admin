@@ -262,6 +262,7 @@ public class SchoolSearchImpl {
 		Query query = session.createQuery(HQL);
 		query.setParameter("schoolId", schoolId);
 		List<SchoolImageGallery> schoolImageGalleryList = query.list();
+		session.close();
 		List<GalleryData> gallaryDataList = new ArrayList<GalleryData>();
 		if(schoolImageGalleryList.size() > 0)
 		{
@@ -283,6 +284,7 @@ public class SchoolSearchImpl {
 		Query query = session.createQuery(HQL).setResultTransformer(Transformers.aliasToBean(SchoolPanoramicImage.class));
 		query.setParameter("schoolId", schoolId);
 		List<SchoolPanoramicImage> schoolImageGalleryList = query.list();
+		session.close();
 		return schoolImageGalleryList;
 	}
 	
@@ -373,6 +375,7 @@ public class SchoolSearchImpl {
 			feeDetail.setTotalFee(totalFee);
 			classFeeDataList.add(feeDetail);
 		}
+		session.close();
 		return classFeeDataList;
 	}
 	
@@ -819,6 +822,7 @@ public class SchoolSearchImpl {
 			responseMessage.setData(result);
 			responseMessage.setStatus(1);
 		}
+		session.close();
 		return responseMessage;
 	}
 	

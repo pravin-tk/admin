@@ -122,6 +122,7 @@ public class ContactDetaillDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		List<ContactInfo> contactInfoList = query.list();
+		session.close();
 		if(contactInfoList.size() > 0)
 		{
 			return true;
@@ -137,6 +138,7 @@ public class ContactDetaillDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		List<ContactInfo> contactInfoList = query.list();
+		session.close();
 		if(contactInfoList.size() > 0)
 		{
 			return true;
@@ -154,6 +156,7 @@ public class ContactDetaillDAO {
 		Query query1 = session1.createQuery(hql1);
 		query1.setParameter("id", contactDetail.getSchool().getId());
 		List<ContactInfo> contactInfoList = query1.list();
+		session1.close();
 		int internal_cont = 0;
 		int external_cont = 0;
 		int is_int_primary = 0;
@@ -276,9 +279,6 @@ public class ContactDetaillDAO {
 	
 	public List<ContactInfo> getConatctDetail(Integer school_id)
 	{
-		System.out.println();
-		System.out.println("....LOADING....");
-		System.out.println();
 		String hql = "from ContactInfo where school.id = :school_id";
 		
 		HibernateUtil hibernateUtil = new HibernateUtil();

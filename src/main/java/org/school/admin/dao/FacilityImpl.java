@@ -96,7 +96,6 @@ public class FacilityImpl {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		List<SafetyCategory> result = query.list();
-		System.out.println("SAFCAT=="+result.size());
 		session.close();
 		return result;
 	}
