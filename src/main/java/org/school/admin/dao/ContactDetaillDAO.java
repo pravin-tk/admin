@@ -122,6 +122,7 @@ public class ContactDetaillDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		List<ContactInfo> contactInfoList = query.list();
+		session.close();
 		if(contactInfoList.size() > 0)
 		{
 			return true;
@@ -137,6 +138,7 @@ public class ContactDetaillDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		List<ContactInfo> contactInfoList = query.list();
+		session.close();
 		if(contactInfoList.size() > 0)
 		{
 			return true;
@@ -288,6 +290,7 @@ public class ContactDetaillDAO {
 		query.setParameter("school_id", school_id);
 		
 		List<ContactInfo> contactInfoList = query.list();
+		session.close();
 		List<ContactInfo> newcontactInfoList = new ArrayList<ContactInfo>();
 		for(int i =0 ;i < contactInfoList.size(); i++)
 		{
@@ -305,7 +308,6 @@ public class ContactDetaillDAO {
 			newcontactInfoList.add(contactInfoInternal);
 			
 		}
-		session.close();
 		return newcontactInfoList;
 	}
 	

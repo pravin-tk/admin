@@ -102,6 +102,7 @@ public class LocalityNamesImp {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		List<Locality> result = query.list();
+		session.close();
 		List<Locality> localities = new ArrayList<Locality>();
 		Locality locality = new Locality();
 		for(int i=0; i<result.size(); i++){
@@ -115,9 +116,17 @@ public class LocalityNamesImp {
 			locality.setLastUpdatedBy(result.get(i).getLastUpdatedBy());
 			locality.setLastUpdatedOn(result.get(i).getLastUpdatedOn());
 			locality.setStatus(result.get(i).getStatus());
+			if(result.get(i).getLatitude() != null)
+				locality.setLatitude(result.get(i).getLatitude());
+			else
+				locality.setLatitude("");
+			if(result.get(i).getLongitude() != null)
+				locality.setLongitude(result.get(i).getLongitude());
+			else
+				locality.setLongitude("");
 			localities.add(locality);
 		}
-		session.close();
+		
 		return localities;
 	}
 }
