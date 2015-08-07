@@ -376,35 +376,33 @@ public class SchoolDAOImp {
 	public List<ViewContactData> getViewContactList(int cityId)
 	{
 		System.out.println("TTTT");
-		String hql = "from ViewContact where cityId =:cityId";
+		String hql = "SELECT DISTINCT contactDetail as contactDetail,contactNumber as contactNumber from ViewContact where cityId =:cityId";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
-		Query query = session.createQuery(hql);
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(ViewContactData.class));
 		
 		query.setParameter("cityId", cityId);
-		List<ViewContact> result = query.list();
-		List<ViewContactData> viewContactDatas = new ArrayList<ViewContactData>();
-		if(result.size()>0){
-			for(int i=0;i<result.size();i++)
-			{
-//				ViewContact viewContact = new ViewContact();
-//				viewContact.setContactNumber(result.get(i).getContactNumber());
-//				viewContact.setContactDetail(result.get(i).getContactDetail());
-				String contactNumber = result.get(i).getContactNumber();
-				String conatctDetail = result.get(i).getContactDetail();
-				ViewContactData viewContactData = new ViewContactData();
-				viewContactData.setContactNumber(contactNumber);
-				viewContactData.setContactDetail(conatctDetail);
-				viewContactDatas.add(viewContactData);
-				System.out.println("AAA : "+result.get(i).getContactDetail());
-			}
-			session.close();
-		}
-		else{
-			System.out.println("ZZZZZZZZZZZ..");
-		}
-		return viewContactDatas;
+		List<ViewContactData> result = query.list();
+		session.close();
+//		List<ViewContactData> viewContactDatas = new ArrayList<ViewContactData>();
+//		if(result.size()>0){
+//			for(int i=0;i<result.size();i++)
+//			{
+//				String contactNumber = result.get(i).getContactNumber();
+//				String conatctDetail = result.get(i).getContactDetail();
+//				ViewContactData viewContactData = new ViewContactData();
+//				viewContactData.setContactNumber(contactNumber);
+//				viewContactData.setContactDetail(conatctDetail);
+//				viewContactDatas.add(viewContactData);
+//				System.out.println("AAA : "+result.get(i).getContactDetail());
+//			}
+//		}
+//		else{
+//			System.out.println("ZZZZZZZZZZZ..");
+//		}
+//		return viewContactDatas;
+		return result;
 	}
 	
 	public List<School> getSchoolList(String contact_id,int cityId){
@@ -626,7 +624,7 @@ public class SchoolDAOImp {
 		List<School> schools = new ArrayList<School>();
 		for(int i=0; i<result.size(); i++){
 			System.out.println("SCHOOLID : "+result.get(i).getId());
-			if(getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 0){
+			//if(getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 0){
 			School school = new School();
 			Locality locality = new Locality();
 			locality.setId(result.get(i).getLocality().getId());
@@ -653,7 +651,7 @@ public class SchoolDAOImp {
 			school.setTagLine(result.get(i).getTagLine());
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
-			}
+			//}
 		}
 		session.close();
 		return schools;
@@ -673,7 +671,7 @@ public class SchoolDAOImp {
 		List<School> schools = new ArrayList<School>();
 		for(int i=0; i<result.size(); i++){
 			System.out.println("SCHOOLID : "+result.get(i).getId());
-			if((getPer(result.get(i).getId()) >0 && getPer(result.get(i).getId()) < 100) && result.get(i).getStatus() == 0){
+			//if((getPer(result.get(i).getId()) >0 && getPer(result.get(i).getId()) < 100) && result.get(i).getStatus() == 0){
 			School school = new School();
 			Locality locality = new Locality();
 			locality.setId(result.get(i).getLocality().getId());
@@ -700,7 +698,7 @@ public class SchoolDAOImp {
 			school.setTagLine(result.get(i).getTagLine());
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
-			}
+			//}
 		}
 		session.close();
 		return schools;
@@ -719,7 +717,7 @@ public class SchoolDAOImp {
 		List<School> result = query.list();
 		List<School> schools = new ArrayList<School>();
 		for(int i=0; i<result.size(); i++){
-			if((getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 2)){
+			//if((getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 2)){
 			School school = new School();
 			Locality locality = new Locality();
 			locality.setId(result.get(i).getLocality().getId());
@@ -746,7 +744,7 @@ public class SchoolDAOImp {
 			school.setTagLine(result.get(i).getTagLine());
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
-			}
+			//}
 		}
 		session.close();
 		return schools;
@@ -821,6 +819,7 @@ public class SchoolDAOImp {
 	}
 	public double getTabs(int school_id)
 	{
+		System.out.println("Test:");
 		String hql = "from TabControl where school.id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
