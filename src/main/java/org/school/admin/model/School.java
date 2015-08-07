@@ -131,7 +131,7 @@ public class School implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "locality_id", nullable = false)
 	public Locality getLocality() {
 		return this.locality;
