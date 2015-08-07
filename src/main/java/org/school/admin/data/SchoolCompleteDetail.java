@@ -22,6 +22,7 @@ public class SchoolCompleteDetail {
 	private Facility facility;
 	private List<Rating> rating;
 	private List<PrevStudentProfile> schoolAchievements;
+	private List<RatingsReviewsData> ratingsAndReviews;
 
 	public List<SchoolTimelineData> getSchoolTimelineData() {
 		return schoolTimelineData;
@@ -109,6 +110,14 @@ public class SchoolCompleteDetail {
 
 	public void setSchoolAchievements(List<PrevStudentProfile> schoolAchievements) {
 		this.schoolAchievements = schoolAchievements;
+	}
+
+	public List<RatingsReviewsData> getRatingsAndReviews() {
+		return ratingsAndReviews;
+	}
+
+	public void setRatingsAndReviews(List<RatingsReviewsData> ratingsAndReviews) {
+		this.ratingsAndReviews = ratingsAndReviews;
 	}
 	
 }

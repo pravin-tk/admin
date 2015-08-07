@@ -26,6 +26,7 @@ import org.school.admin.data.NameImageList;
 import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.Rating;
+import org.school.admin.data.RatingsReviewsData;
 import org.school.admin.data.SchoolCompleteDetail;
 import org.school.admin.data.SchoolList;
 import org.school.admin.data.SchoolListingRequest;
@@ -159,7 +160,7 @@ public class SchoolSearchController {
 			reviews.get(i).getUserRegistrationInfo().setImage(img_path+reviews.get(i).getUserRegistrationInfo().getImage());
 		}
 		result.setHighlights(schoolDAOImp.getSchoolHighlightList(id));
-		result.setReviews(reviews);
+		//result.setReviews(reviews);
 		result.setContacts(contactDetaillDAO.getExternalConatctDetail(id));
 		result.setSchoolTimelineData(timelines);
 		result.setImages(galleryDatas);
@@ -177,6 +178,12 @@ public class SchoolSearchController {
 		}
 		result.setRating(ratings);
 		result.setSchoolAchievements(schoolSearchImpl.getSchoolAchievmentsBySchoolId(id));
+		
+		List<RatingsReviewsData> ratingsReviewsData = schoolSearchImpl.getSchoolRatingsAndReviews(id);
+		for(int i = 0; i < ratingsReviewsData.size(); i++){
+			ratingsReviewsData.get(i).setImage(img_path+ratingsReviewsData.get(i).getImage());
+		}
+		result.setRatingsAndReviews(ratingsReviewsData);
 		
 		return result;
 	}
