@@ -33,15 +33,16 @@
 	</filter-mapping>
 	<context-param>
 		<param-name>logo_url</param-name>
-		<param-value>/Users/pradeep/Documents/workspace/edbuddy/src/main/webapp/images/</param-value>
+		<param-value>/opt/tomcat/webapps/edbuddy/images/</param-value>
 	</context-param>
 	<context-param>
 		<param-name>home_url</param-name>
-		<param-value>/Users/pradeep/Documents/workspace/edbuddy/src/main/webapp/images/</param-value>
+		<param-value>/opt/tomcat/webapps/edbuddy/images/</param-value>
 	</context-param>
 	<context-param>
 		<param-name>s3_base_url</param-name>
-		<param-value>http://localhost:8080/edbuddy/images/</param-value>
+<!-- 		<param-value>http://local:8080/edbuddy/images/</param-value> -->
+		<param-value>https://s3-ap-southeast-1.amazonaws.com/edbuddy/images/</param-value>
 	</context-param>
 <!-- <context-param> -->
 <!-- 		<param-name>logo_url</param-name> -->
