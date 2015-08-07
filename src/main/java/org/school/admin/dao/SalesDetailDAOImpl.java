@@ -90,6 +90,7 @@ public class SalesDetailDAOImpl {
 		query.setParameter("id", id);
 		
 		List<SalesInfo> salesInfoList = query.list();
+		session.close();
 		List<SalesInfo> newsalesInfoList = new ArrayList<SalesInfo>();
 		
 		for(int i =0 ;i < salesInfoList.size(); i++)
@@ -112,7 +113,6 @@ public class SalesDetailDAOImpl {
 			newsalesInfoList.add(salesInfo);
 			
 		}
-		session.close();
 		return newsalesInfoList.get(0);
 	}
 

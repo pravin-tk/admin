@@ -256,7 +256,9 @@ public class GeneralController {
 			@FormParam("name") String name,
 			@FormParam("cityId") int cityId,
 			@FormParam("sortOrder") byte sortOrder,
-			@FormParam("status") boolean status
+			@FormParam("status") boolean status,
+			@FormParam("latitude") String latitude,
+			@FormParam("longitude") String longitude
 	){
 		City city = new City();
 		city.setId(cityId);
@@ -265,6 +267,8 @@ public class GeneralController {
 		locality.setCity(city);
 		locality.setSortOrder(sortOrder);
 		locality.setStatus(status);
+		locality.setLongitude(longitude);
+		locality.setLatitude(latitude);
 		LocalityNamesImp localityNamesImp = new LocalityNamesImp();
 		return localityNamesImp.save(locality);
 	}
@@ -277,7 +281,9 @@ public class GeneralController {
 			@FormParam("name") String name,
 			@FormParam("cityId") int cityId,
 			@FormParam("sortOrder") byte sortOrder,
-			@FormParam("status") boolean status
+			@FormParam("status") boolean status,
+			@FormParam("latitude") String latitude,
+			@FormParam("longitude") String longitude
 	){
 		City city = new City();
 		city.setId(cityId);
@@ -287,6 +293,8 @@ public class GeneralController {
 		locality.setCity(city);
 		locality.setSortOrder(sortOrder);
 		locality.setStatus(status);
+		locality.setLongitude(longitude);
+		locality.setLatitude(latitude);
 		LocalityNamesImp localityNamesImp = new LocalityNamesImp();
 		return localityNamesImp.update(locality);
 	}

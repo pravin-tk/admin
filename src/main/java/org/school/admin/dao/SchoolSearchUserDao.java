@@ -201,6 +201,7 @@ public class SchoolSearchUserDao {
         			+" FROM UserRegistrationInfo ur WHERE ur.id = :id";
         Query query = session.createQuery(hql).setParameter("id", id).setResultTransformer(Transformers.aliasToBean(UserInfo.class));
         UserInfo fetchedUser = (UserInfo)query.uniqueResult();
+        session.close();
         return fetchedUser;
 	}
 
@@ -234,7 +235,7 @@ public class SchoolSearchUserDao {
         Query query = session.createQuery(hql).setParameter("email", schoolSearchUser.getEmail())
         		.setParameter("password", schoolSearchUser.getPassword())
         		.setResultTransformer(Transformers.aliasToBean(SchoolSearchUser.class));
-        		
+        	session.close();	
         return (SchoolSearchUser)query.uniqueResult();
 	}
 	
@@ -245,7 +246,8 @@ public class SchoolSearchUserDao {
         		+ " ssu.mobile as mobile, ssu.image as image FROM SchoolSearchUser ssu WHERE ssu.email = :email";
         Query query = session.createQuery(hql).setParameter("email", schoolSearchUser.getEmail())
         		.setResultTransformer(Transformers.aliasToBean(SchoolSearchUser.class));
-        System.out.println("email : " + schoolSearchUser.getEmail());		
+        System.out.println("email : " + schoolSearchUser.getEmail());	
+        session.close();
         return (SchoolSearchUser)query.uniqueResult();
 	}
 	

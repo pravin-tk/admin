@@ -128,6 +128,35 @@ if (city_id > 0) {
                                     </div>
 	                            </div>
 
+
+  								<div class="form-group">
+                                    <label class="col-sm-2 control-label">Latitude</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" name="localitylatitude" id="localitylatitude" placeholder="latitude">
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="tooltip custom-tool-tip right">
+                                            <div class="tooltip-arrow"></div>
+                                            <div class="tooltip-inner">
+                                                This is the latitude of the Locality.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                  <div class="form-group">
+                                    <label class="col-sm-2 control-label">Longitude</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" name="localitylongitude" id="localitylongitude" placeholder="longitude">
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="tooltip custom-tool-tip right">
+                                            <div class="tooltip-arrow"></div>
+                                            <div class="tooltip-inner">
+                                                This is the longitude of the Locality.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 <!--                                 <div class="form-group"> -->
 <!--                                     <label class="col-sm-2 control-label">Display Order</label> -->
 <!--                                     <div class="col-sm-2"> -->
@@ -194,7 +223,7 @@ function saveLocality(){
 		alert(msg);
 	}
 	else{
-		$.post("../webapi/general/locality/save", {name: $("#name").val(), cityId: $("#cityId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val()}, function(data){
+		$.post("../webapi/general/locality/save", {name: $("#name").val(), cityId: $("#cityId").val(), sortOrder: sortOrder, status: $('input[name=status]:checked').val(),latitude : $("#localitylatitude").val(),longitude : $("#localitylongitude").val()}, function(data){
 			if($("#cityId").val() > 0){
 				if(data.status == 1)
 					window.location.href = "${baseUrl}/general/locality.jsp?city_id="+$("#cityId").val();

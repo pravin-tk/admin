@@ -59,7 +59,7 @@ public class Locality implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "city_id")
 	public City getCity() {
 		return this.city;
