@@ -355,6 +355,17 @@ public class SchoolController extends ResourceConfig {
 	}
 	
 	@POST
+	@Path("/deleteclassdetail")
+	@Produces(MediaType.APPLICATION_JSON)
+	public  ResponseMessage deleteClass(@FormParam("classId") int classId,
+			@FormParam("strReason") String reasonDelete,
+			@FormParam("schoolId") int schoolId,
+			@FormParam("userId") int userId)
+	{
+		return new SchoolDAOImp().deleteClass(classId,reasonDelete,schoolId,userId); 
+	}
+	
+	@POST
 	@Path("deleteSalesDetail")
 	 @Produces(MediaType.APPLICATION_JSON)
 		public List<SalesInfo> deleteSalesDetail(
@@ -1526,4 +1537,16 @@ public class SchoolController extends ResourceConfig {
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 		return schoolDAOImp.updatePanoImageTitle(id, title);
 	}
+	@GET
+	@Path("getlatlong/{cityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<School> getSchoolLatLOng(@PathParam("cityId") int cityId)
+	{
+		return new SchoolDAOImp().getSchoolLatLong(cityId);
+	}
+	
+//	@POST
+//	@Path("pendingreason")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<School> getPendingList(@PathParam(""))
 }

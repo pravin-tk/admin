@@ -11,6 +11,8 @@
 System.out.println("SessionData : "+session.getAttribute("cityid"));
 	SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 	List<School> school_list = null;
+	List<ViewSchoolData> viewSchoolList = null;
+	List<ViewContactData> viewContactList = null;
 	if (request.getParameterMap().containsKey("school_id")) {
 		if(request.getParameter("school_id") != null){
 			if(Integer.parseInt(request.getParameter("school_id")) > 0)
@@ -18,9 +20,14 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 			//System.out.println(school_list.toString());
 		}
 	}
-	List<ViewSchoolData> viewSchoolList = new SchoolDAOImp().getViewSchoolList((Integer)session.getAttribute("cityid"));
-	
-	List<ViewContactData> viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
+	if(session!=null){
+		if(session.getAttribute("cityid") != null){
+		    viewSchoolList = new SchoolDAOImp().getViewSchoolList((Integer)session.getAttribute("cityid"));
+			
+			viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
+		}
+	}
+	if(viewContactList.size()>0){
 	for(int i=0;i<viewContactList.size();i++)
 	{
 	System.out.println("ContactDetailsList : "+viewContactList.get(i).getContactDetail());
@@ -28,6 +35,7 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 				+"console.log('"+viewContactList.get(i).getContactDetail()+"');"
 				+"</script>");
  
+	}
 	}
 	System.out.print("ViewSize : "+viewContactList.size());
 %>

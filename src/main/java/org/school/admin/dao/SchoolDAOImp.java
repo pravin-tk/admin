@@ -61,6 +61,8 @@ import org.school.admin.model.ViewContact;
 import org.school.admin.model.ViewSchool;
 import org.school.admin.util.HibernateUtil;
 
+import com.mysql.jdbc.interceptors.SessionAssociationInterceptor;
+
 public class SchoolDAOImp {
 
 	/*-------------Pankaj Naik -------------*/
@@ -148,6 +150,7 @@ public class SchoolDAOImp {
 		{
 			name = adminUser.get(0).getName();
 		}
+		session.close();
 		return name;
 	}
 	
@@ -180,7 +183,7 @@ public class SchoolDAOImp {
 			newAdminUserList.add(newAdminUser);
 			}
 		}
-		
+		session.close();
 		return newAdminUserList;
 		
 	}
@@ -231,6 +234,7 @@ public class SchoolDAOImp {
 			session.save(schoolReview);
 			tx.commit();
         	session.flush();
+        	session.close();
 			responseMessage.setStatus(1);
 			responseMessage.setMessage("Saved successfuly");
 			
@@ -375,7 +379,9 @@ public class SchoolDAOImp {
 		String hql = "from ViewContact where cityId =:cityId";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
 		Query query = session.createQuery(hql);
+		
 		query.setParameter("cityId", cityId);
 		List<ViewContact> result = query.list();
 		List<ViewContactData> viewContactDatas = new ArrayList<ViewContactData>();
@@ -405,6 +411,7 @@ public class SchoolDAOImp {
 		String hql = "select distinct v from ViewContact v where v.contactNumber = :contactNumber and cityId =:cityId";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("contactNumber", contact_id);
 		query.setParameter("cityId",cityId);
@@ -417,6 +424,7 @@ public class SchoolDAOImp {
 				viewSchoolList.addAll(getSchoolDetail(viewContact.get(j).getSchoolId()));
 			}
 		}
+		session.close();
 		return viewSchoolList;
 	}
 	
@@ -460,6 +468,7 @@ public class SchoolDAOImp {
 			
 		}
 		}
+		session.close();
 		return schools;
 	}
 	
@@ -508,6 +517,7 @@ public class SchoolDAOImp {
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
 		}
+		session.close();
 		return schools;
 	}
 	
@@ -553,6 +563,7 @@ public class SchoolDAOImp {
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
 		}
+		session.close();
 		return schools;
 	}
 	
@@ -596,6 +607,7 @@ public class SchoolDAOImp {
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
 		}
+		session.close();
 		return schools;
 	}
 	
@@ -643,10 +655,11 @@ public class SchoolDAOImp {
 			schools.add(school);
 			}
 		}
+		session.close();
 		return schools;
 	}
 	
-	public List<School> getSchoolRejectedList(int city_id){
+	public List<School> getSchoolIncompleteList(int city_id){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		String hql = "";
@@ -659,7 +672,8 @@ public class SchoolDAOImp {
 		List<School> result = query.list();
 		List<School> schools = new ArrayList<School>();
 		for(int i=0; i<result.size(); i++){
-			if((getPer(result.get(i).getId()) > 0 && getPer(result.get(i).getId()) < 100)){
+			System.out.println("SCHOOLID : "+result.get(i).getId());
+			if((getPer(result.get(i).getId()) >0 && getPer(result.get(i).getId()) < 100) && result.get(i).getStatus() == 0){
 			School school = new School();
 			Locality locality = new Locality();
 			locality.setId(result.get(i).getLocality().getId());
@@ -688,6 +702,53 @@ public class SchoolDAOImp {
 			schools.add(school);
 			}
 		}
+		session.close();
+		return schools;
+	}
+	
+	public List<School> getSchoolRejectedList(int city_id){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "";
+		Query query = null;
+		 if (city_id > 0) {
+			hql = "from School where locality.city.id = :city_id and status = 2";
+			query = session.createQuery(hql);
+			query.setParameter("city_id",city_id);
+		} 
+		List<School> result = query.list();
+		List<School> schools = new ArrayList<School>();
+		for(int i=0; i<result.size(); i++){
+			if((getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 2)){
+			School school = new School();
+			Locality locality = new Locality();
+			locality.setId(result.get(i).getLocality().getId());
+			locality.setName(result.get(i).getLocality().getName());
+			City city = new City();
+			city.setId(result.get(i).getLocality().getCity().getId());
+			city.setName(result.get(i).getLocality().getCity().getName());
+			locality.setCity(city);
+			school.setId(result.get(i).getId());
+			school.setName(result.get(i).getName());
+			school.setAboutSchool(result.get(i).getAboutSchool());
+			school.setEstablishmentType(result.get(i).isEstablishmentType());
+			school.setAlias(result.get(i).getAlias());
+			school.setCreatedBy(result.get(i).getCreatedBy());
+			school.setLandmark(result.get(i).getLandmark());
+			school.setLatitude(result.get(i).getLatitude());
+			school.setLongitude(result.get(i).getLongitude());
+			school.setLiveDate(result.get(i).getLiveDate());
+			school.setLocality(locality);
+			school.setPincode(result.get(i).getPincode());
+			school.setPlotNo(result.get(i).getPlotNo());
+			school.setStatus(result.get(i).getStatus());
+			school.setStreetName(result.get(i).getStreetName());
+			school.setTagLine(result.get(i).getTagLine());
+			school.setPromote(result.get(i).getPromote());
+			schools.add(school);
+			}
+		}
+		session.close();
 		return schools;
 	}
 	/**
@@ -785,6 +846,7 @@ public class SchoolDAOImp {
 					+tabControls.get(i).getPanoImage();
 			
 		}
+		session.close();
 		return sum;
 	}
 	public List<SchoolNameList> getSchoolNameList(int school_id, int city_id, int locality_id){
@@ -817,6 +879,7 @@ public class SchoolDAOImp {
 			school.setSchool_name((String)element[1]);
 			namelist.add(school);
 		}
+		session.close();
 		return namelist;
 	}
 	
@@ -832,7 +895,7 @@ public class SchoolDAOImp {
 		query.setParameter("school_id", school_id);
 		
 		List<School> schoolList = query.list();
-		
+		session.close();
 		return schoolList;
 		
 	}
@@ -936,9 +999,9 @@ public class SchoolDAOImp {
 		int class_info_id = 0;
 		ResponseMessage msg = new ResponseMessage();
 		ClassInfo classInfo = classDetail.getClassInfo();
-		//String strReason = classDetail.getStrReason();
-	//	AdminUser adminUser = new AdminUser();
-		//adminUser.setId(classDetail.getAdminUser().getId());
+		String strReason = classDetail.getStrReason();
+		AdminUser adminUser = new AdminUser();
+		adminUser.setId(classDetail.getClassInfo().getLastUpdatedBy());
 		School school = new School();
 		school.setId(classDetail.getClassInfo().getSchool().getId());
 		if(classDetail.getClassInfo().getStandardType().getId() <= 0) {
@@ -1006,7 +1069,7 @@ public class SchoolDAOImp {
 					ClassAccessories classAccessoryItem = sIterator.next();
 					classAccessoryItem.setClassInfo(classInfo);
 					session.save(classAccessoryItem);
-					log +=", "+new SettingsImpl().getAccessoryById(classAccessoryItem.getAccessories().getId());
+					log +=", "+new SettingsImpl().getAccessoryNameById(classAccessoryItem.getAccessories().getId());
 				}
 				session.getTransaction().commit();
 				session.close();
@@ -1066,7 +1129,8 @@ public class SchoolDAOImp {
 			msg.setStatus(1);
 			msg.setMessage("Saved Successfully");
 			updateTabs(school.getId(), "classDetail");
-			//saveSchoolLog(new SchoolLog(adminUser, school, "", log, new Date(), new Date()));
+			System.out.println("LogEntry : "+log);
+			saveSchoolLog(new SchoolLog(adminUser, school, "", log, new Date(), new Date()));
 		}	
 		
 		return msg;
@@ -1459,8 +1523,6 @@ public class SchoolDAOImp {
 		}
 		
 		Set<SchoolSafetyCatItem> schoolSafetyCatItems = infrastructureDetail.getSafetyCatItems();
-		
-		
 			
 			String hqlDeleteSafety = "Delete from SchoolSafetyCatItem where school.id = :school_id";
 			Session deleteSessionSafety = hibernateUtil.openSession();
@@ -2224,5 +2286,160 @@ public class SchoolDAOImp {
 		sessionSchoolLog.save(schoolLog);
 		sessionSchoolLog.getTransaction().commit();
 		sessionSchoolLog.close();
+	}
+	public ResponseMessage deleteClass(int classId, String reasonDelete,
+			int schoolId, int userId) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		String log = "| Deleted data : ";
+		String hql = "from ClassInfo where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", classId);
+		List<ClassInfo> classInfos = query.list();
+		session.close();
+		log += "| standard : "+new StandardTypeDAO().getStandardTypeNameById(classInfos.get(0).getStandardType().getId());
+		log += "| stream : "+new SettingsImpl().getStreamTypeNameById(classInfos.get(0).getStreamType().getId());
+		log += "| teaching approach : "+new SettingsImpl().getTeachingApproachTypeNameById(classInfos.get(0).getTeachingApproachType().getId());
+		log += "| total seats : "+classInfos.get(0).getTotalSeat();
+		log += "| vacent seats : "+classInfos.get(0).getVacantSeat();
+		log += "| morning time from : "+classInfos.get(0).getMorningTimeFrom();
+		log += "| morning time to : "+classInfos.get(0).getMorningTimeTo();
+		log += "| afternoon time from : "+classInfos.get(0).getAfternoonTimeFrom();
+		log += "| afternoon time to: "+classInfos.get(0).getAfternoonTimeTo();
+		log += "| admission deadline : "+classInfos.get(0).getAdmissionDeadline();
+		log += "| admission from : "+classInfos.get(0).getAdmissionFrom();
+		log += "| admission to : "+classInfos.get(0).getAdmissionTo();
+		log += "| admission process : "+classInfos.get(0).getAdmissionProcess();
+		log += "| eligibility criteria : "+classInfos.get(0).getEligibilityCriteria();
+		log += "| specialization : "+classInfos.get(0).getSpecialization();
+		log += "| how_to_apply : "+classInfos.get(0).getHowToApply();
+		
+		String classSubjectQuery = "from ClassSubjects where classInfo.id = :id";
+		HibernateUtil hibernateUtil2 = new HibernateUtil();
+		Session sessionClassSubject = hibernateUtil2.openSession();
+		sessionClassSubject.beginTransaction();
+		Query queryClassSubject = sessionClassSubject.createQuery(classSubjectQuery);
+		queryClassSubject.setParameter("id", classId);
+		List<ClassSubjects> classSubjects = queryClassSubject.list();
+		sessionClassSubject.close();
+		
+		log +="| subject taught :";
+		for(int i=0;i<classSubjects.size();i++){
+			log +=","+new SettingsImpl().getSubjectNameById(classSubjects.get(i).getSubject().getId());
+		}
+		
+		String classAccessoryQuery = "from ClassAccessories where classInfo.id = :id";
+		HibernateUtil hibernateUtil3 = new HibernateUtil();
+		Session sessionClassAccessory = hibernateUtil3.openSession();
+		sessionClassAccessory.beginTransaction();
+		Query queryClassAccessory = sessionClassAccessory.createQuery(classAccessoryQuery);
+		queryClassAccessory.setParameter("id", classId);
+		List<ClassAccessories> classAccessories = queryClassAccessory.list();
+		sessionClassAccessory.close();
+		
+		log +="| Accessories Provided : ";
+		for(int i=0;i<classAccessories.size();i++){
+			log +=","+new SettingsImpl().getAccessoryNameById(classAccessories.get(0).getAccessories().getId());
+		}
+		
+		
+		
+		String feeTypeQuery = "from ClassFee where classInfo.id = :id";
+		HibernateUtil hibernateUtil4 = new HibernateUtil();
+		Session sesionFeeType = hibernateUtil4.openSession();
+		Query queryFeeType = sesionFeeType.createQuery(feeTypeQuery);
+		queryFeeType.setParameter("id", classId);
+		List<ClassFee> classFeeList = queryFeeType.list();
+		sesionFeeType.close();
+		
+		
+        log +="| Fee type : ";
+        for(int f =0;f<classFeeList.size();f++){
+        	log +=" | Fee decription : "+classFeeList.get(f).getFeeDesc();
+        	log +=" | Amount : "+classFeeList.get(f).getAmount();
+        }
+        
+        try{
+        	 String deleteClassFee = "delete ClassFee where classInfo.id = :id";
+             HibernateUtil hibernateUtildeleteClassFee = new HibernateUtil();
+             Session sessionDeleteClassFee = hibernateUtildeleteClassFee.openSession();
+             sessionDeleteClassFee.beginTransaction();
+             Query queryDeleteClassFee = sessionDeleteClassFee.createQuery(deleteClassFee);
+             queryDeleteClassFee.setParameter("id", classId);
+             queryDeleteClassFee.executeUpdate();
+             sessionDeleteClassFee.getTransaction().commit();
+             sessionDeleteClassFee.close();
+             
+             String deleteClassSubjects = "delete ClassSubjects where classInfo.id = :id";
+             HibernateUtil hibernateUtildeleteClassSubjects = new HibernateUtil();
+             Session sessionDeleteClassSubjects = hibernateUtildeleteClassSubjects.openSession();
+             sessionDeleteClassSubjects.beginTransaction();
+             Query queryDeleteClassSubjects = sessionDeleteClassSubjects.createQuery(deleteClassSubjects);
+             queryDeleteClassSubjects.setParameter("id", classId);
+             queryDeleteClassSubjects.executeUpdate();
+             sessionDeleteClassSubjects.getTransaction().commit();
+             sessionDeleteClassSubjects.close();
+             
+             String deleteClassAccessories = "delete ClassAccessories where classInfo.id = :id";
+             HibernateUtil hibernateUtildeleteClassAccessories = new HibernateUtil();
+             Session sessionDeleteClassAccessories = hibernateUtildeleteClassAccessories.openSession();
+             sessionDeleteClassAccessories.beginTransaction();
+             Query queryDeleteClassAccessories = sessionDeleteClassAccessories.createQuery(deleteClassAccessories);
+             queryDeleteClassAccessories.setParameter("id", classId);
+             queryDeleteClassAccessories.executeUpdate();
+             sessionDeleteClassAccessories.getTransaction().commit();
+             sessionDeleteClassAccessories.close();
+             
+             
+     		String deleteClassQuery = "delete ClassInfo  where id = :id";
+     		HibernateUtil deleteClassUtil = new HibernateUtil();
+     		Session sessiondeleteClass = deleteClassUtil.openSession();
+     		sessiondeleteClass.beginTransaction();
+     		Query querydeleteClass = sessiondeleteClass.createQuery(deleteClassQuery);
+     		querydeleteClass.setParameter("id", classId);
+     		
+     		querydeleteClass.executeUpdate();
+     		sessiondeleteClass.getTransaction().commit();
+     		sessiondeleteClass.close();
+     		School school = new School();
+     		school.setId(schoolId);
+     		
+     		AdminUser adminUser = new AdminUser();
+     		adminUser.setId(userId);
+     		saveSchoolLog(new SchoolLog(adminUser, school, reasonDelete, log, new Date(), new Date()));
+     		responseMessage.setStatus(1);
+     		responseMessage.setMessage("class deleted successfully");
+     		return responseMessage;
+
+        }catch(Exception e){
+        	responseMessage.setStatus(0);
+        	responseMessage.setMessage("Fail to delte class");
+        	return responseMessage;
+        }
+       	}
+	public List<School> getSchoolLatLong(int cityId) {
+		String hql = "from School where locality.city.id = :city_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("city_id", cityId);
+		List<School> schoolList = query.list();
+		List<School> schoolLatlong = new ArrayList<School>();
+		if(schoolList.size()>0)
+		{
+			for(int s =0 ;s<schoolList.size();s++){
+				School school = new School();
+				school.setId(schoolList.get(s).getId());
+				school.setName(schoolList.get(s).getName());
+				school.setLatitude(schoolList.get(s).getLatitude());
+				school.setLongitude(schoolList.get(s).getLongitude());
+				schoolLatlong.add(school);
+				
+			}
+			
+		}
+		session.close();
+		return schoolLatlong;
 	}
 }
