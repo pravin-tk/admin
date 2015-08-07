@@ -10,6 +10,7 @@ public class NearbySchoolList {
 	private Short standardId;
 	private Double distance;
 	private String localityName;
+	private String cityName;
 	private String homeImage;
 	private String mediums;
 	
@@ -78,6 +79,12 @@ public class NearbySchoolList {
 	}
 	public void setMediums(String mediums) {
 		this.mediums = mediums;
+	}
+	public String getCityName() {
+		return cityName;
+	}
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
 	}
 	
 }

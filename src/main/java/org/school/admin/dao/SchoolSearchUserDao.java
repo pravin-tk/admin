@@ -54,6 +54,7 @@ public class SchoolSearchUserDao {
 	        	int userId = schoolSearchUser.getId();
 	        	session.flush();
 	        	String file_name = schoolSearchUser.getImage();
+	        	file_name = file_name.replaceAll("([^a-zA-Z0-9.]|\\s)+", " ").replaceAll(" ", "_").toLowerCase();
 	        	file_name = "avatar/"+userId+"-"+file_name;
 	        	String uploadFileLocation = img_path+file_name;
 	        	schoolSearchUser.setImage(file_name);
@@ -109,8 +110,8 @@ public class SchoolSearchUserDao {
 	        	int userId = userRegistrationInfo.getId();
 	        	if(userRegistrationInfo.getImage() != null && userRegistrationInfo.getImage().trim().length() > 0) {
 		        	String file_name = userRegistrationInfo.getImage();
-		        	file_name = "avatar/"+userId+"-"+file_name;
 		        	file_name = file_name.replaceAll("([^a-zA-Z0-9.]|\\s)+", " ").replaceAll(" ", "_").toLowerCase();
+		        	file_name = "avatar/"+userId+"-"+file_name;
 		        	String uploadFileLocation = img_path+file_name;
 		        	userRegistrationInfo.setImage(file_name);
 		        	Session newsession = hibernateUtil.openSession();
@@ -160,10 +161,11 @@ public class SchoolSearchUserDao {
 	        	int userId = userRegistrationInfo.getId();
 	        	if(userRegistrationInfo.getImage() != null && userRegistrationInfo.getImage().trim().length() > 0) {
 		        	String file_name = userRegistrationInfo.getImage();
-		        	file_name = "avatar/"+userId+"-"+file_name;
 		        	file_name = file_name.replaceAll("([^a-zA-Z0-9.]|\\s)+", " ").replaceAll(" ", "_").toLowerCase();
+		        	file_name = "avatar/"+userId+"-"+file_name;
 		        	String uploadFileLocation = img_path+file_name;
 		        	userRegistrationInfo.setImage(file_name);
+		        	System.out.println("User Image:"+uploadFileLocation);
 		        	this.imageUploader.writeToFile( inputStream, uploadFileLocation);
 	        	}
 	        	String updateQuery = "UPDATE UserRegistrationInfo set firstName='"+userRegistrationInfo.getFirstName()+"'"

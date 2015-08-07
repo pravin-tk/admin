@@ -111,6 +111,7 @@
         <mapping class="org.school.admin.model.SchoolLog" />
         <mapping class="org.school.admin.model.SchoolAnalytics" />
          <mapping class="org.school.admin.model.SchoolPanoramicImage" />
+        <mapping class="org.school.admin.model.ContactUs" />
     </session-factory>
 
 </hibernate-configuration>

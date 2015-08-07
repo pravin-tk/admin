@@ -26,6 +26,7 @@ import org.school.admin.data.NameImageList;
 import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.Rating;
+import org.school.admin.data.RatingsReviewsData;
 import org.school.admin.data.SchoolCompleteDetail;
 import org.school.admin.data.SchoolList;
 import org.school.admin.data.SchoolListingRequest;
@@ -35,6 +36,7 @@ import org.school.admin.data.SearchRequest;
 import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.data.UriData;
+import org.school.admin.exception.ResponseMessage;
 import org.school.admin.service.SearchFilterService;
 
 @Path("api1.0")
@@ -158,7 +160,7 @@ public class SchoolSearchController {
 			reviews.get(i).getUserRegistrationInfo().setImage(img_path+reviews.get(i).getUserRegistrationInfo().getImage());
 		}
 		result.setHighlights(schoolDAOImp.getSchoolHighlightList(id));
-		result.setReviews(reviews);
+		//result.setReviews(reviews);
 		result.setContacts(contactDetaillDAO.getExternalConatctDetail(id));
 		result.setSchoolTimelineData(timelines);
 		result.setImages(galleryDatas);
@@ -176,6 +178,12 @@ public class SchoolSearchController {
 		}
 		result.setRating(ratings);
 		result.setSchoolAchievements(schoolSearchImpl.getSchoolAchievmentsBySchoolId(id));
+		
+		List<RatingsReviewsData> ratingsReviewsData = schoolSearchImpl.getSchoolRatingsAndReviews(id);
+		for(int i = 0; i < ratingsReviewsData.size(); i++){
+			ratingsReviewsData.get(i).setImage(img_path+ratingsReviewsData.get(i).getImage());
+		}
+		result.setRatingsAndReviews(ratingsReviewsData);
 		
 		return result;
 	}
@@ -219,7 +227,7 @@ public class SchoolSearchController {
 	@GET
 	@Path("/geturi.json/{latitude}/{longitude}/{standardId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public UriData getUri(
+	public ResponseMessage getUri(
 			@PathParam("latitude") String latitude,
 			@PathParam("longitude") String longitude,
 			@PathParam("standardId") Short standardId) {

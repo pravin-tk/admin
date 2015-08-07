@@ -16,6 +16,7 @@ import org.school.admin.data.InfraItem;
 import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.RatingData;
+import org.school.admin.data.RatingsReviewsData;
 import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolFee;
 import org.school.admin.data.SchoolList;
@@ -28,6 +29,7 @@ import org.school.admin.data.UriData;
 import org.school.admin.data.VacantSeats;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ClassInfo;
+import org.school.admin.model.ContactUs;
 import org.school.admin.model.PrevStudentProfile;
 import org.school.admin.model.RatingCategoryType;
 import org.school.admin.model.School;
@@ -42,6 +44,8 @@ import org.school.admin.model.SchoolSafetyCatItem;
 import org.school.admin.model.UserRating;
 import org.school.admin.model.UserRegistrationInfo;
 import org.school.admin.util.HibernateUtil;
+
+import com.google.gson.Gson;
 
 
 public class SchoolSearchImpl {
@@ -226,6 +230,27 @@ public class SchoolSearchImpl {
 			schoolReviews.add(schoolReview);
 		}
 		return schoolReviews;
+	}
+	
+	public List<RatingsReviewsData> getSchoolRatingsAndReviews(int schoolId){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		String sql = " SELECT ur.school_id as schoolId, sr.review as review, ur.user_id as userId, "
+				+ " uri.first_name as firstName, uri.last_name as lastName, uri.image, "
+				+ " avg(ur.rating) as rating,"
+				+ " sr.date as date, sr.time as time,"
+				+ " sr.title as title "
+				+ " FROM user_rating ur JOIN school_review sr ON sr.userid=ur.user_id "
+				+ " AND sr.school_id = ur.school_id "
+				+ " JOIN user_registration_info uri ON uri.id = ur.user_id "
+				+ " WHERE sr.school_id = :schoolId "
+				+ " GROUP BY ur.user_id, ur.school_id ";
+		Query query = session.createSQLQuery(sql)
+				.setParameter("schoolId", schoolId)
+				.setResultTransformer(Transformers.aliasToBean(RatingsReviewsData.class));
+		List<RatingsReviewsData> ratingAndReviewsData = query.list();
+		session.close();
+		return ratingAndReviewsData;
 	}
 	
 	public List<GalleryData> getImageGallary(Integer schoolId)
@@ -520,6 +545,7 @@ public class SchoolSearchImpl {
 					userRating.setSchool(school);
 					userRating.setUserRegistrationInfo(userRegistrationInfo);
 					userRating.setRating((float)ratingData.getRatings().get(i).getRating());
+					userRating.setAddedDate(new Date());
 					RatingCategoryType ratingCategoryType = new RatingCategoryType();
 					ratingCategoryType.setId(ratingData.getRatings().get(i).getCatid());
 					userRating.setRatingCategoryType(ratingCategoryType);
@@ -707,6 +733,7 @@ public class SchoolSearchImpl {
 		String hql = "SELECT s.schoolId as schoolId, "
 			+ " s.name as name, "
 			+ " s.localityName as localityName, "
+			+ " s.cityName as cityName, "
 			+ " s.rating as rating, "
 			+ " s.homeImage as homeImage, "
 			+ " s.mediums as mediums, "
@@ -764,7 +791,7 @@ public class SchoolSearchImpl {
 		return result;
 	}
 	
-	public UriData getUriByLatitudeLongitudeByStandard(String latitude, String longitude, Short standardId) {
+	public ResponseMessage getUriByLatitudeLongitudeByStandard(String latitude, String longitude, Short standardId) {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 
@@ -780,6 +807,31 @@ public class SchoolSearchImpl {
 				.setParameter("latitude", latitude)
 				.setParameter("longitude", longitude)
 				.setResultTransformer(Transformers.aliasToBean(UriData.class));
-		return (UriData)query.uniqueResult();
+		
+		UriData result = (UriData)query.uniqueResult();
+		ResponseMessage responseMessage = new ResponseMessage();
+		if( result == null ) { 
+			responseMessage.setMessage("No school found.");
+			responseMessage.setStatus(0);
+		} else {
+			Gson gson = new Gson();
+			responseMessage.setMessage("School found.");
+			responseMessage.setData(result);
+			responseMessage.setStatus(1);
+		}
+		return responseMessage;
+	}
+	
+	public ResponseMessage postContactRequest(ContactUs contactUs){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(contactUs);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setStatus(1);
+		response.setMessage("Success");
+		return response;
 	}
 }

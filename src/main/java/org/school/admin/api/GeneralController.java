@@ -8,12 +8,14 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -24,17 +26,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.tomcat.jni.Time;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.school.admin.dao.SchoolSearchImpl;
 import org.school.admin.dao.UserImpl;
 import org.school.admin.data.UserInfo;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.ApplicantBasicDetail;
 import org.school.admin.model.ApplicantParentDetail;
 import org.school.admin.model.ApplicantPreSchoolDetail;
+import org.school.admin.model.ContactUs;
 import org.school.admin.model.PostRequirement;
 import org.school.admin.model.School;
 import org.school.admin.model.StandardType;
@@ -61,6 +66,57 @@ public class GeneralController extends ResourceConfig {
 		PostRequirement postRequirement = new PostRequirement(name,email,mobile,requirement);
 		UserImpl userImpl = new UserImpl();
 		ResponseMessage responseMessage = userImpl.postRequirement(postRequirement);
+		return responseMessage;
+	}
+	
+	@POST
+	@Path("contactus.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addRequirement(
+			@FormParam("name") String name,
+			@FormParam("email") @DefaultValue("") String email,
+			@FormParam("mobile") String mobile,
+			@FormParam("schoolId") Integer schoolId
+	) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		ArrayList<String> errors = new ArrayList<String>();
+		ContactUs contactUs = new ContactUs();
+		contactUs.setCreatedOn(new Date());
+		contactUs.setPostTime(new Date());
+		contactUs.setDescription("na");
+		contactUs.setName(name);
+		contactUs.setEmail(email);
+		contactUs.setMobile(mobile);
+		try {
+	       InternetAddress emailAddr = new InternetAddress(email);
+	       emailAddr.validate();
+	    } catch (AddressException ex) {
+	    	responseMessage.setStatus(0);
+	    	responseMessage.setMessage("Invalid Email");
+	    	errors.add("Invalid Email.");
+	    	responseMessage.setErrors(errors);
+	    	return responseMessage;
+	    }
+		if (mobile.matches("\\d{10}") || mobile.matches("\\d{0}")) {
+			//mobile check
+		} else {
+			responseMessage.setStatus(0);
+	    	responseMessage.setMessage("Invalid Mobile");
+	    	errors.add("Invalid Mobile.");
+	    	responseMessage.setErrors(errors);
+	    	return responseMessage;
+		}
+		
+		if (name.trim().length() <= 0) {
+			responseMessage.setStatus(0);
+	    	responseMessage.setMessage("Name required");
+	    	errors.add("Name required.");
+	    	responseMessage.setErrors(errors);
+	    	return responseMessage;
+		}
+			
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		responseMessage = schoolSearchImpl.postContactRequest(contactUs);
 		return responseMessage;
 	}
 	
