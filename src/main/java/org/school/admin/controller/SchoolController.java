@@ -1463,10 +1463,6 @@ public class SchoolController extends ResourceConfig {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage saveSchoolPanoImageGallery(
 			@FormDataParam("school_id") Integer school_id,
-		//	@FormDataParam("logo_image") InputStream is_logo_img, 
-			//@FormDataParam("logo_image") FormDataContentDisposition header_logo_img,
-		//	@FormDataParam("home_image") InputStream is_home_img, 
-	//		@FormDataParam("home_image") FormDataContentDisposition header_home_img,
 			@FormDataParam("imagePanoTitle[]") List<FormDataBodyPart> imageTitle,
 			@FormDataParam("ga_pano_image[]") List<FormDataBodyPart> imageslist
 	){
@@ -1476,22 +1472,6 @@ public class SchoolController extends ResourceConfig {
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 		School school = new School();
 		school.setId(school_id);
-//		try{
-//			if(!header_logo_img.getFileName().isEmpty()) {
-//				String logo_name = header_logo_img.getFileName();
-//				logo_name = logo_name.replaceAll(" ", "_").toLowerCase();
-//				logo_name = "pano/"+logo_name;
-//				String uploadLogoLocation = this.context.getInitParameter("logo_url")+logo_name;
-//				this.imageUploader.writeToFile(is_logo_img, uploadLogoLocation);
-//				school.setLogo(logo_name);
-//				System.out.println("LOGO URL : "+logo_name);
-//			}
-//		}
-//		catch(Exception e){
-//			System.out.println(e);
-//			e.printStackTrace();
-//		}
-		
 		
 		try {	
 			List<SchoolPanoramicImage> schoolPanoramicImageList = new ArrayList<SchoolPanoramicImage>();

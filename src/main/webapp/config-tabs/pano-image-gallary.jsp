@@ -143,8 +143,8 @@
 	$("#savepanoimagegallery").click(function() {
 		var options = {
 			target : '#error-contact-detail', // target element(s) to be updated with server response 
-			beforeSubmit : showGalleryRequest, // pre-submit callback 
-			success : showGalleryResponse,
+			beforeSubmit : showPanoGalleryRequest, // pre-submit callback 
+			success : showPanoGalleryResponse,
 			url : '${baseUrl}/webapi/school/saveimagepanogallery',
 			semantic : true,
 			dataType : 'json'
@@ -154,21 +154,21 @@
 	});
 
 	// pre-submit callback 
-	function showGalleryRequest(formData, jqForm, options) {
+	function showPanoGalleryRequest(formData, jqForm, options) {
 		var queryString = $.param(formData);
 		$('#error-contact-detail').hide();
 		return true;
 	}
 
 	// post-submit callback 
-	function showGalleryResponse(responseText, statusText, xhr, $form) {
+	function showPanoGalleryResponse(responseText, statusText, xhr, $form) {
 		if (responseText.status == 1) {
 			updateProgress($('#school_id').val());
 			alert(responseText.message);
 			//$("#saveimagegallery").hide();
-		}
-		else
+		} else {
 			alert(responseText.message);
+		}
 	}
 
 	

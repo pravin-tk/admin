@@ -83,7 +83,7 @@ public class SchoolLog implements java.io.Serializable {
 		this.reason = reason;
 	}
 
-	@Column(name = "log", length = 45)
+	@Column(name = "log")
 	public String getLog() {
 		return this.log;
 	}

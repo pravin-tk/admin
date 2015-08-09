@@ -173,13 +173,13 @@
 function updateProgress(school_id){
 	$.get("webapi/school/get_school_progress/"+school_id,{},function(data){
 		$("#school_progress").html(data+"%");
-		$("#school_progress").attr('width',data);
+		$("#school_progress").attr('width',data+"%");
 	});
 }
 function deleteProgress(school_id){
 	$.get("webapi/school/get_new_school_progress/"+school_id,{},function(data){
 		$("#school_progress").html(data+"%");
-		$("#school_progress").attr('width',data);
+		$("#school_progress").attr('width',data+"%");
 	});
 }
 function viewVerify()

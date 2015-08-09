@@ -110,7 +110,9 @@
 	function showEditSchoolClassificationRequest(formData, jqForm, options) {
 		var queryString = $.param(formData);
 		$('#error-school-classification').hide();
-		//console.log("193");
+		if($("#image").val() == "" || $("#image").val() == null){
+			alert("Please select image.")
+		}
 		return true;
 	}
 	

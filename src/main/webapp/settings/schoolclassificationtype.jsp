@@ -125,6 +125,9 @@ List<SchoolClassificationType> schoolclassification = settings.getAllSchoolClass
 	    	function showSchoolClassificationRequest(formData, jqForm, options) {
 	    		var queryString = $.param(formData);
 	    		$('#error-school-classification').hide();
+	    		if($("#image").val() == "" || $("#image").val() == null){
+	    			alert("Please select image.")
+	    		}
 	    		//console.log("193");
 	    		return true;
 	    	}

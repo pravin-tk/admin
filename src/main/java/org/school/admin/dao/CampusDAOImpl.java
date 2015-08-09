@@ -46,7 +46,7 @@ public class CampusDAOImpl {
 	
 		    List<CampusInfo> campusInfos = 	getCampusInfo(result.get(0).getSchool().getId());
 			AdminUser adminUser = new AdminUser();
-			adminUser.setId(campusInfos.get(0).getLastUpdatedBy());
+			adminUser.setId(campusInfo.getLastUpdatedBy());
 			School school = new School();
 			school.setId(campusInfos.get(0).getSchool().getId());
 			String afterUpdate = " | Data after update in campus detail : ";
