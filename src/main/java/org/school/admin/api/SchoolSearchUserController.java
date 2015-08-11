@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.school.admin.Emailer;
+import org.school.admin.dao.SchoolSearchImpl;
 import org.school.admin.dao.SchoolSearchUserDao;
 import org.school.admin.data.SchoolList;
 import org.school.admin.data.UserInfo;
@@ -384,5 +385,13 @@ public class SchoolSearchUserController {
 	public List<SchoolList> getAppliedSchools(@PathParam("id") int userId) {
 		SchoolSearchUserService schoolSearchUserService = new SchoolSearchUserService(context);
 		return schoolSearchUserService.getAppliedSchoolsByUserId(userId);
+	}
+	
+	@GET
+	@Path("shortlist.json/{schoolId}/{userId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getShortlistedSchools(@PathParam("schoolId") Integer schoolId, @PathParam("userId") Integer userId) {
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		return schoolSearchImpl.shortlistSchool(schoolId, userId);
 	}
 }

@@ -42,6 +42,7 @@ import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolRating;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSafetyCatItem;
+import org.school.admin.model.ShortListedSchool;
 import org.school.admin.model.UserRating;
 import org.school.admin.model.UserRegistrationInfo;
 import org.school.admin.util.HibernateUtil;
@@ -879,4 +880,56 @@ public class SchoolSearchImpl {
 		response.setMessage("Success");
 		return response;
 	}
+	
+	public ResponseMessage shortlistSchool(Integer schoolId, Integer userId ) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		ArrayList<String> errors = new ArrayList<String>();
+		if(schoolId != null && userId != null) {
+			String hql = " FROM ShortListedSchool sls "
+					+ " WHERE sls.school.id = :schoolId AND sls.userRegistrationInfo.id = :userId";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql)
+					.setParameter("schoolId", schoolId)
+					.setParameter("userId", userId);
+			ShortListedSchool shortListedSchool = (ShortListedSchool)query.uniqueResult();
+			session.close();
+			
+			try {
+				Session newSession = hibernateUtil.openSession();
+				newSession.beginTransaction();
+				if(shortListedSchool != null) {
+					newSession.delete(shortListedSchool);
+					responseMessage.setStatus(1);
+					responseMessage.setMessage("School delisted successfully.");
+				} else {
+					shortListedSchool = new ShortListedSchool();
+					School school = new School();
+					school.setId(schoolId);
+					UserRegistrationInfo userRegistrationInfo = new UserRegistrationInfo();
+					userRegistrationInfo.setId(userId);
+					shortListedSchool.setSchool(school);
+					shortListedSchool.setUserRegistrationInfo(userRegistrationInfo);
+					newSession.save(shortListedSchool);
+					responseMessage.setStatus(1);
+					responseMessage.setMessage("School shortlisted successfully.");
+				}
+				newSession.getTransaction().commit();
+				newSession.flush();
+				newSession.close();
+			} catch(Exception e) {
+				errors.add(e.getMessage());
+				responseMessage.setErrors(errors);
+				responseMessage.setStatus(0);
+	        	responseMessage.setMessage("Failed to shortlist/delist school.");
+			}
+		} else {
+			errors.add("School id and user id required.");
+			responseMessage.setErrors(errors);
+			responseMessage.setStatus(0);
+        	responseMessage.setMessage("Failed to shortlist/delist school.");
+		}
+		return responseMessage;
+	}
+	
 }
