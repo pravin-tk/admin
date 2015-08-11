@@ -387,9 +387,12 @@
 			$('#mobile_no').val(data.mobileNo);
 			$("#contact_no").val(data.contactNo);
 			if(data.isPrimary == 1){
+				//$("#is_primary_yes").val("1");
 				$("#is_primary_yes").val("1");
+				$('#is_primary_yes').prop("checked",true);
 			}else{
 				$("#is_primary_no").val("0");
+				$('#is_primary_no').prop("checked",true);
 			}
 			
 			$('input[name="usertype[]"]').prop( "checked", false);

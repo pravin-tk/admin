@@ -69,7 +69,11 @@
                     <div id="myTabContent" class="tab-content">
                         <div class="tab-pane fade active in" id="basic" aria-labelledby="basic-tab">
                             <h2>Basic Information</h2>
-                            <div id="msg" class="danger-box"></div>
+                            <div class="alert alert-danger" role="alert" style="display:none;" id="message_body">
+							  	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							  	<span class="sr-only">Error:</span>
+							  	<span id="output"></span>
+							</div>
                             <input type="hidden" name="school_id" id="school_id" value="<%out.print(School.getId());%>"/>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="School Name">Name</label>

@@ -239,9 +239,6 @@ public class SettingsImpl {
 		}
         return response;
     }
-	
-	
-	
 	/**
 	 * Get StreamType by ID
 	 * @author Pankaj Naik

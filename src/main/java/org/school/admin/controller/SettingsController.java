@@ -73,8 +73,10 @@ public class SettingsController extends ResourceConfig {
 	public ResponseMessage saveAdminUserRole(
 		@FormParam("adminuserrole") String adminuserrole
 	){
+		Byte status = 1;
 		AdminUserRole adminUserRole2 = new AdminUserRole();
 		adminUserRole2.setRoleName(adminuserrole);
+		adminUserRole2.setStatus(status);
 		SettingsImpl settings = new SettingsImpl();
 		return settings.saveAdminUserRole(adminUserRole2);
 	}
@@ -86,10 +88,11 @@ public class SettingsController extends ResourceConfig {
 			@FormParam("id") int id,
 			@FormParam("adminuserrole") String adminuserrole
 	){
-	
+		Byte status = 1;
 		AdminUserRole adminUserRole2 = new AdminUserRole();
 		adminUserRole2.setId(id);
 		adminUserRole2.setRoleName(adminuserrole);
+		adminUserRole2.setStatus(status);
 		SettingsImpl settings = new SettingsImpl();
 		return settings.updateAdminUserRole(adminUserRole2);
 	}

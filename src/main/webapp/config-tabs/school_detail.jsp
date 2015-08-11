@@ -212,7 +212,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">is residential</label>
+                    <label class="col-sm-2 control-label">is residential(Boarding Type)</label>
                     <div class="col-sm-6" id="cbk_board">
                     <%
                        if(info_list.size()>0){

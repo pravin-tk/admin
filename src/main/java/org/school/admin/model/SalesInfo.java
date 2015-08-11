@@ -63,7 +63,7 @@ public class SalesInfo implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "data_collector_id")
 	public AdminUser getAdminUserByDataCollectorId() {
 		return this.adminUserByDataCollectorId;
@@ -74,7 +74,7 @@ public class SalesInfo implements java.io.Serializable {
 		this.adminUserByDataCollectorId = adminUserByDataCollectorId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sales_executive_id")
 	public AdminUser getAdminUserBySalesExecutiveId() {
 		return this.adminUserBySalesExecutiveId;
