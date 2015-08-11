@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.school.admin.dao.CityNamesImp;
 import org.school.admin.dao.ClassificationDAOImpl;
 import org.school.admin.dao.ContactDetaillDAO;
 import org.school.admin.dao.SchoolDAOImp;
@@ -243,6 +244,15 @@ public class SchoolSearchController {
 			@PathParam("standardId") Short standardId) {
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		return schoolSearchImpl.getUriByLatitudeLongitudeByStandard(latitude, longitude, standardId);
+	}
+	
+	@GET
+	@Path("/cities.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NameList> getCityList()
+	{
+		CityNamesImp cityDao = new CityNamesImp();
+		return cityDao.getCityList();
 	}
 	
 }
