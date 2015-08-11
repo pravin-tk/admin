@@ -747,6 +747,7 @@ public class SearchFilterService {
 		searchRequest.setSafetyId("0");
 		searchRequest.setTypeId("0");
 		searchRequest.setClassificationId("0");
+		searchRequest.setUserId("0");
 		try {
 			for (String param: params.keySet()) {
 				//System.out.println(param);
@@ -780,6 +781,8 @@ public class SearchFilterService {
 		        	searchRequest.setTypeId(params.getFirst("typeId"));
 		        } else if(param.equals("classificationId")) {
 		        	searchRequest.setClassificationId(params.getFirst("classificationId"));
+		        } else if(param.equals("userId")) {
+		        	searchRequest.setUserId(params.getFirst("userId"));
 		        }
 		        
 		    }

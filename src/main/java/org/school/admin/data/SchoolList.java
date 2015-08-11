@@ -29,6 +29,8 @@ public class SchoolList implements java.io.Serializable {
 	private Double totalFee;
 	private int seats;
 	private Short standardId;
+	private String primaryContactNo;
+	private boolean isShortlisted;
 
 	public SchoolList() {
 	}
@@ -288,6 +290,22 @@ public class SchoolList implements java.io.Serializable {
 
 	public void setTeachingApproach(String teachingApproach) {
 		this.teachingApproach = teachingApproach;
+	}
+
+	public String getPrimaryContactNo() {
+		return primaryContactNo;
+	}
+
+	public void setPrimaryContactNo(String primaryContactNo) {
+		this.primaryContactNo = primaryContactNo;
+	}
+
+	public boolean isShortlisted() {
+		return isShortlisted;
+	}
+
+	public void setShortlisted(boolean isShortlisted) {
+		this.isShortlisted = isShortlisted;
 	}
 	
 }
