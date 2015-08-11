@@ -16,6 +16,7 @@ import org.school.admin.data.InfraItem;
 import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.RatingData;
+import org.school.admin.data.RatingReviewData;
 import org.school.admin.data.RatingsReviewsData;
 import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolFee;
@@ -251,6 +252,43 @@ public class SchoolSearchImpl {
 		List<RatingsReviewsData> ratingAndReviewsData = query.list();
 		session.close();
 		return ratingAndReviewsData;
+	}
+	
+	public RatingReviewData getSchoolRatingAndReviewByUser(Integer schoolId, Integer userId){
+		RatingReviewData ratingReviewData = new RatingReviewData();
+		if( schoolId != null && userId != null) {
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			String hql = "SELECT sr.school.id as schoolId, "
+					+ " sr.userRegistrationInfo.id as userId, "
+					+ " sr.title as title, "
+					+ " sr.review as review,"
+					+ " sr.id as reviewId "
+					+ " FROM SchoolReview sr "
+					+ " WHERE sr.school.id = :schoolId AND sr.userRegistrationInfo.id = :userId";
+			Query query = session.createQuery(hql)
+					.setParameter("schoolId", schoolId)
+					.setParameter("userId", userId)
+					.setResultTransformer(Transformers.aliasToBean(RatingReviewData.class));
+			ratingReviewData = (RatingReviewData)query.uniqueResult();
+			
+			hql = "SELECT ur.id as id, ur.ratingCategoryType.id as catid, "
+					+ " ur.ratingCategoryType.categoryName as name, "
+					+ " ur.ratingCategoryType.image as image, "
+					+ " ur.rating as rating"
+					+ " FROM UserRating ur"
+					+ " WHERE ur.school.id = :schoolId AND ur.userRegistrationInfo.id = :userId";
+			query = session.createQuery(hql)
+					.setParameter("schoolId", schoolId)
+					.setParameter("userId", userId)
+					.setResultTransformer(Transformers.aliasToBean(Rating.class));
+			List<Rating> ratings = query.list();
+			if(ratings.isEmpty() == false ) {
+				ratingReviewData.setRatings(ratings);
+			}
+			session.close();
+		}
+		return ratingReviewData;
 	}
 	
 	public List<GalleryData> getImageGallary(Integer schoolId)
@@ -545,6 +583,7 @@ public class SchoolSearchImpl {
 				session.beginTransaction();
 				for(int i=0; i<ratingData.getRatings().size();i++){
 					UserRating userRating = new UserRating();
+					userRating.setId(ratingData.getRatings().get(i).getId());
 					userRating.setSchool(school);
 					userRating.setUserRegistrationInfo(userRegistrationInfo);
 					userRating.setRating((float)ratingData.getRatings().get(i).getRating());
@@ -552,13 +591,13 @@ public class SchoolSearchImpl {
 					RatingCategoryType ratingCategoryType = new RatingCategoryType();
 					ratingCategoryType.setId(ratingData.getRatings().get(i).getCatid());
 					userRating.setRatingCategoryType(ratingCategoryType);
-					session.save(userRating);
+					session.saveOrUpdate(userRating);
 				}
 				session.getTransaction().commit();
 				session.flush();
 				updateSchoolFinalRating(schoolRating);
 				msg.setStatus(1);
-				msg.setMessage("Rating added successfully.");
+				msg.setMessage("Rating saved successfully.");
 			} catch(Exception e) {
 				errors.add(e.getMessage());
 				msg.setStatus(0);
