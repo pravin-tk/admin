@@ -58,7 +58,7 @@ public class SchoolService {
 		return schoolCompleteDetail;
 	}
 	
-	public ResponseMessage addSchoolRatingAndReview(RatingReviewData ratingReviewData) {
+	public ResponseMessage addOrUpdateSchoolRatingAndReview(RatingReviewData ratingReviewData) {
 
 		RatingData ratingData = new RatingData();
 		ratingData.setRatings(ratingReviewData.getRatings());
@@ -68,6 +68,7 @@ public class SchoolService {
 		if(ratingResponse.getStatus() == 1) {
 			SchoolReview schoolReview = new SchoolReview();
 		    Byte reviewStatus =0;
+		    schoolReview.setId(ratingReviewData.getReviewId());
 			schoolReview.setDate(new Date());
 			schoolReview.setTime(new Date());
 			schoolReview.setStatus(reviewStatus);
@@ -84,7 +85,7 @@ public class SchoolService {
 			
 			ResponseMessage reviewResponse = new SchoolDAOImp().saveSchoolReview(schoolReview);
 			if(reviewResponse.getStatus() == 1 ) {
-				ratingResponse.setMessage("Rating and Review added successfully.");
+				ratingResponse.setMessage("Rating and Review saved successfully.");
 			} else {
 				ratingResponse.setMessage(reviewResponse.getMessage());
 				ratingResponse.setErrors(reviewResponse.getErrors());
