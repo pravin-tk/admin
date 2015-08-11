@@ -16,6 +16,8 @@ public class SearchRequest {
 	private String rating;
 	private String distance;
 	private String seats;
+	private String userId;
+	
 	public String getLongitude() {
 		return longitude;
 	}
@@ -107,6 +109,14 @@ public class SearchRequest {
 	public void setSeats(String seats) {
 		this.seats = seats;
 	}
+	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 	@Override
 	public String toString() {
 		return "SearchRequest [longitude=" + longitude + ", latitude="
