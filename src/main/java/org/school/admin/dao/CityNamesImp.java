@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
+import org.school.admin.data.NameList;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.City;
 import org.school.admin.model.Tehsil;
@@ -113,6 +115,17 @@ public class CityNamesImp {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		List<City> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<NameList> getCityList()
+	{
+		String hql = "SELECT c.id as id, c.name as name FROM City c";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+		List<NameList> result = query.list();
 		session.close();
 		return result;
 	}
