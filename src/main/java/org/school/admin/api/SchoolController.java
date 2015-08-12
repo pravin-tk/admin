@@ -294,10 +294,14 @@ public class SchoolController extends ResourceConfig {
 	
 	@POST
 	@Path("suggest.json")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage addSuggestion(SchoolSuggestion schoolSuggestion) {
+	public ResponseMessage addSuggestion(
+			@FormParam("personName") String personName,
+			@FormParam("mobile") String mobile,
+			@FormParam("requirement") String requirement
+	) {
 		SchoolSuggestionService schoolSuggestionService = new SchoolSuggestionService();
+		SchoolSuggestion schoolSuggestion = new SchoolSuggestion(personName, mobile, requirement, 0);
 		ResponseMessage responseMessage = schoolSuggestionService.addSchoolSuggestion(schoolSuggestion);
 		return responseMessage;
 	}

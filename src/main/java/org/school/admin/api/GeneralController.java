@@ -56,15 +56,17 @@ public class GeneralController extends ResourceConfig {
     }
 	
 	@POST
-	@Path("requirement.json")
+	@Path("listschool.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addRequirement(
 			@FormParam("name") String name,
 			@FormParam("email") @DefaultValue("") String email,
 			@FormParam("mobile") String mobile,
-			@FormParam("requirement") String requirement
-			) {
-		PostRequirement postRequirement = new PostRequirement(name,email,mobile,requirement);
+			@FormParam("requirement") String requirement,
+			@FormParam("schoolName") String schoolName,
+			@FormParam("city") String city
+	) {
+		PostRequirement postRequirement = new PostRequirement(name,email,mobile,requirement,schoolName,city);
 		UserImpl userImpl = new UserImpl();
 		ResponseMessage responseMessage = userImpl.postRequirement(postRequirement);
 		return responseMessage;
