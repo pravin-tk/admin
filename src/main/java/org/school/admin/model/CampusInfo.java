@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -53,19 +54,19 @@ public class CampusInfo {
 	
 	@ManyToOne
 	@JoinColumn(name = "school_id")
-	private School School;
+	private School school;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "campus_size_unit_id")
 	private AreaUnit areaUnit;
 	
 	
 	
 	public School getSchool() {
-		return School;
+		return school;
 	}
 	public void setSchool(School School) {
-		this.School = School;
+		this.school = School;
 	}
 	public AreaUnit getAreaUnit() {
 		return areaUnit;

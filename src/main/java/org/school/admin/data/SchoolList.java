@@ -31,6 +31,10 @@ public class SchoolList implements java.io.Serializable {
 	private Short standardId;
 	private String primaryContactNo;
 	private boolean isShortlisted;
+	private Double campusSize;
+	private String unitName;
+	private long students;
+	private long teachers;
 
 	public SchoolList() {
 	}
@@ -306,6 +310,38 @@ public class SchoolList implements java.io.Serializable {
 
 	public void setShortlisted(boolean isShortlisted) {
 		this.isShortlisted = isShortlisted;
+	}
+
+	public Double getCampusSize() {
+		return campusSize;
+	}
+
+	public void setCampusSize(Double campusSize) {
+		this.campusSize = campusSize;
+	}
+
+	public String getUnitName() {
+		return unitName;
+	}
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
+
+	public long getStudents() {
+		return students;
+	}
+
+	public void setStudents(long students) {
+		this.students = students;
+	}
+
+	public long getTeachers() {
+		return teachers;
+	}
+
+	public void setTeachers(long teachers) {
+		this.teachers = teachers;
 	}
 	
 }

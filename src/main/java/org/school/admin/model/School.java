@@ -56,6 +56,7 @@ public class School implements java.io.Serializable {
 	private Integer lastUpdatedBy;
 	private String homeImage;
 	private Set<ClassInfo> classInfos = new HashSet<ClassInfo>(0);
+	private Set<CampusInfo> campusInfos = new HashSet<CampusInfo>(0);
 	private Set<SchoolMedium> schoolMediums = new HashSet<SchoolMedium>(0);
 	private Set<SchoolTimeline> schoolTimelines = new HashSet<SchoolTimeline>(0);
 	private Set<SchoolActivityCatItem> schoolActivityCatItems = new HashSet<SchoolActivityCatItem>(0);
@@ -92,7 +93,7 @@ public class School implements java.io.Serializable {
 			String aboutSchool, String logo, boolean establishmentType,
 			byte status, Date liveDate, Integer createdBy,
 			Date lastUpdatedOn, Integer lastUpdatedBy,Byte promote,
-			Set<ClassInfo> classInfos,
+			Set<ClassInfo> classInfos,Set<CampusInfo> campusInfos,
 			Set<SchoolMedium> schoolMediums, Set<SchoolTimeline> schoolTimelines, Set<AppliedSchool> appliedSchools, Set<ShortListedSchool> shortListedSchools) {
 		this.locality = locality;
 		this.name = name;
@@ -114,6 +115,7 @@ public class School implements java.io.Serializable {
 		this.lastUpdatedBy = lastUpdatedBy;
 		this.promote = promote;
 		this.classInfos = classInfos;
+		this.campusInfos = campusInfos;
 		this.schoolMediums = schoolMediums;
 		this.schoolTimelines = schoolTimelines;
 		this.appliedSchools = appliedSchools;
@@ -355,6 +357,14 @@ public class School implements java.io.Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
 	public Set<SchoolActivityCatItem> getSchoolActivityCatItems() {
 		return schoolActivityCatItems;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
+	public Set<CampusInfo> getCampusInfos() {
+		return campusInfos;
+	}
+	public void setCampusInfos(Set<CampusInfo> campusInfos) {
+		this.campusInfos = campusInfos;
 	}
 
 	public void setSchoolActivityCatItems(

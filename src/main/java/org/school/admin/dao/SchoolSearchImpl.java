@@ -202,8 +202,10 @@ public class SchoolSearchImpl {
 				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
 				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
-				+ " 0.0 as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,ci.standardType.id as standardId"
-				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
+				+ " 0.0 as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
+				+ " ci.standardType.id as standardId,cf.campusSize as campusSize,au.name as unitName,"
+				+ " cf.totalStudents as students,(cf.totalMaleTeacher+cf.totalFemaleTeacher) as teachers"
+				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci JOIN ss.campusInfos cf JOIN cf.areaUnit au"
 				+ " WHERE s.schoolId = ss.id AND ci.standardType.id = "+standardId
 				+ " AND ss.id = "+schoolId
 		).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
