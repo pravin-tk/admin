@@ -224,22 +224,18 @@ public class SchoolDAOImp {
 	{
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		  Transaction tx;
-	        tx = session.beginTransaction();
+		Transaction tx;
+		tx = session.beginTransaction();
 		ResponseMessage responseMessage = new ResponseMessage();
 		try
 		{
-			
-		      
-			session.save(schoolReview);
+			session.saveOrUpdate(schoolReview);
 			tx.commit();
         	session.flush();
         	session.close();
 			responseMessage.setStatus(1);
 			responseMessage.setMessage("Saved successfuly");
-			
-		}
-		catch(javax.validation.ConstraintViolationException e) {
+		} catch(javax.validation.ConstraintViolationException e) {
 	    	ArrayList<String> errors = new ArrayList<String>();
 	    	Set<ConstraintViolation<?>> s = e.getConstraintViolations();
 	    	Iterator<ConstraintViolation<?>> i = s.iterator();
@@ -250,7 +246,14 @@ public class SchoolDAOImp {
 	    	responseMessage.setStatus(0);
         	responseMessage.setMessage("School Review failed to save.");
 	    	responseMessage.setErrors(errors);
-	    }    
+	    } catch(Exception e) {
+	    	ArrayList<String> errors = new ArrayList<String>();
+			errors.add(e.getMessage());
+			responseMessage.setErrors(errors);
+			responseMessage.setStatus(0);
+        	responseMessage.setMessage("School Review failed to save.");
+	    	responseMessage.setErrors(errors);
+		}
 		return responseMessage;
 	}
 /*------------------------------------------------------*/

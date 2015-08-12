@@ -1,5 +1,6 @@
 package org.school.admin.api;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -224,6 +225,28 @@ public class SchoolController extends ResourceConfig {
 	}
 	
 	@GET
+	@Path("ratingandreview.json/{schoolId}/{userId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public RatingReviewData getSchoolRatingAndReviewByUser(
+		@PathParam("schoolId") int schoolId,
+		@PathParam("userId") int userId
+	) {
+		img_path = this.context.getInitParameter("s3_base_url");
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		RatingReviewData reviews = schoolSearchImpl.getSchoolRatingAndReviewByUser(schoolId, userId);
+		if(reviews != null ) {
+			for(int i = 0; i < reviews.getRatings().size(); i++){
+				if(reviews.getRatings().get(i).getImage() != null) {
+					reviews.getRatings().get(i).setImage(img_path+reviews.getRatings().get(i).getImage());
+				} else {
+					reviews.getRatings().get(i).setImage("");
+				}
+			}
+		}
+		return reviews;
+	}
+	
+	@GET
 	@Path("facility.json/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Facility getSchoolFacility(@PathParam("id") int id)
@@ -308,7 +331,8 @@ public class SchoolController extends ResourceConfig {
 			@FormParam("schoolId") int schoolId,
 			@FormParam("userId") int userId,
 			@FormParam("title") String title,
-			@FormParam("review") String review
+			@FormParam("review") String review,
+			@FormParam("id") @DefaultValue("") Integer id
 	){
 		SchoolReview schoolReview = new SchoolReview();
 		School school = new School();
@@ -317,6 +341,7 @@ public class SchoolController extends ResourceConfig {
 		userRegistrationInfo.setId(userId);
 		schoolReview.setSchool(school);
 		schoolReview.setUserRegistrationInfo(userRegistrationInfo);
+		schoolReview.setId(id);
 		schoolReview.setTitle(title);
 		schoolReview.setReview(review);
 		Byte reviewStatus =0;
@@ -367,8 +392,8 @@ public class SchoolController extends ResourceConfig {
 	@Path("ratereview.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseMessage addSchoolRatingAndReview(RatingReviewData ratingReviewData){
+	public ResponseMessage addOrUpdateSchoolRatingAndReview(RatingReviewData ratingReviewData){
 		SchoolService schoolService = new SchoolService();
-		return schoolService.addSchoolRatingAndReview(ratingReviewData);
+		return schoolService.addOrUpdateSchoolRatingAndReview(ratingReviewData);
 	}
 }
