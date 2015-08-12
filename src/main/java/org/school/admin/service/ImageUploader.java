@@ -30,12 +30,12 @@ public class ImageUploader {
 			}
 			out.flush();
 			out.close();
-//			try {
-//				this.s3Upload(uploadedFileLocation);
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			try {
+				this.s3Upload(uploadedFileLocation);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
  
 			e.printStackTrace();
@@ -45,7 +45,7 @@ public class ImageUploader {
 	public String s3Upload(String uploadedFileLocation) throws Exception {
 
 	    String url = "";
-	    AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials("xxx", "xxx"));
+	    AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials("AKIAICRWCIBOMK46354Q", "8F3NTyy17Vzub1HXIhInDu0HQquH+dkCzI/RvzFQ"));
 
 		try {
 		    File file = new File(uploadedFileLocation);
