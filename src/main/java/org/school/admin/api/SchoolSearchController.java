@@ -1,5 +1,6 @@
 package org.school.admin.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -37,10 +38,8 @@ import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.SearchRequest;
 import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolReview;
-import org.school.admin.data.UriData;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.service.SearchFilterService;
-
 @Path("api1.0")
 public class SchoolSearchController {
 	@Context ServletContext context;
@@ -272,6 +271,25 @@ public class SchoolSearchController {
 	{
 		CityNamesImp cityDao = new CityNamesImp();
 		return cityDao.getCityList();
+	}
+	
+	@GET
+	@Path("/compareschools.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolList> compareSchools(@QueryParam("schoolIds") String schoolIds )
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		List<Integer> integerSchoolIds = new ArrayList<Integer>();
+		try{
+			for(String s : schoolIds.split(",")) integerSchoolIds.add(Integer.valueOf(s.trim()));
+			if(integerSchoolIds.size() < 2 || integerSchoolIds.size() > 4 ) {
+				return null;
+			}
+		} catch(NumberFormatException e) {
+			return null;
+		}
+		
+		return schoolSearchImpl.compareSchools(integerSchoolIds);
 	}
 	
 }
