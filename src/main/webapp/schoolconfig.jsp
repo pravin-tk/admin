@@ -188,7 +188,7 @@ function viewVerify()
 	if(verify == 100){
 		$("#verify").show();
 	}else{
-		alert("Hi");
+		
 	}
 	
 }

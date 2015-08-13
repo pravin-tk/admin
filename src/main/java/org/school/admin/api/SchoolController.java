@@ -256,6 +256,21 @@ public class SchoolController extends ResourceConfig {
 		List<InfraCategory> safety = schoolSearchImpl.getSchoolSafety(id);
 		List<InfraCategory> infra = schoolSearchImpl.getSchoolInfra(id);
 		Facility facility = new Facility();
+		for(int i=0; i<activity.size(); i++){
+			for(int j=0; j<activity.get(i).getItems().size(); j++){
+				activity.get(i).getItems().get(j).setImage(img_path+activity.get(i).getItems().get(j).getImage());
+			}
+		}
+		for(int i=0; i<safety.size(); i++){
+			for(int j=0; j<safety.get(i).getItems().size(); j++){
+				safety.get(i).getItems().get(j).setImage(img_path+safety.get(i).getItems().get(j).getImage());
+			}
+		}
+		for(int i=0; i<infra.size(); i++){
+			for(int j=0; j<infra.get(i).getItems().size(); j++){
+				infra.get(i).getItems().get(j).setImage(img_path+infra.get(i).getItems().get(j).getImage());
+			}
+		}
 		facility.setActivity(activity);
 		facility.setSafety(safety);
 		facility.setInfra(infra);

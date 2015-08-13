@@ -85,7 +85,8 @@
  	</div>
     <%@include file="../footer.jsp" %>
 	  <script type="text/javascript">
-	    	$('#save').click(function(){    		
+	    	$('#save').click(function(){    
+	    	
 	    		$.post('../webapi/settings/adminuserrole_save',{adminuserrole: $("#adminuserrole").val()},function(data){
 	    			if(data.status == 1)
 	    				{

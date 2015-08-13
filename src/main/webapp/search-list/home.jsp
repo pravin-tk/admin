@@ -158,6 +158,7 @@
 		  onItemRemove : function(value) {
 					  }
 });
+
 <% if(viewSchoolList.size() > 0) {%>
  	select_school  = $select_school[0].selectize;
 <% } %>
@@ -176,10 +177,11 @@
 	  onItemRemove : function(value) {
 				  }
 });
-<% if(viewContactList.size() > 0) {%>
- 	select_contact  = $select_contact[0].selectize;
-<% } %>
+	<% if(viewContactList.size()>0) { %>
+ select_contact  = $select_contact[0].selectize;
+ <%}%>
     
+   
     
     
     $('.addschool').click(function (){
@@ -191,7 +193,7 @@
     	
     	if( school_id > 0){
 	    	
-	    	$.get("webapi/school/htmllist/"+school_id+"/2/0",function(data){
+	    	$.get("webapi/school/htmllist/"+school_id+"/1/0",function(data){
 			  	$("#school_list").html(data);
 			    var oTable = $("#commission-table").dataTable();
 			    oTable.fnClearTable();

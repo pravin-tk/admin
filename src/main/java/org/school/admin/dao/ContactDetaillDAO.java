@@ -288,24 +288,30 @@ public class ContactDetaillDAO {
 		query.setParameter("school_id", school_id);
 		
 		List<ContactInfo> contactInfoList = query.list();
-		session.close();
+		
 		List<ContactInfo> newcontactInfoList = new ArrayList<ContactInfo>();
+		System.out.println("ContactSIZEzz : "+contactInfoList.size());
 		for(int i =0 ;i < contactInfoList.size(); i++)
 		{
 			ContactInfo contactInfoInternal = new ContactInfo();
 			contactInfoInternal.setId(contactInfoList.get(i).getId());
 			School school = new School();
 			school.setId(contactInfoList.get(i).getId());
+			System.out.println("ConatctId : "+contactInfoList.get(i).getId());
 			contactInfoInternal.setSchool(school);
 			contactInfoInternal.setName(contactInfoList.get(i).getName());
+			System.out.println("Name : "+contactInfoList.get(i).getName());
 			contactInfoInternal.setMobileNo(contactInfoList.get(i).getMobileNo());
 			System.out.println("ContactNO: "+contactInfoList.get(i).getContactNo());
 			contactInfoInternal.setContactNo(contactInfoList.get(i).getContactNo());
 			contactInfoInternal.setEmail(contactInfoList.get(i).getEmail());
+			System.out.println("ContactEmail : "+contactInfoList.get(i).getEmail());
 			contactInfoInternal.setType(contactInfoList.get(i).getType());
+			System.out.println("ConatctType : "+contactInfoList.get(i).getType());
 			newcontactInfoList.add(contactInfoInternal);
 			
 		}
+		session.close();
 		return newcontactInfoList;
 	}
 	
@@ -367,6 +373,7 @@ public class ContactDetaillDAO {
 		query.setParameter("id", id);
 		
 		List<ContactInfo> contactInfoList = query.list();
+		session.close();
 		List<ContactInfo> newcontactInfoList = new ArrayList<ContactInfo>();
 		for(int i =0 ;i < contactInfoList.size(); i++)
 		{
@@ -380,10 +387,11 @@ public class ContactDetaillDAO {
 			contactInfoInternal.setContactNo(contactInfoList.get(i).getContactNo());
 			contactInfoInternal.setEmail(contactInfoList.get(i).getEmail());
 			contactInfoInternal.setType(contactInfoList.get(i).getType());
+			contactInfoInternal.setIsPrimary(contactInfoList.get(i).getIsPrimary());
 			newcontactInfoList.add(contactInfoInternal);
 			
 		}
-		session.close();
+		
 		return newcontactInfoList;
 		
 	}

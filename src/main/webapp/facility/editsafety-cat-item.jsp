@@ -25,8 +25,8 @@
                     </li>
                     <li class="active">Safety Category Update</li>
                 </ol>
-                <form method="post" action="#" class="form-horizontal" id="submitForm" novalidate="novalidate">	
-					<div id="myTabContent" class="tab-content">
+                <form method="post" action="#" class="form-horizontal" id="updatesafetycatform" novalidate="novalidate" enctype="multipart/form-data">	
+					<div id="myTabContent" class="tab-content" >
                         <!--Contacts tab starts-->
                         <div class="tab-pane fade active in" id="contacts" aria-labelledby="contacts-tab">
                             <div class="contacts-list">
@@ -35,7 +35,7 @@
                             </div>
                             <div class="contacts-new">
                                 <h2>Update Category Item</h2>
-			<div id="aierror" class="bg-danger" ></div>
+							<div id="aierror" class="bg-danger" ></div>
 								<input type="hidden" name="id" id="id" value="<% out.print(rowCatItem.getId()); %>"/>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Name</label>
@@ -78,20 +78,17 @@
                                     </div>
 	                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Description</label>
-                                    <div class="col-sm-2">
-                                         <textarea class="form-control" name="desc" id="desc" placeholder="Description..."><% out.print(rowCatItem.getDescription()); %></textarea>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                               Description
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+				   <div class="form-group" id="safety_image_panel">
+						<label for="" class="col-sm-2 control-label" data-toggle="tooltip"
+							data-placement="bottom" title="activity Image">Image</label>
+						<div class="col-sm-4">
+							<input data-brackets-id="3402" class="form-control" type="file"
+								name="safety-image" />
+						</div>
+						<div class="col-sm-4">
+							<img id='timeline_img' src='${baseUrl}/images/<%out.print(rowCatItem.getImage()); %>' width=90 height=90/>
+						</div>
+					</div>
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>
@@ -115,7 +112,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-2">
-                                        <button type="button" class="btn btn-success" onclick="saveItem();">Update</button>
+                                        <button type="button" class="btn btn-success" id="updatesafetycatitem">Update</button>
                                         <button class="btn btn-default list-id list-contacts" type="button" onclick="showItemList(<% out.print(rowCatItem.getSafetyCategory().getId()); %>);">Cancel</button>
                                     </div>
                                 </div>
@@ -130,23 +127,60 @@
     </div>
     <!-- /Right main content -->
 <%@ include file="../footer.jsp" %>
+<script src="${baseUrl}/js/jquery.form.js"></script>
 <script type="text/javascript">
-function saveItem(){
-	var strcat=$.trim($("#txtname").val());
-	if (strcat == "" ) {
-		$("#aierror").html("Category name cannot be empty");
-		$("#txtname").addClass('has-error');    
-	}else if ( $("#categoryId").val() == "" ) {
-			$("#aierror").html("Category not selected");
-			$("#categoryId").addClass('has-error');    
-	} else {
-		$.post("../webapi/facility/safetycatitem/update", {id: $("#id").val(), name: $("#txtname").val(), 
-			categoryId: $("#categoryId").val(), desc: $("#desc").val(),
-			status: $('input[name=status]:checked').val()}, function(data){
-			window.location.href = "${baseUrl}/facility/safety-cat-item.jsp?scat_id="+$("#categoryId").val();
-		});
-	}	
+// function saveItem(){
+// 	var strcat=$.trim($("#txtname").val());
+// 	if (strcat == "" ) {
+// 		$("#aierror").html("Category name cannot be empty");
+// 		$("#txtname").addClass('has-error');    
+// 	}else if ( $("#categoryId").val() == "" ) {
+// 			$("#aierror").html("Category not selected");
+// 			$("#categoryId").addClass('has-error');    
+// 	} else {
+// 		$.post("../webapi/facility/safetycatitem/update", {id: $("#id").val(), name: $("#txtname").val(), 
+// 			categoryId: $("#categoryId").val(), desc: $("#desc").val(),
+// 			status: $('input[name=status]:checked').val()}, function(data){
+// 			window.location.href = "${baseUrl}/facility/safety-cat-item.jsp?scat_id="+$("#categoryId").val();
+// 		});
+// 	}	
+// }
+
+$("#updatesafetycatitem").click(function(){
+	var options = {
+ 			beforeSubmit : showUpdateSafetyCatRequest, // pre-submit callback 
+ 			success :  showUpdateSafetyCatResponse,
+ 			url : '../webapi/facility/safetycatitem/update',
+ 			semantic : true,
+ 			dataType : 'json'
+ 		};
+	$("#updatesafetycatform").ajaxSubmit(options);;
+});
+function showUpdateSafetyCatRequest(formData, jqForm, options){
+	var strcat = $.trim($("#tname").val());
+	if (strcat == "") {
+		$("#aierror").html("Category item name cannot be empty");
+		$("#tname").addClass('has-error');
+	} else if ($("#catId").val() == "") {
+		$("#aierror").html("Category not selected");
+		$("#catId").addClass('has-error');
+	}
+	return true;
 }
+	
+	function showUpdateSafetyCatResponse(responseText, statusText, xhr, $form){
+		if ($("#categoryId").val() > 0) {
+			if (responseText.status == 1){
+				alert(responseText.message);
+				window.location.href = "${baseUrl}/facility/safety-cat-item.jsp?scat_id="+$("#categoryId").val();
+			}
+			else
+				$("#aierror").html(responseText.message);
+		} else {
+
+			$("#aierror").html("Select Category");
+		}
+	}
 
 function showItemList(id){
 	window.location.href = "${baseUrl}/facility/safety-cat-item.jsp?scat_id="+id;

@@ -454,7 +454,7 @@ public class SchoolSearchImpl {
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getActivityCategoryItem().getId());
 			infraItem.setName(items.get(i).getActivityCategoryItem().getName());
-			infraItem.setDescription(items.get(i).getActivityCategoryItem().getDescription());
+			infraItem.setImage(items.get(i).getActivityCategoryItem().getImage());
 			infraItems.add(infraItem);
 			cat_id = items.get(i).getActivityCategoryItem().getActivityCategory().getId();
 			cat_name = items.get(i).getActivityCategoryItem().getActivityCategory().getName();
@@ -497,7 +497,7 @@ public class SchoolSearchImpl {
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getSafetyCategoryItem().getId());
 			infraItem.setName(items.get(i).getSafetyCategoryItem().getName());
-			infraItem.setDescription(items.get(i).getSafetyCategoryItem().getDescription());
+			infraItem.setImage(items.get(i).getSafetyCategoryItem().getImage());
 			infraItems.add(infraItem);
 			
 			cat_id = items.get(i).getSafetyCategoryItem().getSafetyCategory().getId();
@@ -539,6 +539,7 @@ public class SchoolSearchImpl {
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getInfrastructureCategoryItem().getId());
 			infraItem.setName(items.get(i).getInfrastructureCategoryItem().getName());
+			infraItem.setImage(items.get(i).getInfrastructureCategoryItem().getImage());
 			infraItem.setDescription(items.get(i).getDescription());
 			infraItem.setItemCount(items.get(i).getCountItemValue());
 			infraItem.setCharges(items.get(i).getCharges());

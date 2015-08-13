@@ -1094,12 +1094,12 @@ public class SchoolController extends ResourceConfig {
 			@FormDataParam("user_id") Integer user_id,
 			@FormDataParam("year") Short year, 
 			@FormDataParam("title") String title, 
-			@FormDataParam("classes_upto") String classes_upto, 
 			@FormDataParam("milestoneTitle[]") List<FormDataBodyPart> milestones,
 			@FormDataParam("milestoneDesc[]") List<FormDataBodyPart> milestonesDescription,
 			@FormDataParam("image") InputStream is, 
 			@FormDataParam("image") FormDataContentDisposition header
 	){
+		Short zero = 0;
 		ResponseMessage msg = new ResponseMessage();
 		List<String> milestoneTitle = new ArrayList<String>();
 		List<String> milestoneDesc = new ArrayList<String>();
@@ -1122,9 +1122,14 @@ public class SchoolController extends ResourceConfig {
 		school.setId(school_id);
 		SchoolTimeline schoolTimeline = new SchoolTimeline();
 		schoolTimeline.setSchool(school);
-		schoolTimeline.setTitle(title);
-		schoolTimeline.setYear(year);
-		schoolTimeline.setClassesUpto(classes_upto);
+		if(title != "")
+			schoolTimeline.setTitle(title);
+		else 
+			schoolTimeline.setTitle("");
+		if(year != zero)
+			schoolTimeline.setYear(year);
+		else
+			schoolTimeline.setYear(null);
 		schoolTimeline.setLastUpdatedBy(user_id);
 		schoolTimeline.setLastUpdatedOn(new Date());
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
@@ -1172,12 +1177,12 @@ public class SchoolController extends ResourceConfig {
 			@FormDataParam("id") Integer id,
 			@FormDataParam("year") Short year, 
 			@FormDataParam("title") String title, 
-			@FormDataParam("classes_upto") String classes_upto, 
 			@FormDataParam("milestoneTitle[]") List<FormDataBodyPart> milestones,
 			@FormDataParam("milestoneDesc[]") List<FormDataBodyPart> milestonesDescription,
 			@FormDataParam("image") InputStream is, 
 			@FormDataParam("image") FormDataContentDisposition header
 	){
+		Short zero = 0;
 		ResponseMessage msg = new ResponseMessage();
 		List<String> milestoneTitle = new ArrayList<String>();
 		List<String> milestoneDesc = new ArrayList<String>();
@@ -1201,9 +1206,14 @@ public class SchoolController extends ResourceConfig {
 		SchoolTimeline schoolTimeline = new SchoolTimeline();
 		schoolTimeline.setId(id);
 		schoolTimeline.setSchool(school);
-		schoolTimeline.setTitle(title);
-		schoolTimeline.setYear(year);
-		schoolTimeline.setClassesUpto(classes_upto);
+		if(title != "")
+			schoolTimeline.setTitle(title);
+		else
+			schoolTimeline.setTitle("");
+		if(year != zero)
+			schoolTimeline.setYear(year);
+		else
+			schoolTimeline.setYear(null);
 		schoolTimeline.setLastUpdatedBy(user_id);
 		schoolTimeline.setLastUpdatedOn(new Date());
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();

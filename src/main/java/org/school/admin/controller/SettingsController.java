@@ -73,8 +73,10 @@ public class SettingsController extends ResourceConfig {
 	public ResponseMessage saveAdminUserRole(
 		@FormParam("adminuserrole") String adminuserrole
 	){
+		Byte status = 1;
 		AdminUserRole adminUserRole2 = new AdminUserRole();
 		adminUserRole2.setRoleName(adminuserrole);
+		adminUserRole2.setStatus(status);
 		SettingsImpl settings = new SettingsImpl();
 		return settings.saveAdminUserRole(adminUserRole2);
 	}
@@ -86,10 +88,11 @@ public class SettingsController extends ResourceConfig {
 			@FormParam("id") int id,
 			@FormParam("adminuserrole") String adminuserrole
 	){
-	
+		Byte status = 1;
 		AdminUserRole adminUserRole2 = new AdminUserRole();
 		adminUserRole2.setId(id);
 		adminUserRole2.setRoleName(adminuserrole);
+		adminUserRole2.setStatus(status);
 		SettingsImpl settings = new SettingsImpl();
 		return settings.updateAdminUserRole(adminUserRole2);
 	}
@@ -906,15 +909,33 @@ public class SettingsController extends ResourceConfig {
 	public ResponseMessage saveSchoolCategoryType(
 		@FormParam("name") String name,
 		@FormParam("status") Byte status,
-		@FormParam("maxPoints") Double maxPoints
+		@FormParam("maxPoints") String maxPoints
 	){
+		double defaultMaxPoint = 0.0;
+		
 		SchoolCategoryType schoolCategoryType = new SchoolCategoryType();
-		schoolCategoryType.setName(name);
-		schoolCategoryType.setStatus(status);
-		schoolCategoryType.setMaxPoints(maxPoints);
-		schoolCategoryType.setLastUpdatedOn(new Date());
-		SettingsImpl settings = new SettingsImpl();
-		return settings.saveSchoolCategoryType(schoolCategoryType);
+		schoolCategoryType.setName("");
+		schoolCategoryType.setMaxPoints(defaultMaxPoint);
+		try{
+		
+			schoolCategoryType.setName(name);
+			schoolCategoryType.setStatus(status);
+			if(maxPoints.length()>0)
+			schoolCategoryType.setMaxPoints(Double.parseDouble(maxPoints));
+			schoolCategoryType.setLastUpdatedOn(new Date());
+			SettingsImpl settings = new SettingsImpl();
+			return settings.saveSchoolCategoryType(schoolCategoryType);
+		}
+		catch(NumberFormatException e){
+			schoolCategoryType.setMaxPoints(defaultMaxPoint);
+			return  new SettingsImpl().saveSchoolCategoryType(schoolCategoryType);
+		}
+		catch(Exception e){
+			ResponseMessage errorMessage = new ResponseMessage();
+			errorMessage.setStatus(0);
+			errorMessage.setMessage("Fail to save school type");
+			return errorMessage;
+		}
 	}
 	
 	@POST
@@ -924,16 +945,34 @@ public class SettingsController extends ResourceConfig {
 			@FormParam("id") Integer id,
 			@FormParam("name") String name,
 			@FormParam("status") Byte status,
-			@FormParam("maxPoints") Double maxPoints
+			@FormParam("maxPoints") String maxPoints
 	){
+		double defaultMaxPoint = 0.0;
+		
 		SchoolCategoryType schoolCategoryType = new SchoolCategoryType();
-		schoolCategoryType.setId(id);
-		schoolCategoryType.setName(name);
-		schoolCategoryType.setStatus(status);
-		schoolCategoryType.setMaxPoints(maxPoints);
-		schoolCategoryType.setLastUpdatedOn(new Date());
-		SettingsImpl settings = new SettingsImpl();
+		schoolCategoryType.setName("");
+		schoolCategoryType.setMaxPoints(defaultMaxPoint);
+		try{
+		    schoolCategoryType.setId(id);
+			schoolCategoryType.setName(name);
+			schoolCategoryType.setStatus(status);
+			if(maxPoints.length()>0)
+			schoolCategoryType.setMaxPoints(Double.parseDouble(maxPoints));
+			schoolCategoryType.setLastUpdatedOn(new Date());
+			SettingsImpl settings = new SettingsImpl();
 		return settings.updateSchoolCategoryType(schoolCategoryType);
+		}
+		catch(NumberFormatException e){
+			e.printStackTrace();
+			schoolCategoryType.setMaxPoints(defaultMaxPoint);
+			return  new SettingsImpl().saveSchoolCategoryType(schoolCategoryType);
+		}
+		catch(Exception e){
+			ResponseMessage errorMessage = new ResponseMessage();
+			errorMessage.setStatus(0);
+			errorMessage.setMessage("Fail to save school type");
+			return errorMessage;
+		}
 	}
 	
 	/* *************************************** School Classification type *********************************** */

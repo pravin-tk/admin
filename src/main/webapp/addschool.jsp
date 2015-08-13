@@ -135,7 +135,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Establishment">Establishment</label>
+                                <label for="" class="col-sm-2 control-label" data-toggle="for new creat" data-placement="bottom" title="Establishment">Establishment</label>
                                 <div class="col-sm-6">
                                 	<select name="establishment_type" id="establishment_type" class="form-control">
                                         <option value="0">Old</option>

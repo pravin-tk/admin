@@ -37,7 +37,6 @@
                    <th>Year</th>
                    <th>Title</th>
                    <th>Image Title</th>
-                   <th>Classes Up To</th>
                    <th class="alignRight">Actions</th>
                </tr>
            </thead>
@@ -47,17 +46,18 @@
               {
            		for(int i = 0; i < schoolTimelineMilestones.size(); i++)
            		{
-           			
-           			out.print("<tr><td>"+schoolTimelineMilestones.get(i).getSchoolTimeline().getYear()+"</td>");
+           			if(schoolTimelineMilestones.get(i).getSchoolTimeline().getYear() !=0)
+           				out.print("<tr><td>"+schoolTimelineMilestones.get(i).getSchoolTimeline().getYear()+"</td>");
+           			else
+           				out.print("<tr><td></td>");
            			out.print("<td>"+schoolTimelineMilestones.get(i).getTitle()+"</td>");
            			out.print("<td>"+schoolTimelineMilestones.get(i).getSchoolTimeline().getTitle()+"</td>");
-           			out.print("<td>"+schoolTimelineMilestones.get(i).getSchoolTimeline().getClassesUpto()+"</td>");
            			out.print("<td><a href='javascript:editTimeLine("+schoolTimelineMilestones.get(i).getSchoolTimeline().getId()+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a></td></tr>");
            		}
               }
               catch(Exception e)
               {
-           	   System.err.print("POCInternalError : "+e);
+           	   System.err.print("SchoolTimelineError : "+e);
               }
             %> 
            </tbody>
@@ -93,14 +93,6 @@
 			<div class="col-sm-4">
 				<input data-brackets-id="3402" type="text" class="form-control"
 					name="title" id="title" placeholder="">
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="" class="col-sm-2 control-label" data-toggle="tooltip"
-				data-placement="bottom" title="Image Title">Classes Up To</label>
-			<div class="col-sm-6">
-				<input data-brackets-id="3402" type="text" class="form-control"
-					name="classes_upto" id="classes_upto" placeholder="">
 			</div>
 		</div>
 		<input type="hidden" name="mcount" id="mcount" value="1" />
@@ -201,7 +193,7 @@
 		$(".school-timeline-new").hide();
 		$(".school-timeline-list").show();
 		$('#error-school-timeline').html("");
-		$('#timeline_id, #year, #title, #classes_upto')
+		$('#timeline_id, #year, #title')
 				.removeClass('has-error');
 		$("#timeline_img").remove();
 		var html = "<div id='milestone_1'>"
@@ -229,7 +221,6 @@
 	{
 		$('#year').val("");
 		$('#title').val("");
-		$('#classes_upto').val("");
 		
 		//alert("schoolID : "+$("#school_id").val());
 		$.get("webapi/school/school_timeline/"+$("#school_id").val(),{},function(data){
@@ -238,21 +229,23 @@
 		    $(data).each(function(index){
 		    	html = "<a href='javascript:editTimeLine("+data[index].schoolTimeline.id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>";
 		    	var row = [];
-		    	row.push(data[index].schoolTimeline.year);
+		    	if(data[index].schoolTimeline.year !='0')
+		    	 		row.push(data[index].schoolTimeline.year);
+		    	else
+		    		  row.push("");
 		    	row.push(data[index].title);
 		    	row.push(data[index].schoolTimeline.title);
-		    	row.push(data[index].schoolTimeline.classesUpto);
 		    	 row.push(html);
-			    	oTable.fnAddData(row);
+			    	oTable.fnAddData(row); 
 		    });
-		});
+		}); 
 	}
 
 	$("#cancel-timeline")
 			.click(
 					function() {
 						$('#error-school-timeline').html("");
-						$('#timeline_id, #year, #title, #classes_upto')
+						$('#timeline_id, #year, #title')
 								.removeClass('has-error');
 						$("#timeline_img").remove();
 						var html = "<div id='milestone_1'>"
@@ -281,8 +274,7 @@
 			$('#timeline_id').val(data[0].schoolTimeline.id);
 			$('#year').val(data[0].schoolTimeline.year);
 			$('#title').val(data[0].schoolTimeline.title);
-			$('#classes_upto').val(
-					data[0].schoolTimeline.classesUpto);
+		
 			$("#image_panel")
 					.append(
 							"<img id='timeline_img' src='${baseUrl}/images/"+data[0].schoolTimeline.image+"' width=90 height=90/>");

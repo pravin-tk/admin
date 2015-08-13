@@ -281,31 +281,45 @@ public class SchoolDAOImp {
 //			message.setStatus(0);
 //		} 
 			else {
+				HibernateUtil oldHibernateUtil = new HibernateUtil();
+				Session oldSession = oldHibernateUtil.openSession();
+				String schoolHql = "from School where name=:name and locality.id = :localityId";
+				Query schoolQuery = oldSession.createQuery(schoolHql);
+				schoolQuery.setParameter("name", school.getName());
+				schoolQuery.setParameter("localityId", school.getLocality().getId());
+				List<School> checkSchool = schoolQuery.list();
+				oldSession.close();
 			try{
-				HibernateUtil hibernateUtil = new HibernateUtil();
-				Session session = hibernateUtil.openSession();
-				session.beginTransaction();
-				session.save(school);
-				session.getTransaction().commit();
-				school_id = school.getId();
-				session.close();
-				
-				Session boardSchool = hibernateUtil.openSession();
-				SchoolBoard schoolBoard = new SchoolBoard();
-				BoardType boardType = new BoardType();
-				boardType.setId(boardId);
-				schoolBoard.setBoardType(boardType);
-				School newSchool = new School();
-				newSchool.setId(school_id);
-				schoolBoard.setSchool(newSchool);
-				boardSchool.beginTransaction();
-				boardSchool.save(schoolBoard);
-				boardSchool.getTransaction().commit();
-				boardSchool.close();
-				saveTab(school);
-				message.setMessage("Added Successfully");
-				message.setStatus(school_id);
-				message.setData(school);
+				if(checkSchool.size()>0){
+					message.setStatus(0);
+					message.setMessage("School name "+checkSchool.get(0).getName()+" with same locality and city already exists.");
+				}else{
+					HibernateUtil hibernateUtil = new HibernateUtil();
+					Session session = hibernateUtil.openSession();
+					session.beginTransaction();
+					session.save(school);
+					session.getTransaction().commit();
+					school_id = school.getId();
+					saveTab(school);
+					session.close();
+					
+					Session boardSchool = hibernateUtil.openSession();
+					SchoolBoard schoolBoard = new SchoolBoard();
+					BoardType boardType = new BoardType();
+					boardType.setId(boardId);
+					schoolBoard.setBoardType(boardType);
+					School newSchool = new School();
+					newSchool.setId(school_id);
+					schoolBoard.setSchool(newSchool);
+					boardSchool.beginTransaction();
+					boardSchool.save(schoolBoard);
+					boardSchool.getTransaction().commit();
+					boardSchool.close();
+					
+					message.setMessage("Added Successfully");
+					message.setStatus(school_id);
+					message.setData(school);
+				}
 			} catch(Exception e) {
 				message.setMessage("Failed to add school");
 				message.setStatus(0);
@@ -920,59 +934,76 @@ public class SchoolDAOImp {
 //			message.setMessage("Longitude Required");
 //			message.setStatus(0);
 		} else {
-			try{
-				HibernateUtil hibernateUtil = new HibernateUtil();
-				Session session = hibernateUtil.openSession();
-				
-				School schoolNew = (School) session.get(School.class, school.getId());
-				schoolNew.setAboutSchool(school.getAboutSchool());
-				schoolNew.setName(school.getName());
-				schoolNew.setAlias(school.getAlias());
-				schoolNew.setEstablishmentType(school.isEstablishmentType());
-				schoolNew.setLandmark(school.getLandmark());
-				schoolNew.setLastUpdatedBy(school.getLastUpdatedBy());
-				schoolNew.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
-				schoolNew.setLatitude(school.getLatitude());
-				schoolNew.setLongitude(school.getLongitude());
-				schoolNew.setLocality(school.getLocality());
-				schoolNew.setPincode(school.getPincode());
-				schoolNew.setPlotNo(school.getPlotNo());
-				schoolNew.setId(school.getId());
-				schoolNew.setStreetName(school.getStreetName());
-				schoolNew.setTagLine(school.getTagLine());
-				schoolNew.setIsFreelisting(school.getIsFreelisting());
-				schoolNew.setTrialStartDate(school.getTrialStartDate());
-				schoolNew.setTrialEndDate(school.getTrialEndDate());
-				session.beginTransaction();
-				session.update(schoolNew);
-				session.getTransaction().commit();
-				session.close();
-				
-				String hqlSchoolBoard = "from SchoolBoard where school.id = :school_id";
-				Session oldSchoolBoard = hibernateUtil.openSession();
-					Query query1 = oldSchoolBoard.createQuery(hqlSchoolBoard);
-					query1.setInteger("school_id",school.getId());
-					List<SchoolBoard> resultSchoolBoard = query1.list();
-					oldSchoolBoard.close();
-					
-					Session newSession = hibernateUtil.openSession();
-					newSession.beginTransaction();
-					if (resultSchoolBoard.size() > 0) {
-							schoolBoard.setId(resultSchoolBoard.get(0).getId());
-							newSession.update(schoolBoard);
-					}else{
-						newSession.save(schoolBoard);
+			
+			   HibernateUtil oldHibernateUtil = new HibernateUtil();
+			   Session oldSession = oldHibernateUtil.openSession();
+			   String oldHql = "from School where name = :name and locality.id=:localityId and id!=:id";
+			   Query oldQuery = oldSession.createQuery(oldHql);
+			   oldQuery.setParameter("name", school.getName());
+			   oldQuery.setParameter("localityId", school.getLocality().getId());
+			   oldQuery.setParameter("id", school.getId());
+			   List<School> checkUpdateSchool = oldQuery.list();
+			   oldSession.close();
+			   if(checkUpdateSchool.size()>0){
+				   message.setStatus(0);
+				   message.setMessage("School name "+school.getName()+" with same city and locality already exists");
+			   }
+			   else{
+					try{
+						HibernateUtil hibernateUtil = new HibernateUtil();
+						Session session = hibernateUtil.openSession();
+						
+						School schoolNew = (School) session.get(School.class, school.getId());
+						schoolNew.setAboutSchool(school.getAboutSchool());
+						schoolNew.setName(school.getName());
+						schoolNew.setAlias(school.getAlias());
+						schoolNew.setEstablishmentType(school.isEstablishmentType());
+						schoolNew.setLandmark(school.getLandmark());
+						schoolNew.setLastUpdatedBy(school.getLastUpdatedBy());
+						schoolNew.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+						schoolNew.setLatitude(school.getLatitude());
+						schoolNew.setLongitude(school.getLongitude());
+						schoolNew.setLocality(school.getLocality());
+						schoolNew.setPincode(school.getPincode());
+						schoolNew.setPlotNo(school.getPlotNo());
+						schoolNew.setId(school.getId());
+						schoolNew.setStreetName(school.getStreetName());
+						schoolNew.setTagLine(school.getTagLine());
+						schoolNew.setIsFreelisting(school.getIsFreelisting());
+						schoolNew.setTrialStartDate(school.getTrialStartDate());
+						schoolNew.setTrialEndDate(school.getTrialEndDate());
+						session.beginTransaction();
+						session.update(schoolNew);
+						session.getTransaction().commit();
+						session.close();
+						
+						String hqlSchoolBoard = "from SchoolBoard where school.id = :school_id";
+						Session oldSchoolBoard = hibernateUtil.openSession();
+							Query query1 = oldSchoolBoard.createQuery(hqlSchoolBoard);
+							query1.setInteger("school_id",school.getId());
+							List<SchoolBoard> resultSchoolBoard = query1.list();
+							oldSchoolBoard.close();
+							
+							Session newSession = hibernateUtil.openSession();
+							newSession.beginTransaction();
+							if (resultSchoolBoard.size() > 0) {
+									schoolBoard.setId(resultSchoolBoard.get(0).getId());
+									newSession.update(schoolBoard);
+							}else{
+								newSession.save(schoolBoard);
+							}
+							newSession.getTransaction().commit();
+							newSession.close();
+						message.setMessage("Updated Successfully");
+						message.setStatus(school.getId());
+						message.setData(schoolNew);
+					} catch(Exception e) {
+						e.printStackTrace();
+						message.setMessage("Failed to update school");
+						message.setStatus(0);
 					}
-					newSession.getTransaction().commit();
-					newSession.close();
-				message.setMessage("Updated Successfully");
-				message.setStatus(school.getId());
-				message.setData(schoolNew);
-			} catch(Exception e) {
-				e.printStackTrace();
-				message.setMessage("Failed to update school");
-				message.setStatus(0);
-			}
+			   }
+		
 		}
 		return message;
 	}
@@ -1695,16 +1726,16 @@ public class SchoolDAOImp {
 	{
 		int timeline_id = 0;
 		ResponseMessage message = new ResponseMessage();
-		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
-			message.setMessage("Image title Required");
-			message.setStatus(0);
+//		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
+//			message.setMessage("Image title Required");
+//			message.setStatus(0);
 //		} else if(schoolTimeline.getClassesUpto() == null || schoolTimeline.getClassesUpto().trim().length() <= 0) {
 //			message.setMessage("Classes detail Required");
 //			message.setStatus(0);
 //		} else if(schoolTimeline.getYear() == null || schoolTimeline.getYear() <= 0) {
 //			message.setMessage("Year of time line required");
 //			message.setStatus(0);
-		}else {
+		//}else {
 			try{
 				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
@@ -1721,7 +1752,7 @@ public class SchoolDAOImp {
 				message.setMessage("Failed to add school time line");
 				message.setStatus(0);
 			}
-		}
+		//}
 		
 		return message;
 	}
@@ -1784,6 +1815,7 @@ public class SchoolDAOImp {
 			 
 			if(result.size() > 0)
 			{
+			   Short defaultValue =0;
 				for(int i = 0; i < result.size();i++)
 				{
 					SchoolTimelineMilestoneData schoolTimelineMilestoneData = new SchoolTimelineMilestoneData();
@@ -1791,9 +1823,11 @@ public class SchoolDAOImp {
 					schoolTimelineMilestoneData.setId(result.get(i).getId());
 					SchoolTimeline schoolTimeline = new SchoolTimeline();
 					schoolTimeline.setId(result.get(i).getSchoolTimeline().getId());
-					schoolTimeline.setClassesUpto(result.get(i).getSchoolTimeline().getClassesUpto());
 					schoolTimeline.setTitle(result.get(i).getSchoolTimeline().getTitle());
-					schoolTimeline.setYear(result.get(i).getSchoolTimeline().getYear());
+					if(result.get(i).getSchoolTimeline().getYear() != null)
+						schoolTimeline.setYear(result.get(i).getSchoolTimeline().getYear());
+					else
+						schoolTimeline.setYear(defaultValue);
 					schoolTimelineMilestoneData.setSchoolTimeline(schoolTimeline);
 					schoolTimelineMilestones.add(schoolTimelineMilestoneData);
 				}
@@ -1824,7 +1858,6 @@ public class SchoolDAOImp {
 				System.out.println("IMAGEURL : "+result.get(i).getSchoolTimeline().getImage());
 				schoolTimeline.setTitle(result.get(i).getSchoolTimeline().getTitle());
 				schoolTimeline.setYear(result.get(i).getSchoolTimeline().getYear());
-				schoolTimeline.setClassesUpto(result.get(i).getSchoolTimeline().getClassesUpto());
 				schoolTimelineMilestone.setSchoolTimeline(schoolTimeline);
 				schoolTimelineMilestones.add(schoolTimelineMilestone);
 			}
@@ -1836,19 +1869,16 @@ public class SchoolDAOImp {
 	{
 		int timeline_id = 0;
 		ResponseMessage message = new ResponseMessage();
-		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
-			message.setMessage("Image title Required");
-			message.setStatus(0);
-		} else if(schoolTimeline.getClassesUpto() == null || schoolTimeline.getClassesUpto().trim().length() <= 0) {
-			message.setMessage("Classes detail Required");
-			message.setStatus(0);
-		} else if(schoolTimeline.getYear() == null || schoolTimeline.getYear() <= 0) {
-			message.setMessage("Year of time line required");
-			message.setStatus(0);
-		} else if(schoolTimeline.getImage() == null || schoolTimeline.getImage().trim().length() <= 0) {
-			message.setMessage("Image required");
-			message.setStatus(0);
-		} else {
+//		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
+//			message.setMessage("Image title Required");
+//			message.setStatus(0);
+//		} else if(schoolTimeline.getYear() == null || schoolTimeline.getYear() <= 0) {
+//			message.setMessage("Year of time line required");
+//			message.setStatus(0);
+//		} else if(schoolTimeline.getImage() == null || schoolTimeline.getImage().trim().length() <= 0) {
+//			message.setMessage("Image required");
+//			message.setStatus(0);
+//		} else {
 			try{
 				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
@@ -1865,7 +1895,7 @@ public class SchoolDAOImp {
 				message.setMessage("Failed to update school time line");
 				message.setStatus(0);
 			}
-		}
+	//	}
 		return message;
 	}
 	
@@ -2254,6 +2284,7 @@ public class SchoolDAOImp {
 			
 			query.executeUpdate();
 			session.getTransaction().commit();
+			session.clear();
 			session.close();
 			
 			response.setStatus(1);

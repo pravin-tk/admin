@@ -6,6 +6,7 @@ public class InfraItem {
 	private String description;
 	private int itemCount;
 	private Double charges;
+	private String image;
 	
 	public int getId() {
 		return id;
@@ -36,6 +37,12 @@ public class InfraItem {
 	}
 	public void setCharges(Double charges) {
 		this.charges = charges;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	
