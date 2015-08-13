@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.persistence.sessions.serializers.JSONSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -935,6 +934,35 @@ public class SchoolSearchImpl {
         	responseMessage.setMessage("Failed to shortlist/delist school.");
 		}
 		return responseMessage;
+	}
+	
+	public List<SchoolList> compareSchools(List<Integer> schoolIds) {
+		
+		List<SchoolList> resultRaw = new ArrayList<SchoolList>();
+		if(schoolIds.isEmpty() == false) {
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			String hql = "SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
+						 + " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
+						 + " s.homeImage as homeImage,s.logo as logo, s.establishmentType as establishmentType,"
+					     + " s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
+					     + " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
+					     + " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
+					     + " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+					     + " ci.totalFee as totalFee,  "
+					     + " ci.vacantSeat as seats,"
+						 + " ci.standardType.id as standardId "
+						 + " FROM SchoolSearch s, ClassInfo ci"
+						 + " WHERE s.schoolId = ci.school.id AND s.schoolId IN(:schoolIds)"
+						 + " GROUP BY s.schoolId";
+			
+			Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(SchoolList.class))
+					.setParameterList("schoolIds", schoolIds);
+			resultRaw = query.list();
+			session.close();
+		}
+		
+		return resultRaw;
 	}
 	
 }
