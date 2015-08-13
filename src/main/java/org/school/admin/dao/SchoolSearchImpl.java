@@ -201,7 +201,7 @@ public class SchoolSearchImpl {
 				+ " s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
 				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
-				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				+ " s.schoolType as schoolType,s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
 				+ " 0.0 as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
 				+ " ci.standardType.id as standardId,cf.campusSize as campusSize,au.name as unitName,"
 				+ " cf.totalStudents as students,(cf.totalMaleTeacher+cf.totalFemaleTeacher) as teachers"
