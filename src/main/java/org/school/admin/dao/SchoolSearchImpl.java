@@ -158,12 +158,16 @@ public class SchoolSearchImpl {
 				orderBy += ",";
 			orderBy += " ci.vacantSeat "+searchRequest.getSeats();
 		}
-		
+
 		String finalOrder = "";
 		if(orderBy != ""){
 			finalOrder = " ORDER BY"+orderBy;
 		}
 		
+		String isShortlistedQuery ="";
+		if(searchRequest.getUserId().equals("0") == false) {
+			isShortlistedQuery = ", CASE WHEN NULL = (FROM ShortListedSchool sls WHERE s.schoolId = sls.school.id AND sls.userRegistrationInfo.id = " + searchRequest.getUserId() + ") THEN false ELSE true END as isShortlisted ";
+		}
 		Query query = session.createQuery(
 				  "SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
 				+ " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
@@ -173,14 +177,15 @@ public class SchoolSearchImpl {
 				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
 				+ " s.schoolType as schoolType,s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
 				+ distance + " as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
-				+ " ci.standardType.id as standardId, ta.name as teachingApproach"
+				+ " ci.standardType.id as standardId, ta.name as teachingApproach,"
+				+ " COALESCE( (SELECT con.mobileNo FROM ContactInfo con WHERE s.schoolId = con.school.id AND con.isPrimary = 1 AND con.type = 1), '') as primaryContactNo "
+				+ isShortlistedQuery
 				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
 				+ " JOIN ss.schoolMediums sm JOIN ci.teachingApproachType ta" + queryJoin
-				+ " WHERE s.schoolId = ss.id"
+				+ " WHERE s.schoolId = ss.id "
 				+ queryCondition+ " Group By ss.id"+finalOrder
 		).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
 
-		
 		List<SchoolList> resultRaw = query.list();
 		session.close();
 		return resultRaw;
