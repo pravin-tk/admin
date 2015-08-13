@@ -2215,23 +2215,17 @@ public class SchoolDAOImp {
 		session.close();
 		List<SchoolTimelineData> result = new ArrayList<SchoolTimelineData>();
 		for(int i=0; i < schoolTimelines.size(); i++) {
+			String milestoneTitle = "";
 			SchoolTimelineData schoolTimelineData = new SchoolTimelineData();
 			schoolTimelineData.setId(schoolTimelines.get(i).getId());
 			schoolTimelineData.setImage(schoolTimelines.get(i).getImage());
-			schoolTimelineData.setTitle(schoolTimelines.get(i).getTitle());
 			schoolTimelineData.setYear(schoolTimelines.get(i).getYear());
 			
 			List<SchoolTimelineMilestone> schoolTimelineMilestones = new ArrayList<SchoolTimelineMilestone>();
 			for ( SchoolTimelineMilestone schoolTimelineMilestone : schoolTimelines.get(i).getSchoolTimelineMilestones()) {
-				System.out.println(" Title : " + schoolTimelineMilestone.getTitle());
-				SchoolTimelineMilestone newSchoolTimelineMilestone = new SchoolTimelineMilestone();
-				newSchoolTimelineMilestone.setId(schoolTimelineMilestone.getId());
-				newSchoolTimelineMilestone.setMilestoneDesc((schoolTimelineMilestone.getMilestoneDesc()));
-				newSchoolTimelineMilestone.setTitle( (schoolTimelineMilestone.getTitle()));
-				schoolTimelineMilestones.add( newSchoolTimelineMilestone );
+				milestoneTitle = schoolTimelineMilestone.getTitle();
 			}
-			
-		    schoolTimelineData.setMilestones(schoolTimelineMilestones);
+			schoolTimelineData.setTitle(milestoneTitle);
 		    result.add(schoolTimelineData);
 		}
 		return result;
