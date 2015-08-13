@@ -157,7 +157,7 @@ $("#update-activity-item").click(function(){
  			semantic : true,
  			dataType : 'json'
  		};
-	$("#updateactivityitemform").ajaxSubmit(options);;
+	$("#updateactivityitemform").ajaxSubmit(options);
 });
 
 function showItemList(id){

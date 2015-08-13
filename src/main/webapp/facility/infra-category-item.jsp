@@ -112,11 +112,12 @@
                             <div class="contacts-new" style="display:none;">
                                 <h4>Add New Infrastructure Category</h4>
                                 	<div id="aierror" class="bg-danger" ></div>
-     						<form method="post" action="" class="form-horizontal" id="submitForm">
+     						<form method="post" action="" class="form-horizontal" id="infracatitemForm" 
+     						  novalidate="novalidate" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Name</label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="txtname" class="form-control" placeholder="library">
+                                        <input type="text" name="infracatitemname" id="infracatitemname" class="form-control" placeholder="library">
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="tooltip custom-tool-tip right">
@@ -130,7 +131,7 @@
                                 <div class="form-group">
 	                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">Category</label>
 	                                <div class="col-sm-4">
-	                                    <select name="catId" id="catId" class="form-control">
+	                                    <select name="infracatid" id="infracatid" class="form-control">
 	                                        <option value="">Select Category</option>
 	                                        <%
 	                                        for(int i=0; i < cat_size; i++){
@@ -175,7 +176,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Count Item Name</label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="countItemName" class="form-control" placeholder="No Of Books">
+                                        <input type="text" name="countItemName" id="countItemName" class="form-control" placeholder="No Of Books">
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="tooltip custom-tool-tip right">
@@ -205,20 +206,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Description</label>
-                                    <div class="col-sm-2">
-                                        <textarea class="form-control" name="desc" id="desc" placeholder="Description..."></textarea>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Description
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- Image -->
+                                <div class="form-group" id="infra_image_panel">
+									<label for="" class="col-sm-2 control-label" data-toggle="tooltip"
+										data-placement="bottom" title="infra Image">Image</label>
+										<div class="col-sm-4">
+											<input data-brackets-id="3402" class="form-control" type="file"
+												name="infra-image" />
+										</div>
+					     	   </div>
                                 <div class="form-group">
                                     <div class="col-sm-4">
                                         <button type="button" id='btnsave' class="btn btn-success">Save</button>
@@ -235,28 +231,50 @@
 
                
             </div>
-       
+       <script src="${baseUrl}/js/jquery.form.js"></script>
      <script type="text/javascript">
-    	$('#btnsave').click(function(){  
-    		var strcat=$.trim($("#txtname").val());
-    		if (strcat == "" ) {
-    			$("#aierror").html("Category name cannot be empty");
-    			$("#txtname").addClass('has-error');    			
-    		}else {	
-	    		$.post('../webapi/facility/infracatitem/save',{
-	    			name: $("#txtname").val(),
-	    			isOptional: $('input[name=isOptional]:checked').val(),
-	    			countItemName: $("#countItemName").val(),
-	    			status: $('input[name=status]:checked').val(),
-	    			desc: $("#desc").val(),infra_cat_id:$("#catId").val()},function(data){
-	    			if(data.status == 1)
-	    				window.location.href = "${baseUrl}/facility/infra-category-item.jsp?scat_id="+$("#catId").val();
-	    			else
-	    				alert(data.message);
-	    		},'json');
-    		}
-    	});
-    
+//     	$('#btnsave').click(function(){  
+//     		var strcat=$.trim($("#txtname").val());
+//     		if (strcat == "" ) {
+//     			$("#aierror").html("Category name cannot be empty");
+//     			$("#txtname").addClass('has-error');    			
+//     		}else {	
+// 	    		$.post('../webapi/facility/infracatitem/save',{
+// 	    			name: $("#txtname").val(),
+// 	    			isOptional: $('input[name=isOptional]:checked').val(),
+// 	    			countItemName: $("#countItemName").val(),
+// 	    			status: $('input[name=status]:checked').val(),
+// 	    			desc: $("#desc").val(),infra_cat_id:$("#catId").val()},function(data){
+// 	    			if(data.status == 1)
+// 	    				window.location.href = "${baseUrl}/facility/infra-category-item.jsp?scat_id="+$("#catId").val();
+// 	    			else
+// 	    				alert(data.message);
+// 	    		},'json');
+//     		}
+//     	});
+     $("#btnsave").click(function(){
+    		var options = {
+    	 			beforeSubmit : showInfraCatRequest, // pre-submit callback 
+    	 			success :  showInfraCatResponse,
+    	 			url : '../webapi/facility/infracatitem/save',
+    	 			semantic : true,
+    	 			dataType : 'json'
+    	 		};
+    			$('#infracatitemForm').ajaxSubmit(options); 
+     });
+    function showInfraCatRequest(formData, jqForm, options){
+    	var strcat=$.trim($("#infracatitemname").val());
+		if (strcat == "" ) {
+			$("#aierror").html("Category name cannot be empty");
+			$("#infracatitemname").addClass('has-error');    			
+		}
+    }
+    function  showInfraCatResponse(responseText, statusText, xhr, $form){
+    	if(responseText.status == 1)
+				window.location.href = "${baseUrl}/facility/infra-category-item.jsp?scat_id="+$("#infracatid").val();
+			else
+				alert(responseText.message);
+    }
 	function editCategory(id){
 		window.location.href = "${baseUrl}/facility/editinfra-category-item.jsp?scat_id="+id;
 	}

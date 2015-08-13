@@ -38,7 +38,7 @@ public class FacilityImpl {
 			session.close();
 			if (result.size() > 0) {
 				response.setStatus(0);
-				response.setMessage("Safety category  name already exists");
+				response.setMessage("Safety category name already exists");
 			} else {
 				Session newsession = hibernateUtil.openSession();
 				newsession.beginTransaction();
@@ -601,6 +601,7 @@ public class FacilityImpl {
 				response.setStatus(0);
 				response.setMessage("Infrastrutcure category item name already exists");
 			} else {
+				
 				Session newsession = hibernateUtil.openSession();
 				newsession.beginTransaction();
 				newsession.save(infrastructureCategoryItem);
@@ -634,6 +635,10 @@ public class FacilityImpl {
 			response.setStatus(0);
 			response.setMessage("Infrastructure Category Item already exists");
 		} else {
+			if(infrastructureCategoryItem.getImage() == ""){
+				infrastructureCategoryItem.setImage(getInfraImageNameById(infrastructureCategoryItem.getId()));
+			}
+			
 			infrastructureCategoryItem.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
 	        Session newsession = hibernateUtil.openSession();
 	        newsession.beginTransaction();
@@ -646,6 +651,18 @@ public class FacilityImpl {
         return response;
     }
 	
+	private String getInfraImageNameById(Integer id) {
+		String hql = "from InfrastructureCategoryItem where id=:id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<InfrastructureCategoryItem> list = query.list();
+		session.close();
+		return list.get(0).getImage();
+	}
+
 	/**
 	 * Get All Infrastructure Category Item by act id
 	 * @author 
