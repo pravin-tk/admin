@@ -28,7 +28,7 @@ public class ActivityCategoryItem implements java.io.Serializable {
 	private Integer id;
 	private ActivityCategory activityCategory;
 	private String name;
-	private String description;
+	private String image;
 	private Byte status;
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
@@ -39,12 +39,12 @@ public class ActivityCategoryItem implements java.io.Serializable {
 	}
 
 	public ActivityCategoryItem(ActivityCategory activityCategory, String name,
-			String description, Byte status, Date lastUpdatedOn,
+			String image, Byte status, Date lastUpdatedOn,
 			Integer lastUpdatedBy,
 			Set<SchoolActivityCatItem> schoolActivityCatItems) {
 		this.activityCategory = activityCategory;
 		this.name = name;
-		this.description = description;
+		this.image = image;
 		this.status = status;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
@@ -81,13 +81,13 @@ public class ActivityCategoryItem implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "description", length = 150)
-	public String getDescription() {
-		return this.description;
+	@Column(name = "image", length = 200)
+	public String getImage() {
+		return this.image;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Column(name = "status")

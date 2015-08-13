@@ -70,9 +70,8 @@
        
             <form action="" method="post">
             	<div class="form-group">
-            		<label for="username">City</label>
+            		<label for="username">Select City</label>
             		<select id="cityid" name="cityid" class="form-control">
-                        <option value="">Select City</option>
 	                    <%
 	                    String search_tehsil_selected = ""; 
 	                    for(int i=0; i < city_size; i++){

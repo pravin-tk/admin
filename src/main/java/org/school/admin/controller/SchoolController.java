@@ -1094,12 +1094,12 @@ public class SchoolController extends ResourceConfig {
 			@FormDataParam("user_id") Integer user_id,
 			@FormDataParam("year") Short year, 
 			@FormDataParam("title") String title, 
-			@FormDataParam("classes_upto") String classes_upto, 
 			@FormDataParam("milestoneTitle[]") List<FormDataBodyPart> milestones,
 			@FormDataParam("milestoneDesc[]") List<FormDataBodyPart> milestonesDescription,
 			@FormDataParam("image") InputStream is, 
 			@FormDataParam("image") FormDataContentDisposition header
 	){
+		Short zero = 0;
 		ResponseMessage msg = new ResponseMessage();
 		List<String> milestoneTitle = new ArrayList<String>();
 		List<String> milestoneDesc = new ArrayList<String>();
@@ -1122,9 +1122,14 @@ public class SchoolController extends ResourceConfig {
 		school.setId(school_id);
 		SchoolTimeline schoolTimeline = new SchoolTimeline();
 		schoolTimeline.setSchool(school);
-		schoolTimeline.setTitle(title);
-		schoolTimeline.setYear(year);
-		schoolTimeline.setClassesUpto(classes_upto);
+		if(title != "")
+			schoolTimeline.setTitle(title);
+		else 
+			schoolTimeline.setTitle("");
+		if(year != zero)
+			schoolTimeline.setYear(year);
+		else
+			schoolTimeline.setYear(null);
 		schoolTimeline.setLastUpdatedBy(user_id);
 		schoolTimeline.setLastUpdatedOn(new Date());
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
@@ -1172,12 +1177,12 @@ public class SchoolController extends ResourceConfig {
 			@FormDataParam("id") Integer id,
 			@FormDataParam("year") Short year, 
 			@FormDataParam("title") String title, 
-			@FormDataParam("classes_upto") String classes_upto, 
 			@FormDataParam("milestoneTitle[]") List<FormDataBodyPart> milestones,
 			@FormDataParam("milestoneDesc[]") List<FormDataBodyPart> milestonesDescription,
 			@FormDataParam("image") InputStream is, 
 			@FormDataParam("image") FormDataContentDisposition header
 	){
+		Short zero = 0;
 		ResponseMessage msg = new ResponseMessage();
 		List<String> milestoneTitle = new ArrayList<String>();
 		List<String> milestoneDesc = new ArrayList<String>();
@@ -1201,9 +1206,14 @@ public class SchoolController extends ResourceConfig {
 		SchoolTimeline schoolTimeline = new SchoolTimeline();
 		schoolTimeline.setId(id);
 		schoolTimeline.setSchool(school);
-		schoolTimeline.setTitle(title);
-		schoolTimeline.setYear(year);
-		schoolTimeline.setClassesUpto(classes_upto);
+		if(title != "")
+			schoolTimeline.setTitle(title);
+		else
+			schoolTimeline.setTitle("");
+		if(year != zero)
+			schoolTimeline.setYear(year);
+		else
+			schoolTimeline.setYear(null);
 		schoolTimeline.setLastUpdatedBy(user_id);
 		schoolTimeline.setLastUpdatedOn(new Date());
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
@@ -1463,10 +1473,6 @@ public class SchoolController extends ResourceConfig {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage saveSchoolPanoImageGallery(
 			@FormDataParam("school_id") Integer school_id,
-		//	@FormDataParam("logo_image") InputStream is_logo_img, 
-			//@FormDataParam("logo_image") FormDataContentDisposition header_logo_img,
-		//	@FormDataParam("home_image") InputStream is_home_img, 
-	//		@FormDataParam("home_image") FormDataContentDisposition header_home_img,
 			@FormDataParam("imagePanoTitle[]") List<FormDataBodyPart> imageTitle,
 			@FormDataParam("ga_pano_image[]") List<FormDataBodyPart> imageslist
 	){
@@ -1476,22 +1482,6 @@ public class SchoolController extends ResourceConfig {
 		SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 		School school = new School();
 		school.setId(school_id);
-//		try{
-//			if(!header_logo_img.getFileName().isEmpty()) {
-//				String logo_name = header_logo_img.getFileName();
-//				logo_name = logo_name.replaceAll(" ", "_").toLowerCase();
-//				logo_name = "pano/"+logo_name;
-//				String uploadLogoLocation = this.context.getInitParameter("logo_url")+logo_name;
-//				this.imageUploader.writeToFile(is_logo_img, uploadLogoLocation);
-//				school.setLogo(logo_name);
-//				System.out.println("LOGO URL : "+logo_name);
-//			}
-//		}
-//		catch(Exception e){
-//			System.out.println(e);
-//			e.printStackTrace();
-//		}
-		
 		
 		try {	
 			List<SchoolPanoramicImage> schoolPanoramicImageList = new ArrayList<SchoolPanoramicImage>();

@@ -16,6 +16,7 @@ import org.school.admin.data.InfraItem;
 import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
 import org.school.admin.data.RatingData;
+import org.school.admin.data.RatingReviewData;
 import org.school.admin.data.RatingsReviewsData;
 import org.school.admin.data.SchoolAnalyticsData;
 import org.school.admin.data.SchoolFee;
@@ -41,6 +42,7 @@ import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolRating;
 import org.school.admin.model.SchoolReview;
 import org.school.admin.model.SchoolSafetyCatItem;
+import org.school.admin.model.ShortListedSchool;
 import org.school.admin.model.UserRating;
 import org.school.admin.model.UserRegistrationInfo;
 import org.school.admin.util.HibernateUtil;
@@ -253,6 +255,43 @@ public class SchoolSearchImpl {
 		return ratingAndReviewsData;
 	}
 	
+	public RatingReviewData getSchoolRatingAndReviewByUser(Integer schoolId, Integer userId){
+		RatingReviewData ratingReviewData = new RatingReviewData();
+		if( schoolId != null && userId != null) {
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			String hql = "SELECT sr.school.id as schoolId, "
+					+ " sr.userRegistrationInfo.id as userId, "
+					+ " sr.title as title, "
+					+ " sr.review as review,"
+					+ " sr.id as reviewId "
+					+ " FROM SchoolReview sr "
+					+ " WHERE sr.school.id = :schoolId AND sr.userRegistrationInfo.id = :userId";
+			Query query = session.createQuery(hql)
+					.setParameter("schoolId", schoolId)
+					.setParameter("userId", userId)
+					.setResultTransformer(Transformers.aliasToBean(RatingReviewData.class));
+			ratingReviewData = (RatingReviewData)query.uniqueResult();
+			
+			hql = "SELECT ur.id as id, ur.ratingCategoryType.id as catid, "
+					+ " ur.ratingCategoryType.categoryName as name, "
+					+ " ur.ratingCategoryType.image as image, "
+					+ " ur.rating as rating"
+					+ " FROM UserRating ur"
+					+ " WHERE ur.school.id = :schoolId AND ur.userRegistrationInfo.id = :userId";
+			query = session.createQuery(hql)
+					.setParameter("schoolId", schoolId)
+					.setParameter("userId", userId)
+					.setResultTransformer(Transformers.aliasToBean(Rating.class));
+			List<Rating> ratings = query.list();
+			if(ratings.isEmpty() == false ) {
+				ratingReviewData.setRatings(ratings);
+			}
+			session.close();
+		}
+		return ratingReviewData;
+	}
+	
 	public List<GalleryData> getImageGallary(Integer schoolId)
 	{
 		String HQL = "from SchoolImageGallery where school.id = :schoolId";
@@ -408,7 +447,6 @@ public class SchoolSearchImpl {
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getActivityCategoryItem().getId());
 			infraItem.setName(items.get(i).getActivityCategoryItem().getName());
-			infraItem.setDescription(items.get(i).getActivityCategoryItem().getDescription());
 			infraItems.add(infraItem);
 			cat_id = items.get(i).getActivityCategoryItem().getActivityCategory().getId();
 			cat_name = items.get(i).getActivityCategoryItem().getActivityCategory().getName();
@@ -451,7 +489,6 @@ public class SchoolSearchImpl {
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getSafetyCategoryItem().getId());
 			infraItem.setName(items.get(i).getSafetyCategoryItem().getName());
-			infraItem.setDescription(items.get(i).getSafetyCategoryItem().getDescription());
 			infraItems.add(infraItem);
 			
 			cat_id = items.get(i).getSafetyCategoryItem().getSafetyCategory().getId();
@@ -545,6 +582,7 @@ public class SchoolSearchImpl {
 				session.beginTransaction();
 				for(int i=0; i<ratingData.getRatings().size();i++){
 					UserRating userRating = new UserRating();
+					userRating.setId(ratingData.getRatings().get(i).getId());
 					userRating.setSchool(school);
 					userRating.setUserRegistrationInfo(userRegistrationInfo);
 					userRating.setRating((float)ratingData.getRatings().get(i).getRating());
@@ -552,13 +590,13 @@ public class SchoolSearchImpl {
 					RatingCategoryType ratingCategoryType = new RatingCategoryType();
 					ratingCategoryType.setId(ratingData.getRatings().get(i).getCatid());
 					userRating.setRatingCategoryType(ratingCategoryType);
-					session.save(userRating);
+					session.saveOrUpdate(userRating);
 				}
 				session.getTransaction().commit();
 				session.flush();
 				updateSchoolFinalRating(schoolRating);
 				msg.setStatus(1);
-				msg.setMessage("Rating added successfully.");
+				msg.setMessage("Rating saved successfully.");
 			} catch(Exception e) {
 				errors.add(e.getMessage());
 				msg.setStatus(0);
@@ -840,4 +878,56 @@ public class SchoolSearchImpl {
 		response.setMessage("Success");
 		return response;
 	}
+	
+	public ResponseMessage shortlistSchool(Integer schoolId, Integer userId ) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		ArrayList<String> errors = new ArrayList<String>();
+		if(schoolId != null && userId != null) {
+			String hql = " FROM ShortListedSchool sls "
+					+ " WHERE sls.school.id = :schoolId AND sls.userRegistrationInfo.id = :userId";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql)
+					.setParameter("schoolId", schoolId)
+					.setParameter("userId", userId);
+			ShortListedSchool shortListedSchool = (ShortListedSchool)query.uniqueResult();
+			session.close();
+			
+			try {
+				Session newSession = hibernateUtil.openSession();
+				newSession.beginTransaction();
+				if(shortListedSchool != null) {
+					newSession.delete(shortListedSchool);
+					responseMessage.setStatus(1);
+					responseMessage.setMessage("School delisted successfully.");
+				} else {
+					shortListedSchool = new ShortListedSchool();
+					School school = new School();
+					school.setId(schoolId);
+					UserRegistrationInfo userRegistrationInfo = new UserRegistrationInfo();
+					userRegistrationInfo.setId(userId);
+					shortListedSchool.setSchool(school);
+					shortListedSchool.setUserRegistrationInfo(userRegistrationInfo);
+					newSession.save(shortListedSchool);
+					responseMessage.setStatus(1);
+					responseMessage.setMessage("School shortlisted successfully.");
+				}
+				newSession.getTransaction().commit();
+				newSession.flush();
+				newSession.close();
+			} catch(Exception e) {
+				errors.add(e.getMessage());
+				responseMessage.setErrors(errors);
+				responseMessage.setStatus(0);
+	        	responseMessage.setMessage("Failed to shortlist/delist school.");
+			}
+		} else {
+			errors.add("School id and user id required.");
+			responseMessage.setErrors(errors);
+			responseMessage.setStatus(0);
+        	responseMessage.setMessage("Failed to shortlist/delist school.");
+		}
+		return responseMessage;
+	}
+	
 }

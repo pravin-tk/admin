@@ -30,7 +30,6 @@ public class SchoolTimeline implements java.io.Serializable {
 	private Short year;
 	private String title;
 	private String image;
-	private String classesUpto;
 	private Integer lastUpdatedBy;
 	private Date lastUpdatedOn;
 	private Set<SchoolTimelineMilestone> schoolTimelineMilestones = new HashSet<SchoolTimelineMilestone>(
@@ -40,14 +39,13 @@ public class SchoolTimeline implements java.io.Serializable {
 	}
 
 	public SchoolTimeline(School school, Short year, String title,
-			String image, String classesUpto, Integer lastUpdatedBy,
+			String image, Integer lastUpdatedBy,
 			Date lastUpdatedOn,
 			Set<SchoolTimelineMilestone> schoolTimelineMilestones) {
 		this.school = school;
 		this.year = year;
 		this.title = title;
 		this.image = image;
-		this.classesUpto = classesUpto;
 		this.lastUpdatedBy = lastUpdatedBy;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.schoolTimelineMilestones = schoolTimelineMilestones;
@@ -99,15 +97,6 @@ public class SchoolTimeline implements java.io.Serializable {
 
 	public void setImage(String image) {
 		this.image = image;
-	}
-
-	@Column(name = "classes_upto", length = 16777215)
-	public String getClassesUpto() {
-		return this.classesUpto;
-	}
-
-	public void setClassesUpto(String classesUpto) {
-		this.classesUpto = classesUpto;
 	}
 
 	@Column(name = "last_updated_by")

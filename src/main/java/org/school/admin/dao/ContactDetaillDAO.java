@@ -288,8 +288,9 @@ public class ContactDetaillDAO {
 		query.setParameter("school_id", school_id);
 		
 		List<ContactInfo> contactInfoList = query.list();
-		session.close();
+		
 		List<ContactInfo> newcontactInfoList = new ArrayList<ContactInfo>();
+		System.out.println("ContactSIZEzz : "+contactInfoList.size());
 		for(int i =0 ;i < contactInfoList.size(); i++)
 		{
 			ContactInfo contactInfoInternal = new ContactInfo();
@@ -310,6 +311,7 @@ public class ContactDetaillDAO {
 			newcontactInfoList.add(contactInfoInternal);
 			
 		}
+		session.close();
 		return newcontactInfoList;
 	}
 	
@@ -371,6 +373,7 @@ public class ContactDetaillDAO {
 		query.setParameter("id", id);
 		
 		List<ContactInfo> contactInfoList = query.list();
+		session.close();
 		List<ContactInfo> newcontactInfoList = new ArrayList<ContactInfo>();
 		for(int i =0 ;i < contactInfoList.size(); i++)
 		{
@@ -384,10 +387,11 @@ public class ContactDetaillDAO {
 			contactInfoInternal.setContactNo(contactInfoList.get(i).getContactNo());
 			contactInfoInternal.setEmail(contactInfoList.get(i).getEmail());
 			contactInfoInternal.setType(contactInfoList.get(i).getType());
+			contactInfoInternal.setIsPrimary(contactInfoList.get(i).getIsPrimary());
 			newcontactInfoList.add(contactInfoInternal);
 			
 		}
-		session.close();
+		
 		return newcontactInfoList;
 		
 	}

@@ -499,7 +499,7 @@
   					{
   	 					alert(data.message); 
   	 					updateProgress($('#school_id').val());
- 	 			
+  	 					window.location.href="${baseUrl}/config-tabs/campus_detail.jsp";
 //			   	 		$("#school_website").val("");
 //			     		 $("#classification").val("");
 //			     		 $('#school_type').val("");

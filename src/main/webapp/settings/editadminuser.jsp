@@ -79,8 +79,9 @@
                             	{
                             %>
                               
-											<option value="<%out.print(adminUserRoles.get(y).getId());%>">
-											<%out.print(adminUserRoles.get(y).getRoleName());%></option>
+											<option value="<%out.print(adminUserRoles.get(y).getId());%>" <%if(adminUser.getAdminUserRole().getId() == adminUserRoles.get(y).getId()){ %>selected<%} %>>
+											<%out.print(adminUserRoles.get(y).getRoleName());%>
+											</option>
 								<%
 								
                             	}
@@ -124,7 +125,7 @@
 			email : $("#uregistration_email").val(),
 			mobile : $("#uregistration_mobleno").val(),
 			upassword : $("#uregistration_password").val(),
-			role_id :$("#registration_id").val(),
+			role_id :$("#uuser_type").val(),
 			user_status : $("#user_status").val()
 		}, function(data){
 			window.location.href = "${baseUrl}/settings/registration.jsp";

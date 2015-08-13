@@ -127,8 +127,8 @@
                                <div class="form-group">
                    				 <label class="col-sm-2 control-label">is primary</label>
                   				  <div class="col-sm-6" id="cbk_board">
-                    				 <label class='checkbox-inline'> <input type='radio' value='1' id='is_primary_yes' name='is_primary' >Yes</label>
-                    				  <label class='checkbox-inline'> <input type='radio' value='0' id='is_primary_no' name='is_primary' checked>No</label>
+                    				 <label class='checkbox-inline'> <input type='radio' value='1' id='is_primary_yes' name='is_primary'  checked>Yes</label>
+                    				  <label class='checkbox-inline'> <input type='radio' value='0' id='is_primary_no' name='is_primary'>No</label>
                      			 </div>
                				 </div>
                                
@@ -220,7 +220,7 @@
     		$(".contact-new").show();
     		$("#contact_detail_add1").show();
     		console.log("count2 : "+count);
-    		count++;
+    		//count++;
     	}else{
     		console.log("count3 : "+count);
     		$("#contact_detail_add1").hide();
@@ -236,7 +236,7 @@
     		$(".contact-new").show();
     		$("#contact_detail_add2").show();
     		console.log("count2 : "+count);
-    		count++;
+    		//count++;
     	}else{
     		console.log("count3 : "+count);
     		 $("#contact_detail_add2").hide();
@@ -340,7 +340,7 @@
 		 			   $(".contact-list").show();
 		 			   $("#savecontact").show();
 		 			   $("#updatecontact").hide();
-		 			   count++;
+		 			  // count++;
 		    			}
 		    			else{
 		    				alert(data.message);
@@ -588,7 +588,7 @@ $("#updateContact").click(function(){
 			$.post("webapi/school/deleteContact",{contactId : contactId,strReason : strReason,schoolId : schoolId, userId : userId},function(data){
 				if(data.status == 1){
 				 alert(data.message);
-				  deleteProgress($("#school_id").val());
+				 // deleteProgress($("#school_id").val());
 				  $("#contactDelReason").val("");
 				 showContactDetail();
 				 count--;

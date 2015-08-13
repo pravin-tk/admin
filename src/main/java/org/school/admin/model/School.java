@@ -186,7 +186,7 @@ public class School implements java.io.Serializable {
 		this.pincode = pincode;
 	}
 
-	@Column(name = "longitude", nullable = false, length = 15)
+	@Column(name = "longitude", nullable = false, length = 45)
 	public String getLongitude() {
 		return this.longitude;
 	}
@@ -195,7 +195,7 @@ public class School implements java.io.Serializable {
 		this.longitude = longitude;
 	}
 
-	@Column(name = "latitude", nullable = false, length = 15)
+	@Column(name = "latitude", nullable = false, length = 45)
 	public String getLatitude() {
 		return this.latitude;
 	}

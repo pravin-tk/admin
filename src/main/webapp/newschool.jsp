@@ -130,8 +130,8 @@
 <td>
 <input type="text" name="pincode" required/> 
 <tr><th><label>Location </label></th></tr>
-<tr><td><label>Longitude *</label></td><td><input type="text" name="longitude" required/></td>
-<tr><td><label>Latitude *</label></td><td><input type="text" name="latitude" required/></td>
+<tr><td><label>Longitude *</label></td><td><input type="text" name="longitude" required maxlength="15"/></td>
+<tr><td><label>Latitude *</label></td><td><input type="text" name="latitude" required maxlength="15"/></td>
 <tr><th>Images of School</th></tr>
 <tr><td>Select File for upload</td><td><input type="file" name="imageFile1"/></td><td>Image Name</td><td><input type="text" name="imageName1"/></td></tr>
 <tr><td>Select File for upload</td><td><input type="file" name="imageFile2"/></td><td>Image Name</td><td><input type="text" name="imageName2"/></td></tr>

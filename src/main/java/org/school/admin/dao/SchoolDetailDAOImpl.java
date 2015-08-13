@@ -112,6 +112,7 @@ public class SchoolDetailDAOImpl {
 				log +="| school website : "+schoolInfo.getSchoolWebsite();
 				log += "| classification : "+new ClassificationDAOImpl().getClassificationNameById(schoolInfo.getSchoolClassificationType().getId());
 				log += " | type of school : "+new CategoryDAOImpl().getCategoryList(schoolInfo.getSchoolCategoryType().getId());
+				System.out.println("SchoolManagement id : "+schoolInfo.getSchoolType().getId());
 				log += "| School Management : "+new SchoolTypeDAOImpl().getSchoolTypeList(schoolInfo.getSchoolType().getId());
 				if(schoolInfo.getDisplayFee() ==0)
 					log += "|  display fee : no";

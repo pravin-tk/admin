@@ -8,7 +8,10 @@
 <%@page import="org.school.admin.dao.SchoolDAOImp"%>
 <%@page import="java.util.List"%>
 <%
-System.out.println("SessionData : "+session.getAttribute("cityid"));
+	if(session.getAttribute("cityid") == null){
+		response.sendRedirect("index.jsp");
+	}
+	
 	SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 	List<School> school_list = null;
 	List<ViewSchoolData> viewSchoolList = null;
@@ -155,8 +158,9 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
 		  onItemRemove : function(value) {
 					  }
 });
-<% if(viewSchoolList.size() > 0){ %>
- select_school  = $select_school[0].selectize;
+
+<% if(viewSchoolList.size() > 0) {%>
+ 	select_school  = $select_school[0].selectize;
 <% } %>
 	$select_contact = $('#contact_id').selectize({
 	
@@ -177,7 +181,7 @@ System.out.println("SessionData : "+session.getAttribute("cityid"));
  select_contact  = $select_contact[0].selectize;
  <%}%>
     
-    
+   
     
     
     $('.addschool').click(function (){

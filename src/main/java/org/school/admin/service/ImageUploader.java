@@ -30,12 +30,12 @@ public class ImageUploader {
 			}
 			out.flush();
 			out.close();
-			try {
-				this.s3Upload(uploadedFileLocation);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				this.s3Upload(uploadedFileLocation);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		} catch (IOException e) {
  
 			e.printStackTrace();

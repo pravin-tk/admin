@@ -166,13 +166,13 @@
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Latitude">Latitude</label>
                                 <div class="col-sm-6">
-                                    <input data-brackets-id="3402" type="text" class="form-control" name="latitude" id="latitude" value="<%out.print(School.getLatitude().toString());%>" placeholder="Latitude">
+                                    <input data-brackets-id="3402" type="text" class="form-control" name="latitude" id="latitude" value="<%out.print(School.getLatitude().toString());%>" placeholder="Latitude" maxlength="15">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Longitude">Longitude</label>
                                 <div class="col-sm-6">
-                                    <input data-brackets-id="3402" type="text" class="form-control" name="longitude" id="longitude" value="<%out.print(School.getLongitude().toString());%>" placeholder="Longitude">
+                                    <input data-brackets-id="3402" type="text" class="form-control" name="longitude" id="longitude" value="<%out.print(School.getLongitude().toString());%>" placeholder="Longitude" maxlength="15">
                                 </div>
                             </div>
                             <div class="form-group">

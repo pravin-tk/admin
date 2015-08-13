@@ -1,6 +1,7 @@
 package org.school.admin.data;
 
 public class Rating {
+	private Integer id;
 	private Short catid;
 	private String name;
 	private double rating;
@@ -37,5 +38,11 @@ public class Rating {
 	public void setRatingCount(Long ratingCount) {
 		this.ratingCount = ratingCount;
 	}
-	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 }

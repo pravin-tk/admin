@@ -1,13 +1,20 @@
 package org.school.admin.controller;
 
+import java.io.InputStream;
 import java.util.Date;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.servlet.ServletContext;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.school.admin.dao.FacilityImpl;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.InfrastructureCategoryItem;
@@ -16,10 +23,15 @@ import org.school.admin.model.SafetyCategoryItem;
 import org.school.admin.model.ActivityCategory;
 import org.school.admin.model.ActivityCategoryItem;
 import org.school.admin.model.InfrastructureCategory;
+import org.school.admin.service.ImageUploader;
 
 @Path("facility")
-public class FacilityController {
-	
+public class FacilityController extends ResourceConfig {
+	@Context ServletContext context;
+	ImageUploader imageUploader = new ImageUploader();
+	public FacilityController() {
+		register(MultiPartFeature.class);
+    }
 	@POST
 	@Path("/safetycat/save")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -60,17 +72,35 @@ public class FacilityController {
 	@Path("/safetycatitem/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addSafetyCatItem(
-			@FormParam("name") String name,
-			@FormParam("categoryId") int categoryId,
-			@FormParam("desc") String desc,
-			@FormParam("status") byte status
+			@FormDataParam("tname") String name,
+			@FormDataParam("catId") int categoryId,
+			@FormDataParam("status") byte status,
+			@FormDataParam("safety-image")  InputStream is, 
+			@FormDataParam("safety-image") FormDataContentDisposition header
 	){
 		SafetyCategory safetyCategory = new SafetyCategory();
 		safetyCategory.setId(categoryId);
 		SafetyCategoryItem safetyCategoryItem = new SafetyCategoryItem();
 		safetyCategoryItem.setName(name);
+		System.out.println("HeaderSafety: "+header.getFileName());
+		try{
+			if(header.getFileName() != null || header.getFileName().trim().length() != 0){
+				String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
+				image_name = image_name+header.getFileName();
+				image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+				image_name = "milestones/"+image_name;
+				String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+				this.imageUploader.writeToFile(is, uploadedFileLocation);
+				safetyCategoryItem.setImage(image_name);
+			}
+			else{
+				safetyCategoryItem.setImage("");
+			}
+		} catch(Exception e) {
+			safetyCategoryItem.setImage("");
+		}
 		safetyCategoryItem.setSafetyCategory(safetyCategory);
-		safetyCategoryItem.setDescription(desc);
+	//	safetyCategoryItem.setDescription(desc);
 		safetyCategoryItem.setStatus(status);
 		FacilityImpl facilityImpl = new FacilityImpl();
 		return facilityImpl.saveSafetyCategoryItem(safetyCategoryItem);
@@ -80,19 +110,37 @@ public class FacilityController {
 	@Path("/safetycatitem/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateSafetyCatItem(
-			@FormParam("id") int id,
-			@FormParam("name") String name,
-			@FormParam("categoryId") int categoryId,
-			@FormParam("desc") String desc,
-			@FormParam("status") byte status
+			@FormDataParam("id") int id,
+			@FormDataParam("txtname") String name,
+			@FormDataParam("categoryId") int categoryId,
+			@FormDataParam("status") byte status,
+			@FormDataParam("safety-image")  InputStream is, 
+			@FormDataParam("safety-image") FormDataContentDisposition header
 	){
 		SafetyCategory safetyCategory = new SafetyCategory();
 		safetyCategory.setId(categoryId);
 		SafetyCategoryItem safetyCategoryItem = new SafetyCategoryItem();
 		safetyCategoryItem.setId(id);
 		safetyCategoryItem.setName(name);
+		try{
+		if(header.getFileName() != null || header.getFileName().trim().length() != 0){
+			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
+			image_name = image_name+header.getFileName();
+			image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+			image_name = "milestones/"+image_name;
+			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+			this.imageUploader.writeToFile(is, uploadedFileLocation);
+			safetyCategoryItem.setImage(image_name);
+		}
+		else{
+			safetyCategoryItem.setImage("");
+		}
+		}
+		catch(Exception e){
+			safetyCategoryItem.setImage("");
+		}
 		safetyCategoryItem.setSafetyCategory(safetyCategory);
-		safetyCategoryItem.setDescription(desc);
+	//	safetyCategoryItem.setDescription(desc);
 		safetyCategoryItem.setStatus(status);
 		FacilityImpl facilityImpl = new FacilityImpl();
 		System.out.println("Saving item object");
@@ -141,17 +189,38 @@ public class FacilityController {
 	@Path("/activitycatitem/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addActivityCatItem(
-			@FormParam("name") String name,
-			@FormParam("categoryId") int categoryId,
-			@FormParam("desc") String desc,
-			@FormParam("status") byte status
+			@FormDataParam("tname") String name,
+			@FormDataParam("catId") int categoryId,
+			@FormDataParam("status") byte status,
+			@FormDataParam("activity-image")  InputStream is, 
+			@FormDataParam("activity-image") FormDataContentDisposition header
+			
 	){
+		System.out.println("ActivityItemName : "+name);
 		ActivityCategory activityCategory = new ActivityCategory();
 		activityCategory.setId(categoryId);
 		ActivityCategoryItem activityCategoryItem = new ActivityCategoryItem();
 		activityCategoryItem.setName(name);
+		System.out.println("Header: "+header.getFileName());
+		try{
+		if(header.getFileName() != null || header.getFileName().trim().length() != 0){
+			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
+			image_name = image_name+header.getFileName();
+			image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+			image_name = "milestones/"+image_name;
+			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+			this.imageUploader.writeToFile(is, uploadedFileLocation);
+			activityCategoryItem.setImage(image_name);
+		}
+		else{
+			activityCategoryItem.setImage("");
+		}
+		}
+		catch(Exception e){
+			activityCategoryItem.setImage("");
+		}
 		activityCategoryItem.setActivityCategory(activityCategory);
-		activityCategoryItem.setDescription(desc);
+		
 		activityCategoryItem.setStatus(status);
 		FacilityImpl facilityImpl = new FacilityImpl();
 		return facilityImpl.saveActivityCategoryItem(activityCategoryItem);
@@ -161,19 +230,39 @@ public class FacilityController {
 	@Path("/activitycatitem/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateActivityCatItem(
-			@FormParam("id") int id,
-			@FormParam("name") String name,
-			@FormParam("categoryId") int categoryId,
-			@FormParam("desc") String desc,
-			@FormParam("status") byte status
+			@FormDataParam("id") int id,
+			@FormDataParam("tname") String name,
+			@FormDataParam("categoryId") int categoryId,
+			@FormDataParam("status") byte status,
+			@FormDataParam("activity-image")  InputStream is, 
+			@FormDataParam("activity-image") FormDataContentDisposition header
+			
 	){
 		ActivityCategory activityCategory = new ActivityCategory();
 		activityCategory.setId(categoryId);
 		ActivityCategoryItem activityCategoryItem = new ActivityCategoryItem();
 		activityCategoryItem.setId(id);
 		activityCategoryItem.setName(name);
+		try{
+		if(header.getFileName() != null || header.getFileName().trim().length() != 0){
+			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
+			image_name = image_name+header.getFileName();
+			image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+			image_name = "milestones/"+image_name;
+			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+			this.imageUploader.writeToFile(is, uploadedFileLocation);
+			activityCategoryItem.setImage(image_name);
+		}
+		else
+		{
+			activityCategoryItem.setImage("");
+		}
+		}
+		catch(Exception e){
+			activityCategoryItem.setImage("");
+		}
 		activityCategoryItem.setActivityCategory(activityCategory);
-		activityCategoryItem.setDescription(desc);
+		//activityCategoryItem.setDescription(desc);
 		activityCategoryItem.setStatus(status);
 		FacilityImpl facilityImpl = new FacilityImpl();
 		System.out.println("Saving item object");

@@ -173,6 +173,9 @@ public class FacilityImpl {
 			response.setStatus(0);
 			response.setMessage("Safety Category Item name already exists");
 		} else {
+			if(safetyCategoryItem.getImage() == ""){
+				safetyCategoryItem.setImage(getSafetyImageNameById(safetyCategoryItem.getId()));
+			}
 	        Session newsession = hibernateUtil.openSession();
 	        newsession.beginTransaction();
 	        newsession.update(safetyCategoryItem);
@@ -184,7 +187,19 @@ public class FacilityImpl {
         return response;
     }
     
-    /**
+    private String getSafetyImageNameById(Integer id) {
+		String hql = "from SafetyCategoryItem where id=:id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<SafetyCategoryItem> list = query.list();
+		session.close();
+		return list.get(0).getImage();
+	}
+
+	/**
      * Get All SafetyCategoryItem    
      * @return List<State>
      */
@@ -387,6 +402,9 @@ public class FacilityImpl {
 			response.setStatus(0);
 			response.setMessage("Activity category name already exists");
 		} else {
+			if(activityCategoryItem.getImage() == ""){
+				activityCategoryItem.setImage(getImageNameById(activityCategoryItem.getId()));
+			}
 	        Session newsession = hibernateUtil.openSession();
 	        newsession.beginTransaction();
 	        newsession.update(activityCategoryItem);
@@ -398,7 +416,19 @@ public class FacilityImpl {
         return response;
     }
     
-    /**
+    private String getImageNameById(Integer id) {
+		String hql ="from ActivityCategoryItem where id =:id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<ActivityCategoryItem> list = query.list();
+		session.close();
+		return list.get(0).getImage();
+	}
+
+	/**
      * Get All ActivityCategoryItem    
      * @return List<ActivityCategoryItem>
      */

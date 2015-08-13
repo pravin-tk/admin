@@ -69,21 +69,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Max Rating</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="maxPoints" id="maxPoints" placeholder="">
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Max Points/Rating.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="hidden" class="form-control" name="maxPoints" id="maxPoints" value="5">
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Status</label>

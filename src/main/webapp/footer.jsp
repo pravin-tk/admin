@@ -240,17 +240,17 @@
 <div style="min-height:50px;">
 &nbsp;
 </div>
-<div id="footer_lower">
-	<div id="footer_info">
-		<div id="copyright">
-			&copy;  All Rights Reserved.
-		</div>
-		<div id="attr">
-			By <a href="http:/return-true.com/themes/">edbuddy</a>.
-		</div>
-		<div class="clear"></div>
-	</div>
-</div>
+<!-- <div id="footer_lower"> -->
+<!-- 	<div id="footer_info"> -->
+<!-- 		<div id="copyright"> -->
+<!-- 			&copy;  All Rights Reserved. -->
+<!-- 		</div> -->
+<!-- 		<div id="attr"> -->
+<!-- 			By <a href="http:/return-true.com/themes/">edbuddy</a>. -->
+<!-- 		</div> -->
+<!-- 		<div class="clear"></div> -->
+<!-- 	</div> -->
+<!-- </div> -->
 <!-- Bootstrap core JavaScript
     ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

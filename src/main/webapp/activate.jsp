@@ -1,6 +1,12 @@
 <%@page import="org.school.admin.model.AdminUser"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,16 +97,12 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/jquery-1.8.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <!-- script src="js/bootstrap.min.js"></script-->
     <!-- datepicker Js -->
-    <script src="js/bootstrap-datepicker.js"></script>
-    <!-- datatable Js -->
-    <script src="js/jquery.dataTables.min.js"></script>
-    <script src="js/dataTables.bootstrap.js"></script>
+    
     <!-- Validation Js -->
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/validation.js"></script>
-    <script src="js/custom.js"></script>
     <script type="text/javascript">
     	$('#activate').click(function(){
     		var newPassword = $('#npassword').val();
@@ -108,26 +110,15 @@
     		
     		if(newPassword == confirmPassword)
     			{
-    		var id = <%out.print(registration.getId());%>;
-    		$.post('webapi/validate/activate',{id : id, password: $("#cpassword").val()}, function(data){
-    			//alert(data);
-    			
-    			//var newjson=JSON.stringify(data); 
-    			
-    			//alert(newjson);
-    			
-    			
-    		
-    				
-    			
-    					
-    					window.location.href="home.jsp";	
-    		});
-    			}
+	    		var id = <%out.print(registration.getId());%>;
+	    		$.post('webapi/validate/activate',{id : id, password: $("#cpassword").val()}, function(data){
+	    			window.location.href="${baseUrl}/hometab.jsp";	
+	    		});
+    		}
     		else
-    			{
-    			alert("Password not match");
-    			}
+   			{
+   				alert("Password not match");
+   			}
     	});
     	
     </script>

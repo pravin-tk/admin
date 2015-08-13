@@ -224,22 +224,18 @@ public class SchoolDAOImp {
 	{
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		  Transaction tx;
-	        tx = session.beginTransaction();
+		Transaction tx;
+		tx = session.beginTransaction();
 		ResponseMessage responseMessage = new ResponseMessage();
 		try
 		{
-			
-		      
-			session.save(schoolReview);
+			session.saveOrUpdate(schoolReview);
 			tx.commit();
         	session.flush();
         	session.close();
 			responseMessage.setStatus(1);
 			responseMessage.setMessage("Saved successfuly");
-			
-		}
-		catch(javax.validation.ConstraintViolationException e) {
+		} catch(javax.validation.ConstraintViolationException e) {
 	    	ArrayList<String> errors = new ArrayList<String>();
 	    	Set<ConstraintViolation<?>> s = e.getConstraintViolations();
 	    	Iterator<ConstraintViolation<?>> i = s.iterator();
@@ -250,7 +246,14 @@ public class SchoolDAOImp {
 	    	responseMessage.setStatus(0);
         	responseMessage.setMessage("School Review failed to save.");
 	    	responseMessage.setErrors(errors);
-	    }    
+	    } catch(Exception e) {
+	    	ArrayList<String> errors = new ArrayList<String>();
+			errors.add(e.getMessage());
+			responseMessage.setErrors(errors);
+			responseMessage.setStatus(0);
+        	responseMessage.setMessage("School Review failed to save.");
+	    	responseMessage.setErrors(errors);
+		}
 		return responseMessage;
 	}
 /*------------------------------------------------------*/
@@ -1723,16 +1726,16 @@ public class SchoolDAOImp {
 	{
 		int timeline_id = 0;
 		ResponseMessage message = new ResponseMessage();
-		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
-			message.setMessage("Image title Required");
-			message.setStatus(0);
+//		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
+//			message.setMessage("Image title Required");
+//			message.setStatus(0);
 //		} else if(schoolTimeline.getClassesUpto() == null || schoolTimeline.getClassesUpto().trim().length() <= 0) {
 //			message.setMessage("Classes detail Required");
 //			message.setStatus(0);
 //		} else if(schoolTimeline.getYear() == null || schoolTimeline.getYear() <= 0) {
 //			message.setMessage("Year of time line required");
 //			message.setStatus(0);
-		}else {
+		//}else {
 			try{
 				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
@@ -1749,7 +1752,7 @@ public class SchoolDAOImp {
 				message.setMessage("Failed to add school time line");
 				message.setStatus(0);
 			}
-		}
+		//}
 		
 		return message;
 	}
@@ -1812,6 +1815,7 @@ public class SchoolDAOImp {
 			 
 			if(result.size() > 0)
 			{
+			   Short defaultValue =0;
 				for(int i = 0; i < result.size();i++)
 				{
 					SchoolTimelineMilestoneData schoolTimelineMilestoneData = new SchoolTimelineMilestoneData();
@@ -1819,9 +1823,11 @@ public class SchoolDAOImp {
 					schoolTimelineMilestoneData.setId(result.get(i).getId());
 					SchoolTimeline schoolTimeline = new SchoolTimeline();
 					schoolTimeline.setId(result.get(i).getSchoolTimeline().getId());
-					schoolTimeline.setClassesUpto(result.get(i).getSchoolTimeline().getClassesUpto());
 					schoolTimeline.setTitle(result.get(i).getSchoolTimeline().getTitle());
-					schoolTimeline.setYear(result.get(i).getSchoolTimeline().getYear());
+					if(result.get(i).getSchoolTimeline().getYear() != null)
+						schoolTimeline.setYear(result.get(i).getSchoolTimeline().getYear());
+					else
+						schoolTimeline.setYear(defaultValue);
 					schoolTimelineMilestoneData.setSchoolTimeline(schoolTimeline);
 					schoolTimelineMilestones.add(schoolTimelineMilestoneData);
 				}
@@ -1852,7 +1858,6 @@ public class SchoolDAOImp {
 				System.out.println("IMAGEURL : "+result.get(i).getSchoolTimeline().getImage());
 				schoolTimeline.setTitle(result.get(i).getSchoolTimeline().getTitle());
 				schoolTimeline.setYear(result.get(i).getSchoolTimeline().getYear());
-				schoolTimeline.setClassesUpto(result.get(i).getSchoolTimeline().getClassesUpto());
 				schoolTimelineMilestone.setSchoolTimeline(schoolTimeline);
 				schoolTimelineMilestones.add(schoolTimelineMilestone);
 			}
@@ -1864,19 +1869,16 @@ public class SchoolDAOImp {
 	{
 		int timeline_id = 0;
 		ResponseMessage message = new ResponseMessage();
-		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
-			message.setMessage("Image title Required");
-			message.setStatus(0);
-		} else if(schoolTimeline.getClassesUpto() == null || schoolTimeline.getClassesUpto().trim().length() <= 0) {
-			message.setMessage("Classes detail Required");
-			message.setStatus(0);
-		} else if(schoolTimeline.getYear() == null || schoolTimeline.getYear() <= 0) {
-			message.setMessage("Year of time line required");
-			message.setStatus(0);
-		} else if(schoolTimeline.getImage() == null || schoolTimeline.getImage().trim().length() <= 0) {
-			message.setMessage("Image required");
-			message.setStatus(0);
-		} else {
+//		if (schoolTimeline.getTitle() == null || schoolTimeline.getTitle().trim().length() == 0) {
+//			message.setMessage("Image title Required");
+//			message.setStatus(0);
+//		} else if(schoolTimeline.getYear() == null || schoolTimeline.getYear() <= 0) {
+//			message.setMessage("Year of time line required");
+//			message.setStatus(0);
+//		} else if(schoolTimeline.getImage() == null || schoolTimeline.getImage().trim().length() <= 0) {
+//			message.setMessage("Image required");
+//			message.setStatus(0);
+//		} else {
 			try{
 				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
@@ -1893,7 +1895,7 @@ public class SchoolDAOImp {
 				message.setMessage("Failed to update school time line");
 				message.setStatus(0);
 			}
-		}
+	//	}
 		return message;
 	}
 	
