@@ -234,7 +234,6 @@
 				+ id;
 	}
 	$("#saveacitivityitem").click(function(){
-		//alert("Hi");
 		var options = {
 	 			beforeSubmit : showActivityCatRequest, // pre-submit callback 
 	 			success :  showActivityCatResponse,

@@ -306,19 +306,37 @@ public class FacilityController extends ResourceConfig {
 	@Path("/infracatitem/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage saveInfrastructureCategoryItem(
-			@FormParam("name") String name,
-			@FormParam("status") byte status,
-			@FormParam("isOptional") byte isOptional,
-			@FormParam("countItemName") String countItemName,
-			@FormParam("desc") String desc,
-			@FormParam("infra_cat_id") Integer infra_cat_id
+			@FormDataParam("infracatitemname") String name,
+			@FormDataParam("status") byte status,
+			@FormDataParam("isOptional") byte isOptional,
+			@FormDataParam("countItemName") String countItemName,
+			@FormDataParam("infracatid") Integer infra_cat_id, //infra-image
+			@FormDataParam("infra-image")  InputStream is, 
+			@FormDataParam("infra-image") FormDataContentDisposition header
 			){
 		InfrastructureCategoryItem infrastructureCategory = new InfrastructureCategoryItem();
 		infrastructureCategory.setName(name);
 		infrastructureCategory.setStatus(status);
-		infrastructureCategory.setDescription(desc);
 		infrastructureCategory.setIsOptional(isOptional);
 		infrastructureCategory.setCountItemName(countItemName);
+		System.out.println("Header: "+header.getFileName());
+		try{
+		if(header.getFileName() != null || header.getFileName().trim().length() != 0){
+			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
+			image_name = image_name+header.getFileName();
+			image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+			image_name = "milestones/"+image_name;
+			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+			this.imageUploader.writeToFile(is, uploadedFileLocation);
+			infrastructureCategory.setImage(image_name);
+		}
+		else{
+			infrastructureCategory.setImage("");
+		}
+		}
+		catch(Exception e){
+			infrastructureCategory.setImage("");
+		}
 		infrastructureCategory.setLastUpdatedOn(new Date());
 		InfrastructureCategory infraCat = new InfrastructureCategory();
 		infraCat.setId(infra_cat_id);
@@ -331,25 +349,42 @@ public class FacilityController extends ResourceConfig {
 	@Path("/infracatitem/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateInfrastructureCategoryItem(
-			@FormParam("id") int id,
-			@FormParam("name") String name,
-			@FormParam("status") byte status,
-			@FormParam("isOptional") byte isOptional,
-			@FormParam("countItemName") String countItemName,
-			@FormParam("desc") String desc,
-			@FormParam("infra_cat_id") Integer infra_cat_id
+			@FormDataParam("id") int id,
+			@FormDataParam("infracatitemname") String name,
+			@FormDataParam("status") byte status,
+			@FormDataParam("isOptional") byte isOptional,
+			@FormDataParam("updatecountItemName") String countItemName,
+			@FormDataParam("infrcatid") Integer infra_cat_id,
+			@FormDataParam("infra-image")  InputStream is, 
+			@FormDataParam("infra-image") FormDataContentDisposition header
 	){
 	
 		InfrastructureCategoryItem infrastructureCategory = new InfrastructureCategoryItem();
 		infrastructureCategory.setId(id);
 		infrastructureCategory.setName(name);
 		infrastructureCategory.setStatus(status);
-		infrastructureCategory.setDescription(desc);
 		InfrastructureCategory infraCat = new InfrastructureCategory();
 		infraCat.setId(infra_cat_id);
 		infrastructureCategory.setInfrastructureCategory(infraCat);
 		infrastructureCategory.setIsOptional(isOptional);
 		infrastructureCategory.setCountItemName(countItemName);
+		try{
+			if(header.getFileName() != null || header.getFileName().trim().length() != 0){
+				String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
+				image_name = image_name+header.getFileName();
+				image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+				image_name = "milestones/"+image_name;
+				String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+				this.imageUploader.writeToFile(is, uploadedFileLocation);
+				infrastructureCategory.setImage(image_name);
+			}
+			else{
+				infrastructureCategory.setImage("");
+			}
+			}
+			catch(Exception e){
+				infrastructureCategory.setImage("");
+			}
 		FacilityImpl facility = new FacilityImpl();
 		return facility.updateInfrastructureCategoryItem(infrastructureCategory);
 	}

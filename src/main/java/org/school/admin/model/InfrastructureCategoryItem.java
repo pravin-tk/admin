@@ -26,7 +26,7 @@ public class InfrastructureCategoryItem implements java.io.Serializable {
 	private InfrastructureCategory infrastructureCategory;
 	private String name;
 	private Byte status;
-	private String description;
+	private String image;
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
 	private Byte isOptional;
@@ -37,12 +37,12 @@ public class InfrastructureCategoryItem implements java.io.Serializable {
 
 	public InfrastructureCategoryItem(
 			InfrastructureCategory infrastructureCategory, String name,
-			Byte status, String description, Date lastUpdatedOn,
+			Byte status, String image, Date lastUpdatedOn,
 			Integer lastUpdatedBy, Byte isOptional, String countItemName) {
 		this.infrastructureCategory = infrastructureCategory;
 		this.name = name;
 		this.status = status;
-		this.description = description;
+		this.image = image;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
 		this.isOptional = isOptional;
@@ -89,13 +89,13 @@ public class InfrastructureCategoryItem implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "description", length = 100)
-	public String getDescription() {
-		return this.description;
+	@Column(name = "image", length = 200)
+	public String getImage() {
+		return this.image;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
