@@ -85,9 +85,8 @@ public class FacilityController extends ResourceConfig {
 		System.out.println("HeaderSafety: "+header.getFileName());
 		try{
 			if(header.getFileName() != null || header.getFileName().trim().length() != 0){
-				String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
-				image_name = image_name+header.getFileName();
-				image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+				String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ").replaceAll(" ", "-").toLowerCase();
+				image_name = image_name+"-"+header.getFileName().replaceAll(" ", "-").toLowerCase();
 				image_name = "milestones/"+image_name;
 				String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 				this.imageUploader.writeToFile(is, uploadedFileLocation);
@@ -124,9 +123,8 @@ public class FacilityController extends ResourceConfig {
 		safetyCategoryItem.setName(name);
 		try{
 		if(header.getFileName() != null || header.getFileName().trim().length() != 0){
-			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
-			image_name = image_name+header.getFileName();
-			image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ").replaceAll(" ", "-").toLowerCase();
+			image_name = image_name+"-"+header.getFileName().replaceAll(" ", "-").toLowerCase();
 			image_name = "milestones/"+image_name;
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 			this.imageUploader.writeToFile(is, uploadedFileLocation);
@@ -204,9 +202,8 @@ public class FacilityController extends ResourceConfig {
 		System.out.println("Header: "+header.getFileName());
 		try{
 		if(header.getFileName() != null || header.getFileName().trim().length() != 0){
-			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
-			image_name = image_name+header.getFileName();
-			image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ").replaceAll(" ", "-").toLowerCase();
+			image_name = image_name+"-"+header.getFileName().replaceAll(" ", "-").toLowerCase();
 			image_name = "milestones/"+image_name;
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 			this.imageUploader.writeToFile(is, uploadedFileLocation);
@@ -245,9 +242,8 @@ public class FacilityController extends ResourceConfig {
 		activityCategoryItem.setName(name);
 		try{
 		if(header.getFileName() != null || header.getFileName().trim().length() != 0){
-			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
-			image_name = image_name+header.getFileName();
-			image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ").replaceAll(" ", "-").toLowerCase();
+			image_name = image_name+"-"+header.getFileName().replaceAll(" ", "-").toLowerCase();
 			image_name = "milestones/"+image_name;
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 			this.imageUploader.writeToFile(is, uploadedFileLocation);
@@ -322,9 +318,8 @@ public class FacilityController extends ResourceConfig {
 		System.out.println("Header: "+header.getFileName());
 		try{
 		if(header.getFileName() != null || header.getFileName().trim().length() != 0){
-			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
-			image_name = image_name+header.getFileName();
-			image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+			String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ").replaceAll(" ", "-").toLowerCase();
+			image_name = image_name+"-"+header.getFileName().replaceAll(" ", "-").toLowerCase();
 			image_name = "milestones/"+image_name;
 			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 			this.imageUploader.writeToFile(is, uploadedFileLocation);
@@ -370,9 +365,8 @@ public class FacilityController extends ResourceConfig {
 		infrastructureCategory.setCountItemName(countItemName);
 		try{
 			if(header.getFileName() != null || header.getFileName().trim().length() != 0){
-				String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
-				image_name = image_name+header.getFileName();
-				image_name = name+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+				String image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ").replaceAll(" ", "-").toLowerCase();
+				image_name = image_name+"-"+header.getFileName().replaceAll(" ", "-").toLowerCase();
 				image_name = "milestones/"+image_name;
 				String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
 				this.imageUploader.writeToFile(is, uploadedFileLocation);
