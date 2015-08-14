@@ -277,18 +277,22 @@ public class SchoolSearchImpl {
 					.setResultTransformer(Transformers.aliasToBean(RatingReviewData.class));
 			ratingReviewData = (RatingReviewData)query.uniqueResult();
 			
-			hql = "SELECT ur.id as id, ur.ratingCategoryType.id as catid, "
-					+ " ur.ratingCategoryType.categoryName as name, "
-					+ " ur.ratingCategoryType.image as image, "
-					+ " ur.rating as rating"
-					+ " FROM UserRating ur"
-					+ " WHERE ur.school.id = :schoolId AND ur.userRegistrationInfo.id = :userId";
-			query = session.createQuery(hql)
+			String sql = "SELECT "
+					+ " ur.id as id, rct.id as catid, rct.category_name as name, "
+					+ " rct.image as image, COALESCE(ur.rating, 0 ) as rating "
+					+ " FROM rating_category_type rct LEFT JOIN user_rating ur "
+					+ " ON( rct.id = ur.rating_category_type_id AND ur.user_id =:userId AND ur.school_id = :schoolId) "; 
+    
+			query = session.createSQLQuery(sql)
 					.setParameter("schoolId", schoolId)
 					.setParameter("userId", userId)
 					.setResultTransformer(Transformers.aliasToBean(Rating.class));
 			List<Rating> ratings = query.list();
+			
 			if(ratings.isEmpty() == false ) {
+				if( ratingReviewData == null) {
+					ratingReviewData = new RatingReviewData(); 
+				}
 				ratingReviewData.setRatings(ratings);
 			}
 			session.close();
