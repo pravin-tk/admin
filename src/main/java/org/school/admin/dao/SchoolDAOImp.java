@@ -21,6 +21,7 @@ import org.school.admin.model.ActivityCategory;
 import org.school.admin.model.InfrastructureCategory;
 import org.school.admin.data.InfrastructureDetail;
 import org.school.admin.data.NameList;
+import org.school.admin.data.Rating;
 import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.SchoolTimelineMilestoneData;
 import org.school.admin.data.ViewContactData;
@@ -223,12 +224,25 @@ public class SchoolDAOImp {
 	public ResponseMessage saveSchoolReview(SchoolReview schoolReview)
 	{
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Transaction tx;
-		tx = session.beginTransaction();
+		
 		ResponseMessage responseMessage = new ResponseMessage();
 		try
 		{
+			String HQL = "SELECT sr.id as id from SchoolReview sr where sr.school = :school AND sr.userRegistrationInfo = :user ";
+			Session sess = hibernateUtil.openSession();
+			Query query = sess.createQuery(HQL).setResultTransformer(Transformers.aliasToBean(SchoolReview.class))
+				.setParameter("school", schoolReview.getSchool())
+				.setParameter("user", schoolReview.getUserRegistrationInfo());
+			SchoolReview fetchedSchoolReview = (SchoolReview)query.uniqueResult();
+			sess.close();
+			
+			if(fetchedSchoolReview != null) {
+				schoolReview.setId(fetchedSchoolReview.getId());
+			}
+			
+			Session session = hibernateUtil.openSession();
+			Transaction tx;
+			tx = session.beginTransaction();
 			session.saveOrUpdate(schoolReview);
 			tx.commit();
         	session.flush();

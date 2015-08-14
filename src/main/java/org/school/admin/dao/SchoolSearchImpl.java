@@ -584,18 +584,33 @@ public class SchoolSearchImpl {
 		ArrayList<String> errors = new ArrayList<String>();
 		if (ratingData.getSchoolId() > 0 && ratingData.getUserId() > 0 && ratingData.getRatings().size() > 0) {
 			try{
+				String HQL = "SELECT ur.id as id, ur.ratingCategoryType.id as catid "
+						+ " FROM UserRating ur WHERE ur.school.id = :schoolId AND ur.userRegistrationInfo.id = :userId ";
+				HibernateUtil hibernateUtil = new HibernateUtil();
+				Session sess = hibernateUtil.openSession();
+				Query query = sess.createQuery(HQL).setResultTransformer(Transformers.aliasToBean(Rating.class))
+					.setParameter("schoolId", ratingData.getSchoolId())
+					.setParameter("userId", ratingData.getUserId());
+				List<Rating> ratings = query.list();
+				sess.close();
+				
 				School school = new School();
 				school.setId(ratingData.getSchoolId());
 				UserRegistrationInfo userRegistrationInfo = new UserRegistrationInfo();
 				userRegistrationInfo.setId(ratingData.getUserId());
 				SchoolRating schoolRating = new SchoolRating();
 				schoolRating.setSchool(school);
-				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
 				session.beginTransaction();
 				for(int i=0; i<ratingData.getRatings().size();i++){
 					UserRating userRating = new UserRating();
-					userRating.setId(ratingData.getRatings().get(i).getId());
+					if(ratings.isEmpty()==false) {
+						for(int j=0; j<ratings.size();j++){
+							if(ratingData.getRatings().get(i).getCatid() == ratings.get(j).getCatid()) {
+								userRating.setId(ratings.get(j).getId());
+							}
+						}
+					}
 					userRating.setSchool(school);
 					userRating.setUserRegistrationInfo(userRegistrationInfo);
 					userRating.setRating((float)ratingData.getRatings().get(i).getRating());

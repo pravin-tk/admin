@@ -68,7 +68,6 @@ public class SchoolService {
 		if(ratingResponse.getStatus() == 1) {
 			SchoolReview schoolReview = new SchoolReview();
 		    Byte reviewStatus =0;
-		    schoolReview.setId(ratingReviewData.getReviewId());
 			schoolReview.setDate(new Date());
 			schoolReview.setTime(new Date());
 			schoolReview.setStatus(reviewStatus);
