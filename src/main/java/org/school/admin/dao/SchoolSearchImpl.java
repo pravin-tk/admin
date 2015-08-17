@@ -293,7 +293,11 @@ public class SchoolSearchImpl {
 			
 			if(ratings.isEmpty() == false ) {
 				if( ratingReviewData == null) {
-					ratingReviewData = new RatingReviewData(); 
+					ratingReviewData = new RatingReviewData();
+					ratingReviewData.setSchoolId(schoolId);
+					ratingReviewData.setUserId(userId);
+					ratingReviewData.setReview("");
+					ratingReviewData.setTitle("");
 				}
 				ratingReviewData.setRatings(ratings);
 			}
