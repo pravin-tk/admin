@@ -808,7 +808,7 @@ public class SchoolSearchImpl {
 			+ " s.localityName as localityName, "
 			+ " s.cityName as cityName, "
 			+ " s.rating as rating, "
-			+ " s.homeImage as homeImage, "
+			+ " s.logo as homeImage, "
 			+ " s.mediums as mediums, "
 			+ " s.boardName as boardName, "
 			+ " ci.vacantSeat as vacantSeat, "
