@@ -23,8 +23,6 @@
 	city_list_drop_dn = new CityNamesService().getAllCityNames();
 	city_size_drop_dn = city_list_drop_dn.size(); 
 	int drop_dn_city_id = 0;
-	
-	
 %>
 <!DOCTYPE html>
 <html lang="en">

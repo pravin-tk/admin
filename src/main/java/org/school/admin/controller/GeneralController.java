@@ -18,11 +18,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.hibernate.criterion.Distinct;
+import org.school.admin.dao.CityNamesImp;
 import org.school.admin.dao.CountryDAOImp;
 import org.school.admin.dao.DistrictImpl;
 import org.school.admin.dao.LocalityNamesImp;
 import org.school.admin.dao.StateImp;
 import org.school.admin.dao.TehsilImpl;
+import org.school.admin.data.CityData;
+import org.school.admin.data.DistrictData;
+import org.school.admin.data.LocalityData;
+import org.school.admin.data.TehsilData;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.City;
 import org.school.admin.model.Country;
@@ -309,12 +314,32 @@ public class GeneralController {
 	}
 
 	@GET
-	@Path("/locality/{city_id}")
+	@Path("/district/{state_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Locality> getLocalityByCity(@PathParam("city_id") int city_id) {
-		LocalityService localityService = new LocalityService();
-		return localityService.getLocalityName(city_id);
+	public List<DistrictData> getDistrictByState(@PathParam("state_id") int state_id) {
+		 DistrictImpl districtImpl = new DistrictImpl();
+		return districtImpl.getDistrictByStateId(state_id);
 	}
 
+	@GET
+	@Path("/tehsil/{district_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<TehsilData> getTehsilByDistrict(@PathParam("district_id") int district_id) {
+		 TehsilImpl tehsilImpl = new TehsilImpl();
+		return tehsilImpl.getTehsilByDistrictId(district_id);
+	}
 
+	@GET
+	@Path("/city/{tehsil_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<CityData> getCityByTehsil(@PathParam("tehsil_id") int tehsil_id) {
+		
+		return new CityNamesImp().getCityByTehsilId(tehsil_id);
+	}
+	@GET
+	@Path("/locality/{city_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<LocalityData> getLocalityByCity(@PathParam("city_id") int city_id) {
+		return new LocalityNamesImp().getLocalityName(city_id);
+	}
 }

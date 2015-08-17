@@ -32,6 +32,7 @@ import org.school.admin.model.SchoolCategoryType;
 import org.school.admin.model.SchoolClassificationType;
 import org.school.admin.model.SchoolType;
 import org.school.admin.model.SecondaryRole;
+import org.school.admin.model.StandardAlias;
 import org.school.admin.model.StandardType;
 import org.school.admin.model.StreamType;
 import org.school.admin.model.Subject;
@@ -367,9 +368,9 @@ public class SettingsImpl {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		if (cast.getName() == null || cast.getName().trim().length() == 0) {
 			response.setStatus(0);
-			response.setMessage("Please enter blood group name");
+			response.setMessage("Please enter cast name");
 		} else {
-			String hql = "from BloodGroup where name = :name";
+			String hql = "from Cast where name = :name";
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
 			query.setParameter("name", cast.getName());
@@ -524,6 +525,22 @@ public class SettingsImpl {
 		session.close();
 		return result.get(0).getName();
 	}
+	/**
+	 * Get all standard alias names
+	 * @author PANKAJ
+	 * @return List<StandardAilas>
+	 */
+	public List<StandardAlias> getStandardAlias()
+	{
+		String hql = "from StandardAlias";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<StandardAlias> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	/**
 	 * Get All Blood group
 	 * @author PANKAJ 
@@ -3064,4 +3081,70 @@ public class SettingsImpl {
 		session.close();
 		return result;
 	}
+
+	public List<StandardAlias> getStandardAliasById(Short id)
+	{
+		String hql = "from StandardAlias where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<StandardAlias> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage saveStandardAlias(StandardAlias standardAlias) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if (standardAlias.getName() == null || standardAlias.getName().trim().length() == 0) {
+			response.setStatus(0);
+			response.setMessage("Please enter standard alias name");
+		} else {
+			String hql = "from StandardAlias where name = :name";
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("name", standardAlias.getName());
+			List<StandardAlias> result = query.list();
+			session.close();
+			if (result.size() > 0) {
+				response.setStatus(0);
+				response.setMessage("Standard alias name already exists");
+			} else {
+				Session newsession = hibernateUtil.openSession();
+				newsession.beginTransaction();
+				newsession.save(standardAlias);
+				newsession.getTransaction().commit();
+				newsession.close();
+				response.setStatus(1);
+				response.setMessage("Success");
+			}
+		}
+		return response;
+	}
+	
+	public ResponseMessage updateStandardAlias(StandardAlias standardAlias){
+    	ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "from StandardAlias where name = :name and id != :id";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("name", standardAlias.getName());
+		query.setParameter("id", standardAlias.getId());
+		List<StandardAlias> result = query.list();
+		session.close();
+		if (result.size() > 0) {
+			response.setStatus(0);
+			response.setMessage("Standard alias name already exists");
+		} else {
+	        Session newsession = hibernateUtil.openSession();
+	        newsession.beginTransaction();
+	        newsession.update(standardAlias);
+	        newsession.getTransaction().commit();
+	        newsession.close();
+	        response.setStatus(1);
+			response.setMessage("Success");
+		}
+        return response;
+    }
 }

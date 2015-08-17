@@ -1,9 +1,11 @@
 package org.school.admin.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.school.admin.data.DistrictData;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.District;
 import org.school.admin.model.Tehsil;
@@ -103,9 +105,31 @@ public class DistrictImpl {
 		query.setParameter("state_id", state_id);
 		List<District> result = query.list();
 		session.close();
+		
 		return result;
 	}
 	
+	public List<DistrictData> getDistrictByStateId(int state_id)
+	{
+		String hql = "from District where state.id = :state_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("state_id", state_id);
+		List<District> result = query.list();
+		session.close();
+		List<DistrictData> districtDataList = new ArrayList<DistrictData>();
+		if(result.size()>0){
+			
+			for(int i=0;i<result.size();i++){
+				DistrictData districtData = new DistrictData();
+				districtData.setId(result.get(i).getId());
+				districtData.setName(result.get(i).getName());
+				districtDataList.add(districtData);
+			}
+		}
+		return districtDataList;
+	}
 	/**
 	 * Get All Tehsils by district
 	 * @author pradeep

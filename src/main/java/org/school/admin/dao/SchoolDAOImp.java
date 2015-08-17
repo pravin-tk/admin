@@ -641,7 +641,7 @@ public class SchoolDAOImp {
 		List<School> schools = new ArrayList<School>();
 		for(int i=0; i<result.size(); i++){
 			System.out.println("SCHOOLID : "+result.get(i).getId());
-			//if(getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 0){
+			if(getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 0){
 			School school = new School();
 			Locality locality = new Locality();
 			locality.setId(result.get(i).getLocality().getId());
@@ -668,7 +668,7 @@ public class SchoolDAOImp {
 			school.setTagLine(result.get(i).getTagLine());
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
-			//}
+			}
 		}
 		session.close();
 		return schools;
@@ -688,7 +688,7 @@ public class SchoolDAOImp {
 		List<School> schools = new ArrayList<School>();
 		for(int i=0; i<result.size(); i++){
 			System.out.println("SCHOOLID : "+result.get(i).getId());
-			//if((getPer(result.get(i).getId()) >0 && getPer(result.get(i).getId()) < 100) && result.get(i).getStatus() == 0){
+			if((getPer(result.get(i).getId()) >0 && getPer(result.get(i).getId()) < 100) && result.get(i).getStatus() == 0){
 			School school = new School();
 			Locality locality = new Locality();
 			locality.setId(result.get(i).getLocality().getId());
@@ -715,7 +715,7 @@ public class SchoolDAOImp {
 			school.setTagLine(result.get(i).getTagLine());
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
-			//}
+			}
 		}
 		session.close();
 		return schools;
@@ -732,9 +732,10 @@ public class SchoolDAOImp {
 			query.setParameter("city_id",city_id);
 		} 
 		List<School> result = query.list();
+		session.close();
 		List<School> schools = new ArrayList<School>();
 		for(int i=0; i<result.size(); i++){
-			//if((getPer(result.get(i).getId()) == 100 && result.get(i).getStatus() == 2)){
+			if((result.get(i).getStatus() == 2)){
 			School school = new School();
 			Locality locality = new Locality();
 			locality.setId(result.get(i).getLocality().getId());
@@ -761,9 +762,9 @@ public class SchoolDAOImp {
 			school.setTagLine(result.get(i).getTagLine());
 			school.setPromote(result.get(i).getPromote());
 			schools.add(school);
-			//}
+			}
 		}
-		session.close();
+		
 		return schools;
 	}
 	/**
@@ -1780,6 +1781,7 @@ public class SchoolDAOImp {
 	{
 		ResponseMessage message = new ResponseMessage();
 		try{
+			
 			String hqldelete = "DELETE from SchoolTimelineMilestone where schoolTimeline.id = :schoolId";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session1 = hibernateUtil.openSession();

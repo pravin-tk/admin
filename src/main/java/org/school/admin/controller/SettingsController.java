@@ -52,6 +52,7 @@ import org.school.admin.model.SchoolCategoryType;
 import org.school.admin.model.SchoolClassificationType;
 import org.school.admin.model.SchoolType;
 import org.school.admin.model.SecondaryRole;
+import org.school.admin.model.StandardAlias;
 import org.school.admin.model.StandardType;
 import org.school.admin.model.StreamType;
 import org.school.admin.model.Subject;
@@ -1133,4 +1134,53 @@ public class SettingsController extends ResourceConfig {
 		return settings.updateStreamType(streamType);
 	}
 	
+	@POST
+	@Path("standard-alias/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage saveStandardAlias(
+			@FormParam("standard") Short stdId,
+			@FormParam("name") String name
+			)
+	{
+		StandardType standardType = new StandardType();
+		standardType.setId(stdId);
+		StandardAlias standardAlias = new StandardAlias();
+		if(name == null)
+		{
+			ResponseMessage responseMessage =new ResponseMessage();
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please enter standard alias name");
+			return responseMessage;
+		}else{
+			standardAlias.setName(name);
+			standardAlias.setStandardType(standardType);
+		}
+		return new SettingsImpl().saveStandardAlias(standardAlias);
+	}
+	
+	@POST
+	@Path("/standard-alias/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateStandardAlias(
+			@FormParam("id") Short id,
+			@FormParam("standard") Short stdId,
+			@FormParam("name") String name
+	){
+		StandardAlias standardAlias = new StandardAlias();
+		
+		if(name !=null){
+			standardAlias.setId(id);
+			standardAlias.setName(name);
+			StandardType standardType = new StandardType();
+			standardType.setId(stdId);
+			standardAlias.setStandardType(standardType);
+			SettingsImpl settings = new SettingsImpl();
+			return settings.updateStandardAlias(standardAlias);
+		}else{
+			ResponseMessage responseMessage = new ResponseMessage();
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please enter the standard alias name");
+			return responseMessage;
+		}
+	}
 }

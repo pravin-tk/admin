@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.school.admin.data.LocalityData;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.City;
 import org.school.admin.model.Locality;
@@ -127,6 +128,24 @@ public class LocalityNamesImp {
 			localities.add(locality);
 		}
 		
+		return localities;
+	}
+	public List<LocalityData> getLocalityName(int cityId)
+	{
+		String hql = "from Locality where city.id = :city_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("city_id", cityId);
+		List<Locality> result = query.list();
+		List<LocalityData> localities = new ArrayList<LocalityData>();
+		for(int i=0; i<result.size(); i++){
+			LocalityData locality = new LocalityData();
+			locality.setId(result.get(i).getId());
+			locality.setName(result.get(i).getName());
+			localities.add(locality);
+		}
+		session.close();
 		return localities;
 	}
 }

@@ -111,7 +111,7 @@
                     </div>
                </form>
  		</div>
-    </div>
+    
     <!-- /Right main content -->
 <%@ include file="../footer.jsp" %>
 <script src="${baseUrl}/js/jquery.form.js"></script>

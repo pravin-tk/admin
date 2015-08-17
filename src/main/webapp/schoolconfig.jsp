@@ -176,16 +176,22 @@ function updateProgress(school_id){
 		$("#school_progress").attr('width',data+"%");
 	});
 }
-function deleteProgress(school_id){
-	$.get("webapi/school/get_new_school_progress/"+school_id,{},function(data){
-		$("#school_progress").html(data+"%");
-		$("#school_progress").attr('width',data+"%");
-	});
+// function deleteProgress(school_id){
+// 	$.get("webapi/school/get_new_school_progress/"+school_id,{},function(data){
+// 		$("#school_progress").html(data+"%");
+// 		$("#school_progress").attr('width',data+"%");
+// 	});
+// }
+var per = <%out.print(per);%>
+if(per == 100){
+	$("#verify").show();
+	
 }
 function viewVerify()
 {
 	var verify = <%out.print(per);%>
 	if(verify == 100){
+		
 		$("#verify").show();
 	}else{
 		

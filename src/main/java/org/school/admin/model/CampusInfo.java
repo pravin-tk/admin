@@ -53,7 +53,7 @@ public class CampusInfo {
 	
 	@ManyToOne
 	@JoinColumn(name = "school_id")
-	private School School;
+	private School school;
 	
 	@ManyToOne
 	@JoinColumn(name = "campus_size_unit_id")
@@ -62,10 +62,10 @@ public class CampusInfo {
 	
 	
 	public School getSchool() {
-		return School;
+		return school;
 	}
 	public void setSchool(School School) {
-		this.School = School;
+		this.school = School;
 	}
 	public AreaUnit getAreaUnit() {
 		return areaUnit;

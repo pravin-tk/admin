@@ -135,6 +135,10 @@
 					href="${baseUrl}/settings/standardtype.jsp"> <i class="fa"></i>Standard
 						Type
 				</a></li>
+				<li class="col-sm-2"><a
+					href="${baseUrl}/settings/standard-alias.jsp"> <i class="fa"></i>Standard
+						Alias
+				</a></li>
 				<li class="col-sm-2"><a href="${baseUrl}/settings/subject.jsp">
 						<i class="fa"></i>Subject
 				</a></li>

@@ -62,7 +62,7 @@
                     </div>
                </form>
  		</div>
-    </div>
+    
     <!-- /Right main content -->
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">

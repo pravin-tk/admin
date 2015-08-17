@@ -7,7 +7,7 @@ public class PrevStudentProfileList {
 	private String name;
 	private String batch;
 	private String achievements;
-	
+	private String image;
 	public int getId() {
 		return id;
 	}
@@ -44,6 +44,12 @@ public class PrevStudentProfileList {
 	}
 	public void setAchievements(String achievements) {
 		this.achievements = achievements;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

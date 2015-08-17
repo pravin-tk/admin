@@ -1,10 +1,12 @@
 package org.school.admin.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.school.admin.data.CityData;
 import org.school.admin.data.NameList;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.City;
@@ -128,5 +130,24 @@ public class CityNamesImp {
 		List<NameList> result = query.list();
 		session.close();
 		return result;
+	}
+	public List<CityData> getCityByTehsilId(int tehsilId){
+		String hql = "from City where tehsil.id = :tehsilId";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("tehsilId", tehsilId);
+		List<City> result = query.list();
+		session.close();
+		List<CityData> cityDataList = new ArrayList<CityData>();
+		if(result.size()>0){
+			for(int i=0;i<result.size();i++){
+				CityData cityData = new CityData();
+				cityData.setId(result.get(i).getId());
+				cityData.setName(result.get(i).getName());
+				cityDataList.add(cityData);
+			}
+		}
+		return cityDataList;
 	}
 }

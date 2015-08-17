@@ -5,6 +5,7 @@
 <%@page import="org.school.admin.dao.SalesDetailDAOImpl"%>
 <%@page import="org.school.admin.model.SalesInfo"%>
 <%@page import="java.util.List"%>
+<%@page import="javax.servlet.ServletContext" %>
 <%@page import="org.school.admin.model.AdminUser"%>
 <%
 	
@@ -16,6 +17,8 @@
 	 session = request.getSession(false);
 	 AdminUser registration5 = new AdminUser();
  	int user_id5 = 0;
+ 	out.println("<script>"+
+ 	"console.log(' Number of preStudents : '+"+prevStudentProfiles.size()+");</script>");
  	if(session!=null)
  	{
  		if(session.getAttribute("uname") != null)
@@ -27,7 +30,7 @@
    				System.out.println();
  		}
     }	
-
+ 	ServletContext preStudentContext = pageContext.getServletContext();
 
 %>
 
@@ -35,7 +38,7 @@
 
 
         <!-- <div id="myTabContent" class="tab-content"> -->
-		<form action="" method="post" id="old_student_profile" class="form-horizontal">
+		<form action="" method="post" id="old_student_profile" class="form-horizontal" enctype="multipart/form-data">
 		<input type="hidden" id="hdnid" value="" />
        <div class="prevStudent-list" id="pre_student_list">
            <p>Here you can add or deactivate school type.</p>
@@ -77,37 +80,49 @@
  	<h4>Add old Student Profile</h4>
     	<div id="error-prevStudent" class="has-error bg-danger nopadding"></div>
     	<input type="hidden" name="osId" id="osId" value=""/>
+    	<input type="hidden" name="school_id" id="school_id" value="<%out.print(school_id5);%>"/>
+    	<input type="hidden" name="user_id" id="user_id" value="<%out.print(user_id5); %>" />
         <div class="form-group">
             <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Name</label>
             <div class="col-sm-4">
-              	<input data-brackets-id="3402" type="text" class="form-control" id="osname" placeholder="enter old student name">
+              	<input data-brackets-id="3402" type="text" class="form-control" name="osname" id="osname" placeholder="enter old student name">
           	</div>
        </div>
        <div class="form-group">
           	<label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">email</label>
             <div class="col-sm-4">
-              	<input data-brackets-id="3402" type="text" class="form-control" id="osemail" placeholder="enter old student email id">
+              	<input data-brackets-id="3402" type="text" class="form-control" name="osemail" id="osemail" placeholder="enter old student email id">
             </div>
        </div>
        <div class="form-group">
            	<label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Mobile No</label>
             <div class="col-sm-2">
-              	<input data-brackets-id="3402" type="text" class="form-control" id="osmobile_no" onKeyPress="return checkNumber(event)" placeholder="enter old student mobile number" maxlength="10">
+              	<input data-brackets-id="3402" type="text" class="form-control" name="osmobile_no" id="osmobile_no" onKeyPress="return checkNumber(event)" placeholder="enter old student mobile number" maxlength="10">
             </div>
        	</div>
               
         <div class="form-group">
                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Batch</label>
                 <div class="col-sm-6">
-                    <input data-brackets-id="3402" type="text" class="form-control" id="osbatch" placeholder="enter old student batch">
+                    <input data-brackets-id="3402" type="text" class="form-control" name="osbatch" id="osbatch" placeholder="enter old student batch">
                 </div>
         </div>
         <div class="form-group">
                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Achievements</label>
                 <div class="col-sm-6">
-                    <input data-brackets-id="3402" type="text" class="form-control" id="osachievements" placeholder="enter old student achievements">
+                    <input data-brackets-id="3402" type="text" class="form-control" name="osachievements" id="osachievements" placeholder="enter old student achievements">
                 </div>
         </div>
+        <div class="form-group" id="pre_student_image_panel">
+			<label for="" class="col-sm-2 control-label" data-toggle="tooltip"
+				data-placement="bottom" title="Student Image">Image</label>
+			<div class="col-sm-4">
+				<input data-brackets-id="3402" class="form-control" type="file"
+					name="prestudentimage" />
+			</div>
+			
+		</div>
+		
         <div class="form-group">
     		<div class="col-sm-4" id="button_list">
             	<button type="button" id='saveprevStudent' class="btn btn-success ">Save</button>
@@ -162,7 +177,7 @@
                       </div>
                   </div>
 </form>
-          	 	
+<script src="${baseUrl}/js/jquery.form.js"></script>
 <script type="text/javascript">
   	function ValidateEmail(email) {
         var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -190,56 +205,54 @@
    		$("#updatePrevStudent").hide();
    	});
    	
-   	
-   	$('#saveprevStudent').click(function(){
-   		var school_id = <%out.print(school_id5);%>
-   		var user_id = <%out.print(user_id5);%>
-//    			if($("#osname").val().length ==0 )
-//   			{
-   			//	alert("Please enter previous student name");
-//   				$("#error-prevStudent").html('Please enter your name, email id and mobile number');
-//   				$('#email, #mobile_no, #name, #achievements, #batch ').addClass('has-error');
-  				
-//   			} else if (!ValidateEmail($('#osemail').val()))
-//   			{
-//   				$('#error-prevStudent').html("Please enter your valid email id");
-//  					$('#email').addClass('has-error');
-//   			} 
-   			//}
-// 		else {		
-   			    		$.post('webapi/school/prestudent',{school_id : school_id, user_id : user_id,name: $("#osname").val(), email : $("#osemail").val(), mobile : $("#osmobile_no").val(), batch : $("#osbatch").val(),
-    			achievements : $("#osachievements").val()},function(data){
-    			
-    			$('#osemail, #osmobile_no, #osname').removeClass('has-error');
-    			$('#error-prevStudent').html("");
-    			var oTable = $("#prevStudent-table").dataTable();
- 			    oTable.fnClearTable();
- 			    $("#osname").val(""); $("#osemail").val(""); $("#osmobile_no").val("");
- 			    $("#osachievements").val("");
- 			    $("#osbatch").val("");
- 			    
- 			   alert("Save successfully..");
- 			    $("#pre_student_add").hide();
- 			    $("#pre_student_list").show();
- 			    $("#saveprevStudent").hide();
- 			    $("#updatePrevStudent").show();
- 			   updateProgress($('#school_id').val());
- 			    $(data).each(function(index){
- 			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-                          +" <a href='#deleteStudentProfile'  data-id='"+data[index].id+"' class='open-DeleteProfileDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteStudentProfile' >"
-                          +"<i class='fa fa-trash'></i></a>";
- 			    	var row = [];
- 			    	 row.push(data[index].name);
- 			    	 row.push(data[index].batch);
- 			    	 row.push(data[index].achievements);
-	 			    	 row.push(html);
- 			    	oTable.fnAddData(row);
- 			    });
- 			  
-    		},'json');
-//    		}
-   		
+   	$("#saveprevStudent").click(function(){
+   		var options = {
+	 			target : '#error-prevStudent', // target element(s) to be updated with server response 
+	 			beforeSubmit : showPreStudentRequest, // pre-submit callback 
+	 			success :  showPreStudentResponse,
+	 			url : '${baseUrl}/webapi/school/prestudent',
+	 			semantic : true,
+	 			dataType : 'json'
+	 		};
+   		$('#old_student_profile').ajaxSubmit(options);
    	});
+   	
+   	function showPreStudentRequest(formData, jqForm, options){
+   		var queryString = $.param(formData);
+		return true;
+   	}
+   	function showPreStudentResponse(responseText, statusText, xhr, $form){
+   		var oTable = $("#prevStudent-table").dataTable();
+	    oTable.fnClearTable();
+	    $("#osname").val(""); $("#osemail").val(""); $("#osmobile_no").val("");
+	    $("#osachievements").val("");
+	    $("#osbatch").val("");
+	    $("#pre_student_image_panel").html('<div class="form-group" id="pre_student_image_panel">'+
+	    		'<label for="" class="col-sm-2 control-label" data-toggle="tooltip"'
+					+'data-placement="bottom" title="Student Image">Image</label>'
+				+'<div class="col-sm-4">'
+					+'<input data-brackets-id="3402" class="form-control" type="file"'
+						+'name="prestudentimage" />'
+				+'</div>'
+			+'</div>');
+	   alert("Save successfully..");
+	    $("#pre_student_add").hide();
+	    $("#pre_student_list").show();
+	    $("#saveprevStudent").hide();
+	    $("#updatePrevStudent").show();
+	   updateProgress($('#school_id').val());
+	    $(responseText).each(function(index){
+	    	html = "<a href='javascript:editProfile("+responseText[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
+              +" <a href='#deleteStudentProfile'  data-id='"+responseText[index].id+"' class='open-DeleteProfileDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteStudentProfile' >"
+              +"<i class='fa fa-trash'></i></a>";
+	    	var row = [];
+	    	 row.push(responseText[index].name);
+	    	 row.push(responseText[index].batch);
+	    	 row.push(responseText[index].achievements);
+		    	 row.push(html);
+	    	oTable.fnAddData(row);
+	    });
+   	}
 	    	
    	$("#cancel-old-student").click(function(){
    		$('#error-prevStudent').html("");
@@ -247,6 +260,14 @@
    		$("#osname").val(""); $("#osemail").val(""); $("#osmobile_no").val("");
 		    $("#osachievements").val("");
 		    $("#osbatch").val("");
+		    $("#pre_student_image_panel").html('<div class="form-group" id="pre_student_image_panel">'+
+		    		'<label for="" class="col-sm-2 control-label" data-toggle="tooltip"'
+						+'data-placement="bottom" title="Student Image">Image</label>'
+					+'<div class="col-sm-4">'
+						+'<input data-brackets-id="3402" class="form-control" type="file"'
+							+'name="prestudentimage" />'
+					+'</div>'
+				+'</div>');
    	});
    	
    	function editProfile(id){
@@ -261,6 +282,8 @@
 			$('#osname').val(data.name);
 			$('#osachievements').val(data.achievements);
 			$('#osbatch').val(data.batch);
+			$("#pre_student_image_panel")
+			.append("<img id='pre_student_img' src='${baseUrl}/images/"+data.image+"' width=90 height=90/>");
 		});
    	}
    	$('#updateProfileDetail').click(function(){
@@ -276,54 +299,15 @@
    	
    	function updateProfile(strReason)
    	{
-   		
-   		var school_id = <%out.print(school_id5);%>
-			var user_id = <%out.print(user_id5);%>
-			
-			 var oTable = $("#prevStudent-table").dataTable();
-		    oTable.fnClearTable();
-//			if($("#osname").val().length ==0)
-//			{
-//				alert("Please enter previous student name");
-//				$("#error-prevStudent").html('Please enter your name, email id and mobile number');
-//				$('#email, #mobile_no, #name, #achievements, #batch ').addClass('has-error');
-				
-//			} else if (!ValidateEmail($('#osemail').val()))
-//			{
-//				$('#error-prevStudent').html("Please enter your valid email id");
-//					$('#email').addClass('has-error');
-//			} 
-//			}
-//			else {		
-			
-		$.post('webapi/school/prestudent_update',{id: $("#osId").val(), school_id : school_id, user_id : user_id,name: $("#osname").val(), email : $("#osemail").val(), mobile : $("#osmobile_no").val(), batch : $("#osbatch").val(),
-			achievements : $("#osachievements").val(), strReason : strReason},function(data){
-			
-			$('#osemail, #osmobile_no, #osname').removeClass('has-error');
-			$('#error-prevStudent').html("");
-			
-			    $("#osname").val(""); $("#osemail").val(""); $("#osmobile_no").val("");
-			    $("#osachievements").val("");
-			    $("#osbatch").val("");
-			   alert("Updated successfully..");
-			    $("#pre_student_add").hide();
-			    $("#pre_student_list").show();
-			    $("#saveprevStudent").show();
-				$("#updatePrevStudent").hide();
-				updateProgress($('#school_id').val());
-			    $(data).each(function(index){
-			    	html = "<a href='javascript:editProfile("+data[index].id+");' class='btn btn-success icon-btn'><i class='fa fa-pencil'></i></a>"
-			    	+" <a href='#deleteStudentProfile'  data-id='"+data[index].id+"' class='open-DeleteProfileDialog btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteStudentProfile' >"
-                +"<i class='fa fa-trash'></i></a>";
-			    	var row = [];
-			    	 row.push(data[index].name);
-			    	 row.push(data[index].batch);
-			    	 row.push(data[index].achievements);
- 			    	 row.push(html);
-			    	oTable.fnAddData(row);
-			    });
-			  
-		},'json');
+		var options = {
+				target : '#error-prevStudent',
+				beforeSubmit : showPreStudentRequest, // pre-submit callback 
+	 			success :  showPreStudentResponse,
+				url : '${baseUrl}/webapi/school/prestudent_update',
+				semantic : true,
+				dataType : 'json'
+			};
+		$('#old_student_profile').ajaxSubmit(options);
    	}
 		
 		function deleteProfile(deletePreStudentId,strReason){

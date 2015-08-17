@@ -99,7 +99,7 @@ public class CampusDAOImpl {
 	}
 	
 	public List<CampusInfo> getCampusInfo(int school_id){
-		String hql = "from CampusInfo where School.id = :school_id";
+		String hql = "from CampusInfo where school.id = :school_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session oldsession = hibernateUtil.openSession();
 		Query query = oldsession.createQuery(hql);

@@ -1,3 +1,5 @@
+<%@page import="org.school.admin.dao.StateImp"%>
+<%@page import="org.school.admin.model.State"%>
 <%@page import="org.school.admin.model.BoardType"%>
 <%@page import="org.school.admin.service.BoardService"%>
 <%@page import="org.school.admin.model.City"%>
@@ -5,7 +7,7 @@
 <%@page import="java.util.List"%>
 <%
 	List<City> city_list = new CityNamesService().getAllCityNames();
-	System.out.println(city_list.toString());
+	List<State> state_list = new StateImp().getStateList();
 	
 	List<BoardType> boardTypeList = null;
 	boardTypeList = new BoardService().getBoardList();
@@ -58,23 +60,54 @@
 						%>
                       </div>
                 </div>
+               			   <div class="form-group">
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Alias Name">Alias Name</label>
+                                <div class="col-sm-6">
+                                    <input data-brackets-id="3402" type="text" class="form-control" name="alias" id="alias" placeholder="Alias Name of school">
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Plot No.">Plot No.</label>
                                 <div class="col-sm-6">
                                     <input data-brackets-id="3402" type="text" class="form-control" name="plot_no" id="plot_no" placeholder="Plot No.">
                                 </div>
                             </div>
+                            
                             <div class="form-group">
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">State</label>
+                                <div class="col-sm-4">
+                                    <select name="state_id" id="state_id" class="form-control">
+                                        <option value="">Select State</option>
+                                        <%
+                                        int state_size = state_list.size(); 
+                                        for(int i=0; i < state_size; i++){
+                                        	out.print("<option value='"+state_list.get(i).getId()+"'>"+state_list.get(i).getName()+"</option>");
+                                        }
+                                        %>
+                                    </select>
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">District</label>
+                                <div class="col-sm-4">
+                                    <select name="district_id" id="district_id" class="form-control">
+                                        <option value="">Select District</option>
+                                    </select>
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">Tehsil</label>
+                                <div class="col-sm-4">
+                                    <select name="tehsil_id" id="tehsil_id" class="form-control">
+                                        <option value="">Select Tehsil</option>
+                                    </select>
+                                </div>
+                            </div>
+                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">City</label>
                                 <div class="col-sm-4">
                                     <select name="city_id" id="city_id" class="form-control">
                                         <option value="">Select City</option>
-                                        <%
-                                        int city_size = city_list.size(); 
-                                        for(int i=0; i < city_size; i++){
-                                        	out.print("<option value='"+city_list.get(i).getId()+"'>"+city_list.get(i).getName()+"</option>");
-                                        }
-                                        %>
                                     </select>
                                 </div>
                             </div>
@@ -116,12 +149,7 @@
                                     <input data-brackets-id="3402" type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude" maxlength="15">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Alias">Alias Name</label>
-                                <div class="col-sm-6">
-                                    <input data-brackets-id="3402" type="text" class="form-control" name="alias" id="alias" placeholder="Alias Name of school">
-                                </div>
-                            </div>
+                           
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tag Line">Tag Line</label>
                                 <div class="col-sm-6">
@@ -132,6 +160,12 @@
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="About School">About School</label>
                                 <div class="col-sm-6">
                                     <textarea class="form-control" rows="4" name="about_school" id="about_school" placeholder="About School"></textarea>
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Year of establishment">Year of establishment</label>
+                                <div class="col-sm-6">
+                                    <input data-brackets-id="3402" type="text" class="form-control" name="establishment" id="establishment" placeholder="year of establishment of school">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -229,6 +263,44 @@
     	}
     });
     
+    $("#state_id").change(function(){
+    	var state_id = $(this).val();
+    	if(state_id != 0 || state_id != ""){
+    		$.get("webapi/general/district/"+state_id,function(data){
+	    		var dropdown = "<option value=''>Select District</option>";
+	    		for(var i=0;i<data.length;i++){
+	    			dropdown += "<option value="+data[i].id+">"+data[i].name+"</option>"; 
+	    		}
+			  	$("#district_id").html(dropdown);
+	    	});
+    	}
+    });
+    
+    $("#district_id").change(function(){
+    	var district_id = $(this).val();
+    	if(district_id !=0 || district_id != ""){
+    		$.get("webapi/general/tehsil/"+district_id,function(data){
+    			var dropdown = "<option value=''>Select Tehsil</option>";
+    			for( var i =0;i<data.length;i++){
+    				dropdown +="<option value="+data[i].id+">"+data[i].name+"</option>";
+    			}
+    			$("#tehsil_id").html(dropdown);
+    		});
+    	}
+    });
+    
+    $("#tehsil_id").change(function(){
+    	var tehsil_id = $(this).val();
+    	if(tehsil_id !=0 || tehsil_id != ""){
+    		$.get("webapi/general/city/"+tehsil_id,function(data){
+    			var dropdown = "<option value=''>Select City</option>";
+    			for( var i =0;i<data.length;i++){
+    				dropdown +="<option value="+data[i].id+">"+data[i].name+"</option>";
+    			}
+    			$("#city_id").html(dropdown);
+    		});
+    	}
+    });
     $(document).ready(function() { 
         var options = { 
             target:        '#output',   // target element(s) to be updated with server response 
