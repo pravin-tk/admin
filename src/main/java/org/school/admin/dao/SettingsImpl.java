@@ -2610,6 +2610,10 @@ public class SettingsImpl {
 			response.setStatus(0);
 			response.setMessage("Rating category already exists");
 		} else {
+			if(ratingCategoryType.getImage() == ""){
+				List<RatingCategoryType> image =getRatingCatImageById(ratingCategoryType);
+				ratingCategoryType.setImage(image.get(0).getImage());
+			}
 			ratingCategoryType.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
 	        Session newsession = hibernateUtil.openSession();
 	        newsession.beginTransaction();
@@ -2622,6 +2626,19 @@ public class SettingsImpl {
         return response;
     }
 	
+	private List<RatingCategoryType> getRatingCatImageById(
+			RatingCategoryType ratingCategoryType) {
+		String hql = "from RatingCategoryType where id = :id";
+		HibernateUtil hibernateUtil = new  HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", ratingCategoryType.getId());
+		List<RatingCategoryType> image = query.list();
+		session.close();
+		
+		return image;
+	}
+
 	/**
 	 * Get All RatingCategoryType
 	 * @author 

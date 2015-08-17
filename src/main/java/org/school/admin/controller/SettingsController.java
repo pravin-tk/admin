@@ -830,13 +830,24 @@ public class SettingsController extends ResourceConfig {
 		ratingCategoryType.setCategoryName(categoryName);
 		ratingCategoryType.setWeightage(weightage);
 		ratingCategoryType.setLastUpdatedOn(new Date());
-		String image_name = ratingCategoryType.getCategoryName().replaceAll("([^a-zA-Z]|\\s)+", " ");
-		image_name = image_name+header.getFileName();
-		image_name = image_name.replaceAll(" ", "_").toLowerCase();
-		image_name = "rating/"+image_name;
-		String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
-		this.imageUploader.writeToFile(is, uploadedFileLocation);
-		ratingCategoryType.setImage(image_name);
+		String image_name = "";
+		try{
+			if(header.getFileName().trim().length() !=0){
+				image_name = ratingCategoryType.getCategoryName().replaceAll("([^a-zA-Z]|\\s)+", " ");
+				image_name = image_name+header.getFileName();
+				image_name = image_name.replaceAll(" ", "_").toLowerCase();
+				image_name = "rating/"+image_name;
+				String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+				this.imageUploader.writeToFile(is, uploadedFileLocation);
+				ratingCategoryType.setImage(image_name);
+			}
+			else{
+				ratingCategoryType.setImage(image_name);
+			}
+		}catch(Exception e){
+			ratingCategoryType.setImage(image_name);
+		}
+		
 		SettingsImpl settings = new SettingsImpl();
 		return settings.saveRatingCategoryType(ratingCategoryType);
 	}
@@ -857,15 +868,23 @@ public class SettingsController extends ResourceConfig {
 		ratingCategoryType.setCategoryName(categoryName);
 		ratingCategoryType.setWeightage(weightage);
 		ratingCategoryType.setLastUpdatedOn(new Date());
-		if(header.getFileName() != null){
-			String image_name = ratingCategoryType.getCategoryName().replaceAll("([^a-zA-Z]|\\s)+", " ");
-			image_name = image_name+header.getFileName();
-			image_name = image_name.replaceAll(" ", "_").toLowerCase();
-			image_name = "rating/"+image_name;
-			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
-			this.imageUploader.writeToFile(is, uploadedFileLocation);
+		String image_name = "";
+		try{
+			if(header.getFileName() != null || header.getFileName().trim().length() !=0){
+				image_name = ratingCategoryType.getCategoryName().replaceAll("([^a-zA-Z]|\\s)+", " ");
+				image_name = image_name+header.getFileName();
+				image_name = image_name.replaceAll(" ", "_").toLowerCase();
+				image_name = "rating/"+image_name;
+				String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+				this.imageUploader.writeToFile(is, uploadedFileLocation);
+				ratingCategoryType.setImage(image_name);
+			}else{
+				ratingCategoryType.setImage(image_name);
+			}
+		}catch(Exception e){
 			ratingCategoryType.setImage(image_name);
 		}
+		
 		SettingsImpl settings = new SettingsImpl();
 		return settings.updateRatingCategoryType(ratingCategoryType);
 	}
