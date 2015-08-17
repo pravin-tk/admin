@@ -1,5 +1,6 @@
 package org.school.admin.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -23,6 +24,7 @@ import org.school.admin.dao.SchoolSearchImpl;
 import org.school.admin.dao.StandardTypeDAO;
 import org.school.admin.data.Facility;
 import org.school.admin.data.GalleryData;
+import org.school.admin.data.InfraCategory;
 import org.school.admin.data.NameImageList;
 import org.school.admin.data.NameList;
 import org.school.admin.data.NearbySchoolList;
@@ -36,10 +38,8 @@ import org.school.admin.data.SchoolTimelineData;
 import org.school.admin.data.SearchRequest;
 import org.school.admin.model.SchoolPanoramicImage;
 import org.school.admin.model.SchoolReview;
-import org.school.admin.data.UriData;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.service.SearchFilterService;
-
 @Path("api1.0")
 public class SchoolSearchController {
 	@Context ServletContext context;
@@ -168,9 +168,27 @@ public class SchoolSearchController {
 		result.setPanorama(schoolPanoramicImages);
 		result.setFees(schoolSearchImpl.getClassFeeDetails(id,standardId));
 		Facility facility = new Facility();
-		facility.setActivity(schoolSearchImpl.getSchoolActivity(id));
-		facility.setSafety(schoolSearchImpl.getSchoolSafety(id));
-		facility.setInfra(schoolSearchImpl.getSchoolInfra(id));
+		List<InfraCategory> schoolActivity = schoolSearchImpl.getSchoolActivity(id);
+		for(int i=0; i<schoolActivity.size(); i++){
+			for(int j=0; j<schoolActivity.get(i).getItems().size(); j++){
+				schoolActivity.get(i).getItems().get(j).setImage(img_path+schoolActivity.get(i).getItems().get(j).getImage());
+			}
+		}
+		List<InfraCategory> schoolSafety = schoolSearchImpl.getSchoolSafety(id);
+		for(int i=0; i<schoolSafety.size(); i++){
+			for(int j=0; j<schoolSafety.get(i).getItems().size(); j++){
+				schoolSafety.get(i).getItems().get(j).setImage(img_path+schoolSafety.get(i).getItems().get(j).getImage());
+			}
+		}
+		List<InfraCategory> schoolInfra = schoolSearchImpl.getSchoolInfra(id);
+		for(int i=0; i<schoolInfra.size(); i++){
+			for(int j=0; j<schoolInfra.get(i).getItems().size(); j++){
+				schoolInfra.get(i).getItems().get(j).setImage(img_path+schoolInfra.get(i).getItems().get(j).getImage());
+			}
+		}
+		facility.setActivity(schoolActivity);
+		facility.setSafety(schoolSafety);
+		facility.setInfra(schoolInfra);
 		result.setFacility(facility);
 		
 		List<Rating> ratings = schoolSearchImpl.getSchoolRating(id);
@@ -253,6 +271,25 @@ public class SchoolSearchController {
 	{
 		CityNamesImp cityDao = new CityNamesImp();
 		return cityDao.getCityList();
+	}
+	
+	@GET
+	@Path("/compareschools.json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SchoolList> compareSchools(@QueryParam("schoolIds") String schoolIds )
+	{
+		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
+		List<Integer> integerSchoolIds = new ArrayList<Integer>();
+		try{
+			for(String s : schoolIds.split(",")) integerSchoolIds.add(Integer.valueOf(s.trim()));
+			if(integerSchoolIds.size() < 2 || integerSchoolIds.size() > 4 ) {
+				return null;
+			}
+		} catch(NumberFormatException e) {
+			return null;
+		}
+		
+		return schoolSearchImpl.compareSchools(integerSchoolIds);
 	}
 	
 }

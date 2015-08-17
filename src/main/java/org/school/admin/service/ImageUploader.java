@@ -45,7 +45,7 @@ public class ImageUploader {
 	public String s3Upload(String uploadedFileLocation) throws Exception {
 
 	    String url = "";
-	    AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials("xxx", "xxx"));
+	    AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials("xxx", "xxxx"));
 
 		try {
 		    File file = new File(uploadedFileLocation);

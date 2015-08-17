@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.persistence.sessions.serializers.JSONSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -201,9 +200,11 @@ public class SchoolSearchImpl {
 				+ " s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
 				+ " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
-				+ " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
-				+ " 0.0 as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,ci.standardType.id as standardId"
-				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
+				+ " s.schoolType as schoolType,s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+				+ " 0.0 as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
+				+ " ci.standardType.id as standardId,cf.campusSize as campusSize,au.name as unitName,"
+				+ " cf.totalStudents as students,(cf.totalMaleTeacher+cf.totalFemaleTeacher) as teachers"
+				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci JOIN ss.campusInfos cf JOIN cf.areaUnit au"
 				+ " WHERE s.schoolId = ss.id AND ci.standardType.id = "+standardId
 				+ " AND ss.id = "+schoolId
 		).setResultTransformer(Transformers.aliasToBean(SchoolList.class));
@@ -278,18 +279,26 @@ public class SchoolSearchImpl {
 					.setResultTransformer(Transformers.aliasToBean(RatingReviewData.class));
 			ratingReviewData = (RatingReviewData)query.uniqueResult();
 			
-			hql = "SELECT ur.id as id, ur.ratingCategoryType.id as catid, "
-					+ " ur.ratingCategoryType.categoryName as name, "
-					+ " ur.ratingCategoryType.image as image, "
-					+ " ur.rating as rating"
-					+ " FROM UserRating ur"
-					+ " WHERE ur.school.id = :schoolId AND ur.userRegistrationInfo.id = :userId";
-			query = session.createQuery(hql)
+			String sql = "SELECT "
+					+ " ur.id as id, rct.id as catid, rct.category_name as name, "
+					+ " rct.image as image, COALESCE(ur.rating, 0 ) as rating "
+					+ " FROM rating_category_type rct LEFT JOIN user_rating ur "
+					+ " ON( rct.id = ur.rating_category_type_id AND ur.user_id =:userId AND ur.school_id = :schoolId) "; 
+    
+			query = session.createSQLQuery(sql)
 					.setParameter("schoolId", schoolId)
 					.setParameter("userId", userId)
 					.setResultTransformer(Transformers.aliasToBean(Rating.class));
 			List<Rating> ratings = query.list();
+			
 			if(ratings.isEmpty() == false ) {
+				if( ratingReviewData == null) {
+					ratingReviewData = new RatingReviewData();
+					ratingReviewData.setSchoolId(schoolId);
+					ratingReviewData.setUserId(userId);
+					ratingReviewData.setReview("");
+					ratingReviewData.setTitle("");
+				}
 				ratingReviewData.setRatings(ratings);
 			}
 			session.close();
@@ -452,6 +461,7 @@ public class SchoolSearchImpl {
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getActivityCategoryItem().getId());
 			infraItem.setName(items.get(i).getActivityCategoryItem().getName());
+			infraItem.setImage(items.get(i).getActivityCategoryItem().getImage());
 			infraItems.add(infraItem);
 			cat_id = items.get(i).getActivityCategoryItem().getActivityCategory().getId();
 			cat_name = items.get(i).getActivityCategoryItem().getActivityCategory().getName();
@@ -494,6 +504,7 @@ public class SchoolSearchImpl {
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getSafetyCategoryItem().getId());
 			infraItem.setName(items.get(i).getSafetyCategoryItem().getName());
+			infraItem.setImage(items.get(i).getSafetyCategoryItem().getImage());
 			infraItems.add(infraItem);
 			
 			cat_id = items.get(i).getSafetyCategoryItem().getSafetyCategory().getId();
@@ -535,6 +546,7 @@ public class SchoolSearchImpl {
 			InfraItem infraItem = new InfraItem();
 			infraItem.setId(items.get(i).getInfrastructureCategoryItem().getId());
 			infraItem.setName(items.get(i).getInfrastructureCategoryItem().getName());
+			infraItem.setImage(items.get(i).getInfrastructureCategoryItem().getImage());
 			infraItem.setDescription(items.get(i).getDescription());
 			infraItem.setItemCount(items.get(i).getCountItemValue());
 			infraItem.setCharges(items.get(i).getCharges());
@@ -576,18 +588,33 @@ public class SchoolSearchImpl {
 		ArrayList<String> errors = new ArrayList<String>();
 		if (ratingData.getSchoolId() > 0 && ratingData.getUserId() > 0 && ratingData.getRatings().size() > 0) {
 			try{
+				String HQL = "SELECT ur.id as id, ur.ratingCategoryType.id as catid "
+						+ " FROM UserRating ur WHERE ur.school.id = :schoolId AND ur.userRegistrationInfo.id = :userId ";
+				HibernateUtil hibernateUtil = new HibernateUtil();
+				Session sess = hibernateUtil.openSession();
+				Query query = sess.createQuery(HQL).setResultTransformer(Transformers.aliasToBean(Rating.class))
+					.setParameter("schoolId", ratingData.getSchoolId())
+					.setParameter("userId", ratingData.getUserId());
+				List<Rating> ratings = query.list();
+				sess.close();
+				
 				School school = new School();
 				school.setId(ratingData.getSchoolId());
 				UserRegistrationInfo userRegistrationInfo = new UserRegistrationInfo();
 				userRegistrationInfo.setId(ratingData.getUserId());
 				SchoolRating schoolRating = new SchoolRating();
 				schoolRating.setSchool(school);
-				HibernateUtil hibernateUtil = new HibernateUtil();
 				Session session = hibernateUtil.openSession();
 				session.beginTransaction();
 				for(int i=0; i<ratingData.getRatings().size();i++){
 					UserRating userRating = new UserRating();
-					userRating.setId(ratingData.getRatings().get(i).getId());
+					if(ratings.isEmpty()==false) {
+						for(int j=0; j<ratings.size();j++){
+							if(ratingData.getRatings().get(i).getCatid() == ratings.get(j).getCatid()) {
+								userRating.setId(ratings.get(j).getId());
+							}
+						}
+					}
 					userRating.setSchool(school);
 					userRating.setUserRegistrationInfo(userRegistrationInfo);
 					userRating.setRating((float)ratingData.getRatings().get(i).getRating());
@@ -781,7 +808,7 @@ public class SchoolSearchImpl {
 			+ " s.localityName as localityName, "
 			+ " s.cityName as cityName, "
 			+ " s.rating as rating, "
-			+ " s.homeImage as homeImage, "
+			+ " s.logo as homeImage, "
 			+ " s.mediums as mediums, "
 			+ " s.boardName as boardName, "
 			+ " ci.vacantSeat as vacantSeat, "
@@ -933,6 +960,35 @@ public class SchoolSearchImpl {
         	responseMessage.setMessage("Failed to shortlist/delist school.");
 		}
 		return responseMessage;
+	}
+	
+	public List<SchoolList> compareSchools(List<Integer> schoolIds) {
+		
+		List<SchoolList> resultRaw = new ArrayList<SchoolList>();
+		if(schoolIds.isEmpty() == false) {
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			String hql = "SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
+						 + " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
+						 + " s.homeImage as homeImage,s.logo as logo, s.establishmentType as establishmentType,"
+					     + " s.streetName as streetName, s.pincode as pincode, s.localityName as localityName,"
+					     + " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
+					     + " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
+					     + " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+					     + " ci.totalFee as totalFee,  "
+					     + " ci.vacantSeat as seats,"
+						 + " ci.standardType.id as standardId "
+						 + " FROM SchoolSearch s, ClassInfo ci"
+						 + " WHERE s.schoolId = ci.school.id AND s.schoolId IN(:schoolIds)"
+						 + " GROUP BY s.schoolId";
+			
+			Query query = session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(SchoolList.class))
+					.setParameterList("schoolIds", schoolIds);
+			resultRaw = query.list();
+			session.close();
+		}
+		
+		return resultRaw;
 	}
 	
 }
