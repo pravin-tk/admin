@@ -173,6 +173,20 @@
 			</div>
 		</div>
 
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Standard alias name *</label>
+			<div class="col-sm-4">
+				<input type="text" name="stdaliasname" id="stdaliasname" />
+			</div>
+			<div class="col-sm-6">
+				<div class="tooltip custom-tool-tip right">
+					<div class="tooltip-arrow"></div>
+					<div class="tooltip-inner">This is the alias name of the class. It
+						might be used in the template of the email/SMS we send, so be
+						careful.</div>
+				</div>
+			</div>
+		</div>
 
 		 <div class="form-group">
 			<label class="col-sm-2 control-label">Stream *</label>
@@ -300,13 +314,13 @@
 			<label class="col-sm-2 control-label">Morning timing from</label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control"
-					placeholder="hh:mm:ss" id="morning_time_from">
+					placeholder="hh:mm am/pm" id="morning_time_from">
 			</div>
 			<div class="col-sm-4">
 				<label class="col-sm-2 control-label">to</label>
 				<div class="col-sm-4">
 					<input type="text" class="form-control"
-						placeholder="hh:mm:ss" id="morning_time_to">
+						placeholder="hh:mm am/pm" id="morning_time_to">
 				</div>
 			</div>
 		
@@ -316,13 +330,13 @@
 			<label class="col-sm-2 control-label">Evening timing from</label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control"
-					placeholder="hh:mm:ss" id="evening_time_from">
+					placeholder="hh:mm am/pm" id="evening_time_from">
 			</div>
 			<div class="col-sm-4">
 				<label class="col-sm-2 control-label">to</label>
 				<div class="col-sm-4">
 					<input type="text" class="form-control"
-						placeholder="hh:mm:ss" id="evening_time_to">
+						placeholder="hh:mm am/pm" id="evening_time_to">
 				</div>
 			</div>
 		</div>
@@ -456,6 +470,8 @@
 
 		<h4>Fee Details</h4>
 		(Fee, Fee Payment terms etc.)
+		
+				
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Fee payment term</label>
 				<div class="col-sm-6">
@@ -470,7 +486,8 @@
 					</div>
 				</div>
 			</div>
-		<div class="form-group">
+		
+				<div class="form-group">
 			<label class="col-sm-6 control-label">Fee Type *</label> <label
 				class="col-sm-2 control-label">Amount *</label>
 		</div>
@@ -519,7 +536,6 @@
 		
 		<!--xxx  -->
 		</div>
-
 				
 
 
@@ -541,38 +557,46 @@
 <script src="${baseUrl}/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
 $(document).on('click', 'a.open-deleteclassdialog', function(){
-	console.log("Hi11 "+$(this).data('id'));
 	$("#hdclassid").val($(this).data('id'));
 });
+$("#standard").change(function(){
+	 var txtname = $("#standard :selected").text();
+	// alert("selected std : "+txtname.trim());
+		$("#stdaliasname").val(txtname.trim());
+});
 $(function() {
-	$('#morning_time_to').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showSeconds: true,
-        showMeridian: false,
-       // defaultTime:'00:00:00'
-    });
-	$('#morning_time_from').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showSeconds: true,
-        showMeridian: false,
-       // defaultTime:'00:00:00'
-    });
-	$('#evening_time_to').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showSeconds: true,
-        showMeridian: false,
-       // defaultTime:'00:00:00'
-    });
-	$('#evening_time_from').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showSeconds: true,
-        showMeridian: false,
-    });
-	
+// 	$('#morning_time_to').timepicker({
+//         minuteStep: 1,
+//         secondStep: 5,
+//         showSeconds: true,
+//         showMeridian: false,
+//        // defaultTime:'00:00:00'
+//     });
+// 	$('#morning_time_from').timepicker({
+//         minuteStep: 1,
+//         secondStep: 5,
+//         showSeconds: true,
+//         showMeridian: false,
+//        // defaultTime:'00:00:00'
+//     });
+// 	$('#evening_time_to').timepicker({
+//         minuteStep: 1,
+//         secondStep: 5,
+//         showSeconds: true,
+//         showMeridian: false,
+//        // defaultTime:'00:00:00'
+//     });
+// 	$('#evening_time_from').timepicker({
+//         minuteStep: 1,
+//         secondStep: 5,
+//         showSeconds: true,
+//         showMeridian: false,
+//     });
+
+$('#morning_time_from').timepicker({'step': 15});
+	$('#morning_time_to').timepicker({'step': 15});
+	$('#evening_time_from').timepicker({'step': 15});
+	$('#evening_time_to').timepicker({'step': 15});
   });
 $("#admission_deadline").datepicker('setDate',new Date());
 $("#admission_from").datepicker('setDate',new Date());
@@ -667,20 +691,20 @@ $('#updateclassdetail').click(function() {
 			if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
 		}
 	}
-	 	  if($("#morning_time_from").val() == ""){
-				 $("#morning_time_from").val("00:00:00");
-			} 
-			if($("#morning_time_to").val() == ""){
-			 $("#morning_time_to").val("00:00:00");
-			}
-			if($("#evening_time_from").val() == "")
-			{
-				$("#evening_time_from").val("00:00:00");
-			}
-			if($("#evening_time_to").val() == "")
-			{
-				$("#evening_time_to").val("00:00:00");
-			}
+// 	 	  if($("#morning_time_from").val() == ""){
+// 				 $("#morning_time_from").val("00:00:00");
+// 			} 
+// 			if($("#morning_time_to").val() == ""){
+// 			 $("#morning_time_to").val("00:00:00");
+// 			}
+// 			if($("#evening_time_from").val() == "")
+// 			{
+// 				$("#evening_time_from").val("00:00:00");
+// 			}
+// 			if($("#evening_time_to").val() == "")
+// 			{
+// 				$("#evening_time_to").val("00:00:00");
+// 			}
 // 	if($('#admission_deadline').val() < $("#admission_to").val()){
 // 		if(msg != "") msg = msg+",Admission deadline date should be greater than admission to"; else msg = "Please select admission deadline";
 // 	}
@@ -964,10 +988,64 @@ $("#addClassDetail1").click(function(){
 		adminUser = {adminUser:{id:adminId}};
 		return adminUser;
 	}
+	function getTime(str){
+		   var a = str;
+		   var b = " ";
+		   var n = a.indexOf(":");
+		   var position = n+3;
+		   var output = [a.slice(0, position), b, a.slice(position)].join('');
+	  	   var time1 = output;
+    	   var hours = Number(time1.match(/^(\d+)/)[1]);
+		   var minutes = Number(time1.match(/:(\d+)/)[1]);
+		   var AMPM = time1.match(/\s(.*)$/)[1];
+		   
+		   if ((AMPM == "PM" || AMPM == "pm") && hours < 12) hours = hours + 12;
+		   if ((AMPM == "AM" || AMPM == "am") && hours == 12) hours = hours - 12;
+		   var sHours = hours.toString();
+		   var sMinutes = minutes.toString();
+		   if (hours < 10) sHours = "0" + sHours;
+		   if (minutes < 10) sMinutes = "0" + sMinutes;
+		   var time2 = sHours+":"+sMinutes+":00";
+		   return time2;
+		}
 	
+	function getSelectedStandard(){
+		var stdalias = $("#standard :selected").text();
+		return stdalias.trim();
+	}
 	function getClassInfoData () {
 		var school_id = <%out.print(school_id6);%>
 		var user_id = <%out.print(user_id6);%>
+		var mtimefrom = "";
+		var mtimeto =  "";
+		var etimefrom = "";
+		var etimeto = ""; 
+		if($("#morning_time_from").val() != ""){
+			mtimefrom =  getTime($("#morning_time_from").val());
+		}else{
+			mtimefrom = null;
+		}
+		if($("#morning_time_to").val() !=""){
+			mtimeto =  getTime($("#morning_time_to").val());
+		}else{
+			mtimeto = null;
+		}
+		if($("#evening_time_from").val() != ""){
+			etimefrom = getTime($("#evening_time_from").val());
+		}else{
+			etimefrom = null;
+		}
+		if($("#evening_time_to").val() != "" ){
+			etimeto = getTime($("#evening_time_to").val());
+		}else{
+			etimeto = null;
+		}
+		var stdalias; 
+		if( $("#stdaliasname").val() !=""){
+			stdalias =  $("#stdaliasname").val();
+		}else{
+			stdalias = getSelectedStandard();
+		}
 		if($("#class_id").val() >0) {
 			var classInfo = {
 					school:{id:school_id},
@@ -979,6 +1057,7 @@ $("#addClassDetail1").click(function(){
 					totalSeat : $("#total_seats").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
 					specialization : $("#specialization").val(),
+					stdAliasName : stdalias,
 					admissionProcess :  $("#admission_procedure").val(),
 					howToApply : $("#how_to_apply").val(),
 					admissionDeadline : new Date($("#admission_deadline").val()),
@@ -986,10 +1065,10 @@ $("#addClassDetail1").click(function(){
 					admissionTo : new Date($("#admission_to").val()),
 					feesPaymentTerm : $("#fee_pay_term").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
-					morningTimeFrom : $("#morning_time_from").val(),
-					morningTimeTo   : $("#morning_time_to").val(),
-					afternoonTimeFrom : $("#evening_time_from").val(),
-					afternoonTimeTo   : $("#evening_time_to").val(),
+					morningTimeFrom : mtimefrom,
+					morningTimeTo   :mtimeto,
+					afternoonTimeFrom : etimefrom,
+					afternoonTimeTo   : etimeto,
 					lastUpdatedBy : user_id
 					};
 		}else {
@@ -1001,6 +1080,7 @@ $("#addClassDetail1").click(function(){
 					totalSeat : $("#total_seats").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
 					specialization : $("#specialization").val(),
+					stdAliasName : stdalias,
 					admissionProcess :  $("#admission_procedure").val(),
 					howToApply : $("#how_to_apply").val(),
 					admissionDeadline : new Date($("#admission_deadline").val()),
@@ -1008,10 +1088,10 @@ $("#addClassDetail1").click(function(){
 					admissionTo : new Date($("#admission_to").val()),
 					feesPaymentTerm : $("#fee_pay_term").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
-					morningTimeFrom : $("#morning_time_from").val(),
-					morningTimeTo   : $("#morning_time_to").val(),
-					afternoonTimeFrom : $("#evening_time_from").val(),
-					afternoonTimeTo   : $("#evening_time_to").val(),
+					morningTimeFrom : mtimefrom,
+					morningTimeTo   :mtimeto,
+					afternoonTimeFrom : etimefrom,
+					afternoonTimeTo   : etimeto,
 					lastUpdatedBy : user_id
 					};
 		}
@@ -1026,6 +1106,9 @@ $("#addClassDetail1").click(function(){
 		var msg = "";
 		var strReason = "";
          var adminUser = "";
+         alert("Morning time from : "+$("#morning_time_from").val());
+         alert("Morning time to : "+$("#morning_time_to").val());
+         
 		if ($('#standard').val() == 0) {
 			if(msg != "") msg = msg+",Please select standard"; else  msg = "Please select standard";
 		}
@@ -1040,20 +1123,20 @@ $("#addClassDetail1").click(function(){
 			if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
 			}
 		}
-	 	  if($("#morning_time_from").val() == ""){
-				 $("#morning_time_from").val("00:00:00");
-			} 
-			if($("#morning_time_to").val() == ""){
-			 $("#morning_time_to").val("00:00:00");
-			}
-			if($("#evening_time_from").val() == "")
-			{
-				$("#evening_time_from").val("00:00:00");
-			}
-			if($("#evening_time_to").val() == "")
-			{
-				$("#evening_time_to").val("00:00:00");
-			}
+// 	 	  if($("#morning_time_from").val() == ""){
+// 				 $("#morning_time_from").val("00:00:00");
+// 			} 
+// 			if($("#morning_time_to").val() == ""){
+// 			 $("#morning_time_to").val("00:00:00");
+// 			}
+// 			if($("#evening_time_from").val() == "")
+// 			{
+// 				$("#evening_time_from").val("00:00:00");
+// 			}
+// 			if($("#evening_time_to").val() == "")
+// 			{
+// 				$("#evening_time_to").val("00:00:00");
+// 			}
 	   if(msg != "") {
 		       alert(msg);
 	   }else{
@@ -1115,6 +1198,7 @@ $("#addClassDetail1").click(function(){
 			}
 		$(".cancel-class-detail").click();
 	}
+	
 	function getClassList(school_id)
 	{
 		$.get("webapi/school/getclasslist/"+school_id,{},function(newdata){
@@ -1139,6 +1223,21 @@ $("#addClassDetail1").click(function(){
 		});
 		
 	}
+	 function hours_am_pm(time) {
+	        var hours = time[0] + time[1];
+	        var min = time[3] + time[4];
+	        if (hours < 12) {
+	            return hours+':'+min+'am';
+	        } else {
+	        	 if(hours == 12){
+	                 hours = hours;
+	             }else{
+	             hours=hours - 12;
+	             hours=(hours.length < 10) ? hours:'0'+hours;
+	             }
+	            return hours+':'+min +'pm';
+	        }
+	    }
 	function editClassInfo(id){
 		$.get('webapi/school/class_info/'+id,{},function(data){
 			$(".class-detail-new").show();
@@ -1154,13 +1253,38 @@ $("#addClassDetail1").click(function(){
 				}
 			}
 	    });
+ 		if(data.classInfo.stdAliasName != 'undefiend'){
+ 			$("#stdaliasname").val(data.classInfo.stdAliasName);
+ 		}
+		else
+ 			$("#stdaliasname").val("");
 		$('[name=teaching_approach]').val(data.classInfo.teachingApproachType.id);
 		$("#total_seats").val(data.classInfo.totalSeat);
 		$("#vacant_seats").val(data.classInfo.vacantSeat);
-		$("#morning_time_from").val(data.classInfo.morningTimeFrom);
-        $("#morning_time_to").val(data.classInfo.morningTimeTo);
-        $("#evening_time_from").val(data.classInfo.afternoonTimeFrom);
-        $("#evening_time_to").val(data.classInfo.afternoonTimeTo);
+		if(typeof data.classInfo.morningTimeFrom != 'undefined'){
+			var newtimefrom = hours_am_pm(data.classInfo.morningTimeFrom);
+			$("#morning_time_from").val(newtimefrom);
+		}else{
+			$("#morning_time_from").val("");
+		}
+		if(typeof data.classInfo.morningTimeTo != 'undefined'){
+			var newtimeto = hours_am_pm(data.classInfo.morningTimeTo);
+			 $("#morning_time_to").val(newtimeto);
+		}else{
+			 $("#morning_time_to").val("");
+		}
+		if(typeof data.classInfo.afternoonTimeFrom != 'undefined'){
+			var newtimeefrom = hours_am_pm(data.classInfo.afternoonTimeFrom);
+			 $("#evening_time_from").val(newtimeefrom);
+		}else{
+			$("#evening_time_from").val("");
+		}
+		if(typeof data.classInfo.afternoonTimeTo != 'undefined'){
+			var newtimeeto = hours_am_pm(data.classInfo.afternoonTimeTo);
+			 $("#evening_time_to").val(newtimeeto);
+		}else{
+			 $("#evening_time_to").val("");
+		}
 		$("#specialization").val(data.classInfo.specialization);
 		$("#ecriteria").val(data.classInfo.eligibilityCriteria);
 		$("#admission_procedure").val(data.classInfo.admissionProcess);

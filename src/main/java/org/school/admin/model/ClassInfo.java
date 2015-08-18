@@ -41,6 +41,7 @@ public class ClassInfo implements java.io.Serializable {
 	private String howToApply;
 	private String feesPaymentTerm;
 	private String specialization;
+	private String stdAliasName;
 	private Integer lastUpdatedBy;
 	private Date lastUpdatedOn;
 	private Short totalSeat;
@@ -63,8 +64,9 @@ public class ClassInfo implements java.io.Serializable {
 			String howToApply, String feesPaymentTerm, String specialization,
 			Integer lastUpdatedBy, Date lastUpdatedOn, Short totalSeat,
 			Short vacantSeat, Date admissionFrom, Date admissionTo,
-			Date admissionDeadline, Time morningTimeFrom, Time morningTimeTo,
-			Time afternoonTimeFrom, Time afternoonTimeTo, Double totalFee) {
+			String stdAliasName, Date admissionDeadline, Time morningTimeFrom,
+			Time morningTimeTo,	Time afternoonTimeFrom, Time afternoonTimeTo,
+			Double totalFee) {
 		this.school = school;
 		this.standardType = standardType;
 		this.streamType = streamType;
@@ -74,6 +76,7 @@ public class ClassInfo implements java.io.Serializable {
 		this.howToApply = howToApply;
 		this.feesPaymentTerm = feesPaymentTerm;
 		this.specialization = specialization;
+		this.stdAliasName = stdAliasName;
 		this.lastUpdatedBy = lastUpdatedBy;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.totalSeat = totalSeat;
@@ -295,5 +298,15 @@ public class ClassInfo implements java.io.Serializable {
 	public void setTotalFee(Double totalFee) {
 		this.totalFee = totalFee;
 	}
+    
+	@Column(name="std_alias_name")
+	public String getStdAliasName() {
+		return stdAliasName;
+	}
 
+	public void setStdAliasName(String stdAliasName) {
+		this.stdAliasName = stdAliasName;
+	}
+
+	
 }

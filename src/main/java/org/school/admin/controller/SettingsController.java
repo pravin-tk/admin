@@ -1,20 +1,12 @@
 package org.school.admin.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
-import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -23,8 +15,6 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.school.admin.dao.SettingsImpl;
 import org.school.admin.exception.ResponseMessage;
 import org.school.admin.model.Accessories;
@@ -52,13 +42,11 @@ import org.school.admin.model.SchoolCategoryType;
 import org.school.admin.model.SchoolClassificationType;
 import org.school.admin.model.SchoolType;
 import org.school.admin.model.SecondaryRole;
-import org.school.admin.model.StandardAlias;
 import org.school.admin.model.StandardType;
 import org.school.admin.model.StreamType;
 import org.school.admin.model.Subject;
 import org.school.admin.model.TeachingApproachType;
 import org.school.admin.service.ImageUploader;
-import org.school.admin.util.HibernateUtil;
 
 @Path("settings")
 public class SettingsController extends ResourceConfig {
@@ -1153,53 +1141,7 @@ public class SettingsController extends ResourceConfig {
 		return settings.updateStreamType(streamType);
 	}
 	
-	@POST
-	@Path("standard-alias/save")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage saveStandardAlias(
-			@FormParam("standard") Short stdId,
-			@FormParam("name") String name
-			)
-	{
-		StandardType standardType = new StandardType();
-		standardType.setId(stdId);
-		StandardAlias standardAlias = new StandardAlias();
-		if(name == null)
-		{
-			ResponseMessage responseMessage =new ResponseMessage();
-			responseMessage.setStatus(0);
-			responseMessage.setMessage("Please enter standard alias name");
-			return responseMessage;
-		}else{
-			standardAlias.setName(name);
-			standardAlias.setStandardType(standardType);
-		}
-		return new SettingsImpl().saveStandardAlias(standardAlias);
-	}
 	
-	@POST
-	@Path("/standard-alias/update")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateStandardAlias(
-			@FormParam("id") Short id,
-			@FormParam("standard") Short stdId,
-			@FormParam("name") String name
-	){
-		StandardAlias standardAlias = new StandardAlias();
-		
-		if(name !=null){
-			standardAlias.setId(id);
-			standardAlias.setName(name);
-			StandardType standardType = new StandardType();
-			standardType.setId(stdId);
-			standardAlias.setStandardType(standardType);
-			SettingsImpl settings = new SettingsImpl();
-			return settings.updateStandardAlias(standardAlias);
-		}else{
-			ResponseMessage responseMessage = new ResponseMessage();
-			responseMessage.setStatus(0);
-			responseMessage.setMessage("Please enter the standard alias name");
-			return responseMessage;
-		}
-	}
+	
+	
 }

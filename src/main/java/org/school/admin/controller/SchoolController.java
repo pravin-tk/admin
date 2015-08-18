@@ -687,6 +687,8 @@ public class SchoolController extends ResourceConfig {
 		/* save class accessory*/
 		Double totalFee = 0.0;
 		ClassInfo classInfo = classDetail.getClassInfo();
+		System.out.println("Moring Time from : "+classInfo.getMorningTimeFrom());
+		System.out.println("Morning Time to : "+classInfo.getMorningTimeTo());
 		Set<ClassAccessories> classAccessories = classDetail.getClassAccessories();
 		if(classAccessories.size()>0)
 		{
@@ -794,21 +796,21 @@ public class SchoolController extends ResourceConfig {
 		{
 			 time = classInfo.getMorningTimeFrom();
 			if(time == null)
-				classInfo.setMorningTimeFrom(new Time(Calendar.getInstance().getTime().getTime()));
+				classInfo.setMorningTimeFrom(time);
 		}
 		catch(NullPointerException e)
 		{
-			classInfo.setMorningTimeFrom(new Time(Calendar.getInstance().getTime().getTime()));
+			classInfo.setMorningTimeFrom(time);
 		}
 		try
 		{
 			 time = classInfo.getMorningTimeTo();
 			if(time ==null)
-				classInfo.setMorningTimeTo(new Time(Calendar.getInstance().getTime().getTime()));
+				classInfo.setMorningTimeTo(time);
 		}
 		catch(NullPointerException e)
 		{
-			classInfo.setMorningTimeTo(new Time(Calendar.getInstance().getTime().getTime()));
+			classInfo.setMorningTimeTo(time);
 		}
 		try
 		{
@@ -1005,6 +1007,7 @@ public class SchoolController extends ResourceConfig {
 			classInfo.setFeesPaymentTerm(classes.get(i).getFeesPaymentTerm());
 			classInfo.setHowToApply(classes.get(i).getHowToApply());
 			classInfo.setSpecialization(classes.get(i).getSpecialization());
+			classInfo.setStdAliasName(classes.get(i).getStdAliasName());
 			classInfo.setTotalSeat(classes.get(i).getTotalSeat());
 			classInfo.setVacantSeat(classes.get(i).getVacantSeat());
 			classInfo.setMorningTimeFrom(classes.get(i).getMorningTimeFrom());
