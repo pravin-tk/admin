@@ -42,7 +42,7 @@ public class Tehsil implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "district_id")
 	public District getDistrict() {
 		return this.district;

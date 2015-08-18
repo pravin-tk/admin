@@ -33,27 +33,30 @@ public class PrevStudentProfile implements java.io.Serializable {
 	private String achievements;
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
+	private String image;
 
 	public PrevStudentProfile() {
 	}
 
 	public PrevStudentProfile(School school, String name, String batch,
-			String achievements) {
+			String achievements,String image) {
 		this.school = school;
 		this.name = name;
 		this.batch = batch;
 		this.achievements = achievements;
+		this.image = image;
 	}
 
 	public PrevStudentProfile(School school, String name, String email,
 			String mobile, String batch, String achievements,
-			Date lastUpdatedOn, Integer lastUpdatedBy) {
+			String image,Date lastUpdatedOn, Integer lastUpdatedBy) {
 		this.school = school;
 		this.name = name;
 		this.email = email;
 		this.mobile = mobile;
 		this.batch = batch;
 		this.achievements = achievements;
+		this.image = image;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
@@ -141,6 +144,15 @@ public class PrevStudentProfile implements java.io.Serializable {
 
 	public void setLastUpdatedBy(Integer lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
+	}
+
+	@Column(name = "image", length = 200)
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Override

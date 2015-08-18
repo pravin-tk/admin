@@ -54,7 +54,7 @@ public class District implements java.io.Serializable {
 		this.id = id;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "state_id")
 	public State getState() {
 		return state;

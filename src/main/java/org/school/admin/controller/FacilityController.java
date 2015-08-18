@@ -72,7 +72,7 @@ public class FacilityController extends ResourceConfig {
 	@Path("/safetycatitem/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addSafetyCatItem(
-			@FormDataParam("tname") String name,
+			@FormDataParam("safetycatitemname") String name,
 			@FormDataParam("catId") int categoryId,
 			@FormDataParam("status") byte status,
 			@FormDataParam("safety-image")  InputStream is, 

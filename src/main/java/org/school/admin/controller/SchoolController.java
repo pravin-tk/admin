@@ -250,7 +250,8 @@ public class SchoolController extends ResourceConfig {
 		@FormParam("registration_id") int registration_id,
 		@FormParam("isFreeListing") Byte isFreeListing,
 		@FormParam("trialStartDate") String trial_StartDate,
-		@FormParam("trialEndDate") String trial_EndDate
+		@FormParam("trialEndDate") String trial_EndDate,
+		@FormParam("establishment") String year_of_establishment
 	){
 		Byte status = 0,promote =0;
 		
@@ -262,35 +263,36 @@ public class SchoolController extends ResourceConfig {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		School School = new School();
+		School school = new School();
 		
 		Locality locality = new Locality();
 		locality.setId(locality_id);
-		School.setName(school_name);
-		School.setAboutSchool(about_school);
-		School.setAlias(alias);
-		School.setCreatedBy(registration_id);
+		school.setName(school_name);
+		school.setAboutSchool(about_school);
+		school.setAlias(alias);
+		school.setCreatedBy(registration_id);
 		if(establishment_type == 1)
-		School.setEstablishmentType(true);
+			school.setEstablishmentType(true);
 		else
-			School.setEstablishmentType(false);
-		School.setLandmark(landmark);
-		School.setLatitude(latitude);
-		School.setLocality(locality);
-		School.setLongitude(longitude);
-		School.setPincode(pincode);
-		School.setPlotNo(plot_no);
-		School.setStreetName(street_name);
-		School.setStatus(status);
-		School.setTagLine(tag_line);
-		School.setPromote(promote);
-		School.setIsFreelisting(isFreeListing);
-		School.setTrialStartDate(trialStartDate);
-		School.setTrialEndDate(trialEndDate);
+			school.setEstablishmentType(false);
+		school.setLandmark(landmark);
+		school.setLatitude(latitude);
+		school.setLocality(locality);
+		school.setLongitude(longitude);
+		school.setPincode(pincode);
+		school.setPlotNo(plot_no);
+		school.setStreetName(street_name);
+		school.setStatus(status);
+		school.setTagLine(tag_line);
+		school.setPromote(promote);
+		school.setYearOfEstablishment(year_of_establishment);
+		school.setIsFreelisting(isFreeListing);
+		school.setTrialStartDate(trialStartDate);
+		school.setTrialEndDate(trialEndDate);
 		SchoolService schoolService = new SchoolService();
 		
  
-		return schoolService.addSchool(School,boardId);
+		return schoolService.addSchool(school,boardId);
 	}
 	
 	@POST
@@ -538,14 +540,17 @@ public class SchoolController extends ResourceConfig {
 	@Path("prestudent")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PrevStudentProfileList> savePreStudentProfile(
-		@FormParam("school_id") int school_id,
-		@FormParam("user_id") int user_id,
-		@FormParam("name") String name,
-		@FormParam("email") String email,
-		@FormParam("mobile") String mobile,
-		@FormParam("batch") String batch,
-		@FormParam("achievements") String achievements
+		@FormDataParam("school_id") int school_id,
+		@FormDataParam("user_id") int user_id,
+		@FormDataParam("osname") String name,
+		@FormDataParam("osemail") String email,
+		@FormDataParam("osmobile_no") String mobile,
+		@FormDataParam("osbatch") String batch,
+		@FormDataParam("osachievements") String achievements,
+		@FormDataParam("prestudentimage") InputStream is, 
+		@FormDataParam("prestudentimage") FormDataContentDisposition header
 	){
+		String image_name = "";
 		School school = new School();
 		school.setId(school_id);
 		PrevStudentProfile prevStudentProfile = new PrevStudentProfile();
@@ -558,7 +563,22 @@ public class SchoolController extends ResourceConfig {
 		prevStudentProfile.setAchievements(achievements);
 		prevStudentProfile.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));;
 		
-		System.out.println(prevStudentProfile);
+		try{
+			if(header.getFileName() != null || header.getFileName().trim().length() !=0){
+			    image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
+				image_name = image_name+header.getFileName();
+				image_name = batch+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+				image_name = "milestones/"+image_name;
+				String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+				this.imageUploader.writeToFile(is, uploadedFileLocation);
+				prevStudentProfile.setImage(image_name);
+		}else{
+			prevStudentProfile.setImage(image_name);
+		}
+		}
+		catch(Exception e){
+			prevStudentProfile.setImage(image_name);
+		}
 		
 		PrevStudentProfileDAO prevStudentProfileDAO = new PrevStudentProfileDAO();
 		prevStudentProfileDAO.savePreStudentProfile(prevStudentProfile);
@@ -571,15 +591,17 @@ public class SchoolController extends ResourceConfig {
 	@Path("prestudent_update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PrevStudentProfileList> updatePreStudentProfile(
-		@FormParam("id") int id,
-		@FormParam("school_id") int school_id,
-		@FormParam("user_id") int user_id,
-		@FormParam("name") String name,
-		@FormParam("email") String email,
-		@FormParam("mobile") String mobile,
-		@FormParam("batch") String batch,
-		@FormParam("achievements") String achievements,
-		@FormParam("strReason") String reason
+		@FormDataParam("osId") int id,
+		@FormDataParam("school_id") int school_id,
+		@FormDataParam("user_id") int user_id,
+		@FormDataParam("osname") String name,
+		@FormDataParam("osemail") String email,
+		@FormDataParam("osmobile_no") String mobile,
+		@FormDataParam("osbatch") String batch,
+		@FormDataParam("osachievements") String achievements,
+		@FormDataParam("strReason") String reason,
+		@FormDataParam("prestudentimage") InputStream is, 
+		@FormDataParam("prestudentimage") FormDataContentDisposition header
 	){
 		School school = new School();
 		school.setId(school_id);
@@ -608,8 +630,23 @@ public class SchoolController extends ResourceConfig {
 		if(achievements != null || achievements.trim().length() !=0)
 		prevStudentProfile.setAchievements(achievements);
 		prevStudentProfile.setLastUpdatedOn(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));;
-		
-		System.out.println(prevStudentProfile);
+		String image_name = "";
+		try{
+			if(header.getFileName() != null || header.getFileName().trim().length() !=0){
+			    image_name = name.replaceAll("([^a-zA-Z]|\\s)+", " ");
+				image_name = image_name+header.getFileName();
+				image_name = batch+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+				image_name = "milestones/"+image_name;
+				String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+				this.imageUploader.writeToFile(is, uploadedFileLocation);
+				prevStudentProfile.setImage(image_name);
+		}else{
+			prevStudentProfile.setImage(image_name);
+		}
+		}
+		catch(Exception e){
+			prevStudentProfile.setImage(image_name);
+		}
 		
 		PrevStudentProfileDAO prevStudentProfileDAO = new PrevStudentProfileDAO();
 		prevStudentProfileDAO.updatePreStudentProfile(prevStudentProfile,reason);
@@ -1100,6 +1137,7 @@ public class SchoolController extends ResourceConfig {
 			@FormDataParam("image") FormDataContentDisposition header
 	){
 		Short zero = 0;
+		String image_name = "";
 		ResponseMessage msg = new ResponseMessage();
 		List<String> milestoneTitle = new ArrayList<String>();
 		List<String> milestoneDesc = new ArrayList<String>();
@@ -1138,13 +1176,22 @@ public class SchoolController extends ResourceConfig {
 			return msg;
 		} else {
 			schoolTimeline.setId(msg.getStatus());
-			String image_name = schoolTimeline.getTitle().replaceAll("([^a-zA-Z]|\\s)+", " ");
-			image_name = image_name+header.getFileName();
-			image_name = msg.getStatus()+"_"+image_name.replaceAll(" ", "_").toLowerCase();
-			image_name = "milestones/"+image_name;
-			String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
-			this.imageUploader.writeToFile(is, uploadedFileLocation);
-			schoolTimeline.setImage(image_name);
+			try{
+				if(header.getFileName() != null || header.getFileName().trim().length() !=0){
+				    image_name = schoolTimeline.getTitle().replaceAll("([^a-zA-Z]|\\s)+", " ");
+					image_name = image_name+header.getFileName();
+					image_name = msg.getStatus()+"_"+image_name.replaceAll(" ", "_").toLowerCase();
+					image_name = "milestones/"+image_name;
+					String uploadedFileLocation = this.context.getInitParameter("logo_url") + image_name;
+					this.imageUploader.writeToFile(is, uploadedFileLocation);
+					schoolTimeline.setImage(image_name);
+			}else{
+				schoolTimeline.setImage(image_name);
+			}
+			}
+			catch(Exception e){
+				schoolTimeline.setImage(image_name);
+			}
 			List<SchoolTimelineMilestone> timelineMilestones = new ArrayList<SchoolTimelineMilestone>();
 			if(schoolDAOImp.updateSchoolTimelineImage(msg.getStatus(),image_name)){
 				for(int k = 0; k < milestoneTitle.size(); k++){

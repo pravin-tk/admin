@@ -124,7 +124,7 @@
                     </div>
                </form>
  		</div>
-    </div>
+    
     <!-- /Right main content -->
 <%@ include file="../footer.jsp" %>
 <script src="${baseUrl}/js/jquery.form.js"></script>
@@ -157,10 +157,10 @@ $("#updatesafetycatitem").click(function(){
 	$("#updatesafetycatform").ajaxSubmit(options);;
 });
 function showUpdateSafetyCatRequest(formData, jqForm, options){
-	var strcat = $.trim($("#tname").val());
+	var strcat = $.trim($("#txtname").val());
 	if (strcat == "") {
 		$("#aierror").html("Category item name cannot be empty");
-		$("#tname").addClass('has-error');
+		$("#txtname").addClass('has-error');
 	} else if ($("#catId").val() == "") {
 		$("#aierror").html("Category not selected");
 		$("#catId").addClass('has-error');

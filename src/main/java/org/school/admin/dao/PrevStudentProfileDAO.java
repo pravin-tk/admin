@@ -73,6 +73,9 @@ public class PrevStudentProfileDAO {
 			
 			//new SchoolDAOImp().saveSchoolLog(new SchoolLog(adminUser, school, "", beforeUpdate, new Date(), new Date()));
 		}
+		if(prevStudentProfile.getImage() == "" || prevStudentProfile.getImage() == null){
+			prevStudentProfile.setImage(getPrevStudentImage(prevStudentProfile.getId()));
+		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
@@ -111,6 +114,7 @@ public class PrevStudentProfileDAO {
 		query.setParameter("school_id", schoolId);
 		
 		List<PrevStudentProfile> prevStudentProfileList = query.list();
+		session.close();
 		List<PrevStudentProfileList> newListofStudentProfile = new ArrayList<PrevStudentProfileList>();
 		for(int i =0 ;i < prevStudentProfileList.size(); i++)
 		{
@@ -121,9 +125,10 @@ public class PrevStudentProfileDAO {
 			prevStudentProfile.setAchievements(prevStudentProfileList.get(i).getAchievements());
 			prevStudentProfile.setBatch(prevStudentProfileList.get(i).getBatch());
 			prevStudentProfile.setName(prevStudentProfileList.get(i).getName());
+			prevStudentProfile.setImage(prevStudentProfileList.get(i).getImage());
 			newListofStudentProfile.add(prevStudentProfile);
 		}
-		session.close();
+		
 		return newListofStudentProfile;
 	}
 	
@@ -147,6 +152,7 @@ public class PrevStudentProfileDAO {
 			prevStudentProfile.setAchievements(prevStudentProfileList.get(i).getAchievements());
 			prevStudentProfile.setBatch(prevStudentProfileList.get(i).getBatch());
 			prevStudentProfile.setName(prevStudentProfileList.get(i).getName());
+			prevStudentProfile.setImage(prevStudentProfileList.get(i).getImage());
 			newListofStudentProfile.add(prevStudentProfile);
 		}
 		session.close();
@@ -205,5 +211,15 @@ public class PrevStudentProfileDAO {
 		sessionSchoolLog.save(schoolLog);
 		sessionSchoolLog.getTransaction().commit();
 		sessionSchoolLog.close();
+	}
+	public String getPrevStudentImage(int id){
+		String hql = "from PrevStudentProfile where id =:id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<PrevStudentProfile> image = query.list();
+		session.close();
+		return image.get(0).getImage();
 	}
 }

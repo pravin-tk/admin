@@ -54,7 +54,7 @@ public class City implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "tehsil_id")
 	public Tehsil getTehsil() {
 		return this.tehsil;

@@ -42,17 +42,15 @@
 	<context-param>
 		<param-name>s3_base_url</param-name>
 		<param-value>http://192.168.1.78:8080/edbuddy/images/</param-value>
-<!--  		<param-value>https://s3-ap-southeast-1.amazonaws.com/edbuddy/images/</param-value>  -->
+<!--   		<param-value>https://s3-ap-southeast-1.amazonaws.com/edbuddy/images/</param-value>   -->
 	</context-param>
-<!-- <context-param> -->
+<!-- 	<context-param> -->
 <!-- 		<param-name>logo_url</param-name> -->
 <!-- 		<param-value>C:/pankaj/edbuddy/src/main/webapp/images/</param-value> -->
-
 <!-- 	</context-param> -->
 <!-- 	<context-param> -->
 <!-- 		<param-name>home_url</param-name> -->
 <!-- 		<param-value>C:/pankaj/edbuddy/src/main/webapp/images/</param-value> -->
-
 <!-- 	</context-param> -->
 <!-- 	<context-param> -->
 <!-- 		<param-name>s3_base_url</param-name> -->

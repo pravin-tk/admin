@@ -111,7 +111,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Name</label>
 						<div class="col-sm-2">
-							<input type="text" class="form-control" name="tname" id="tname"
+							<input type="text" class="form-control" name="safetycatitemname" id="safetycatitemname"
 								placeholder="eg. Identity Card, Lab Coat">
 						</div>
 						<div class="col-sm-8">
@@ -195,37 +195,37 @@
 <%@ include file="../footer.jsp"%>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script type="text/javascript">
-	function saveCatItem() {
-		var strcat = $.trim($("#tname").val());
-		if (strcat == "") {
-			$("#aerror").html("Item name cannot be empty");
-			$("#tname").addClass('has-error');
-		} else if ($("#catId").val() == "") {
-			$("#aerror").html("Category not selected");
-			$("#catId").addClass('has-error');
-		} else {
-			$
-					.post(
-							"../webapi/facility/safetycatitem/save",
-							{
-								name : $("#tname").val(),
-								categoryId : $("#catId").val(),
-								desc : $("#desc").val(),
-								status : $('input[name=status]:checked').val()
-							},
-							function(data) {
-								if ($("#catId").val() > 0) {
-									if (data.status == 1)
-										window.location.href = "${baseUrl}/facility/safety-cat-item.jsp?scat_id="
-												+ $("#catId").val();
-									else
-										alert(data.message);
-								} else {
-									alert("Select Category");
-								}
-							});
-		}
-	}
+// 	function saveCatItem() {
+// 		var strcat = $.trim($("#tname").val());
+// 		if (strcat == "") {
+// 			$("#aerror").html("Item name cannot be empty");
+// 			$("#tname").addClass('has-error');
+// 		} else if ($("#catId").val() == "") {
+// 			$("#aerror").html("Category not selected");
+// 			$("#catId").addClass('has-error');
+// 		} else {
+// 			$
+// 					.post(
+// 							"../webapi/facility/safetycatitem/save",
+// 							{
+// 								name : $("#tname").val(),
+// 								categoryId : $("#catId").val(),
+// 								desc : $("#desc").val(),
+// 								status : $('input[name=status]:checked').val()
+// 							},
+// 							function(data) {
+// 								if ($("#catId").val() > 0) {
+// 									if (data.status == 1)
+// 										window.location.href = "${baseUrl}/facility/safety-cat-item.jsp?scat_id="
+// 												+ $("#catId").val();
+// 									else
+// 										alert(data.message);
+// 								} else {
+// 									alert("Select Category");
+// 								}
+// 							});
+// 		}
+// 	}
 	
 	$("#save-safety-cat-item").click(function(){
 		var options = {
@@ -238,10 +238,10 @@
 			$('#safetycatform').ajaxSubmit(options);
 	});
     function showSafetyCatRequest(formData, jqForm, options){
-		var strcat = $.trim($("#tname").val());
+		var strcat = $.trim($("#safetycatitemname").val());
 		if (strcat == "") {
 			$("#aierror").html("Category item name cannot be empty");
-			$("#tname").addClass('has-error');
+			$("#safetycatitemname").addClass('has-error');
 		} else if ($("#catId").val() == "") {
 			$("#aierror").html("Category not selected");
 			$("#catId").addClass('has-error');

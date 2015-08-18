@@ -26,7 +26,6 @@
 <%		int main_cat_id = 0;
       	for(int k=0;k<infrastructureCategories.size();k++) 	{ // for
       		InfrastructureCategoryItem infrastructureCategory = infrastructureCategories.get(k);
-   				
    				String checked = "";
    				Byte isOptional = 0;
    				Integer countItemValue = 0;

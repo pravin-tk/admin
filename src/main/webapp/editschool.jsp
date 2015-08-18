@@ -1,4 +1,11 @@
 
+<%@page import="org.school.admin.model.Tehsil"%>
+<%@page import="org.school.admin.dao.TehsilImpl"%>
+<%@page import="org.school.admin.model.District"%>
+<%@page import="org.school.admin.dao.DistrictImpl"%>
+<%@page import="org.school.admin.model.State"%>
+<%@page import="org.school.admin.service.StateService"%>
+<%@page import="org.school.admin.dao.StateImp"%>
 <%@page import="org.school.admin.dao.SchoolDetailDAOImpl"%>
 <%@page import="org.school.admin.service.BoardService"%>
 <%@page import="org.school.admin.model.BoardType"%>
@@ -35,10 +42,24 @@
 	SchoolService schoolService = new SchoolService();
 	List<School> schoolList = schoolService.getSchoolDetails(school_id);
 	School School = schoolList.get(0);
+	
+	StateService stateService = new StateService();
+	List<State> state_list = stateService.getAllStates();
+	
+	DistrictImpl districtImpl = new DistrictImpl();
+	List<District> district_list = districtImpl.getAllDistrictByStateId(School.getLocality().getCity().getTehsil().getDistrict().getState().getId());
+	
+	List<Tehsil> tehsil_list = new TehsilImpl().getAllTehsilByDistrictId(School.getLocality().getCity().getTehsil().getDistrict().getId());
+	
+    
+	
+	
 	CityNamesService cityService = new CityNamesService();
-	List<City> city_list = cityService.getAllCityNames();
+	List<City> city_list = cityService.getAllCityNamesByTehsilId(School.getLocality().getCity().getTehsil().getId());
+	
 	LocalityService localityService = new LocalityService();
 	List<Locality> locality_list = localityService.getLocalityName(School.getLocality().getCity().getId());
+	
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	Date trial_StartDate = School.getTrialStartDate();
 	Date trial_EndDate = School.getTrialEndDate();
@@ -111,7 +132,59 @@
                                     <input data-brackets-id="3402" type="text" class="form-control" name="plot_no" id="plot_no" value="<%out.print(School.getPlotNo());%>" placeholder="Plot No.">
                                 </div>
                             </div>
+                           
                             <div class="form-group">
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">State</label>
+                                <div class="col-sm-4">
+                                    <select name="state_id" id="state_id" class="form-control">
+                                        <option value="">Select State</option>
+                                        <%
+                                        int state_size =state_list.size(); 
+                                        for(int i=0; i < state_size; i++){
+                                        	String selected = "";
+                                        	if(School.getLocality().getCity().getTehsil().getDistrict().getState().getId() == state_list.get(i).getId())
+                                        		selected = "selected";
+                                        	out.print("<option value='"+state_list.get(i).getId()+"' "+selected+">"+state_list.get(i).getName()+"</option>");
+                                        }
+                                        %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">District</label>
+                                <div class="col-sm-4">
+                                    <select name="district_id" id="district_id" class="form-control">
+                                        <option value="">Select District</option>
+                                        <%
+                                        int district_size = district_list.size(); 
+                                        for(int i=0; i < district_size; i++){
+                                        	String selected = "";
+                                        	if(School.getLocality().getCity().getTehsil().getDistrict().getId() == district_list.get(i).getId())
+                                        		selected = "selected";
+                                        	out.print("<option value='"+district_list.get(i).getId()+"' "+selected+">"+district_list.get(i).getName()+"</option>");
+                                        }
+                                        %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">Tehsil</label>
+                                <div class="col-sm-4">
+                                    <select name="tehsil_id" id="tehsil_id" class="form-control">
+                                        <option value="">Select City</option>
+                                        <%
+                                        int tehsil_size = tehsil_list.size(); 
+                                        for(int i=0; i < tehsil_size; i++){
+                                        	String selected = "";
+                                        	if(School.getLocality().getCity().getTehsil().getId() == tehsil_list.get(i).getId())
+                                        		selected = "selected";
+                                        	out.print("<option value='"+tehsil_list.get(i).getId()+"' "+selected+">"+tehsil_list.get(i).getName()+"</option>");
+                                        }
+                                        %>
+                                    </select>
+                                </div>
+                            </div>
+                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom">City</label>
                                 <div class="col-sm-4">
                                     <select name="city_id" id="city_id" class="form-control">

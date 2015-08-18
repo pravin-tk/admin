@@ -165,7 +165,6 @@
 	};
 
 	$("#savetimeline").click(function() {
-		console.log("test");
 		var options = {
 	 			target : '#error-school-timeline', // target element(s) to be updated with server response 
 	 			beforeSubmit : showTimeLineRequest, // pre-submit callback 

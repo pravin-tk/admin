@@ -55,6 +55,7 @@ public class School implements java.io.Serializable {
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
 	private String homeImage;
+	private String yearOfEstablishment;
 	private Set<ClassInfo> classInfos = new HashSet<ClassInfo>(0);
 	private Set<CampusInfo> campusInfos = new HashSet<CampusInfo>(0);
 	private Set<SchoolMedium> schoolMediums = new HashSet<SchoolMedium>(0);
@@ -71,7 +72,7 @@ public class School implements java.io.Serializable {
 	public School(Locality locality, String name, String plotNo,
 			String streetName, String landmark, String pincode,
 			String longitude, String latitude, String alias, String tagLine,
-			String aboutSchool, boolean establishmentType,Byte promote) {
+			String aboutSchool, boolean establishmentType,Byte promote,String yearOfEstablishment) {
 		this.locality = locality;
 		this.name = name;
 		this.plotNo = plotNo;
@@ -85,6 +86,7 @@ public class School implements java.io.Serializable {
 		this.aboutSchool = aboutSchool;
 		this.establishmentType = establishmentType;
 		this.promote = promote;
+		this.yearOfEstablishment = yearOfEstablishment;
 	}
 
 	public School(Locality locality, String name, String plotNo,
@@ -93,7 +95,9 @@ public class School implements java.io.Serializable {
 			String aboutSchool, String logo, boolean establishmentType,
 			byte status, Date liveDate, Integer createdBy,
 			Date lastUpdatedOn, Integer lastUpdatedBy,Byte promote,
-			Set<ClassInfo> classInfos,Set<CampusInfo> campusInfos,
+			String yearOfEstablishment,
+			Set<ClassInfo> classInfos,
+			Set<CampusInfo> campusInfos,
 			Set<SchoolMedium> schoolMediums, Set<SchoolTimeline> schoolTimelines, Set<AppliedSchool> appliedSchools, Set<ShortListedSchool> shortListedSchools) {
 		this.locality = locality;
 		this.name = name;
@@ -114,6 +118,7 @@ public class School implements java.io.Serializable {
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
 		this.promote = promote;
+		this.yearOfEstablishment = yearOfEstablishment;
 		this.classInfos = classInfos;
 		this.campusInfos = campusInfos;
 		this.schoolMediums = schoolMediums;
@@ -335,7 +340,15 @@ public class School implements java.io.Serializable {
 	public void setPromote(Byte promote) {
 		this.promote = promote;
 	}
-	
+	@Column(name = "year_of_establishment")
+	public String getYearOfEstablishment() {
+		return yearOfEstablishment;
+	}
+
+	public void setYearOfEstablishment(String yearOfEstablishment) {
+		this.yearOfEstablishment = yearOfEstablishment;
+	}
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
 	public Set<SchoolMedium> getSchoolMediums() {
 		return this.schoolMediums;
