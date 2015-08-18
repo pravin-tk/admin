@@ -80,7 +80,7 @@ public class SchoolSearchUserService {
 			} else {
 				if (userRegistrationInfo.getPassword().equals(fetchedUser.getPassword())) {
 					if(fetchedUser.getImage().trim().length() <= 0){
-						fetchedUser.setImage("avatar/avatar.jpg");
+						fetchedUser.setImage(img_path+"avatar/avatar.jpg");
 					} else {
 						fetchedUser.setImage(img_path+fetchedUser.getImage());
 					}
@@ -103,19 +103,19 @@ public class SchoolSearchUserService {
 				userRegistrationInfo.setId(responseMessage.getId());
 				try{
 					if(userRegistrationInfo.getImage().trim().length() <= 0){
-						userRegistrationInfo.setImage("avatar/avatar.jpg");
+						userRegistrationInfo.setImage(img_path+"avatar/avatar.jpg");
 					} else {
 						userRegistrationInfo.setImage(img_path+userRegistrationInfo.getImage());
 					}
 				} catch(Exception e) {
-					userRegistrationInfo.setImage("avatar/avatar.jpg");
+					userRegistrationInfo.setImage(img_path+"avatar/avatar.jpg");
 				}
 				responseMessage.setData(userRegistrationInfo);
 			} else {
 				try{
 					fetchedUser.setImage(img_path+fetchedUser.getImage());
 				} catch(Exception e){
-					fetchedUser.setImage("avatar/avatar.jpg");
+					fetchedUser.setImage(img_path+"avatar/avatar.jpg");
 				}
 				responseMessage.setId(fetchedUser.getId());
 				responseMessage.setData(fetchedUser);
@@ -138,8 +138,33 @@ public class SchoolSearchUserService {
 	}
 
 	public ResponseMessage activateUser(String email, String password) {
+		img_path = this.context.getInitParameter("s3_base_url");
+		ResponseMessage responseMessage = new ResponseMessage();
+		ArrayList<String> errors = new ArrayList<String>();
 		SchoolSearchUserDao schoolSearchUserDao = new SchoolSearchUserDao();
-		return schoolSearchUserDao.updatePassword(email,password);
+		UserRegistrationInfo userRegistrationInfo = schoolSearchUserDao.getUserByEmailId(email);
+		if (userRegistrationInfo != null) {
+			try{
+				if(userRegistrationInfo.getImage().trim().length() <= 0){
+					userRegistrationInfo.setImage(img_path+"avatar/avatar.jpg");
+				} else {
+					userRegistrationInfo.setImage(img_path+userRegistrationInfo.getImage());
+				}
+			} catch(Exception e) {
+				userRegistrationInfo.setImage(img_path+"avatar/avatar.jpg");
+			}
+			schoolSearchUserDao.updatePassword(email,password);
+			responseMessage.setData(userRegistrationInfo);
+			responseMessage.setId(userRegistrationInfo.getId());
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Profile activated successfully.");
+		} else {
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User not registered with us.");
+			errors.add("Invalid user.");
+			responseMessage.setErrors(errors);
+		}
+		return responseMessage;
 	}
 	
 	public Boolean resetUserPassword(String email) {
