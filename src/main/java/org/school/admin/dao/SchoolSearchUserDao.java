@@ -266,9 +266,7 @@ public class SchoolSearchUserDao {
         }
 	}
 
-	public ResponseMessage updatePassword(String email, String password) {
-		ResponseMessage responseMessage = new ResponseMessage();
-		ArrayList<String> errors = new ArrayList<String>();
+	public String updatePassword(String email, String password) {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		String updateQuery = "UPDATE UserRegistrationInfo set"
 				+" password='"+password+"'"
@@ -280,19 +278,8 @@ public class SchoolSearchUserDao {
 		newQuery.executeUpdate();
 		newsession.getTransaction().commit();
 		newsession.close();
-		UserRegistrationInfo userRegistrationInfo = this.getUserByEmailId(email);
-		if (userRegistrationInfo != null) {
-			responseMessage.setData(userRegistrationInfo);
-			responseMessage.setId(userRegistrationInfo.getId());
-			responseMessage.setStatus(1);
-			responseMessage.setMessage("Profile activated successfully.");
-		} else {
-			responseMessage.setStatus(0);
-			responseMessage.setMessage("User not registered with us.");
-			errors.add("Invalid user.");
-			responseMessage.setErrors(errors);
-		}
-		return responseMessage;
+		
+		return "Updated successfully";
 	}
 	
 	public Boolean resetPassword(String email, String password) {
