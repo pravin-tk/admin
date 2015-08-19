@@ -3,9 +3,7 @@
 <%@page import="java.util.List"%>
 
 <%List<School> schoolPendingList = new SchoolDAOImp().getSchoolPendingList((Integer)session.getAttribute("cityid"));
-out.print("<script>"
-		+"console.log('"+schoolPendingList.size()+"');"
-		+"</script>");
+
    if(schoolPendingList.size()>0)
    {
 %>

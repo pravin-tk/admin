@@ -49,10 +49,7 @@ public class ClassInfo implements java.io.Serializable {
 	private Date admissionFrom;
 	private Date admissionTo;
 	private Date admissionDeadline;
-	private Time morningTimeFrom;
-	private Time morningTimeTo;
-	private Time afternoonTimeFrom;
-	private Time afternoonTimeTo;
+	
 	private Double totalFee;
 
 	public ClassInfo() {
@@ -84,10 +81,6 @@ public class ClassInfo implements java.io.Serializable {
 		this.admissionFrom = admissionFrom;
 		this.admissionTo = admissionTo;
 		this.admissionDeadline = admissionDeadline;
-		this.morningTimeFrom = morningTimeFrom;
-		this.morningTimeTo = morningTimeTo;
-		this.afternoonTimeFrom = afternoonTimeFrom;
-		this.afternoonTimeTo = afternoonTimeTo;
 		this.totalFee = totalFee;
 	}
 
@@ -254,42 +247,7 @@ public class ClassInfo implements java.io.Serializable {
 	public void setAdmissionDeadline(Date admissionDeadline) {
 		this.admissionDeadline = admissionDeadline;
 	}
-	@Column(name = "morning_time_from", length = 8)
-	public Time getMorningTimeFrom() {
-		return this.morningTimeFrom;
-	}
-
-	public void setMorningTimeFrom(Time morningTimeFrom) {
-		this.morningTimeFrom = morningTimeFrom;
-	}
-
-	@Column(name = "morning_time_to", length = 8)
-	public Time getMorningTimeTo() {
-		return this.morningTimeTo;
-	}
-
-	public void setMorningTimeTo(Time morningTimeTo) {
-		this.morningTimeTo = morningTimeTo;
-	}
-
-	@Column(name = "afternoon_time_from", length = 8)
-	public Time getAfternoonTimeFrom() {
-		return this.afternoonTimeFrom;
-	}
-
-	public void setAfternoonTimeFrom(Time afternoonTimeFrom) {
-		this.afternoonTimeFrom = afternoonTimeFrom;
-	}
-
-	@Column(name = "afternoon_time_to", length = 8)
-	public Time getAfternoonTimeTo() {
-		return this.afternoonTimeTo;
-	}
-
-	public void setAfternoonTimeTo(Time afternoonTimeTo) {
-		this.afternoonTimeTo = afternoonTimeTo;
-	}
-
+		
 	@Column(name= "total_fee")
 	public Double getTotalFee() {
 		return totalFee;

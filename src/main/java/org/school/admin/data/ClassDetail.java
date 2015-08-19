@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.school.admin.model.AdminUser;
 import org.school.admin.model.ClassAccessories;
+import org.school.admin.model.ClassBatchTime;
 import org.school.admin.model.ClassFee;
 import org.school.admin.model.ClassInfo;
 import org.school.admin.model.ClassSection;
@@ -14,10 +15,11 @@ public class ClassDetail {
 	private ClassInfo classInfo;
 	private ClassSection classSection;
 	private String strReason;
-	//private AdminUser adminUser;
+	private Set<ClassBatchTime> classBatchTime;
 	private Set<ClassFee> classFee;
 	private Set<ClassAccessories> classAccessories;
 	private Set<ClassSubjects> classSubjects;
+	
 	public ClassInfo getClassInfo() {
 		return classInfo;
 	}
@@ -55,10 +57,11 @@ public class ClassDetail {
 	public void setStrReason(String strReason) {
 		this.strReason = strReason;
 	}
-//	public AdminUser getAdminUser() {
-//		return adminUser;
-//	}
-//	public void setAdminUser(AdminUser adminUser) {
-//		this.adminUser = adminUser;
-//	}
+	public Set<ClassBatchTime> getClassBatchTime() {
+		return classBatchTime;
+	}
+	public void setClassBatchTime(Set<ClassBatchTime> classBatchTime) {
+		this.classBatchTime = classBatchTime;
+	}
+
 }

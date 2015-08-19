@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="map-canvas" style="width:100%;height:550px;"></div>
-aaaa
+
 <input type="hidden" name="latitude" id="latitude" value="" />
 <input type="hidden" name="longitude" id="longitude" value="" />
 

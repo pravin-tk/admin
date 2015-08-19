@@ -48,6 +48,7 @@ import org.school.admin.model.AdminUser;
 import org.school.admin.model.AdminUserRole;
 import org.school.admin.model.BoardType;
 import org.school.admin.model.ClassAccessories;
+import org.school.admin.model.ClassBatchTime;
 import org.school.admin.model.ClassFee;
 import org.school.admin.model.ClassInfo;
 import org.school.admin.model.ClassSection;
@@ -687,8 +688,6 @@ public class SchoolController extends ResourceConfig {
 		/* save class accessory*/
 		Double totalFee = 0.0;
 		ClassInfo classInfo = classDetail.getClassInfo();
-		System.out.println("Moring Time from : "+classInfo.getMorningTimeFrom());
-		System.out.println("Morning Time to : "+classInfo.getMorningTimeTo());
 		Set<ClassAccessories> classAccessories = classDetail.getClassAccessories();
 		if(classAccessories.size()>0)
 		{
@@ -791,47 +790,7 @@ public class SchoolController extends ResourceConfig {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		Time time = null;
-		try
-		{
-			 time = classInfo.getMorningTimeFrom();
-			if(time == null)
-				classInfo.setMorningTimeFrom(time);
-		}
-		catch(NullPointerException e)
-		{
-			classInfo.setMorningTimeFrom(time);
-		}
-		try
-		{
-			 time = classInfo.getMorningTimeTo();
-			if(time ==null)
-				classInfo.setMorningTimeTo(time);
-		}
-		catch(NullPointerException e)
-		{
-			classInfo.setMorningTimeTo(time);
-		}
-		try
-		{
-			 time = classInfo.getAfternoonTimeFrom();
-			if(time == null)
-				classInfo.setAfternoonTimeFrom(null);
-		}
-		catch(NullPointerException e)
-		{
-			classInfo.setAfternoonTimeFrom(null);
-		}
-		try
-		{
-			 time = classInfo.getAfternoonTimeTo();
-			if(time == null)
-				classInfo.setAfternoonTimeTo(null);
-		}
-		catch(NullPointerException e)
-		{
-			classInfo.setAfternoonTimeTo(null);
-		}
+		
 		classInfo.setTotalFee(totalFee);
 		classDetail.setClassInfo(classInfo);
 		classDetail.setClassAccessories(classAccessories);
@@ -1010,10 +969,6 @@ public class SchoolController extends ResourceConfig {
 			classInfo.setStdAliasName(classes.get(i).getStdAliasName());
 			classInfo.setTotalSeat(classes.get(i).getTotalSeat());
 			classInfo.setVacantSeat(classes.get(i).getVacantSeat());
-			classInfo.setMorningTimeFrom(classes.get(i).getMorningTimeFrom());
-			classInfo.setMorningTimeTo(classes.get(i).getMorningTimeTo());
-			classInfo.setAfternoonTimeFrom(classes.get(i).getAfternoonTimeFrom());
-			classInfo.setAfternoonTimeTo(classes.get(i).getAfternoonTimeTo());
 			classInfo.setAdmissionDeadline(classes.get(i).getAdmissionDeadline());
 			classInfo.setAdmissionFrom(classes.get(i).getAdmissionFrom());
 			classInfo.setAdmissionTo(classes.get(i).getAdmissionTo());
@@ -1073,11 +1028,22 @@ public class SchoolController extends ResourceConfig {
 			fee.setAmount(classFeeList.get(i).getAmount());
 			classfee.add(fee);
 		}
+		
+		List<ClassBatchTime> classBatchTimeList = schoolDAOImp.getClassBatchTimeByClassId(class_id);
+		Set<ClassBatchTime> classBatchTimeSet = new HashSet<ClassBatchTime>();
+		for(int i=0; i<classBatchTimeList.size(); i++){
+			ClassBatchTime fee = new ClassBatchTime();
+			fee.setId(classBatchTimeList.get(i).getId());
+			fee.setBatchTimeFrom(classBatchTimeList.get(i).getBatchTimeFrom());
+			fee.setBatchTimeTo(classBatchTimeList.get(i).getBatchTimeTo());
+			classBatchTimeSet.add(fee);
+		}
 		ClassDetail classDetaiL = new ClassDetail();
 		classDetaiL.setClassInfo(newClassInfo.get(0));
 		classDetaiL.setClassSubjects(cs);
 		classDetaiL.setClassAccessories(cass);
 		classDetaiL.setClassFee(classfee);
+		classDetaiL.setClassBatchTime(classBatchTimeSet);
 		return classDetaiL;
 	}
 	@POST
