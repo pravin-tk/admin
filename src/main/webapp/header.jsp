@@ -49,11 +49,24 @@
     
     <script src="${baseUrl}/js/jquery.min.js"></script>
     <script src="${baseUrl}/js/jquery.dataTables.min.js"></script>
-<script src="${baseUrl}/js/dataTables.bootstrap.js"></script>
+	<script src="${baseUrl}/js/dataTables.bootstrap.js"></script>
     <script src="${baseUrl}/js/custom-plugin.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $(document).ajaxStart(function(){
+            $("#myModal").fadeIn();
+        });
+        $(document).ajaxComplete(function(){
+            $("#myModal").fadeOut();
+        });
+    });
+    </script>
 </head>
 
 <body>
+	<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;background:rgba(33,33,33,0.4)" aria-hidden="false"><div class="modal-backdrop fade in"></div>
+	    <img src='${baseUrl}/images/ajax_loading.gif' width="80" style="position:fixed;top:45%;left:45%;"/>
+    </div>
     <!-- Header bar -->
     <nav class="navbar navbar-inverse navbar-fixed-top custom-header">
         <div class="container-fluid">
