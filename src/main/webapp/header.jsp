@@ -42,8 +42,9 @@
     <!-- Dashboard CSS -->
     <link href="${baseUrl}/css/dashboard.css" rel="stylesheet">
     <!-- Time Picker css -->
-    <link href="${baseUrl}/css/bootstrap-timepicker.css" rel="stylesheet">
-    <!-- Time picker js -->
+    <link href="${baseUrl}/css/jquery.timepicker.css" rel="stylesheet">
+   
+  
     <!-- Date picker CSS -->
     <link href="${baseUrl}/css/datepicker3.css" rel="stylesheet">
     

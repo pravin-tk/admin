@@ -135,10 +135,6 @@
 					href="${baseUrl}/settings/standardtype.jsp"> <i class="fa"></i>Standard
 						Type
 				</a></li>
-				<li class="col-sm-2"><a
-					href="${baseUrl}/settings/standard-alias.jsp"> <i class="fa"></i>Standard
-						Alias
-				</a></li>
 				<li class="col-sm-2"><a href="${baseUrl}/settings/subject.jsp">
 						<i class="fa"></i>Subject
 				</a></li>
@@ -269,6 +265,8 @@
 <script src="${baseUrl}/js/jquery.validate.min.js"></script>
 <script src="${baseUrl}/js/validation.js"></script>
 <script src="${baseUrl}/js/custom.js"></script>
+  <!-- Time picker js -->
+     <script src="${baseUrl}/js/jquery.timepicker.js"></script>
 
 <script>
 	function toggleMenu(){

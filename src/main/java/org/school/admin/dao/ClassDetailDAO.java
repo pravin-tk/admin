@@ -44,13 +44,9 @@ public class ClassDetailDAO {
 				classInfoData.setAdmissionFrom(classDetailList.get(i).getAdmissionFrom());
 				classInfoData.setAdmissionProcess(classDetailList.get(i).getAdmissionProcess());
 				classInfoData.setAdmissionTo(classDetailList.get(i).getAdmissionTo());
-				classInfoData.setAfternoonTimeFrom(classDetailList.get(i).getAfternoonTimeFrom());
-				classInfoData.setAfternoonTimeTo(classDetailList.get(i).getAfternoonTimeTo());
 				classInfoData.setEligibilityCriteria(classDetailList.get(i).getEligibilityCriteria());
 				classInfoData.setFeesPaymentTerm(classDetailList.get(i).getFeesPaymentTerm());
 				classInfoData.setHowToApply(classDetailList.get(i).getHowToApply());
-				classInfoData.setMorningTimeFrom(classDetailList.get(i).getAfternoonTimeFrom());
-				classInfoData.setMorningTimeTo(classDetailList.get(i).getAfternoonTimeTo());
 				classInfoData.setTotalFee(classDetailList.get(i).getTotalFee());
 				classInfoData.setTotalSeat(classDetailList.get(i).getTotalSeat());
 				classInfoData.setVacantSeat(classDetailList.get(i).getVacantSeat());
@@ -100,13 +96,9 @@ public class ClassDetailDAO {
 				classInfoData.setAdmissionFrom(classDetailList.get(i).getAdmissionFrom());
 				classInfoData.setAdmissionProcess(classDetailList.get(i).getAdmissionProcess());
 				classInfoData.setAdmissionTo(classDetailList.get(i).getAdmissionTo());
-				classInfoData.setAfternoonTimeFrom(classDetailList.get(i).getAfternoonTimeFrom());
-				classInfoData.setAfternoonTimeTo(classDetailList.get(i).getAfternoonTimeTo());
 				classInfoData.setEligibilityCriteria(classDetailList.get(i).getEligibilityCriteria());
 				classInfoData.setFeesPaymentTerm(classDetailList.get(i).getFeesPaymentTerm());
 				classInfoData.setHowToApply(classDetailList.get(i).getHowToApply());
-				classInfoData.setMorningTimeFrom(classDetailList.get(i).getAfternoonTimeFrom());
-				classInfoData.setMorningTimeTo(classDetailList.get(i).getAfternoonTimeTo());
 				classInfoData.setTotalFee(classDetailList.get(i).getTotalFee());
 				classInfoData.setTotalSeat(classDetailList.get(i).getTotalSeat());
 				classInfoData.setVacantSeat(classDetailList.get(i).getVacantSeat());

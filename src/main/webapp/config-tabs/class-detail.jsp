@@ -173,6 +173,20 @@
 			</div>
 		</div>
 
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Standard alias name *</label>
+			<div class="col-sm-4">
+				<input type="text" name="stdaliasname" id="stdaliasname" />
+			</div>
+			<div class="col-sm-6">
+				<div class="tooltip custom-tool-tip right">
+					<div class="tooltip-arrow"></div>
+					<div class="tooltip-inner">This is the alias name of the class. It
+						might be used in the template of the email/SMS we send, so be
+						careful.</div>
+				</div>
+			</div>
+		</div>
 
 		 <div class="form-group">
 			<label class="col-sm-2 control-label">Stream *</label>
@@ -297,36 +311,35 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Morning timing from</label>
+			<label class="col-sm-2 control-label">Batch timing from</label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control"
-					placeholder="hh:mm:ss" id="morning_time_from">
+					placeholder="hh:mm am/pm" id="batch_time_from1">
 			</div>
 			<div class="col-sm-4">
 				<label class="col-sm-2 control-label">to</label>
 				<div class="col-sm-4">
 					<input type="text" class="form-control"
-						placeholder="hh:mm:ss" id="morning_time_to">
+						placeholder="hh:mm am/pm" id="batch_time_to1">
 				</div>
 			</div>
 		
 		</div>
-		
+		<div id="addbatch">
+		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Evening timing from</label>
 			<div class="col-sm-2">
-				<input type="text" class="form-control"
-					placeholder="hh:mm:ss" id="evening_time_from">
-			</div>
-			<div class="col-sm-4">
-				<label class="col-sm-2 control-label">to</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control"
-						placeholder="hh:mm:ss" id="evening_time_to">
+				<div class="tooltip custom-tool-tip right">
+
+					<div class="tooltip-inner" id ="divaddmorebatch">
+						<span
+							style="font: normal 12px agency, arial; color: blue; text-decoration: underline; cursor: pointer;"
+							onclick="addBatch();"> Add More </span>
+					</div>
 				</div>
 			</div>
 		</div>
-
+	
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Admission deadline </label>
 			<div class="col-sm-4">
@@ -456,6 +469,8 @@
 
 		<h4>Fee Details</h4>
 		(Fee, Fee Payment terms etc.)
+		
+				
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Fee payment term</label>
 				<div class="col-sm-6">
@@ -470,7 +485,8 @@
 					</div>
 				</div>
 			</div>
-		<div class="form-group">
+		
+				<div class="form-group">
 			<label class="col-sm-6 control-label">Fee Type *</label> <label
 				class="col-sm-2 control-label">Amount *</label>
 		</div>
@@ -520,9 +536,6 @@
 		<!--xxx  -->
 		</div>
 
-				
-
-
 		<div class="form-group">
 			<div class="col-sm-4">
 				<button type="button" id='saveclassdetail' class="btn btn-success">Save</button>
@@ -540,40 +553,52 @@
 <!-- datepicker Js -->
 <script src="${baseUrl}/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
+var batch_count =1;
+function addBatch(){
+	
+	batch_count++;
+	var batch = '<div class="form-group" id="batch'+batch_count+'">';
+	    batch +='<label class="col-sm-2 control-label">Batch timing from</label>';
+	    batch += '<div class="col-sm-2">';
+	    batch += '<input type="text" class="form-control" placeholder="hh:mm am/pm" id="batch_time_from'+batch_count+'">';
+	    batch += '</div>';
+	    batch += '<div class="col-sm-4">';
+		batch += '<label class="col-sm-2 control-label">to</label>';
+		batch += '<div class="col-sm-4">';
+		batch += '<input type="text" class="form-control" placeholder="hh:mm am/pm" id="batch_time_to'+batch_count+'">';
+		batch += '</div>';
+		batch += '</div>';
+		batch += '<div class="col-sm-2"><a href="javascript:void(0);" onclick="removeBatch('+batch_count+');">Delete</a></div></div>'
+		batch += '</div>';
+		
+		$("#addbatch").append(batch);
+		$('#batch_time_from'+batch_count).timepicker({'step':15});
+		$('#batch_time_to'+batch_count).timepicker({'step': 15});
+
+}
+
+function removeBatch(count){
+	var removeDiv = "#batch"+count;
+	$( "div").remove(removeDiv);
+	count--;
+	batch_count--;
+}
 $(document).on('click', 'a.open-deleteclassdialog', function(){
-	console.log("Hi11 "+$(this).data('id'));
 	$("#hdclassid").val($(this).data('id'));
 });
+$("#standard").change(function(){
+	 var txtname = $("#standard :selected").text();
+	// alert("selected std : "+txtname.trim());
+		$("#stdaliasname").val(txtname.trim());
+});
 $(function() {
-	$('#morning_time_to').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showSeconds: true,
-        showMeridian: false,
-       // defaultTime:'00:00:00'
-    });
-	$('#morning_time_from').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showSeconds: true,
-        showMeridian: false,
-       // defaultTime:'00:00:00'
-    });
-	$('#evening_time_to').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showSeconds: true,
-        showMeridian: false,
-       // defaultTime:'00:00:00'
-    });
-	$('#evening_time_from').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showSeconds: true,
-        showMeridian: false,
-    });
+$('#batch_time_from1').timepicker({'step': 15});
+	$('#batch_time_to1').timepicker({'step': 15});
 	
   });
+  
+
+  
 $("#admission_deadline").datepicker('setDate',new Date());
 $("#admission_from").datepicker('setDate',new Date());
 $("#admission_to").datepicker('setDate',new Date());
@@ -667,20 +692,20 @@ $('#updateclassdetail').click(function() {
 			if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
 		}
 	}
-	 	  if($("#morning_time_from").val() == ""){
-				 $("#morning_time_from").val("00:00:00");
-			} 
-			if($("#morning_time_to").val() == ""){
-			 $("#morning_time_to").val("00:00:00");
-			}
-			if($("#evening_time_from").val() == "")
-			{
-				$("#evening_time_from").val("00:00:00");
-			}
-			if($("#evening_time_to").val() == "")
-			{
-				$("#evening_time_to").val("00:00:00");
-			}
+// 	 	  if($("#morning_time_from").val() == ""){
+// 				 $("#morning_time_from").val("00:00:00");
+// 			} 
+// 			if($("#morning_time_to").val() == ""){
+// 			 $("#morning_time_to").val("00:00:00");
+// 			}
+// 			if($("#evening_time_from").val() == "")
+// 			{
+// 				$("#evening_time_from").val("00:00:00");
+// 			}
+// 			if($("#evening_time_to").val() == "")
+// 			{
+// 				$("#evening_time_to").val("00:00:00");
+// 			}
 // 	if($('#admission_deadline').val() < $("#admission_to").val()){
 // 		if(msg != "") msg = msg+",Admission deadline date should be greater than admission to"; else msg = "Please select admission deadline";
 // 	}
@@ -709,8 +734,9 @@ $('#updateclassdetail').click(function() {
 		class_info_data = getClassInfoData();
 		adminUser = getAdminUser();
 		strReason = $("#strReasonUpdateClass").val();
+		class_batch_time_data = getBatchTime();
 		var final_data = [];
-		final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data};
+		final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data,classBatchTime : class_batch_time_data};
 		$.ajax({
 		    url: 'webapi/school/updateclassdetail',
 		    type: 'POST',
@@ -776,7 +802,6 @@ $("#addClassDetail1").click(function(){
 	  if (blncheck || arr_feetype_temp.length<1 ){ return false;}
 	  
 	  rowCount = rowCount +1;
-	  console.log('#751');
 	
 		var cmb = '#cb'+rowCount; 
 		var recRow = '<div class="form-group" id="rowCount'+rowCount+'">';
@@ -897,11 +922,35 @@ $("#addClassDetail1").click(function(){
 		if(arr_feetype_temp.length >0)
 			 $("#divaddmore").show();
 	});
+	
+	function getBatchTime(){
+		var class_batch_time = [];
+		var batch_time;
+		var total_batch = batch_count;
+		var batch_24hr_format_from,batch_24hr_format_to;
+		for(var i =1 ;i<=total_batch;i++){
+			var batch_time_from = "#batch_time_from"+i;
+			var batch_time_to = "#batch_time_to"+i;
+			if($("#batch_time_from"+i).val() != "" || $("#batch_time_from"+i).val() != "undefined" ){
+				 batch_24hr_format_from = getTime($("#batch_time_from"+i).val());
+			}
+			if($("#batch_time_to"+i).val() != "" || $("#batch_time_to"+i).val() != "undefined"){
+				 batch_24hr_format_to = getTime($("#batch_time_to"+i).val());
+			}
+			if($("#class_id").val() >0){
+				batch_time = {batchTimeFrom : batch_24hr_format_from, batchTimeTo : batch_24hr_format_to, classInfo : {id :$("#class_id").val()}};
+			}else{
+				batch_time = {batchTimeFrom : batch_24hr_format_from, batchTimeTo : batch_24hr_format_to};
+			}
+			class_batch_time.push(batch_time);
+	    }
+		return class_batch_time;
+    }
+	
 	function getFeeData(){
 		var fee_data = [];
 		var fee_item;
 		var totalcnt =rowCount;
-		console.log("row count : "+rowCount);
 		var str_val ="";
 		for (i = 1; i <= rowCount; i++) {
 			var sep = ",";
@@ -964,10 +1013,42 @@ $("#addClassDetail1").click(function(){
 		adminUser = {adminUser:{id:adminId}};
 		return adminUser;
 	}
+	function getTime(str){
+		 // console.log("Time : "+str);
+		   var a = str;
+		   var b = " ";
+		   var n = a.indexOf(":");
+		   var position = n+3;
+		   var output = [a.slice(0, position), b, a.slice(position)].join('');
+	  	   var time1 = output;
+    	   var hours = Number(time1.match(/^(\d+)/)[1]);
+		   var minutes = Number(time1.match(/:(\d+)/)[1]);
+		   var AMPM = time1.match(/\s(.*)$/)[1];
+		   
+		   if ((AMPM == "PM" || AMPM == "pm") && hours < 12) hours = hours + 12;
+		   if ((AMPM == "AM" || AMPM == "am") && hours == 12) hours = hours - 12;
+		   var sHours = hours.toString();
+		   var sMinutes = minutes.toString();
+		   if (hours < 10) sHours = "0" + sHours;
+		   if (minutes < 10) sMinutes = "0" + sMinutes;
+		   var time2 = sHours+":"+sMinutes+":00";
+		   return time2;
+		}
 	
+	function getSelectedStandard(){
+		var stdalias = $("#standard :selected").text();
+		return stdalias.trim();
+	}
 	function getClassInfoData () {
 		var school_id = <%out.print(school_id6);%>
 		var user_id = <%out.print(user_id6);%>
+		var stdalias; 
+		
+		if( $("#stdaliasname").val() !=""){
+			stdalias =  $("#stdaliasname").val();
+		}else{
+			stdalias = getSelectedStandard();
+		}
 		if($("#class_id").val() >0) {
 			var classInfo = {
 					school:{id:school_id},
@@ -979,6 +1060,7 @@ $("#addClassDetail1").click(function(){
 					totalSeat : $("#total_seats").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
 					specialization : $("#specialization").val(),
+					stdAliasName : stdalias,
 					admissionProcess :  $("#admission_procedure").val(),
 					howToApply : $("#how_to_apply").val(),
 					admissionDeadline : new Date($("#admission_deadline").val()),
@@ -986,10 +1068,6 @@ $("#addClassDetail1").click(function(){
 					admissionTo : new Date($("#admission_to").val()),
 					feesPaymentTerm : $("#fee_pay_term").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
-					morningTimeFrom : $("#morning_time_from").val(),
-					morningTimeTo   : $("#morning_time_to").val(),
-					afternoonTimeFrom : $("#evening_time_from").val(),
-					afternoonTimeTo   : $("#evening_time_to").val(),
 					lastUpdatedBy : user_id
 					};
 		}else {
@@ -1001,6 +1079,7 @@ $("#addClassDetail1").click(function(){
 					totalSeat : $("#total_seats").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
 					specialization : $("#specialization").val(),
+					stdAliasName : stdalias,
 					admissionProcess :  $("#admission_procedure").val(),
 					howToApply : $("#how_to_apply").val(),
 					admissionDeadline : new Date($("#admission_deadline").val()),
@@ -1008,10 +1087,6 @@ $("#addClassDetail1").click(function(){
 					admissionTo : new Date($("#admission_to").val()),
 					feesPaymentTerm : $("#fee_pay_term").val(),
 					eligibilityCriteria : $("#ecriteria").val(),
-					morningTimeFrom : $("#morning_time_from").val(),
-					morningTimeTo   : $("#morning_time_to").val(),
-					afternoonTimeFrom : $("#evening_time_from").val(),
-					afternoonTimeTo   : $("#evening_time_to").val(),
 					lastUpdatedBy : user_id
 					};
 		}
@@ -1026,6 +1101,7 @@ $("#addClassDetail1").click(function(){
 		var msg = "";
 		var strReason = "";
          var adminUser = "";
+         
 		if ($('#standard').val() == 0) {
 			if(msg != "") msg = msg+",Please select standard"; else  msg = "Please select standard";
 		}
@@ -1040,20 +1116,29 @@ $("#addClassDetail1").click(function(){
 			if(msg != "") msg = msg+",Vacant seats should not exceed total seat"; else msg = "Vacant seats should not exceed total seat";
 			}
 		}
-	 	  if($("#morning_time_from").val() == ""){
-				 $("#morning_time_from").val("00:00:00");
-			} 
-			if($("#morning_time_to").val() == ""){
-			 $("#morning_time_to").val("00:00:00");
-			}
-			if($("#evening_time_from").val() == "")
-			{
-				$("#evening_time_from").val("00:00:00");
-			}
-			if($("#evening_time_to").val() == "")
-			{
-				$("#evening_time_to").val("00:00:00");
-			}
+		if($("#batch_time_from1").val() == "" && $("#batch_time_to1").val() == ""){
+			if(msg != "") msg = msg+",Batch time from and to is complsory"; else msg = "Batch time from and to is complsory";
+		}
+		if($("#batch_time_from1").val() == ""){
+			if(msg != "") msg = msg+",Batch time from is complsory"; else msg = "Batch time from is complsory";
+		}
+		if($("#batch_time_to1").val() == ""){
+			if(msg != "") msg = msg+",Batch time to is complsory"; else msg = "Batch time to is complsory";
+		}
+// 	 	  if($("#morning_time_from").val() == ""){
+// 				 $("#morning_time_from").val("00:00:00");
+// 			} 
+// 			if($("#morning_time_to").val() == ""){
+// 			 $("#morning_time_to").val("00:00:00");
+// 			}
+// 			if($("#evening_time_from").val() == "")
+// 			{
+// 				$("#evening_time_from").val("00:00:00");
+// 			}
+// 			if($("#evening_time_to").val() == "")
+// 			{
+// 				$("#evening_time_to").val("00:00:00");
+// 			}
 	   if(msg != "") {
 		       alert(msg);
 	   }else{
@@ -1063,8 +1148,9 @@ $("#addClassDetail1").click(function(){
 			accessory_data = getAccessoryData();
 			class_info_data = getClassInfoData();
 			adminUser = getAdminUser();
+			class_batch_time_data = getBatchTime();
 			var final_data = [];
-			final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data,strReason : strReason,adminUser:adminUser};
+			final_data = { classInfo : class_info_data,classFee:fee_data,classSubjects:subject_data,classAccessories: accessory_data,strReason : strReason,classBatchTime : class_batch_time_data,adminUser:adminUser};
 			$.ajax({
 			    url: 'webapi/school/saveclassdetail',
 			    type: 'POST',
@@ -1113,8 +1199,14 @@ $("#addClassDetail1").click(function(){
 			{
 				$("#txt"+i).val("");
 			}
+		for(var i =1;i<batch_count;i++){
+			
+			$("#batch_time_from"+i).val("");
+			$("#batch_time_to"+i).val("");
+		}
 		$(".cancel-class-detail").click();
 	}
+	
 	function getClassList(school_id)
 	{
 		$.get("webapi/school/getclasslist/"+school_id,{},function(newdata){
@@ -1139,6 +1231,21 @@ $("#addClassDetail1").click(function(){
 		});
 		
 	}
+	 function hours_am_pm(time) {
+	        var hours = time[0] + time[1];
+	        var min = time[3] + time[4];
+	        if (hours < 12) {
+	            return hours+':'+min+'am';
+	        } else {
+	        	 if(hours == 12){
+	                 hours = hours;
+	             }else{
+	             hours=hours - 12;
+	             hours=(hours.length < 10) ? hours:'0'+hours;
+	             }
+	            return hours+':'+min +'pm';
+	        }
+	    }
 	function editClassInfo(id){
 		$.get('webapi/school/class_info/'+id,{},function(data){
 			$(".class-detail-new").show();
@@ -1154,13 +1261,15 @@ $("#addClassDetail1").click(function(){
 				}
 			}
 	    });
+ 		if(data.classInfo.stdAliasName != 'undefiend'){
+ 			$("#stdaliasname").val(data.classInfo.stdAliasName);
+ 		}
+		else
+ 			$("#stdaliasname").val("");
 		$('[name=teaching_approach]').val(data.classInfo.teachingApproachType.id);
 		$("#total_seats").val(data.classInfo.totalSeat);
 		$("#vacant_seats").val(data.classInfo.vacantSeat);
-		$("#morning_time_from").val(data.classInfo.morningTimeFrom);
-        $("#morning_time_to").val(data.classInfo.morningTimeTo);
-        $("#evening_time_from").val(data.classInfo.afternoonTimeFrom);
-        $("#evening_time_to").val(data.classInfo.afternoonTimeTo);
+		
 		$("#specialization").val(data.classInfo.specialization);
 		$("#ecriteria").val(data.classInfo.eligibilityCriteria);
 		$("#admission_procedure").val(data.classInfo.admissionProcess);
@@ -1201,7 +1310,7 @@ $("#addClassDetail1").click(function(){
 			
 			if(data.classFee.length>0)
 			for(var i = 0; i < data.classFee.length; i++){
-				if(data.classFee[i].feeDesc != undefined && data.classFee[i].feeDesc != ""){
+				if(data.classFee[i].feeDesc != 'undefined' && data.classFee[i].feeDesc != ""){
 					str1 = data.classFee[i].feeDesc;
 					if (str1.indexOf("+") >= 0 ) {
 						arr = str1.split("+");
@@ -1230,9 +1339,52 @@ $("#addClassDetail1").click(function(){
 		$("#class_id").val(data.classInfo.id);
 		if(data.classFee.length >0)
 			rowCount = data.classFee.length;
-		console.log('#1191');
+		//console.log('#1191');
+		
+		//console.log("Len = "+data.classBatchTime.length);
+		var classBatchCount = data.classBatchTime.length;
+		if(classBatchCount>0){
+			for(var i=0;i<classBatchCount;i++){
+				if(i>=1 && i<= classBatchCount-1)
+				addEditBatch(i+1);
+				 if(data.classBatchTime[i].batchTimeFrom != 'undefined' || data.classBatchTime[i].batchTimeFrom != ""){
+					var get12hrfrom = hours_am_pm(data.classBatchTime[i].batchTimeFrom);
+					$("#batch_time_from"+(i+1)).val(get12hrfrom);	
+				}else{
+					$("#batch_time_from"+(i+1)).val("");	
+				}
+				if(data.classBatchTime[i].batchTimeTo != 'undefined' || data.classBatchTime[i].batchTimeTo != ""){
+					var get12hrTo = hours_am_pm(data.classBatchTime[i].batchTimeTo);
+					$("#batch_time_to"+(i+1)).val(get12hrTo);	
+				}else{
+					$("#batch_time_to"+(i+1)).val("");	
+				} 
+			}
+		}
 		
 	});
+	}
+	//Pankaj Naik addeditBatch time function
+	function addEditBatch(bcount){
+	 	var batch_data = '<div class="form-group" id="batch'+bcount+'">';
+	 	batch_data +='<label class="col-sm-2 control-label">Batch timing from</label>';
+	 	batch_data += '<div class="col-sm-2">';
+	 	batch_data += '<input type="text" class="form-control" placeholder="hh:mm am/pm" id="batch_time_from'+bcount+'">';
+	 	batch_data += '</div>';
+	 	batch_data += '<div class="col-sm-4">';
+	 	batch_data += '<label class="col-sm-2 control-label">to</label>';
+		batch_data += '<div class="col-sm-4">';
+		batch_data += '<input type="text" class="form-control" placeholder="hh:mm am/pm" id="batch_time_to'+bcount+'">';
+		batch_data += '</div>';
+		batch_data += '</div>';
+		batch_data += '<div class="col-sm-2"><a href="javascript:void(0);" onclick="removeBatch('+bcount+');">Delete</a></div></div>'
+		batch_data += '</div>';
+		
+		
+		$('#batch_time_from'+bcount).timepicker({'step':15});
+		$('#batch_time_to'+bcount).timepicker({'step': 15});
+		jQuery('#addbatch').append(batch_data);
+
 	}
 	
 	function addEditRows(rowCount) {

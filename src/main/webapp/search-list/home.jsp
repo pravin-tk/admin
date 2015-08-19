@@ -30,17 +30,6 @@
 			viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
 		}
 	}
-	if(viewContactList.size()>0){
-	for(int i=0;i<viewContactList.size();i++)
-	{
-	System.out.println("ContactDetailsList : "+viewContactList.get(i).getContactDetail());
-		out.print("<script>"
-				+"console.log('"+viewContactList.get(i).getContactDetail()+"');"
-				+"</script>");
- 
-	}
-	}
-	System.out.print("ViewSize : "+viewContactList.size());
 %>
             <!-- Right main content -->
                    <form class="form-horizontal" action="" method="">
@@ -48,7 +37,7 @@
                              <div class="col-sm-4">
                                    <label for="Schooly">Search by School Name or School Id</label>
                                     <% if(viewSchoolList.size()>0){%>
-                                   <select id="school_id" name="sendImages">
+                                   <select id="school_id" name="sendImages" placeholder="Enter School Name or School Id">
                                     <option value="0">Enter School Name or School Id</option>
                                   <% for(int i=0;i<viewSchoolList.size();i++) {
                                          ViewSchoolData viewSchoolData = viewSchoolList.get(i);%>
@@ -67,9 +56,8 @@
                            <div class="col-sm-4">
                                    <label for="Schooly">Search by POC Name or POC Contact Number</label>
                                     <% 
-                                    System.out.println("ContactListSize : "+viewContactList.size());
                                     if(viewContactList.size()>0) {%>
-		                                   <select id="contact_id" name="sendImages">
+		                                   <select id="contact_id" name="sendImages" placeholder="Enter POC Name or POC Contact Number">
 		                                        <option value="0">Enter POC Name or POC Contact Number</option> 
 		                                  <% for(int i=0;i<viewContactList.size();i++) {
 		                                	  ViewContactData viewContact = viewContactList.get(i); %>
@@ -144,7 +132,6 @@
     <script type="text/javascript" >
     
     $select_school = $('#school_id').selectize({
-    	
 		persist: false,
 		create: function(input) {
 		   return {
@@ -152,18 +139,22 @@
 		       text: input
 		   }
 		},
-		onChange: function(value) {		    	
+		 onChange: function(value) {
 	         searchSchool();
 	     },
-		  onItemRemove : function(value) {
-					  }
+	    onDropdownOpen: function(value){
+	    	 var obj = $(this);
+    		var textClear =	 $("#school_id :selected").text();
+	    	 if(textClear.trim() == "Enter School Name or School Id"){
+	    		 obj[0].setValue("");
+	    	 }
+	     }
 });
 
 <% if(viewSchoolList.size() > 0) {%>
  	select_school  = $select_school[0].selectize;
 <% } %>
 	$select_contact = $('#contact_id').selectize({
-	
 	persist: false,
 	create: function(input) {
 	   return {
@@ -174,15 +165,19 @@
 	onChange: function(value) {		    	
             searchContact();
      },
+     onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#contact_id :selected").text();
+    	 if(textClear.trim() == "Enter POC Name or POC Contact Number"){
+    		 obj[0].setValue("");
+    	 }
+     },
 	  onItemRemove : function(value) {
 				  }
 });
 	<% if(viewContactList.size()>0) { %>
  select_contact  = $select_contact[0].selectize;
  <%}%>
-    
-   
-    
     
     $('.addschool').click(function (){
     	window.location.href="addschool.jsp";

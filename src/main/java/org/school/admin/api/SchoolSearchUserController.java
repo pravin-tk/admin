@@ -178,11 +178,15 @@ public class SchoolSearchUserController {
 		userRegistrationInfo.setFirstName(firstName);
 		userRegistrationInfo.setLastName(lastName);
 		userRegistrationInfo.setMobile(mobile);
+		
 		try{
-			userRegistrationInfo.setImage(fileDetail.getFileName());
+			if(fileDetail != null && uploadedInputStream != null) {
+				userRegistrationInfo.setImage(fileDetail.getFileName());
+			}
 		}catch(NullPointerException e){
-			userRegistrationInfo.setImage("");
+			//userRegistrationInfo.setImage("");
 		}
+		
 		if (id > 0) {
 			if(firstName.trim().length() <= 0){
 				errors.add("First Name required.");

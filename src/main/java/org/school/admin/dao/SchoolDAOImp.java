@@ -39,6 +39,7 @@ import org.school.admin.model.AdminUserRole;
 import org.school.admin.model.BoardType;
 import org.school.admin.model.City;
 import org.school.admin.model.ClassAccessories;
+import org.school.admin.model.ClassBatchTime;
 import org.school.admin.model.ClassFee;
 import org.school.admin.model.ClassInfo;
 import org.school.admin.model.ClassSection;
@@ -1076,30 +1077,41 @@ public class SchoolDAOImp {
 				msg.setMessage("Class already added");
 				classInfo.setId(oldClassInfo.get(0).getId());
 			}else{
-				HibernateUtil hibernateUtil = new HibernateUtil();
-				Session session = hibernateUtil.openSession();
-				session.beginTransaction();
-				session.save(classInfo);
-				class_info_id = classInfo.getId();
-				session.getTransaction().commit();
-				session.close();
-				log += " Standard : "+new StandardTypeDAO().getStandardTypeNameById(classInfo.getStandardType().getId());
-				log += "| stream : "+new SettingsImpl().getStreamTypeNameById(classInfo.getStreamType().getId());
-				log += "| Teaching approach : "+new SettingsImpl().getTeachingApproachTypeNameById(classInfo.getTeachingApproachType().getId());
-				log += "| Total seats : "+classInfo.getTotalSeat();
-				log += "| Vacant seats : "+classInfo.getVacantSeat();
-				log += "| Morning time from : "+classInfo.getMorningTimeFrom();
-				log += "| Moring time to : "+classInfo.getMorningTimeTo();
-				log += "| Afternoon time from : "+classInfo.getAfternoonTimeFrom();
-				log += "| Afternoon time to : "+classInfo.getAfternoonTimeTo();
-				log += "| Admission deadline : "+classInfo.getAdmissionDeadline();
-				log += "| Admission from : "+classInfo.getAdmissionFrom();
-				log += "| Admission to : "+classInfo.getAdmissionTo();
-				log += "| Eligibility Criteria :"+classInfo.getEligibilityCriteria();
-				log += "| Specialization : "+classInfo.getSpecialization();
-				log += "| Admission Procedure : "+classInfo.getAdmissionProcess();
-				log += "| How To Apply : "+classInfo.getHowToApply();
-				log += "| Fee Payment Term : "+classInfo.getFeesPaymentTerm();
+				try{
+					HibernateUtil hibernateUtil = new HibernateUtil();
+					Session session = hibernateUtil.openSession();
+					session.beginTransaction();
+					session.save(classInfo);
+					class_info_id = classInfo.getId();
+					session.getTransaction().commit();
+					session.close();
+					
+					log += " Standard : "+new StandardTypeDAO().getStandardTypeNameById(classInfo.getStandardType().getId());
+					log += "| stream : "+new SettingsImpl().getStreamTypeNameById(classInfo.getStreamType().getId());
+					log += "| Teaching approach : "+new SettingsImpl().getTeachingApproachTypeNameById(classInfo.getTeachingApproachType().getId());
+					log += "| Total seats : "+classInfo.getTotalSeat();
+					log += "| Vacant seats : "+classInfo.getVacantSeat();
+					log += "| Admission deadline : "+classInfo.getAdmissionDeadline();
+					log += "| Admission from : "+classInfo.getAdmissionFrom();
+					log += "| Admission to : "+classInfo.getAdmissionTo();
+					log += "| Eligibility Criteria :"+classInfo.getEligibilityCriteria();
+					log += "| Specialization : "+classInfo.getSpecialization();
+					log += "| Admission Procedure : "+classInfo.getAdmissionProcess();
+					log += "| How To Apply : "+classInfo.getHowToApply();
+					log += "| Fee Payment Term : "+classInfo.getFeesPaymentTerm();
+				}
+				catch(org.hibernate.exception.ConstraintViolationException e){
+					ResponseMessage response = new ResponseMessage();
+					response.setStatus(0);
+					response.setMessage("Class with this name alredy exist");
+					return response;
+				}
+				catch(org.hibernate.exception.LockAcquisitionException e){
+					ResponseMessage response = new ResponseMessage();
+					response.setStatus(0);
+					response.setMessage("Save failed Please try again");
+					return response;
+				}
 			}
 			
 			Set<ClassAccessories> classAccessories = classDetail.getClassAccessories();
@@ -1174,6 +1186,33 @@ public class SchoolDAOImp {
 			}
 			session4.getTransaction().commit();
 			session4.close();
+			
+			Set<ClassBatchTime> classBatchTimes = classDetail.getClassBatchTime();
+			Session session5 = hibernateUtil.openSession();
+			session5.beginTransaction();
+			if(classBatchTimes.size()>0)
+			{
+				log +="| Batch Time : ";
+				for(int i=0;i<classBatchTimes.size();i++)
+				{
+					if(!classBatchTimes.isEmpty())
+					{
+						Iterator<ClassBatchTime> classBatchTimeIterator = classBatchTimes.iterator();
+						while(classBatchTimeIterator.hasNext())
+						{
+							ClassBatchTime classBatchTime = classBatchTimeIterator.next();
+							classBatchTime.setClassInfo(classInfo);
+							session5.save(classBatchTime);
+							log += "  : "+classBatchTime.getBatchTimeFrom();
+							log += " | Amount : "+classBatchTime.getBatchTimeTo();
+						}
+					}
+				}
+			}
+			session5.getTransaction().commit();
+			session5.close();
+			
+			
 			msg.setStatus(1);
 			msg.setMessage("Saved Successfully");
 			updateTabs(school.getId(), "classDetail");
@@ -1203,16 +1242,34 @@ public class SchoolDAOImp {
 			msg.setStatus(0);
 			msg.setMessage("Select Stream Type");	
 		} else {
-				HibernateUtil hibernateUtil = new HibernateUtil();
+			    
+			    Set<ClassAccessories> classAccessories = classDetail.getClassAccessories();
+			    HibernateUtil hibernateUtil = new HibernateUtil();
+			    try{
+				
 				Session session = hibernateUtil.openSession();
 				//ClassStream classStream = classDetail.getClassSection();
-				Set<ClassAccessories> classAccessories = classDetail.getClassAccessories();
+			
 				session.beginTransaction();
 				classInfo.setId(classInfo.getId());
 				session.update(classInfo);
 				
 				session.getTransaction().commit();
 				session.close();
+			    }
+			    catch(org.hibernate.exception.ConstraintViolationException e){
+			    	ResponseMessage response = new ResponseMessage();
+			    	response.setStatus(0);
+			    	response.setMessage("Trying to update duplicate entry with same combination of standard, stream, subjects and teaching approach");
+			    	return response;
+			    }
+			    catch(org.hibernate.exception.LockTimeoutException e){
+			    	ResponseMessage response = new ResponseMessage();
+			    	response.setStatus(0);
+			    	response.setMessage("Update fail due to time out");
+			    	return response;
+			    }
+			    
 				String deleteClassAccessories = "DELETE from ClassAccessories where classInfo.id = :class_id";
 				Session newsession = hibernateUtil.openSession();
 				newsession.beginTransaction();
@@ -1272,8 +1329,6 @@ public class SchoolDAOImp {
 				}
 				session3.getTransaction().commit();
 				session3.close();
-				msg.setStatus(1);
-				msg.setMessage("Updated Successfully.");
 				
 				/*class fee */
 				String deleteClassFees = "DELETE from ClassFee where classInfo.id = :class_id";
@@ -1305,6 +1360,38 @@ public class SchoolDAOImp {
 				}
 				session4.getTransaction().commit();
 				session4.close();
+				/*Batch time*/
+				String deleteClassBatchTime = "DELETE from ClassBatchTime where classInfo.id = :class_id";
+				Session newsessionBatchTime = hibernateUtil.openSession();
+				newsessionBatchTime.beginTransaction();
+				Query deleteBatchTime = newsessionBatchTime.createQuery(deleteClassBatchTime);
+				deleteBatchTime.setParameter("class_id", classInfo.getId());
+				deleteBatchTime.executeUpdate();
+				newsessionBatchTime.getTransaction().commit();
+				newsessionBatchTime.close();
+				
+				Set<ClassBatchTime> classBatchTimeSet = classDetail.getClassBatchTime();
+				
+					Session session2 = hibernateUtil.openSession();
+					session2.beginTransaction();
+					if(classBatchTimeSet.size()>0)
+					{
+						for(int i=0;i< classBatchTimeSet.size();i++)
+						{
+							if(!classBatchTimeSet.isEmpty())
+							{
+								Iterator<ClassBatchTime> classAccessories3 = classBatchTimeSet.iterator();
+								while(classAccessories3.hasNext())
+								{
+									ClassBatchTime classAccessories4 = classAccessories3.next();
+									session2.save(classAccessories4);
+								}
+							}
+						}
+					}
+					session2.getTransaction().commit();
+					session2.close();
+				
 				msg.setStatus(1);
 				msg.setMessage("Updated Successfully.");
 				updateTabs(school.getId(), "classDetail");
@@ -2347,10 +2434,6 @@ public class SchoolDAOImp {
 		log += "| teaching approach : "+new SettingsImpl().getTeachingApproachTypeNameById(classInfos.get(0).getTeachingApproachType().getId());
 		log += "| total seats : "+classInfos.get(0).getTotalSeat();
 		log += "| vacent seats : "+classInfos.get(0).getVacantSeat();
-		log += "| morning time from : "+classInfos.get(0).getMorningTimeFrom();
-		log += "| morning time to : "+classInfos.get(0).getMorningTimeTo();
-		log += "| afternoon time from : "+classInfos.get(0).getAfternoonTimeFrom();
-		log += "| afternoon time to: "+classInfos.get(0).getAfternoonTimeTo();
 		log += "| admission deadline : "+classInfos.get(0).getAdmissionDeadline();
 		log += "| admission from : "+classInfos.get(0).getAdmissionFrom();
 		log += "| admission to : "+classInfos.get(0).getAdmissionTo();
@@ -2485,5 +2568,17 @@ public class SchoolDAOImp {
 		}
 		session.close();
 		return schoolLatlong;
+	}
+	public List<ClassBatchTime> getClassBatchTimeByClassId(int class_id) {
+		String hql = "from ClassBatchTime where  classInfo.id = :class_id";
+		
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		
+		Query query = session.createQuery(hql);
+		query.setParameter("class_id", class_id);
+		List<ClassBatchTime> classBatchTimeList = query.list();
+		session.close();
+		return classBatchTimeList;
 	}
 }

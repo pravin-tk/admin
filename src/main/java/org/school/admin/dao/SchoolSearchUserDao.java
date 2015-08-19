@@ -159,6 +159,7 @@ public class SchoolSearchUserDao {
         } else {
 	        try {
 	        	int userId = userRegistrationInfo.getId();
+	        	String setImageQuery = "";
 	        	if(userRegistrationInfo.getImage() != null && userRegistrationInfo.getImage().trim().length() > 0) {
 		        	String file_name = userRegistrationInfo.getImage();
 		        	file_name = file_name.replaceAll("([^a-zA-Z0-9.]|\\s)+", " ").replaceAll(" ", "_").toLowerCase();
@@ -167,11 +168,12 @@ public class SchoolSearchUserDao {
 		        	userRegistrationInfo.setImage(file_name);
 		        	System.out.println("User Image:"+uploadFileLocation);
 		        	this.imageUploader.writeToFile( inputStream, uploadFileLocation);
+		        	setImageQuery = ", image='"+userRegistrationInfo.getImage()+"'";
 	        	}
 	        	String updateQuery = "UPDATE UserRegistrationInfo set firstName='"+userRegistrationInfo.getFirstName()+"'"
 	        						+", lastName='"+userRegistrationInfo.getLastName()+"'"
 	        						+", mobile='"+userRegistrationInfo.getMobile()+"'"
-	        						+", image='"+userRegistrationInfo.getImage()+"'"
+	        						+ setImageQuery 
 	        						+" WHERE id="+userRegistrationInfo.getId();
 	        	Session newsession = hibernateUtil.openSession();
 	        	Query newQuery = newsession.createQuery(updateQuery);
