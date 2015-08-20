@@ -582,7 +582,6 @@ $("#updateContact").click(function(){
  }
 	function deleteContactInfo(contactId,strReason)
 	{
-		console.log("#543");
 		var schoolId = <%out.print(school_id3);%> 
 			var userId = <%out.print(user_id3);%> 
 			$.post("webapi/school/deleteContact",{contactId : contactId,strReason : strReason,schoolId : schoolId, userId : userId},function(data){
