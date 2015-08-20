@@ -60,12 +60,7 @@
 	  </div>
 	</div>
 	                              
-	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students </label>
-	  <div class="col-sm-6">
-	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student"  onKeyPress="return checkNumber(event)" placeholder="enter no of students" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalStudents()); }%>">
-	  </div>
-	</div>
+	
 	                              
 	<div class="form-group">
 	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (boys) </label>
@@ -78,10 +73,17 @@
 	<div class="form-group">
 	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (girls) </label>
 	    <div class="col-sm-6">
-	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student_girls" onKeyPress="return checkNumber(event)"
+	        <input data-brackets-id="3402" type="text" onkeyup="sum();" class="form-control" id="txt_no_of_student_girls" onKeyPress="return checkNumber(event)"
 	         placeholder="enter no of students girls" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalGirls()); }%>">
 	    </div>
 	</div>
+	 	
+	<div class="form-group">
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students </label>
+	  <div class="col-sm-6">
+	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student"   placeholder="enter no of students" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalStudents()); }%>" disabled>
+	  </div>
+	</div>	 	
 	 	
 	<div class="form-group">
 	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of teaching staff(Male) </label>
@@ -144,6 +146,18 @@
      </div>
 </form>
 <script type="text/javascript">
+  		 function sum()
+ 		 {
+  			
+  			if( $("#txt_no_of_student_boys").val() != "" && $('#txt_no_of_student_girls').val() !=""){
+  				var sum = 0;
+	   			sum = parseInt( $("#txt_no_of_student_boys").val())+parseInt( $('#txt_no_of_student_girls').val());
+	   			$('#txt_no_of_student').val(sum);
+  			}else{
+  				$('#txt_no_of_student').val("0");
+  			}
+ 		 }
+  		 
          function checkNumber(evt)
         	{
         		evt = (evt) ? evt : window.event
@@ -155,84 +169,96 @@
         	}
  		$('#savecampusdetails').click(function()
  			{
- 			var school_id = $('#school_id').val();
- 			var updated_by = $('#updated_by').val();
- 			var campus_size = $('#txt_name').val();
- 			var area_unit = $('#area_unit').val();
- 			var no_of_building = $('#txt_no_of_bldng').val();
- 			var no_of_playgrounds = $('#txt_no_of_playground').val();
- 			var no_of_total_student = $('#txt_no_of_student').val();
- 			var txt_no_of_student_boys = $('#txt_no_of_student_boys').val();
- 			var txt_no_of_student_girls = $('#txt_no_of_student_girls').val();
- 			var txt_no_of_male_teaching_staff = $('#txt_no_of_male_teaching_staff').val();
- 			var txt_no_of_female_teaching_staff = $('#txt_no_of_female_teaching_staff').val();
- 			var txt_no_of_male_supporting_staff = $('#txt_no_of_male_supporting_staff').val();
- 			var txt_no_of_female_supporting_staff = $('#txt_no_of_female_supporting_staff').val();
- 			
-//  			if(no_of_building == "" 
-//  					|| no_of_playgrounds == "" 
-//  					||campus_size == "" 
-//  					|| no_of_total_student == "" 
-//  					|| txt_no_of_student_boys == ""
-//  					|| txt_no_of_student_girls == ""
-//  					|| txt_no_of_male_teaching_staff == ""
-//  					|| txt_no_of_female_teaching_staff == ""
-//  					|| txt_no_of_male_supporting_staff == ""
-//  					|| txt_no_of_female_supporting_staff == "")
-//  				{
-//  				  alert("All fields are mendatory");
-//  				}
-//  			else{
- 			$.ajax({
- 				
- 				url : 'webapi/campus/savecampus',
- 				type:'POST',
- 				data : {
- 					school_id : school_id,
- 					updated_by : updated_by,
- 					campus_size : campus_size,
- 					area_unit : area_unit,
- 					no_of_building : no_of_building,
- 					no_of_playground : no_of_playgrounds,
- 					no_of_total_student : no_of_total_student,
- 					no_of_student_boys : txt_no_of_student_boys,
- 					no_of_student_girls : txt_no_of_student_girls,
- 					no_of_male_teaching_staff : txt_no_of_male_teaching_staff,
- 					no_of_female_teaching_staff : txt_no_of_female_teaching_staff,
- 					no_of_male_supporting_staff : txt_no_of_male_supporting_staff,
- 					no_of_female_supporting_staff  : txt_no_of_female_supporting_staff
- 				},
- 				success : function(data)
- 				{
- 						
- 					if(data.status == 1){
- 						alert(data.message);	
- 						updateProgress($('#school_id').val());
-//  						$('#txt_name').val("");
-//  			 			$('#area_unit').val("");
-//  			 			$('#txt_no_of_bldng').val("");
-//  			 			$('#txt_no_of_playground').val("");
-//  			 			$('#txt_no_of_student').val("");
-//  			 			$('#txt_no_of_student_boys').val("");
-//  			 			$('#txt_no_of_student_girls').val("");
-//  			 			$('#txt_no_of_male_teaching_staff').val("");
-//  			 			$('#txt_no_of_female_teaching_staff').val("");
-//  			 			$('#txt_no_of_male_supporting_staff').val("");
-//  			 			$('#txt_no_of_female_supporting_staff').val("");
- 					}
- 					else
- 						alert(data.message);
- 					
- 			 			
- 						
- 				},
- 				error : function(data)
- 				{
- 					alert("Fail to save campus detail");
- 				}
- 			
- 			});
- 			//}
+ 			 var msg="";
+  			 if($("#txt_no_of_student_boys").val() == "" || $("#txt_no_of_student_boys").val() == null){
+	   			if(msg != "") msg+=", Please enter number of boys"; else msg="Please enter number of boys";
+  			 }
+  			 if( $('#txt_no_of_student_girls').val() == ""){
+  				if(msg != "") msg+=", Please enter number of girls"; else msg="Please enter number of girls";
+  			 }
+  			 if(msg != ""){
+  				 alert(msg);
+  			 }else{
+  				 
+  			 
+	 			var school_id = $('#school_id').val();
+	 			var updated_by = $('#updated_by').val();
+	 			var campus_size = $('#txt_name').val();
+	 			var area_unit = $('#area_unit').val();
+	 			var no_of_building = $('#txt_no_of_bldng').val();
+	 			var no_of_playgrounds = $('#txt_no_of_playground').val();
+	 			var no_of_total_student = $('#txt_no_of_student').val();
+	 			var txt_no_of_student_boys = $('#txt_no_of_student_boys').val();
+	 			var txt_no_of_student_girls = $('#txt_no_of_student_girls').val();
+	 			var txt_no_of_male_teaching_staff = $('#txt_no_of_male_teaching_staff').val();
+	 			var txt_no_of_female_teaching_staff = $('#txt_no_of_female_teaching_staff').val();
+	 			var txt_no_of_male_supporting_staff = $('#txt_no_of_male_supporting_staff').val();
+	 			var txt_no_of_female_supporting_staff = $('#txt_no_of_female_supporting_staff').val();
+	 			
+	//  			if(no_of_building == "" 
+	//  					|| no_of_playgrounds == "" 
+	//  					||campus_size == "" 
+	//  					|| no_of_total_student == "" 
+	//  					|| txt_no_of_student_boys == ""
+	//  					|| txt_no_of_student_girls == ""
+	//  					|| txt_no_of_male_teaching_staff == ""
+	//  					|| txt_no_of_female_teaching_staff == ""
+	//  					|| txt_no_of_male_supporting_staff == ""
+	//  					|| txt_no_of_female_supporting_staff == "")
+	//  				{
+	//  				  alert("All fields are mendatory");
+	//  				}
+	//  			else{
+	 			$.ajax({
+	 				
+	 				url : 'webapi/campus/savecampus',
+	 				type:'POST',
+	 				data : {
+	 					school_id : school_id,
+	 					updated_by : updated_by,
+	 					campus_size : campus_size,
+	 					area_unit : area_unit,
+	 					no_of_building : no_of_building,
+	 					no_of_playground : no_of_playgrounds,
+	 					no_of_total_student : no_of_total_student,
+	 					no_of_student_boys : txt_no_of_student_boys,
+	 					no_of_student_girls : txt_no_of_student_girls,
+	 					no_of_male_teaching_staff : txt_no_of_male_teaching_staff,
+	 					no_of_female_teaching_staff : txt_no_of_female_teaching_staff,
+	 					no_of_male_supporting_staff : txt_no_of_male_supporting_staff,
+	 					no_of_female_supporting_staff  : txt_no_of_female_supporting_staff
+	 				},
+	 				success : function(data)
+	 				{
+	 						
+	 					if(data.status == 1){
+	 						alert(data.message);	
+	 						updateProgress($('#school_id').val());
+	//  						$('#txt_name').val("");
+	//  			 			$('#area_unit').val("");
+	//  			 			$('#txt_no_of_bldng').val("");
+	//  			 			$('#txt_no_of_playground').val("");
+	//  			 			$('#txt_no_of_student').val("");
+	//  			 			$('#txt_no_of_student_boys').val("");
+	//  			 			$('#txt_no_of_student_girls').val("");
+	//  			 			$('#txt_no_of_male_teaching_staff').val("");
+	//  			 			$('#txt_no_of_female_teaching_staff').val("");
+	//  			 			$('#txt_no_of_male_supporting_staff').val("");
+	//  			 			$('#txt_no_of_female_supporting_staff').val("");
+	 					}
+	 					else
+	 						alert(data.message);
+	 					
+	 			 			
+	 						
+	 				},
+	 				error : function(data)
+	 				{
+	 					alert("Fail to save campus detail");
+	 				}
+	 			
+	 			});
+	 			}
  			//alert("campus details");
  		});
  		function updateCampus(strReason)

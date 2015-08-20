@@ -1203,8 +1203,8 @@ public class SchoolDAOImp {
 							ClassBatchTime classBatchTime = classBatchTimeIterator.next();
 							classBatchTime.setClassInfo(classInfo);
 							session5.save(classBatchTime);
-							log += "  : "+classBatchTime.getBatchTimeFrom();
-							log += " | Amount : "+classBatchTime.getBatchTimeTo();
+							log += "  | from : "+classBatchTime.getBatchTimeFrom();
+							log += " | to : "+classBatchTime.getBatchTimeTo();
 						}
 					}
 				}
@@ -2487,6 +2487,21 @@ public class SchoolDAOImp {
         	log +=" | Amount : "+classFeeList.get(f).getAmount();
         }
         
+        String batchTimeQuery = "from ClassBatchTime where classInfo.id = :id";
+		HibernateUtil hibernateUtil5 = new HibernateUtil();
+		Session sesionBatchTime = hibernateUtil5.openSession();
+		Query querybatchTime = sesionBatchTime.createQuery(batchTimeQuery);
+		querybatchTime.setParameter("id", classId);
+		List<ClassBatchTime> classBatchTimeList = queryFeeType.list();
+		sesionBatchTime.close();
+		
+		
+        log +="| Batch Time : ";
+        for(int f =0;f<classBatchTimeList.size();f++){
+        	log +=" | from  : "+classBatchTimeList.get(f).getBatchTimeFrom();
+        	log +=" | to : "+classBatchTimeList.get(f).getBatchTimeTo();
+        }
+        
         try{
         	 String deleteClassFee = "delete ClassFee where classInfo.id = :id";
              HibernateUtil hibernateUtildeleteClassFee = new HibernateUtil();
@@ -2497,6 +2512,16 @@ public class SchoolDAOImp {
              queryDeleteClassFee.executeUpdate();
              sessionDeleteClassFee.getTransaction().commit();
              sessionDeleteClassFee.close();
+             
+             String deleteClassBatchTime = "delete ClassBatchTime where classInfo.id = :id";
+             HibernateUtil hibernateUtildeleteClassBatchTime = new HibernateUtil();
+             Session sessionDeleteClassBatchTime = hibernateUtildeleteClassBatchTime.openSession();
+             sessionDeleteClassBatchTime.beginTransaction();
+             Query queryDeleteClassBatchTime = sessionDeleteClassBatchTime.createQuery(deleteClassBatchTime);
+             queryDeleteClassBatchTime.setParameter("id", classId);
+             queryDeleteClassBatchTime.executeUpdate();
+             sessionDeleteClassBatchTime.getTransaction().commit();
+             sessionDeleteClassBatchTime.close();
              
              String deleteClassSubjects = "delete ClassSubjects where classInfo.id = :id";
              HibernateUtil hibernateUtildeleteClassSubjects = new HibernateUtil();
