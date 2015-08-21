@@ -388,7 +388,7 @@ public class SchoolController extends ResourceConfig {
 		return schoolSearchImpl.getContactClicksBySchoolId(schoolId);
 	}
 	
-	@GET
+	@POST
 	@Path("contactclicked.json/{schoolId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void updateContactClicks(@PathParam("schoolId") Integer schoolId)
