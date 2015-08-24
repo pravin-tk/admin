@@ -50,20 +50,20 @@
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Weightage</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="weightage" id="weightage" value="<% out.print(ratingcategory.getWeightage()); %>">
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                 Weightage/priority.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Weightage</label> -->
+<!--                                     <div class="col-sm-6"> -->
+<%--                                         <input type="text" class="form-control" name="weightage" id="weightage" value="<% out.print(ratingcategory.getWeightage()); %>"> --%>
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-4"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                  Weightage/priority. -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Image</label>
                                     <div class="col-sm-6">

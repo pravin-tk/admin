@@ -27,7 +27,7 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Max Rating</th>
+<!--                                             <th>Max Rating</th> -->
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
                                         </tr>
@@ -38,7 +38,7 @@
                                         %>
                                         <tr>
                                             <td><% out.print(schoolcategory_list.get(i).getName()); %></td>
-                                            <td><% out.print(schoolcategory_list.get(i).getMaxPoints()); %></td>
+<%--                                             <td><% out.print(schoolcategory_list.get(i).getMaxPoints()); %></td> --%>
                                             <td><% if(schoolcategory_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editSchoolCategory(<% out.print(schoolcategory_list.get(i).getId()); %>);" class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a>
@@ -105,12 +105,13 @@
                     </div>
                </form>
  		</div>
-    </div>
+    
     <!-- /Right main content -->
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveSchoolCategory(){
-	$.post("../webapi/settings/schoolcategorytype/save", {name: $("#name").val(), maxPoints: $("#maxPoints").val(), status: $('input[name=status]:checked').val()}, function(data){
+	maxPoints = 0.0;
+	$.post("../webapi/settings/schoolcategorytype/save", {name: $("#name").val(), maxPoints: maxPoints, status: $('input[name=status]:checked').val()}, function(data){
 		if(data.status == 1)
 			window.location.href = "${baseUrl}/settings/type-of-school.jsp";
 		else

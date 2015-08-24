@@ -2492,7 +2492,7 @@ public class SchoolDAOImp {
 		Session sesionBatchTime = hibernateUtil5.openSession();
 		Query querybatchTime = sesionBatchTime.createQuery(batchTimeQuery);
 		querybatchTime.setParameter("id", classId);
-		List<ClassBatchTime> classBatchTimeList = queryFeeType.list();
+		List<ClassBatchTime> classBatchTimeList = querybatchTime.list();
 		sesionBatchTime.close();
 		
 		
@@ -2599,8 +2599,8 @@ public class SchoolDAOImp {
 		
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		
-		Query query = session.createQuery(hql);
+	
+		Query query = session.createQuery(hql).setCacheable(false);
 		query.setParameter("class_id", class_id);
 		List<ClassBatchTime> classBatchTimeList = query.list();
 		session.close();

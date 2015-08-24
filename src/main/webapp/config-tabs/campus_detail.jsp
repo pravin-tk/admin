@@ -66,7 +66,7 @@
 	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (boys) </label>
 	  <div class="col-sm-6">
 	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student_boys" onKeyPress="return checkNumber(event)"
-	       placeholder="enter no of students boys" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBoys());}%>">
+	       placeholder="enter no of students boys" onkeyup="sum();" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBoys());}%>">
 	  </div>
 	</div>
 	                              
@@ -149,10 +149,23 @@
   		 function sum()
  		 {
   			
-  			if( $("#txt_no_of_student_boys").val() != "" && $('#txt_no_of_student_girls').val() !=""){
-  				var sum = 0;
-	   			sum = parseInt( $("#txt_no_of_student_boys").val())+parseInt( $('#txt_no_of_student_girls').val());
-	   			$('#txt_no_of_student').val(sum);
+  			if($("#txt_no_of_student_boys").val() != ""){
+  				if($('#txt_no_of_student_girls').val() !=""){
+  					var sum = 0;
+  		   			sum = parseInt( $("#txt_no_of_student_boys").val())+parseInt( $('#txt_no_of_student_girls').val());
+  		   			$('#txt_no_of_student').val(sum);
+  				}else{
+  					$('#txt_no_of_student').val($("#txt_no_of_student_boys").val());
+  				}
+  			}
+  			if($('#txt_no_of_student_girls').val() !=""){
+  				if( $("#txt_no_of_student_boys").val() != ""){
+  					var sum = 0;
+  		   			sum = parseInt( $("#txt_no_of_student_boys").val())+parseInt( $('#txt_no_of_student_girls').val());
+  		   			$('#txt_no_of_student').val(sum);
+  				}else{
+  					$('#txt_no_of_student').val($("#txt_no_of_student_girls").val());
+  				}
   			}else{
   				$('#txt_no_of_student').val("0");
   			}

@@ -27,7 +27,7 @@
                                     <thead>
                                         <tr>
                                             <th>Category Name</th>
-                                            <th>Weightage</th>
+<!--                                             <th>Weightage</th> -->
                                             <th class="alignRight">Actions</th>
                                         </tr>
                                     </thead>
@@ -37,7 +37,7 @@
                                         %>
                                         <tr>
                                             <td><% out.print(ratingcategory_list.get(i).getCategoryName()); %></td>
-                                            <td><% out.print(ratingcategory_list.get(i).getWeightage()); %></td>
+<%--                                             <td><% out.print(ratingcategory_list.get(i).getWeightage()); %></td> --%>
                                             <td class="alignRight">
                                             	<a href="javascript:editRatingCategory(<% out.print(ratingcategory_list.get(i).getId()); %>);" class="btn btn-success icon-btn"><i class="fa fa-pencil"></i></a>
                                             </td>
@@ -67,21 +67,21 @@
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Weightage</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="weightage" id="weightage" placeholder="">
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="tooltip custom-tool-tip right">
-                                            <div class="tooltip-arrow"></div>
-                                            <div class="tooltip-inner">
-                                                 Weightage/priority.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
+<!--                                 <div class="form-group"> -->
+<!--                                     <label class="col-sm-2 control-label">Weightage</label> -->
+<!--                                     <div class="col-sm-6"> -->
+<!--                                         <input type="text" class="form-control" name="weightage" id="weightage" placeholder=""> -->
+<!--                                     </div> -->
+<!--                                     <div class="col-sm-4"> -->
+<!--                                         <div class="tooltip custom-tool-tip right"> -->
+<!--                                             <div class="tooltip-arrow"></div> -->
+<!--                                             <div class="tooltip-inner"> -->
+<!--                                                  Weightage/priority. -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
+                                 <input type="hidden" class="form-control" name="weightage" id="weightage" placeholder="" value="0.0"> 
                                  <div class="form-group">
 			                         <label class="col-sm-2 control-label">Image</label>
 			                         <div class="col-sm-6">

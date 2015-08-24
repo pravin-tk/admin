@@ -185,7 +185,7 @@
                                  <div class="form-group">
                                     <label class="col-sm-2 control-label">Pickup Time</label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="pickuptime" id="pickuptime"  placeholder="hh:mm:ss">
+                                        <input type="text" class="form-control" name="pickuptime" id="pickuptime"  placeholder="hh:mm am/pm">
                                     </div>
   
                                     <div class="col-sm-8">
@@ -200,7 +200,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Drop Time</label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="droptime" id="droptime" placeholder="hh:mm:ss">
+                                        <input type="text" class="form-control" name="droptime" id="droptime" placeholder="hh:mm am/pm">
                                     </div>
   
                                     <div class="col-sm-8">
@@ -227,14 +227,16 @@
                     </div>
                </form>
  		</div>
-    </div>
+    
     <!-- /Right main content -->
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 function saveRouteStop(){
 	var stopno = $.trim($("#stopno").val());
-	var pickuptime = $("#pickuptime").val(); 
-	var droptime = $("#droptime").val();
+	if($("#pickuptime").val() != "")
+	var pickuptime = getTime($("#pickuptime").val()); 
+	if($("#droptime").val() != "")
+	var droptime = getTime($("#droptime").val());
 	var routeId = $("#routeId").val();
 	var stopId = $("#stopId").val();
 	if (stopno == "" ) {
@@ -249,8 +251,8 @@ function saveRouteStop(){
 		
 	} else { 
 		$.post("../webapi/transport/routestop/save", {stopno: $("#stopno").val(),
-		routeId: $("#routeId").val(),stopId: $("#stopId").val(), pickuptime: $("#pickuptime").val(), 
-		droptime: $("#droptime").val(), }, function(data){
+		routeId: $("#routeId").val(),stopId: $("#stopId").val(), pickuptime: pickuptime, 
+		droptime: droptime, }, function(data){
 		if($("#routeId").val() > 0){
 			if(data.status == 1)
 				window.location.href = "${baseUrl}/transport/route-stop.jsp?route_id="+$("#routeId").val();

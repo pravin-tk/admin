@@ -120,7 +120,7 @@
                                  <div class="form-group">
                                     <label class="col-sm-2 control-label">Pickup Time</label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="pickuptime" id="pickuptime"  placeholder="hh:mm:ss" value = "<% out.print(rowRouteStop.getBusPickTime()); %>">
+                                        <input type="text" class="form-control" name="pickuptime" id="pickuptime"  placeholder="hh:mm am/pm">
                                     </div>
   
                                     <div class="col-sm-8">
@@ -135,7 +135,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Drop Time</label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="droptime" id="droptime" placeholder="hh:mm:ss" value = "<% out.print(rowRouteStop.getBusDropTime()); %>">
+                                        <input type="text" class="form-control" name="droptime" id="droptime" placeholder="hh:mm am/pm" value = "hours_am_pm('<% rowRouteStop.getBusDropTime(); %>');">
                                     </div>
   
                                     <div class="col-sm-8">
@@ -163,15 +163,18 @@
                     </div>
                </form>
  		</div>
-    </div>
     <!-- /Right main content -->
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
+$("#pickuptime").val(hours_am_pm("<%out.print(rowRouteStop.getBusPickTime());%>")); 
+$("#droptime").val(hours_am_pm("<%out.print(rowRouteStop.getBusDropTime()); %>"));
 function saveRouteStopInfo(){
 	var strcat=$.trim($("#tname").val());
 	var stopno = $.trim($("#stopno").val());
-	var pickuptime = $("#pickuptime").val(); 
-	var droptime = $("#droptime").val();
+	if($("#pickuptime").val() != "")
+	var pickuptime = getTime($("#pickuptime").val()); 
+	if($("#droptime").val() != "")
+	var droptime = getTime($("#droptime").val());
 	var routeId = $("#routeId").val();
 	var stopId = $("#stopId").val();
 	if (stopno == "" ) {
@@ -186,8 +189,8 @@ function saveRouteStopInfo(){
 		
 	} else {
 		$.post("../webapi/transport/routestop/update", {id: $("#id").val(), stopno: $("#stopno").val(),
-			routeId: $("#routeId").val(),stopId: $("#stopId").val(), pickuptime: $("#pickuptime").val(), 
-			droptime: $("#droptime").val()}, function(data){
+			routeId: $("#routeId").val(),stopId: $("#stopId").val(), pickuptime: pickuptime, 
+			droptime: droptime}, function(data){
 			window.location.href = "${baseUrl}/transport/route-stop.jsp?route_id="+$("#routeId").val();
 		});
 	}

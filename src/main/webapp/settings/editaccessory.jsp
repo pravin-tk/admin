@@ -68,7 +68,7 @@
 <script type="text/javascript">
 	function saveAccessory(){
 		$.post("../webapi/settings/accessory/update", {id: $("#id").val(), name: $("#name").val()}, function(data){
-			if(data.staus == 1)
+			if(data.status == 1)
 				window.location.href = "${baseUrl}/settings/accessory.jsp";
 			else
 				alert(data.message);
