@@ -276,8 +276,11 @@ public class SchoolSearchController {
 	@GET
 	@Path("/compareschools.json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<SchoolList> compareSchools(@QueryParam("schoolIds") String schoolIds )
-	{
+	public List<SchoolList> compareSchools(
+			@QueryParam("schoolIds") String schoolIds,
+			@QueryParam("latitude") @DefaultValue("") String latitude,
+			@QueryParam("longitude") @DefaultValue("") String longitude
+	) {
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		List<Integer> integerSchoolIds = new ArrayList<Integer>();
 		try{
@@ -289,7 +292,7 @@ public class SchoolSearchController {
 			return null;
 		}
 		
-		return schoolSearchImpl.compareSchools(integerSchoolIds);
+		return schoolSearchImpl.compareSchools(integerSchoolIds, latitude, longitude);
 	}
 	
 }

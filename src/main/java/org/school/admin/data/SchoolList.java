@@ -29,6 +29,7 @@ public class SchoolList implements java.io.Serializable {
 	private Double totalFee;
 	private int seats;
 	private Short standardId;
+	private String standardName;
 	private String primaryContactNo;
 	private boolean isShortlisted;
 	private Double campusSize;
@@ -342,6 +343,14 @@ public class SchoolList implements java.io.Serializable {
 
 	public void setTeachers(long teachers) {
 		this.teachers = teachers;
+	}
+
+	public String getStandardName() {
+		return standardName;
+	}
+
+	public void setStandardName(String standardName) {
+		this.standardName = standardName;
 	}
 	
 }

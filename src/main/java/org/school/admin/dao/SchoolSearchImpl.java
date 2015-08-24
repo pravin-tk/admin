@@ -176,10 +176,10 @@ public class SchoolSearchImpl {
 				+ " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
 				+ " s.schoolType as schoolType,s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
 				+ distance + " as distance,ci.totalFee as totalFee,ci.vacantSeat as seats,"
-				+ " ci.standardType.id as standardId, ta.name as teachingApproach,"
+				+ " ci.standardType.id as standardId, st.name as standardName, ta.name as teachingApproach,"
 				+ " COALESCE( (SELECT con.mobileNo FROM ContactInfo con WHERE s.schoolId = con.school.id AND con.isPrimary = 1 AND con.type = 1), '') as primaryContactNo "
 				+ isShortlistedQuery
-				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci"
+				+ " FROM SchoolSearch s, School ss JOIN ss.classInfos ci JOIN ci.standardType st"
 				+ " JOIN ss.schoolMediums sm JOIN ci.teachingApproachType ta" + queryJoin
 				+ " WHERE s.schoolId = ss.id "
 				+ queryCondition+ " Group By ss.id"+finalOrder
@@ -758,40 +758,49 @@ public class SchoolSearchImpl {
 		return schoolAnalyticsDataList;
 	}
 	
-	public void updateContactClicksBySchoolId( Integer schoolId ) {
+	public ResponseMessage updateContactClicksBySchoolId( Integer schoolId ) {
 		String hql = "FROM SchoolAnalytics WHERE school.id = :school_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql)
 				.setParameter("school_id", schoolId);
 		List<SchoolAnalytics> result = query.list();
-		
-		if(result.isEmpty() != true) {
-			Integer contactClicks=0;
-			for(int i=0; i< result.size(); i++) {
-				contactClicks = result.get(i).getContactClicks();
+		ResponseMessage responseMessage = new ResponseMessage();
+		try {
+			if(result.isEmpty() != true) {
+				Integer contactClicks=0;
+				for(int i=0; i< result.size(); i++) {
+					contactClicks = result.get(i).getContactClicks();
+				}
+				++contactClicks;
+				hql = "UPDATE SchoolAnalytics SET contact_clicks = :contact_clicks WHERE school.id = :school_id";
+				query = session.createQuery(hql).setParameter("contact_clicks", contactClicks).setParameter("school_id",schoolId);
+				session.beginTransaction();
+				query.executeUpdate();
+				session.getTransaction().commit();
+				session.flush();
+			} else {
+				SchoolAnalytics schoolAnalytics = new SchoolAnalytics();
+				schoolAnalytics.setContactClicks(1);
+				hql = "FROM School where id = :school_id";
+				query = session.createQuery(hql).setParameter("school_id",schoolId);
+				schoolAnalytics.setSchool((School)query.uniqueResult());
+				
+				session.beginTransaction();
+				session.save(schoolAnalytics);
+				session.getTransaction().commit();
+				session.flush();
 			}
-			++contactClicks;
-			hql = "UPDATE SchoolAnalytics SET contact_clicks = :contact_clicks WHERE school.id = :school_id";
-			query = session.createQuery(hql).setParameter("contact_clicks", contactClicks).setParameter("school_id",schoolId);
-			session.beginTransaction();
-			query.executeUpdate();
-			session.getTransaction().commit();
-			session.flush();
-		} else {
-			SchoolAnalytics schoolAnalytics = new SchoolAnalytics();
-			schoolAnalytics.setContactClicks(1);
-			hql = "FROM School where id = :school_id";
-			query = session.createQuery(hql).setParameter("school_id",schoolId);
-			schoolAnalytics.setSchool((School)query.uniqueResult());
+			responseMessage.setMessage("success");
+			responseMessage.setStatus(1);
 			
-			session.beginTransaction();
-			session.save(schoolAnalytics);
-			session.getTransaction().commit();
-			session.flush();
+		} catch(Exception e){
+			responseMessage.setMessage(e.getMessage());
+			responseMessage.setStatus(0);
 		}
 		
 		session.close();
+		return responseMessage;
 	}
 	
 	public List<NearbySchoolList> getNearbySchoolByLatitudeByLogitude(SearchRequest searchRequest) {
@@ -962,12 +971,21 @@ public class SchoolSearchImpl {
 		return responseMessage;
 	}
 	
-	public List<SchoolList> compareSchools(List<Integer> schoolIds) {
+	public List<SchoolList> compareSchools(List<Integer> schoolIds, String latitude, String longitude) {
 		
 		List<SchoolList> resultRaw = new ArrayList<SchoolList>();
 		if(schoolIds.isEmpty() == false) {
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.getSessionFactory().openSession();
+			
+			String distance = "";
+			if(latitude.trim().length() > 0 && longitude.trim().length() > 0) {
+				distance = ", ROUND(6371 *  "
+					+ " ACOS(COS( RADIANS(" + latitude + ") ) * COS( RADIANS( s.latitude ) ) * " 
+					+ " COS(RADIANS( s.longitude ) - RADIANS(" + longitude + ") ) "
+					+ " + SIN(RADIANS("+ latitude +")) * SIN(RADIANS(s.latitude)) ),2) as distance";
+			}
+			
 			String hql = "SELECT s.schoolId as schoolId, s.name as name,s.alias as alias, s.latitude as latitude,"
 						 + " s.longitude as longitude, s.tagLine as tagLine, s.aboutSchool as aboutSchool,"
 						 + " s.homeImage as homeImage,s.logo as logo, s.establishmentType as establishmentType,"
@@ -975,9 +993,11 @@ public class SchoolSearchImpl {
 					     + " s.cityName as cityName,s.boardName as boardName,s.mediums as mediums,"
 					     + " s.schoolCategory as schoolCategory,s.schoolClassification as schoolClassification,"
 					     + " s.rating as rating,s.galeryImages as galeryImages,s.reviews as reviews, "
+					     + " s.schoolType as schoolType, "
 					     + " ci.totalFee as totalFee,  "
 					     + " ci.vacantSeat as seats,"
 						 + " ci.standardType.id as standardId "
+						 + distance
 						 + " FROM SchoolSearch s, ClassInfo ci"
 						 + " WHERE s.schoolId = ci.school.id AND s.schoolId IN(:schoolIds)"
 						 + " GROUP BY s.schoolId";
