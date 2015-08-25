@@ -120,7 +120,7 @@
 	                       		}
                     	   	}
 							out.print(" <label class='checkbox-inline'> <input type='radio' value='"+boardType.getId()+
-										  "' id='board' name='board' "+checked+"> "+boardType.getBoardName()+"</label>"); 
+										  "' id='board' name='board' "+checked+">&nbsp;&nbsp;"+boardType.getBoardName()+"</label>"); 
                        	}
                     	 }
 						%>

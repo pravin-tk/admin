@@ -54,7 +54,7 @@
                        	for(int i=0;i<boardTypeList.size();i++){ 
                     	   	BoardType boardType = boardTypeList.get(i);
 							out.print(" <label class='checkbox-inline'> <input type='radio' value='"+boardType.getId()+
-										  "' id='board' name='board' >"+boardType.getBoardName()+"</label>"); 
+										  "' id='board' name='board' >&nbsp;&nbsp;"+boardType.getBoardName()+"</label>"); 
                        	}
                     	 }
 						%>
@@ -181,10 +181,10 @@
                                     <label class="col-sm-2 control-label">Is Free Listing</label>
                                     <div class="col-sm-2">
                                         <label class="radio-inline">
-                                            <input type="radio" name="isFreeListing" id="isFreeListing" value="1" onClick="openTrialDate();">Yes
+                                            <input type="radio" name="isFreeListing" id="isFreeListing1" value="1" checked="checked" onClick="openTrialDate();">Yes
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="isFreeListing" id="isFreeListing" value="0" checked="checked" onClick="closeTrialDate();">No
+                                            <input type="radio" name="isFreeListing" id="isFreeListing0" value="0" onClick="closeTrialDate();">No
                                         </label>
                                     </div>
                             </div>
@@ -236,11 +236,14 @@
 		   			</div>
                 </form>
             </div>
-        </div>
-    </div>
     <%@ include file="footer.jsp" %>
     <script src="${baseUrl}/js/jquery.form.js"></script>
     <script type="text/javascript">
+    if($("#isFreeListing1").is(':checked')){
+    	openTrialDate();
+    }
+    
+    
     	$("#trialStartDate").datepicker({
    		 format: 'yyyy-mm-dd',
 		    startDate: '2010-01-01'
@@ -309,6 +312,7 @@
             url: '${baseUrl}/webapi/school/addschool',
      		dataType: 'json'
         }; 
+        
          $("#trialStartDate").datepicker('setDate',new Date());
          $("#trialEndDate").datepicker('setDate',new Date(new Date().setMonth(new Date().getMonth()+6)));
        

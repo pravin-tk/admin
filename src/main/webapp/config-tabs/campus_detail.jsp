@@ -19,13 +19,13 @@
 %> 
 <form method="post" action="" class="form-horizontal" id="campus_detail">
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Campus size</label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total area of your campus.">Campus size</label>
 	  <div class="col-sm-6">
 	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_name" placeholder="enter campus size" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getCampusSize());}%>">
 	  </div>
 	</div>
 	<div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">Unit of campus size</label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Select the area unit for your campus.">Unit of campus size</label>
 	    <div class="col-sm-6">
 	       	<select name="area_unit" id="area_unit" class="form-control">
 	       		<option value="0">Select Area Unit</option>
@@ -47,71 +47,71 @@
 	    </div>
 	</div>
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of building </label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total number of buildings in your campus.">No. of building </label>
 	  <div class="col-sm-6">
-	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_bldng" placeholder="enter no of buildings" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBuildings());}%>">
+	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_bldng" placeholder="enter no. of buildings" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBuildings());}%>">
 	  </div>
 	</div>
 	                              
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of playgrounds </label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total number of playgrounds in your campus.">No. of playgrounds </label>
 	  <div class="col-sm-6">
-	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_playground" onKeyPress="return checkNumber(event)" placeholder="enter no of playgrounds" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalPlaygrounds());}%>">
+	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_playground" onKeyPress="return checkNumber(event)" placeholder="enter no. of playgrounds" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalPlaygrounds());}%>">
 	  </div>
 	</div>
 	                              
 	
 	                              
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (boys) </label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total numbers of boys in your campus.">No. of students (boys) </label>
 	  <div class="col-sm-6">
 	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student_boys" onKeyPress="return checkNumber(event)"
-	       placeholder="enter no of students boys" onkeyup="sum();" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBoys());}%>">
+	       placeholder="enter no. of students boys" onkeyup="sum();" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalBoys());}%>">
 	  </div>
 	</div>
 	                              
 	<div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students (girls) </label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total number of girls in your campus.">No. of students (girls) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" onkeyup="sum();" class="form-control" id="txt_no_of_student_girls" onKeyPress="return checkNumber(event)"
-	         placeholder="enter no of students girls" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalGirls()); }%>">
+	         placeholder="enter no. of students girls" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalGirls()); }%>">
 	    </div>
 	</div>
 	 	
 	<div class="form-group">
-	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">No of students </label>
+	  <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="addtion of total boys and total girls in your campus.">No. of students </label>
 	  <div class="col-sm-6">
-	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student"   placeholder="enter no of students" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalStudents()); }%>" disabled>
+	      <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_student"   placeholder="enter no. of students" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalStudents()); }%>" disabled>
 	  </div>
 	</div>	 	
 	 	
 	<div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of teaching staff(Male) </label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total number of male teachers in your campus.">  No. of teaching staff(Male) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_male_teaching_staff" onKeyPress="return checkNumber(event)"
-	        placeholder="enter no of  male teaching staff" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalMaleTeacher());} %>">
+	        placeholder="enter no. of  male teaching staff" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalMaleTeacher());} %>">
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of teaching staff(Female) </label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total number of female teachers in your campus.">  No. of teaching staff(Female) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_female_teaching_staff" onKeyPress="return checkNumber(event)"
-	        placeholder="enter no of female teaching staff " value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalFemaleTeacher()); }%>">
+	        placeholder="enter no. of female teaching staff " value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getTotalFemaleTeacher()); }%>">
 	    </div>
 	</div>
 	   <div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip...">  No of supporting staff(Male) </label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total number of male non-teaching staff in your campus.">  No. of supporting staff(Male) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_male_supporting_staff" onKeyPress="return checkNumber(event)"
-	        placeholder="enter no of supporting staff male" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getMaleSupportingStaff()); }%>">
+	        placeholder="enter no. of supporting staff male" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getMaleSupportingStaff()); }%>">
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Tooltip..."> 
-	     No of supporting staff(Female) *</label>
+	    <label for="" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="bottom" title="Total number of female non-teaching staff in your campus."> 
+	     No. of supporting staff(Female) </label>
 	    <div class="col-sm-6">
 	        <input data-brackets-id="3402" type="text" class="form-control" id="txt_no_of_female_supporting_staff" onKeyPress="return checkNumber(event)"
-	        placeholder="enter no of supporting staff female" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getFemaleSupportingStaff()); }%>">
+	        placeholder="enter no. of supporting staff female" value="<% if(campusInfoList.size() > 0){ out.print(campusInfo.getFemaleSupportingStaff()); }%>">
 	    </div>
 	</div>
 	
