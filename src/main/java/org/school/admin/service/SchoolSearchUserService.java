@@ -99,8 +99,9 @@ public class SchoolSearchUserService {
 			if(fetchedUser == null) {
 				String autoPass = this.commonUtility.randomString(8);
 				userRegistrationInfo.setPassword(autoPass);
-				responseMessage = schoolSearchUserRepo.signUpUser(userRegistrationInfo, inputStream, uploadFileLocation );
+				responseMessage = schoolSearchUserRepo.signUpUser(userRegistrationInfo, inputStream, uploadFileLocation, socialType );
 				userRegistrationInfo.setId(responseMessage.getId());
+				userRegistrationInfo.setStatus((byte)1);
 				try{
 					if(userRegistrationInfo.getImage().trim().length() <= 0){
 						userRegistrationInfo.setImage(img_path+"avatar/avatar.jpg");

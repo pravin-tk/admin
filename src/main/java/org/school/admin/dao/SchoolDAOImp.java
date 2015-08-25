@@ -2599,8 +2599,8 @@ public class SchoolDAOImp {
 		
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		
-		Query query = session.createQuery(hql);
+	
+		Query query = session.createQuery(hql).setCacheable(false);
 		query.setParameter("class_id", class_id);
 		List<ClassBatchTime> classBatchTimeList = query.list();
 		session.close();

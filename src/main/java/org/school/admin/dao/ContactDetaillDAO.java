@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.CacheMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.school.admin.data.SchoolContact;
@@ -239,6 +240,8 @@ public class ContactDetaillDAO {
 				contactDetail.setId(getContactInfo.get(0).getId());
 				updateContactInfo.update("id",contactDetail);
 				updateContactInfo.getTransaction().commit();
+				//updateContactInfo.flush();
+				//updateContactInfo.clear();
 				updateContactInfo.close();
 				response.setStatus(1);
 				response.setMessage("Updated successfully");
@@ -283,8 +286,8 @@ public class ContactDetaillDAO {
 		
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		
-		Query query = session.createQuery(hql);
+		session.setCacheMode(CacheMode.REFRESH);
+		Query query = session.createQuery(hql).setCacheable(false);
 		query.setParameter("school_id", school_id);
 		
 		List<ContactInfo> contactInfoList = query.list();

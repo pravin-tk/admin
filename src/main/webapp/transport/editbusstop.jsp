@@ -140,13 +140,21 @@
                     </div>
                </form>
  		</div>
-    </div>
     <!-- /Right main content -->
 <%@ include file="../footer.jsp" %>
 <script type="text/javascript">
 	function saveBusStop(){
-		$.post("../webapi/settings/busstop/update", {id: $("#id").val(), name: $("#name").val(), pickupLatitude: $("#pickup_latitude").val(), pickupLongitude: $("#pickup_longitude").val(), dropLatitude: $("#drop_latitude").val(), dropLongitude: $("#drop_longitude").val(), status: $('input[name=status]:checked').val()}, function(data){
-			window.location.href = "${baseUrl}/transport/busstop.jsp";
+		$.post("../webapi/settings/busstop/update", {id: $("#id").val(),
+			name: $("#name").val(),
+			pickupLatitude: $("#pickup_latitude").val(), 
+			pickupLongitude: $("#pickup_longitude").val(), 
+			dropLatitude: $("#drop_latitude").val(), 
+			dropLongitude: $("#drop_longitude").val(), 
+			status: $('input[name=status]:checked').val()}, function(data){
+				if(data.status == 0)
+					alert(data.message);
+				else
+					window.location.href = "${baseUrl}/transport/busstop.jsp";
 		});
 	}
 	

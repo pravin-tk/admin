@@ -37,7 +37,6 @@
                      <table class="table table-striped table-bordered" id="contact-detail-table">
                          <thead>
                              <tr>
-                                 
                                  <th>Name</th>
                                  <th>Email</th>
                                  <th>Mobile No.</th>
@@ -256,6 +255,9 @@
     		
     		
     		var msg = "";
+    		if(!$("#usertype0").is(':checked') && !$("#usertype1").is(':checked')){
+    			if(msg != "") msg = msg+",Please select internal or external from check box"; else  msg ="Please Please select internal or external from check box";
+    		}
     		if ($("#name").val().length ==0 && ($("#email").val().length == 0 && $("#mobile_no").val().length == 0 && $("#contact_no").val().length == 0))
     		{
     			if(msg != "") msg = msg+",Please enter your name, email id and mobile number and conatct number"; else  msg ="Please enter your name, email id and mobile number and contact number";
@@ -321,7 +323,8 @@
 		    			usertype : usertype.toString(), name: $("#name").val(), email : $("#email").val(), 
 		    			mobile : $("#mobile_no").val(),contact : $("#contact_no").val(),
 		    			isPrimary: $("input[name='is_primary']:checked").val()},
-		    		method : 'POST',
+		    		type : 'POST',
+		    		 dataType: 'json',
 		    		success: function(data)
 		    		{
 		    			if(data.status == 1){
@@ -335,7 +338,6 @@
 		 			  updateProgress(school_id);
 		 			 showContactDetail();
 		 			    alert(data.message);
-		 			   $("input[name='is_primary']:checked").val(0);
 		 			   $(".contact-new").hide();
 		 			   $(".contact-list").show();
 		 			   $("#savecontact").show();
@@ -436,7 +438,7 @@
 <%-- 		var user_id = <%out.print(user_id3);%> --%>
 		
 // 		var usertype = [];
-// 		$('input[name="usertype[]"]:checked').each(function(){
+//  		$('input[name="usertype[]"]:checked').each(function(){
 // 			usertype.push($(this).val());
 // 		});
 // 		var msg = "";
@@ -566,8 +568,8 @@ $("#updateContact").click(function(){
 				  			  showContactDetail();
 				  			   alert("Updated successfully..");
 				  			  $("#id").val('');
-				  			  $("#is_primary_yes").prop( "checked", false);
-				  			  $("#is_primary_no").prop( "checked", true);
+				  			  $("#is_primary_yes").prop( "checked", true);
+				  			  $("#is_primary_no").prop( "checked",false);
 				  			$("#contactUpReason").val("");
 				  			   $(".contact-new").hide();
 				  			   $(".contact-list").show();
@@ -577,7 +579,7 @@ $("#updateContact").click(function(){
 		    				alert(data.message);
 		    			}
 		    			
-		     		});
+		     		},'json');
 		 		}
  }
 	function deleteContactInfo(contactId,strReason)
@@ -642,7 +644,7 @@ $("#updateContact").click(function(){
 				$("#contact_detail_add1").show();
 				$("#contact_detail_add2").show();			 
 			}
-		});
+		},'json');
 		
 	}
 </script>

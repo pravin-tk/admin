@@ -16,6 +16,7 @@
 <%@page import="org.school.admin.model.City"%>
 <%@page import="org.school.admin.service.CityNamesService"%>
 <%@page import="java.util.List"%>
+<%@page import="javax.servlet.RequestDispatcher" %>
 <%
 	session = request.getSession(false);
 	List<City> city_list_drop_dn = null; 
@@ -104,12 +105,30 @@
                         	}
                         	else
                             {
-                            	response.sendRedirect("index.jsp");
+                        		if(!response.isCommitted())
+                            		response.sendRedirect("index.jsp");
+                        		else{
+                        			try{
+                        				RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+                        				rd.forward(request, response);
+                        			}catch(Exception e){
+                        				System.err.println(e);
+                        			}
+                        		}
                             }
                         }
                         else
                         {
-                        	response.sendRedirect("index.jsp");
+                        	if(!response.isCommitted())
+                        		response.sendRedirect("index.jsp");
+                    		else{
+                    			try{
+                    				RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+                    				rd.forward(request, response);
+                    			}catch(Exception e){
+                    				System.err.println(e);
+                    			}
+                    		}
                         }
                         %> <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">

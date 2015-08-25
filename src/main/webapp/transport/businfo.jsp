@@ -80,7 +80,7 @@
                     <div class="form-group">
                          <label class="col-sm-2 control-label">Bus No.</label>
                          <div class="col-sm-2">
-                             <input type="text" id="bus_number" name="bus_number" class="form-control" placeholder="">
+                             <input type="text" id="bus_number" name="bus_number" maxlength="10" class="form-control" placeholder="">
                          </div>
                          <div class="col-sm-8">
                              <div class="tooltip custom-tool-tip right">
@@ -95,7 +95,7 @@
                     <div class="form-group">
                          <label class="col-sm-2 control-label">Vehicle No.</label>
                          <div class="col-sm-2">
-                             <input type="text" id="vehicle_no" name="vehicle_no" class="form-control" placeholder="">
+                             <input type="text" id="vehicle_no" name="vehicle_no" maxlength="20" class="form-control" placeholder="">
                          </div>
                          <div class="col-sm-8">
                              <div class="tooltip custom-tool-tip right">

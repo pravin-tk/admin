@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@include file="header.jsp" %>
-<%@include file="LeftNav.jsp" %>    
+<%-- <%@include file="LeftNav.jsp" %>     --%>
             <!-- Right main content -->
             <div class="col-sm-12 col-md-12  main">
                     <ul id="myTab" class="nav nav-tabs">

@@ -2,7 +2,17 @@
 <%@page import="org.school.admin.model.School"%>
 <%@page import="java.util.List"%>
 
-<%List<School> schoolPendingList = new SchoolDAOImp().getSchoolPendingList((Integer)session.getAttribute("cityid"));
+<%
+if(session !=null){
+	if(session.getAttribute("cityid") == null){
+		StringBuffer header_url = request.getRequestURL();
+		if(response.containsHeader(header_url.toString())){
+			response.setHeader(header_url.toString(), header_url.toString()+"/index.jsp");
+		}
+	}else{
+		
+	
+List<School> schoolPendingList = new SchoolDAOImp().getSchoolPendingList((Integer)session.getAttribute("cityid"));
 
    if(schoolPendingList.size()>0)
    {
@@ -39,6 +49,8 @@
 					class="btn btn-danger icon-btn"><i class="fa fa-ban"></i></a></td>
 			</tr>
 			<%}
+ 			}
+ 			}
  			}%> 
 		</tbody>
 	</table>

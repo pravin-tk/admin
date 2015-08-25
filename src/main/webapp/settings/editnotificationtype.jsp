@@ -88,7 +88,10 @@
 <script type="text/javascript">
 function saveNotification(){
 	$.post("../webapi/settings/notificationtype/update", {id: $("#id").val(), name: $("#name").val(), status: $('input[name=status]:checked').val()}, function(data){
+		if(data.status == 1)
 		window.location.href = "${baseUrl}/settings/notificationtype.jsp";
+		else
+			alert(data.message);
 	});
 }
 
