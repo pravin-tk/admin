@@ -14,6 +14,7 @@
 <!--          <property name="hibernate.connection.password">abc@12345</property> -->
 
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/school_db</property>
+<!--         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/school_data</property> -->
 <!-- 		<property name="hibernate.connection.username">xxx</property> -->
 <!--         <property name="hibernate.connection.password">xxxxx</property> -->
 <!--         <property name="hibernate.connection.url">jdbc:mysql://xxxxxx:3306/school_db</property> -->

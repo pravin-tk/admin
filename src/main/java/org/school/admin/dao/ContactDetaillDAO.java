@@ -22,20 +22,22 @@ public class ContactDetaillDAO {
 	{
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
 		School school = null;
 		AdminUser adminUser = new AdminUser();
 		String message = "";
 		String log = "New entry for contact detail | ";
 	try{
-		session.beginTransaction();
 		for(int i=0;i<contactDetail.size();i++){
 			System.out.println("i=: "+i);
 			//checking for external
 			if(contactDetail.get(i).getType()==1){//external
 				if(contactDetail.get(i).getIsPrimary() ==1){//primary is 1
 					if(!isPrimaryExternal(contactDetail.get(i).getSchool().getId())){//primary 1 not exist DB
+						Session session = hibernateUtil.openSession();
+						session.beginTransaction();
 						session.save(contactDetail.get(i));
+						session.getTransaction().commit();
+						session.close();
 						log +=" Name : "+contactDetail.get(i).getName();
 						log +="| Email : "+contactDetail.get(i).getEmail();
 						log +="| Mobile : "+contactDetail.get(i).getMobileNo();
@@ -47,9 +49,14 @@ public class ContactDetaillDAO {
 					}else{// primary 1 exist in DB
 						response.setStatus(0);
 						response.setMessage("Primary contact number for external already exist");
+						//return response;
 					}
 				}else{// if primary is 0.
+						Session session = hibernateUtil.openSession();
+						session.beginTransaction();
 						session.save(contactDetail.get(i));
+						session.getTransaction().commit();
+						session.close();
 						log +=" Name : "+contactDetail.get(i).getName();
 						log +="| Email : "+contactDetail.get(i).getEmail();
 						log +="| Mobile : "+contactDetail.get(i).getMobileNo();
@@ -65,7 +72,11 @@ public class ContactDetaillDAO {
 			if(contactDetail.get(i).getType()==0){//internal
 				if(contactDetail.get(i).getIsPrimary() == 1){//if primary is 1
 					if(!isPrimaryInternal(contactDetail.get(i).getSchool().getId())){//primary 1 not exist DB
+						Session session = hibernateUtil.openSession();
+						session.beginTransaction();
 						session.save(contactDetail.get(i));
+						session.getTransaction().commit();
+						session.close();
 						log +=" Name : "+contactDetail.get(i).getName();
 						log +="| Email : "+contactDetail.get(i).getEmail();
 						log +="| Mobile : "+contactDetail.get(i).getMobileNo();
@@ -77,9 +88,14 @@ public class ContactDetaillDAO {
 					}else{// primary 1 exist in DB
 						response.setStatus(0);
 						response.setMessage("Primary contact number for internal already exist");
+						//return response;
 					}
 				}else{// if primary 0
+						Session session = hibernateUtil.openSession();
+						session.beginTransaction();
 						session.save(contactDetail.get(i));
+						session.getTransaction().commit();
+						session.close();
 						log +=" Name : "+contactDetail.get(i).getName();
 						log +="| Email : "+contactDetail.get(i).getEmail();
 						log +="| Mobile : "+contactDetail.get(i).getMobileNo();
@@ -95,8 +111,6 @@ public class ContactDetaillDAO {
 			}
 		
 			adminUser.setId(contactDetail.get(0).getLastUpdatedBy());
-			session.getTransaction().commit();
-			session.close();
 	}
 	catch(Exception e)
 	{ 
@@ -126,8 +140,10 @@ public class ContactDetaillDAO {
 		session.close();
 		if(contactInfoList.size() > 0)
 		{
+			System.out.println("External Contact:"+contactInfoList.get(0).getMobileNo());
 			return true;
 		}else{
+			System.out.println("External Contact Absent");
 			return false;
 		}
 	}
@@ -158,6 +174,8 @@ public class ContactDetaillDAO {
 		query1.setParameter("id", contactDetail.getSchool().getId());
 		List<ContactInfo> contactInfoList = query1.list();
 		session1.close();
+		boolean allowUpdate = false;
+		boolean allowPrimaryUpdate = false;
 		int internal_cont = 0;
 		int external_cont = 0;
 		int is_int_primary = 0;
@@ -176,32 +194,46 @@ public class ContactDetaillDAO {
 					internal_cont++;
 				}
 			}
-		}
-		if(contactDetail.getType() == 1){
-			if(external_cont >= 2){
-				response.setMessage("Can not add more than two external contacts.");
-				response.setStatus(0);
-				return response;
-			}
-		}else{
-			if(internal_cont >= 2){
-				response.setMessage("Can not add more than two internal contacts.");
-				response.setStatus(0);
-				return response;
+			if(contactInfoList.get(i).getId().equals(contactDetail.getId())){
+				if(contactInfoList.get(i).getType() == contactDetail.getType()){
+					allowUpdate = true;
+					if(contactInfoList.get(i).getIsPrimary().equals(contactDetail.getIsPrimary())){
+						allowPrimaryUpdate = true;
+					}
+				}
 			}
 		}
-		if(contactDetail.getIsPrimary() == 1){
+		if(!allowUpdate) {
 			if(contactDetail.getType() == 1){
-				if(is_ext_primary >= 1){
-					response.setMessage("Primary external contact already exists.");
+				
+				if(external_cont >= 2){
+					response.setMessage("Can not add more than two external contacts.");
 					response.setStatus(0);
 					return response;
 				}
 			}else{
-				if(is_int_primary >= 1){
-					response.setMessage("Primary internal contact already exists.");
+				
+				if(internal_cont >= 2){
+					response.setMessage("Can not add more than two internal contacts.");
 					response.setStatus(0);
 					return response;
+				}
+			}
+		}
+		if(!allowPrimaryUpdate) {
+			if(contactDetail.getIsPrimary() == 1){
+				if(contactDetail.getType() == 1){
+					if(is_ext_primary >= 1){
+						response.setMessage("Primary external contact already exists.");
+						response.setStatus(0);
+						return response;
+					}
+				}else{
+					if(is_int_primary >= 1){
+						response.setMessage("Primary internal contact already exists.");
+						response.setStatus(0);
+						return response;
+					}
 				}
 			}
 		}
@@ -286,8 +318,8 @@ public class ContactDetaillDAO {
 		
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		session.setCacheMode(CacheMode.REFRESH);
-		Query query = session.createQuery(hql).setCacheable(false);
+		//session.setCacheMode(CacheMode.REFRESH);
+		Query query = session.createQuery(hql);//.setCacheable(false);
 		query.setParameter("school_id", school_id);
 		
 		List<ContactInfo> contactInfoList = query.list();

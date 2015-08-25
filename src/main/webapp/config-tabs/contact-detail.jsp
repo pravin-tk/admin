@@ -502,6 +502,7 @@
 $("#updateContact").click(function(){
 	if($("#contactUpReason").val() != ""){
 		updateContact($("#contactUpReason").val());
+		$("#contactUpReason").val(""); 
 		$('#updatecontactdetail').modal('hide');
 	}else{
 		alert("Please enter the resaon for update");
@@ -593,13 +594,13 @@ $("#updateContact").click(function(){
 				  $("#contactDelReason").val("");
 				 showContactDetail();
 				 count--;
-				 if(count<4){
-					 $("#contact_detail_add1").show();
-					 $("#contact_detail_add2").show();
-				 }else{
-					 $("#contact_detail_add1").hide();
-					 $("#contact_detail_add2").hide();
-				 }
+// 				 if(count<4){
+// 					 $("#contact_detail_add1").show();
+// 					 $("#contact_detail_add2").show();
+// 				 }else{
+// 					 $("#contact_detail_add1").hide();
+// 					 $("#contact_detail_add2").hide();
+// 				 }
 				}
 			});
 		
