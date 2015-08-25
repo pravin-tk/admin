@@ -132,7 +132,7 @@ public class SchoolSearchUserController {
 	    }
 		if (isValidEmail) {
 			SchoolSearchUserDao schoolSearchUserDao = new SchoolSearchUserDao();
-			responseMessage = schoolSearchUserDao.signUpUser(userRegistrationInfo, uploadedInputStream, context.getInitParameter("home_url"));
+			responseMessage = schoolSearchUserDao.signUpUser(userRegistrationInfo, uploadedInputStream, context.getInitParameter("home_url"), 0);
 			userRegistrationInfo.setId(responseMessage.getId());
 			if(userRegistrationInfo.getImage().trim().length() <= 0){
 				userRegistrationInfo.setImage("avatar/avatar.jpg");

@@ -84,7 +84,7 @@ public class SchoolSearchUserDao {
 	}
 	
 	@SuppressWarnings("null")
-	public ResponseMessage signUpUser( UserRegistrationInfo userRegistrationInfo, InputStream inputStream, String img_path ) {
+	public ResponseMessage signUpUser( UserRegistrationInfo userRegistrationInfo, InputStream inputStream, String img_path, Integer socialType ) {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
         ResponseMessage responseMessage = new ResponseMessage();
@@ -103,7 +103,12 @@ public class SchoolSearchUserDao {
 	        	Session session1 = hibernateUtil.openSession();
 	        	Transaction tx;
 	            tx = session1.beginTransaction();
-	        	userRegistrationInfo.setStatus((byte)0);
+	            if(socialType == 1 || socialType == 2) {
+	            	userRegistrationInfo.setStatus((byte)1);
+	            } else {
+	            	userRegistrationInfo.setStatus((byte)0);
+	            }
+	        	
 	        	session1.save("UserRegistrationInfo",userRegistrationInfo );
 	        	tx.commit();
 	        	session1.close();
@@ -121,11 +126,11 @@ public class SchoolSearchUserDao {
 		        	newsession.close();
 		        	this.imageUploader.writeToFile( inputStream, uploadFileLocation);
 	        	}
-	        	userRegistrationInfo.setStatus((byte)0);
+//	        	userRegistrationInfo.setStatus((byte)0);
 	        	responseMessage.setId(userId);
 	        	responseMessage.setStatus(1);
 	        	responseMessage.setData(userRegistrationInfo);
-	        	responseMessage.setMessage("User registered successfully.");
+	        	responseMessage.setMessage("User registered successfully. Password sent to registered email id.");
 		    } catch(javax.validation.ConstraintViolationException e) {
 		    	ArrayList<String> errors = new ArrayList<String>();
 		    	Set<ConstraintViolation<?>> s = e.getConstraintViolations();
