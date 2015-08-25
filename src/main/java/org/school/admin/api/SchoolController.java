@@ -284,6 +284,11 @@ public class SchoolController extends ResourceConfig {
 	{
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		List<InfraCategory> activity = schoolSearchImpl.getSchoolActivity(id);
+		for(int i=0; i<activity.size(); i++){
+			for(int j=0; j<activity.get(i).getItems().size(); j++){
+				activity.get(i).getItems().get(j).setImage(img_path+activity.get(i).getItems().get(j).getImage());
+			}
+		}
 		return activity;
 	}
 	
@@ -294,6 +299,11 @@ public class SchoolController extends ResourceConfig {
 	{
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		List<InfraCategory> safety = schoolSearchImpl.getSchoolSafety(id);
+		for(int i=0; i<safety.size(); i++){
+			for(int j=0; j<safety.get(i).getItems().size(); j++){
+				safety.get(i).getItems().get(j).setImage(img_path+safety.get(i).getItems().get(j).getImage());
+			}
+		}
 		return safety;
 	}
 	
@@ -304,6 +314,11 @@ public class SchoolController extends ResourceConfig {
 	{
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		List<InfraCategory> infra = schoolSearchImpl.getSchoolInfra(id);
+		for(int i=0; i<infra.size(); i++){
+			for(int j=0; j<infra.get(i).getItems().size(); j++){
+				infra.get(i).getItems().get(j).setImage(img_path+infra.get(i).getItems().get(j).getImage());
+			}
+		}
 		return infra;
 	}
 	
