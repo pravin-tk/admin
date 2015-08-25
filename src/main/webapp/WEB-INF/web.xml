@@ -41,7 +41,7 @@
 	</context-param>
 	<context-param>
 		<param-name>s3_base_url</param-name>
-		<param-value>http://192.168.5.116:8080/edbuddy/images/</param-value>
+		<param-value>http://192.168.5.104:8080/edbuddy/images/</param-value>
 <!--   		<param-value>https://s3-ap-southeast-1.amazonaws.com/edbuddy/images/</param-value>   -->
 	</context-param>
 <!-- 	<context-param> -->
