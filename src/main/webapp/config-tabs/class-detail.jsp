@@ -554,6 +554,7 @@
 <script src="${baseUrl}/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
 var batch_count =1;
+console.log("#557 btach count="+batch_count);
 function addBatch(){
 	
 	batch_count++;
@@ -918,18 +919,22 @@ $("#addClassDetail1").click(function(){
 				  text:arr_feetype_perm[i]
 				}); 
 		}
-		batct_count=0;
+		
 		arr_feetype_temp = arr_feetype_perm.slice();
 		if(arr_feetype_temp.length >0)
 			 $("#divaddmore").show();
 	});
 	
 	function getBatchTime(){
+		console.log("In batch time function");
 		var class_batch_time = [];
 		var batch_time;
 		var total_batch = batch_count;
+		console.log("Batch_count : "+batch_count);
 		var batch_24hr_format_from,batch_24hr_format_to;
+		console.log("Global batch count"+total_batch);
 		for(var i =1 ;i<=total_batch;i++){
+			console.log("for loop i = "+ i);
 			var batch_time_from = "#batch_time_from"+i;
 			var batch_time_to = "#batch_time_to"+i;
 			if($("#batch_time_from"+i).val() != "" || $("#batch_time_from"+i).val() != "undefined" ){
@@ -938,11 +943,15 @@ $("#addClassDetail1").click(function(){
 			if($("#batch_time_to"+i).val() != "" || $("#batch_time_to"+i).val() != "undefined"){
 				 batch_24hr_format_to = getTime($("#batch_time_to"+i).val());
 			}
+			console.log("FROM =" +batch_24hr_format_from);
+			console.log("TO = "+batch_24hr_format_to);
+			
 			if($("#class_id").val() >0){
 				batch_time = {batchTimeFrom : batch_24hr_format_from, batchTimeTo : batch_24hr_format_to, classInfo : {id :$("#class_id").val()}};
 			}else{
 				batch_time = {batchTimeFrom : batch_24hr_format_from, batchTimeTo : batch_24hr_format_to};
 			}
+			console.log("JSON obj"+batch_time);
 			class_batch_time.push(batch_time);
 	    }
 		return class_batch_time;
@@ -1315,13 +1324,13 @@ $("#addClassDetail1").click(function(){
 				console.log("for loop="+i);
 				if(i>=1 && i<= data.classBatchTime.length-1)
 					addEditBatch(i+1);
-				 if(data.classBatchTime[i].batchTimeFrom != 'undefined' || data.classBatchTime[i].batchTimeFrom != ""){
+				 if(typeof data.classBatchTime[i].batchTimeFrom != 'undefined' || data.classBatchTime[i].batchTimeFrom != ""){
 					var get12hrfrom = hours_am_pm(data.classBatchTime[i].batchTimeFrom);
 					$("#batch_time_from"+(i+1)).val(get12hrfrom);	
 				}else{
 					$("#batch_time_from"+(i+1)).val("");	
 				}
-				if(data.classBatchTime[i].batchTimeTo != 'undefined' || data.classBatchTime[i].batchTimeTo != ""){
+				if(typeof data.classBatchTime[i].batchTimeTo != 'undefined' || data.classBatchTime[i].batchTimeTo != ""){
 					var get12hrTo = hours_am_pm(data.classBatchTime[i].batchTimeTo);
 					$("#batch_time_to"+(i+1)).val(get12hrTo);	
 				}else{

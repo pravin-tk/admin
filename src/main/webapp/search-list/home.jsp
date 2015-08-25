@@ -8,9 +8,23 @@
 <%@page import="org.school.admin.dao.SchoolDAOImp"%>
 <%@page import="java.util.List"%>
 <%
+	int school_list_size =0 ;
+	int contact_list_size=0;
 	if(session.getAttribute("cityid") == null){
-		response.sendRedirect("index.jsp");
-	}
+		if(!response.isCommitted()){
+			response.sendRedirect("index.jsp");
+		}else{
+    			try{
+    				StringBuffer header_url = request.getRequestURL();
+    				if(response.containsHeader(header_url.toString()))
+    					response.setHeader(header_url.toString(), header_url.toString()+"/index.jsp");
+    				//RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+    				//rd.forward(request, response);
+    			}catch(Exception e){
+    				System.err.println("E2 "+e);
+    			}
+    		}
+		}
 	
 	SchoolDAOImp schoolDAOImp = new SchoolDAOImp();
 	List<School> school_list = null;
@@ -23,20 +37,43 @@
 			//System.out.println(school_list.toString());
 		}
 	}
-	if(session!=null){
-		if(session.getAttribute("cityid") != null){
-		    viewSchoolList = new SchoolDAOImp().getViewSchoolList((Integer)session.getAttribute("cityid"));
-		    System.out.println("schoolSize:"+viewSchoolList.size());
-			viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
+	try{
+		if(session!=null){
+			if(session.getAttribute("cityid") != null){
+				
+			    viewSchoolList = new SchoolDAOImp().getViewSchoolList((Integer)session.getAttribute("cityid"));
+			    if(viewSchoolList.size()>0){
+			    	school_list_size = viewSchoolList.size();
+			    }
+			    System.out.println("schoolSize:"+viewSchoolList.size());
+				viewContactList = new SchoolDAOImp().getViewContactList((Integer)session.getAttribute("cityid"));
+				if(viewContactList.size()>0){
+					contact_list_size = viewContactList.size();
+				}
+			}
+		}
+	}catch(Exception e){
+		System.out.print("E : "+e);
+		if(!response.isCommitted()){
+			response.sendRedirect("index");
+		}else{
+			try{
+				RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+			
+				rd.forward(request, response);
+			}catch(Exception e1){
+				System.err.print("E1 : "+e1);
+		}
 		}
 	}
+	
 %>
             <!-- Right main content -->
                    <form class="form-horizontal" action="" method="">
                        <div class="form-group">
                              <div class="col-sm-4">
                                    <label for="Schooly">Search by School Name or School Id</label>
-                                    <% if(viewSchoolList.size()>0){%>
+                                    <% if(school_list_size>0){%>
                                    <select id="school_id" name="sendImages" placeholder="Enter School Name or School Id">
                                     <option value="0">Enter School Name or School Id</option>
                                   <% for(int i=0;i<viewSchoolList.size();i++) {
@@ -56,7 +93,7 @@
                            <div class="col-sm-4">
                                    <label for="Schooly">Search by POC Name or POC Contact Number</label>
                                     <% 
-                                    if(viewContactList.size()>0) {%>
+                                    if(contact_list_size>0) {%>
 		                                   <select id="contact_id" name="sendImages" placeholder="Enter POC Name or POC Contact Number">
 		                                        <option value="0">Enter POC Name or POC Contact Number</option> 
 		                                  <% for(int i=0;i<viewContactList.size();i++) {
@@ -151,7 +188,7 @@
 	     }
 });
 
-<% if(viewSchoolList.size() > 0) {%>
+<% if(school_list_size> 0) {%>
  	select_school  = $select_school[0].selectize;
 <% } %>
 	$select_contact = $('#contact_id').selectize({
@@ -175,7 +212,7 @@
 	  onItemRemove : function(value) {
 				  }
 });
-	<% if(viewContactList.size()>0) { %>
+	<% if(contact_list_size>0) { %>
  select_contact  = $select_contact[0].selectize;
  <%}%>
     
