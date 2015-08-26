@@ -105,6 +105,10 @@ public class SchoolSearchImpl {
 			queryCondition += " AND s.boardId IN(" + searchRequest.getBoardId() + ")";
 		}
 		
+		if (searchRequest.getTaId() != "0") {
+			queryCondition += " AND ta.id IN(" + searchRequest.getTaId() + ")";
+		}
+		
 		if (searchRequest.getTypeId() != "0") {
 			queryCondition += " AND s.schoolTypeId IN(" + searchRequest.getTypeId() + ")";
 		}

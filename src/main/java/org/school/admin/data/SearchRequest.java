@@ -5,6 +5,7 @@ public class SearchRequest {
 	private String latitude;
 	private Short standardId;
 	private String boardId;
+	private String taId;
 	private String mediumId;
 	private String typeId;
 	private String categoryId;
@@ -41,6 +42,12 @@ public class SearchRequest {
 	}
 	public void setBoardId(String boardId) {
 		this.boardId = boardId;
+	}
+	public String getTaId() {
+		return taId;
+	}
+	public void setTaId(String taId) {
+		this.taId = taId;
 	}
 	public String getMediumId() {
 		return mediumId;

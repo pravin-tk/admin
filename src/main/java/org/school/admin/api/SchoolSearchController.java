@@ -96,6 +96,7 @@ public class SchoolSearchController {
 //		result.setSafetyFilter(sfService.getUserSafetyFilter(searchRequest.getSafetyId()));
 //		result.setInfraFilter(sfService.getUserInfraFilter(searchRequest.getInfraId()));
 		result.setBoardFilter(sfService.getUserBoardFilter(searchRequest.getBoardId()));
+		result.setTaFilter(sfService.getUserTAFilter(searchRequest.getTaId()));
 		result.setMediumFilter(sfService.getUserMediumFilter(searchRequest.getMediumId()));
 //		result.setTypeFilter(sfService.getUserSchoolTypeFilter(searchRequest.getTypeId()));
 		result.setCategoryFilter(sfService.getUserSchoolCategoryFilter(searchRequest.getCategoryId()));
@@ -281,6 +282,7 @@ public class SchoolSearchController {
 			@QueryParam("latitude") @DefaultValue("") String latitude,
 			@QueryParam("longitude") @DefaultValue("") String longitude
 	) {
+		String img_path = this.context.getInitParameter("s3_base_url");
 		SchoolSearchImpl schoolSearchImpl = new SchoolSearchImpl();
 		List<Integer> integerSchoolIds = new ArrayList<Integer>();
 		try{
@@ -291,8 +293,14 @@ public class SchoolSearchController {
 		} catch(NumberFormatException e) {
 			return null;
 		}
-		
-		return schoolSearchImpl.compareSchools(integerSchoolIds, latitude, longitude);
+		List<SchoolList> schoolLists = schoolSearchImpl.compareSchools(integerSchoolIds, latitude, longitude);
+		for(int i=0; i< schoolLists.size(); i++){
+			if(schoolLists.get(i).getLogo() != "")
+				schoolLists.get(i).setLogo(img_path+schoolLists.get(i).getLogo());
+			if(schoolLists.get(i).getHomeImage() != "")
+				schoolLists.get(i).setHomeImage(img_path+schoolLists.get(i).getHomeImage());
+		}
+		return schoolLists;
 	}
 	
 }

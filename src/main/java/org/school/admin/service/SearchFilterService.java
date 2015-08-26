@@ -20,6 +20,7 @@ import org.school.admin.model.SafetyCategoryItem;
 import org.school.admin.model.SchoolCategoryType;
 import org.school.admin.model.SchoolClassificationType;
 import org.school.admin.model.SchoolType;
+import org.school.admin.model.TeachingApproachType;
 
 public class SearchFilterService {
 	/**
@@ -480,6 +481,35 @@ public class SearchFilterService {
 		return boardFilter;
 	}
 	
+	public List<MainFilter> getUserTAFilter(String taId) 
+	{
+		SettingsImpl settingsImpl = new SettingsImpl();
+		List<TeachingApproachType> boardTypes = settingsImpl.getTeachingApproachType();
+		int board_count = boardTypes.size();
+		List<MainFilter> boardFilter = new ArrayList<MainFilter>();
+		String[] requestBoardFilter = taId.split(",");
+		int req_board_count = 0;
+		try {
+			req_board_count = requestBoardFilter.length;
+		} catch(NullPointerException e) {
+			//Board filters not found
+		}
+		for (int i = 0; i < board_count; i++) {
+			MainFilter mainFilter = new MainFilter();
+			mainFilter.setId(boardTypes.get(i).getId());
+			mainFilter.setName(boardTypes.get(i).getName());
+			mainFilter.setFiltered(false);
+			mainFilter.setParamName("taId");
+			for (int j = 0; j < req_board_count; j++) {
+				if (Integer.parseInt(requestBoardFilter[j]) == boardTypes.get(i).getId()) {
+					mainFilter.setFiltered(true);
+				}
+			}
+			boardFilter.add(mainFilter);
+		}
+		return boardFilter;
+	}
+	
 	/**
 	 * Get user school type filters
 	 * @param requestTypeFilter
@@ -737,6 +767,7 @@ public class SearchFilterService {
 		searchRequest.setStandardId(std);
 		searchRequest.setActivityId("0");
 		searchRequest.setBoardId("0");
+		searchRequest.setTaId("0");
 		searchRequest.setCategoryId("0");
 		searchRequest.setDistance("random");
 		searchRequest.setFee("random");
@@ -761,6 +792,8 @@ public class SearchFilterService {
 		        	searchRequest.setActivityId(params.getFirst("activityId"));
 		        } else if(param.equals("boardId")) {
 		        	searchRequest.setBoardId(params.getFirst("boardId"));
+		        } else if(param.equals("taId")) {
+		        	searchRequest.setTaId(params.getFirst("taId"));
 		        } else if(param.equals("categoryId")) {
 		        	searchRequest.setCategoryId(params.getFirst("categoryId"));
 		        } else if(param.equals("distance")) {

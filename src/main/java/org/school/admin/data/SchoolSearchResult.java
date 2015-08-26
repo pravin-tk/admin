@@ -8,6 +8,7 @@ public class SchoolSearchResult {
 	private List<SearchFilter> infraFilter;
 	private List<SearchFilter> activityFilter;
 	private List<MainFilter> boardFilter;
+	private List<MainFilter> taFilter;
 	private List<MainFilter> mediumFilter;
 	private List<MainFilter> typeFilter;
 	private List<MainFilter> categoryFilter;
@@ -49,6 +50,12 @@ public class SchoolSearchResult {
 	}
 	public void setBoardFilter(List<MainFilter> boardFilter) {
 		this.boardFilter = boardFilter;
+	}
+	public List<MainFilter> getTaFilter() {
+		return taFilter;
+	}
+	public void setTaFilter(List<MainFilter> taFilter) {
+		this.taFilter = taFilter;
 	}
 	public List<MainFilter> getMediumFilter() {
 		return mediumFilter;
