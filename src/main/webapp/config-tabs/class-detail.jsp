@@ -311,13 +311,13 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Batch timing from</label>
+			<label class="col-sm-2 control-label">Batch timing from *</label>
 			<div class="col-sm-2">
 				<input type="text" class="form-control"
 					placeholder="hh:mm am/pm" id="batch_time_from1">
 			</div>
 			<div class="col-sm-4">
-				<label class="col-sm-2 control-label">to</label>
+				<label class="col-sm-2 control-label">to *</label>
 				<div class="col-sm-4">
 					<input type="text" class="form-control"
 						placeholder="hh:mm am/pm" id="batch_time_to1">
@@ -441,7 +441,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Accessories Provided *</label>
+			<label class="col-sm-2 control-label">Accessories Provided </label>
 			<div class="col-sm-8">
 				<div class="inline-checkboxes-holder">
 					<%
@@ -487,8 +487,8 @@
 			</div>
 		
 				<div class="form-group">
-			<label class="col-sm-6 control-label">Fee Type *</label> <label
-				class="col-sm-2 control-label">Amount *</label>
+			<label class="col-sm-6 control-label">Fee Type </label> <label
+				class="col-sm-2 control-label">Amount </label>
 		</div>
 
 		<div class="form-group">
@@ -582,7 +582,7 @@ function removeBatch(count){
 	var removeDiv = "#batch"+count;
 	$( "div").remove(removeDiv);
 	count--;
-	
+	batch_count--;
 }
 $(document).on('click', 'a.open-deleteclassdialog', function(){
 	$("#hdclassid").val($(this).data('id'));
@@ -672,10 +672,10 @@ $('#updateclassdetail').click(function() {
 	var user_id = <%out.print(user_id6);%>
 	var subject = null;
  	//if($("#cb1").val() != "" && $("#txt1").val() != "")
-	fee_data = getFeeData();
-	subject_data = getSubjectData();
-	accessory_data = getAccessoryData();
-	class_info_data = getClassInfoData();
+	//fee_data = getFeeData();
+	//subject_data = getSubjectData();
+	//accessory_data = getAccessoryData();
+	//class_info_data = getClassInfoData();
    
 	var msg = "";
 
@@ -909,6 +909,7 @@ $("#addClassDetail1").click(function(){
 	}
 	$(".cancel-class-detail").click(function(){
 		
+		
 		$("#addedRows").html("");
 		$("#txt1").val("");
 		$("#cb1").val("");
@@ -923,6 +924,14 @@ $("#addClassDetail1").click(function(){
 		arr_feetype_temp = arr_feetype_perm.slice();
 		if(arr_feetype_temp.length >0)
 			 $("#divaddmore").show();
+		
+		$("#addbatch").html("");
+		$("#batch_time_from1").val("");
+		$("#batch_time_to1").val("");
+// 		for(var i=2;i<=batch_count;i++){
+// 			$('div').remove("#batch"+i);
+// 		}
+		batch_count=1;
 	});
 	
 	function getBatchTime(){
@@ -937,10 +946,10 @@ $("#addClassDetail1").click(function(){
 			console.log("for loop i = "+ i);
 			var batch_time_from = "#batch_time_from"+i;
 			var batch_time_to = "#batch_time_to"+i;
-			if($("#batch_time_from"+i).val() != "" || $("#batch_time_from"+i).val() != "undefined" ){
+			if($("#batch_time_from"+i).val() != "" ||typeof $("#batch_time_from"+i).val() != "undefined" ){
 				 batch_24hr_format_from = getTime($("#batch_time_from"+i).val());
 			}
-			if($("#batch_time_to"+i).val() != "" || $("#batch_time_to"+i).val() != "undefined"){
+			if($("#batch_time_to"+i).val() != "" ||typeof $("#batch_time_to"+i).val() != "undefined"){
 				 batch_24hr_format_to = getTime($("#batch_time_to"+i).val());
 			}
 			console.log("FROM =" +batch_24hr_format_from);
@@ -1170,6 +1179,7 @@ $("#addClassDetail1").click(function(){
 	});
 	function clearAllFields()
 	{
+		
 		$("#standard").val(0);
 		//$("#stream").val(0);
 		 $("#teaching_approach").val(0);
@@ -1193,6 +1203,7 @@ $("#addClassDetail1").click(function(){
 			$("#batch_time_from"+i).val("");
 			$("#batch_time_to"+i).val("");
 		}
+		batch_count=1;
 		$(".cancel-class-detail").click();
 	}
 	
@@ -1316,12 +1327,12 @@ $("#addClassDetail1").click(function(){
 			rowCount = data.classFee.length;
 		//console.log('#1191');
 		
-		console.log("Len = "+data.classBatchTime.length);
+		//console.log("Len = "+data.classBatchTime.length);
 		batch_count = data.classBatchTime.length;
-		console.log("#1311="+batch_count);
+		//console.log("#1311="+batch_count);
 		if(batch_count>0){
 			for(var i=0;i<batch_count;i++){
-				console.log("for loop="+i);
+				//console.log("for loop="+i);
 				if(i>=1 && i<= data.classBatchTime.length-1)
 					addEditBatch(i+1);
 				 if(typeof data.classBatchTime[i].batchTimeFrom != 'undefined' || data.classBatchTime[i].batchTimeFrom != ""){
@@ -1358,11 +1369,11 @@ $("#addClassDetail1").click(function(){
 		batch_data += '</div>';
 		batch_data += '<div class="col-sm-2"><a href="javascript:void(0);" onclick="removeBatch('+bcount+');">Delete</a></div></div>'
 		batch_data += '</div>';
-		
+		jQuery('#addbatch').append(batch_data);
 		
 		$('#batch_time_from'+bcount).timepicker({'step':15});
 		$('#batch_time_to'+bcount).timepicker({'step': 15});
-		jQuery('#addbatch').append(batch_data);
+		
 
 	}
 	
