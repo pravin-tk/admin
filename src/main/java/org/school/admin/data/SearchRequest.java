@@ -18,6 +18,8 @@ public class SearchRequest {
 	private String distance;
 	private String seats;
 	private String userId;
+	private String minFee;
+	private String maxFee;
 	
 	public String getLongitude() {
 		return longitude;
@@ -124,16 +126,30 @@ public class SearchRequest {
 		this.userId = userId;
 	}
 	
+	public String getMinFee() {
+		return minFee;
+	}
+	public void setMinFee(String minFee) {
+		this.minFee = minFee;
+	}
+	public String getMaxFee() {
+		return maxFee;
+	}
+	public void setMaxFee(String maxFee) {
+		this.maxFee = maxFee;
+	}
 	@Override
 	public String toString() {
 		return "SearchRequest [longitude=" + longitude + ", latitude="
 				+ latitude + ", standardId=" + standardId + ", boardId="
-				+ boardId + ", mediumId=" + mediumId + ", typeId=" + typeId
-				+ ", categoryId=" + categoryId + ", classificationId="
-				+ classificationId + ", safetyId=" + safetyId + ", activityId="
-				+ activityId + ", infraId=" + infraId + ", fee=" + fee
-				+ ", rating=" + rating + ", distance=" + distance + ", seats="
-				+ seats + "]";
+				+ boardId + ", taId=" + taId + ", mediumId=" + mediumId
+				+ ", typeId=" + typeId + ", categoryId=" + categoryId
+				+ ", classificationId=" + classificationId + ", safetyId="
+				+ safetyId + ", activityId=" + activityId + ", infraId="
+				+ infraId + ", fee=" + fee + ", rating=" + rating
+				+ ", distance=" + distance + ", seats=" + seats + ", userId="
+				+ userId + ", minFee=" + minFee + ", maxFee=" + maxFee + "]";
 	}
+	
 	
 }

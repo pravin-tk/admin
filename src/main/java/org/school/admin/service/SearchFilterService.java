@@ -779,6 +779,8 @@ public class SearchFilterService {
 		searchRequest.setTypeId("0");
 		searchRequest.setClassificationId("0");
 		searchRequest.setUserId("0");
+		searchRequest.setMinFee("0");
+		searchRequest.setMaxFee("0");
 		try {
 			for (String param: params.keySet()) {
 				//System.out.println(param);
@@ -816,6 +818,10 @@ public class SearchFilterService {
 		        	searchRequest.setClassificationId(params.getFirst("classificationId"));
 		        } else if(param.equals("userId")) {
 		        	searchRequest.setUserId(params.getFirst("userId"));
+		        } else if(param.equals("minFee")) {
+		        	searchRequest.setMinFee(params.getFirst("minFee"));
+		        } else if(param.equals("maxFee")) {
+		        	searchRequest.setMaxFee(params.getFirst("maxFee"));
 		        }
 		        
 		    }

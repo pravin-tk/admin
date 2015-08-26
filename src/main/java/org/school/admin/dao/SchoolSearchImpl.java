@@ -140,6 +140,10 @@ public class SchoolSearchImpl {
 			queryJoin += " JOIN ss.schoolInfrastructureCatItems ic";
 		}
 		
+		if (Integer.parseInt(searchRequest.getMinFee()) >= 0 && Integer.parseInt(searchRequest.getMaxFee()) > 0) {
+			queryCondition += " AND ci.totalFee >= " + searchRequest.getMinFee() + " AND ci.totalFee <= "+searchRequest.getMaxFee();
+		}
+		
 		if (searchRequest.getFee().equalsIgnoreCase("ASC") || searchRequest.getFee().equalsIgnoreCase("DESC")) {
 			orderBy += " ci.totalFee "+searchRequest.getFee();
 		}
