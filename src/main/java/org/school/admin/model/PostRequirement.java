@@ -27,7 +27,7 @@ public class PostRequirement implements java.io.Serializable {
 	private String email;
 	@Pattern(regexp="[\\d]{10}||[\\d]{0}",message="Mobile number should be valid 10 digit number.")
 	private String mobile;
-	@NotEmpty(message="Please enter your requirement")
+//	@NotEmpty(message="Please enter your requirement")
 	private String requirement;
 	@NotEmpty(message="Please enter school name")
 	private String schoolName;

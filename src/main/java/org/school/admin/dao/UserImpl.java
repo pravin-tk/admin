@@ -41,9 +41,9 @@ public class UserImpl {
 				errors.add("Please enter your name.");
 			}
 			
-			if(postRequirement.getRequirement().isEmpty()) {
-				errors.add("Please enter your requirement.");
-			}
+//			if(postRequirement.getRequirement().isEmpty()) {
+//				errors.add("Please enter your requirement.");
+//			}
 			
 			if(errors.size() > 0){
 				responseMessage.setErrors(errors);
