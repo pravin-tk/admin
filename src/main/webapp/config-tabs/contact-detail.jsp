@@ -333,7 +333,9 @@
 		    			
 		 			   $("#name").val(""); $("#email").val(""); $("#mobile_no").val("");$("#contact_no").val('');
 		 			  $('input[name="usertype[]"]').prop( "checked", false);
-		 			  
+		 			 $("#is_primary_yes").prop( "checked", true);
+		  			  $("#is_primary_no").prop( "checked",false);
+		  			  
 		 			   $("#savecontact").addClass("list-contact");
 		 			  updateProgress(school_id);
 		 			 showContactDetail();
@@ -342,7 +344,7 @@
 		 			   $(".contact-list").show();
 		 			   $("#savecontact").show();
 		 			   $("#updatecontact").hide();
-		 			  // count++;
+		 			   count++;
 		    			}
 		    			else{
 		    				alert(data.message);
@@ -374,6 +376,8 @@
 		$("#name").val(""); $("#email").val(""); $("#mobile_no").val("");$("#contact_no").val("");
 		  $('input[name="usertype[]"]').prop( "checked", false);
 		  $("#id").val('');
+		  $("#is_primary_yes").prop( "checked", true);
+			  $("#is_primary_no").prop( "checked",false);
 		
    	});
    	
@@ -400,10 +404,10 @@
 			$('input[name="usertype[]"]').prop( "checked", false);
 			if(data.type == 0){
 					$('#usertype0').prop('checked',true);
-					//console.log('smthng'+$('#usertype0').prop('checked',true));
+					console.log('smthng'+$('#usertype0').prop('checked',true));
 			}else if(data.type == 1){
 				$('#usertype1').prop('checked',true);
-			//	console.log('smthng'+$('#usertype1').prop('checked',true));
+				console.log('smthng'+$('#usertype1').prop('checked',true));
 			}else{
 				console.log('nothing'+data.type);
 			}
@@ -634,7 +638,7 @@ $("#updateContact").click(function(){
 		    			 "<a href='#deleteContactDetail'  data-id='"+data[index].id+"' class='open-deleteContactDetail btn btn-danger icon-btn' data-toggle='modal' data-taget='#deleteContactDetail' >"
                          +"<i class='fa fa-trash'></i></a>");
 		    	oTable.fnAddData(row);
-		    	count++;
+		    	//count++;
 		    	datacount++;
 		    	 
 		   	});
